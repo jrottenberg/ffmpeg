@@ -9,7 +9,7 @@ MAINTAINER    Julien Rottenberg <julien@rottenberg.info>
 
 
 
-RUN           yum install -y  --disableplugin=fastestmirror autoconf automake gcc gcc-c++ git libtool make nasm pkgconfig zlib-devel tar bzip2
+RUN           yum install -y autoconf automake gcc gcc-c++ git libtool make nasm pkgconfig zlib-devel tar bzip2
 
 
 ENV           FFMPEG_VERSION  2.3.3
@@ -18,7 +18,9 @@ ENV           LAME_VERSION    3.99.5
 ENV           FAAC_VERSION    1.28
 ENV           XVID_VERSION    1.3.3
 ENV           SRC             /opt/src
+ENV           LD_LIBRARY_PATH ${SRC}/lib
 ENV           PKG_CONFIG_PATH ${SRC}/lib/pkgconfig
+
 
 
 RUN           mkdir ${SRC}
@@ -64,8 +66,7 @@ RUN           cd ${SRC} && \
               ./bootstrap && \
               ./configure --prefix="${SRC}" --bindir="/usr/local/bin" && \
               make && \
-              make install && \
-              ldconfig
+              make install
 
 # xvid
 RUN           cd ${SRC} && \
@@ -74,8 +75,7 @@ RUN           cd ${SRC} && \
               cd xvidcore/build/generic && \
               ./configure --prefix="${SRC}" --bindir="/usr/local/bin" && \
               make && \
-              make install && \
-              ldconfig
+              make install
 
 
 
@@ -91,10 +91,6 @@ RUN           cd ${SRC} && \
               make install && \
               make distclean && \
               hash -r
-
-
-RUN           ls -lsa               /usr/local/bin ${SRC}
-RUN           /usr/local/bin/ffmpeg
 
 
 ENTRYPOINT    ["ffmpeg"]
