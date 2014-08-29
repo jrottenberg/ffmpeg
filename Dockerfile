@@ -9,7 +9,7 @@ MAINTAINER    Julien Rottenberg <julien@rottenberg.info>
 
 
 
-RUN           yum install -y  --disableplugin=fastestmirror autoconf automake gcc gcc-c++ git libtool make nasm pkgconfig zlib-devel tar
+RUN           yum install -y  --disableplugin=fastestmirror autoconf automake gcc gcc-c++ git libtool make nasm pkgconfig zlib-devel tar bzip2
 
 
 ENV           FFMPEG_VERSION 2.3.3
@@ -58,13 +58,14 @@ RUN           cd ${SRC} && \
 # ffmpeg
 RUN           cd ${SRC} && \
               curl -O http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-              tar xjvf ffmpeg-${FFMPEG_VERSION}.tar.bz2  && \
-              cd ffmpeg-${FFMPEG_VERSION} && \
+              tar xjvf ffmpeg-${FFMPEG_VERSION}.tar.bz2
+
+RUN           cd ${SRC}/ffmpeg-${FFMPEG_VERSION} && \
               PKG_CONFIG_PATH="${SRC}/lib/pkgconfig" && \
               export PKG_CONFIG_PATH && \
               ./configure --prefix="${SRC}" --extra-cflags="-I${SRC}/include" --extra-ldflags="-L${SRC}/lib" --bindir="/usr/local/bin" \
               --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libxvid --enable-gpl \
-              --enable-postproc --enable-nonfree --enable-avresample
+              --enable-postproc --enable-nonfree --enable-avresample && \
               make && \
               make install && \
               make distclean && \
