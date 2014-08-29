@@ -15,7 +15,7 @@ RUN           yum install -y  --disableplugin=fastestmirror autoconf automake gc
 ENV           FFMPEG_VERSION 2.3.3
 ENV           YASM_VERSION   1.2.0
 ENV           LAME_VERSION   3.99.5
-
+ENV           FAAC_VERSION   1.28
 
 ENV           SRC            /opt/src
 
@@ -53,6 +53,18 @@ RUN           cd ${SRC} && \
               make && \
               make install && \
               make distclean
+
+
+# faac
+RUN           cd ${SRC} && \
+              curl -L -O http://downloads.sourceforge.net/project/faac/ffax/${FAAC_VERSION%.*}/faac-${FAAC_VERSION}.tar.gz  && \
+              tar xzvf faac-${FAAC_VERSION}.tar.gz  && \
+              cd faac-${FAAC_VERSION} && \
+              ./bootstrap && \
+              ./configure && \
+              make && \
+              make install && \
+              ldconfig
 
 
 # ffmpeg
