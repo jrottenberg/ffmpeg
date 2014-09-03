@@ -1,6 +1,6 @@
 # ffmpeg
 #
-# VERSION               0.0.1
+# VERSION               0.0.2
 #
 # From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
 #
@@ -93,5 +93,4 @@ RUN           cd ${SRC} && \
               hash -r
 
 
-ENTRYPOINT    ["ffmpeg"]
-CMD           ["--help"]
+CMD           ["ffmpeg"]
