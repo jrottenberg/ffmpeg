@@ -81,6 +81,6 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               rm -rf ${DIR}
 
 
-yum remove -y  autoconf automake gcc gcc-c++ git libtool nasm  zlib-devel tar bzip2 perl libgomp libstdc++-devel
+yum remove -y autoconf automake gcc gcc-c++ git libtool nasm  zlib-devel tar bzip2 perl libgomp libstdc++-devel
 yum clean all
 rm -rf /var/lib/yum/yumdb/*

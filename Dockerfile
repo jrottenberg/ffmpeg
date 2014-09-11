@@ -1,6 +1,6 @@
 # ffmpeg
 #
-# VERSION               2.2.3-4
+# VERSION               2.3.2-1
 #
 # From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
 #
@@ -11,7 +11,7 @@ MAINTAINER    Julien Rottenberg <julien@rottenberg.info>
 
 
 
-ENV           FFMPEG_VERSION  2.3.3
+ENV           FFMPEG_VERSION  2.3.2
 ENV           YASM_VERSION    1.2.0
 ENV           LAME_VERSION    3.99.5
 ENV           FAAC_VERSION    1.28
