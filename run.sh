@@ -84,5 +84,5 @@ DIR=$(mktemp -d) && cd ${DIR} && \
 yum remove -y autoconf automake gcc gcc-c++ git libtool nasm  zlib-devel tar bzip2 perl libgomp libstdc++-devel
 yum clean all
 rm -rf /var/lib/yum/yumdb/*
-echo "export LD_RUN_PATH=/usr/local/lib" > /etc/profile.d/compile.sh
+echo "/usr/local/lib" > /etc/ld.so.conf.d/libc.conf
 
