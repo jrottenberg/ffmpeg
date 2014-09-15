@@ -65,6 +65,16 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               rm -rf ${DIR}
 
 
+# fdk-aac
+DIR=$(mktemp -d) && cd ${DIR} && \
+              curl -s https://codeload.github.com/mstorsjo/fdk-aac/tar.gz/v${FDKAAC_VERSION} | tar zxvf - && \
+              cd fdk-aac-${FDKAAC_VERSION} && \
+              autoreconf -fiv && \
+              ./configure --prefix="${SRC}" --disable-shared && \
+              make && \
+              make install && \
+              make distclean && \
+              rm -rf ${DIR}
 
 # ffmpeg
 DIR=$(mktemp -d) && cd ${DIR} && \
@@ -73,7 +83,7 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               cd ffmpeg-${FFMPEG_VERSION} && \
               ./configure --prefix="${SRC}" --extra-cflags="-I${SRC}/include" --extra-ldflags="-L${SRC}/lib" --bindir="/usr/local/bin" \
               --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libxvid --enable-gpl \
-              --enable-postproc --enable-nonfree --enable-avresample --disable-debug --enable-small && \
+              --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small && \
               make && \
               make install && \
               make distclean && \
@@ -85,4 +95,3 @@ yum remove -y autoconf automake gcc gcc-c++ git libtool nasm  zlib-devel tar bzi
 yum clean all
 rm -rf /var/lib/yum/yumdb/*
 echo "/usr/local/lib" > /etc/ld.so.conf.d/libc.conf
-
