@@ -6,7 +6,7 @@ set -euo pipefail
 
 
 
-yum install -y autoconf automake gcc gcc-c++ git libtool make nasm zlib-devel tar bzip2
+yum install -y autoconf automake gcc gcc-c++ git libtool make nasm zlib-devel tar
 
 
 # yasm
@@ -78,8 +78,8 @@ DIR=$(mktemp -d) && cd ${DIR} && \
 
 # ffmpeg
 DIR=$(mktemp -d) && cd ${DIR} && \
-              curl -Os http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-              tar xjvf ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
+              curl -Os http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
+              tar xzvf ffmpeg-${FFMPEG_VERSION}.tar.gz && \
               cd ffmpeg-${FFMPEG_VERSION} && \
               ./configure --prefix="${SRC}" --extra-cflags="-I${SRC}/include" --extra-ldflags="-L${SRC}/lib" --bindir="/usr/local/bin" \
               --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libxvid --enable-gpl \
@@ -87,11 +87,11 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               make && \
               make install && \
               make distclean && \
-              hash -r&& \
+              hash -r && \
               rm -rf ${DIR}
 
 
-yum remove -y autoconf automake gcc gcc-c++ git libtool nasm  zlib-devel tar bzip2 perl libgomp libstdc++-devel
+yum remove -y autoconf automake gcc gcc-c++ git libtool nasm  zlib-devel tar perl libgomp libstdc++-devel
 yum clean all
 rm -rf /var/lib/yum/yumdb/*
 echo "/usr/local/lib" > /etc/ld.so.conf.d/libc.conf
