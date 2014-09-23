@@ -40,7 +40,7 @@ Capture output from the container to the host running the command
 ### Example
 
 ```
- docker run jrottenberg/ffmpeg ffmpeg -stats  \
+ docker run jrottenberg/ffmpeg -stats  \
         -i http://archive.org/download/thethreeagesbusterkeaton/Buster.Keaton.The.Three.Ages.ogv \
         -loop 0  \
         -final_delay 500 -c:v gif -f gif -ss 00:49:42 -t 5 - > trow_ball.gif
@@ -51,17 +51,5 @@ See what's inside the beast
 
 ```
 $ docker run -ti --entrypoint='bash'  jrottenberg/ffmpeg
-bash-4.1# ls -lsa /usr/local/bin/
-total 46804
-    4 drwxr-xr-x  2 root root     4096 Sep 16 18:39 .
-    4 drwxr-xr-x 16 root root     4096 Sep 16 18:31 ..
- 3040 -rwxr-xr-x  1 root root  3111725 Sep 16 18:33 faac
-12204 -rwxr-xr-x  1 root root 12496224 Sep 16 18:39 ffmpeg
-12144 -rwxr-xr-x  1 root root 12433632 Sep 16 18:39 ffprobe
-11332 -rwxr-xr-x  1 root root 11603392 Sep 16 18:39 ffserver
-  440 -rwxr-xr-x  1 root root   447593 Sep 16 18:32 lame
- 2068 -rwxr-xr-x  1 root root  2116610 Sep 16 18:31 vsyasm
- 1444 -rwxr-xr-x  1 root root  1474928 Sep 16 18:32 x264
- 2068 -rwxr-xr-x  1 root root  2115439 Sep 16 18:31 yasm
- 2056 -rwxr-xr-x  1 root root  2102781 Sep 16 18:31 ytasm
+bash-4.1#
 ```
