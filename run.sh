@@ -3,10 +3,11 @@
 
 set -euo pipefail
 
+#export MAKEFLAGS="-j$[$(nproc) + 1]"
 
 
 
-yum install -y autoconf automake gcc gcc-c++ git libtool make nasm zlib-devel openssl-devel tar xz
+yum install -y autoconf automake gcc gcc-c++ git libtool make nasm zlib-devel openssl-devel tar xz mercurial cmake
 
 
 # yasm
@@ -28,6 +29,16 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               make && \
               make install && \
               make distclean&& \
+              rm -rf ${DIR}
+
+# x265
+DIR=$(mktemp -d) && cd ${DIR} && \
+              hg clone https://bitbucket.org/multicoreware/x265 && \
+              cd x265/source && \
+              cmake -G "Unix Makefiles" . && \
+              cmake . && \
+              make && \
+              make install && \
               rm -rf ${DIR}
 
 # libmp3lame
@@ -82,8 +93,13 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               tar xzvf ffmpeg-${FFMPEG_VERSION}.tar.gz && \
               cd ffmpeg-${FFMPEG_VERSION} && \
               ./configure --prefix="${SRC}" --extra-cflags="-I${SRC}/include" --extra-ldflags="-L${SRC}/lib" --bindir="${SRC}/bin" \
+<<<<<<< HEAD
               --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libxvid --enable-gpl \
               --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small --enable-ssl && \
+=======
+              --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libx265 --enable-libxvid --enable-gpl \
+              --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small && \
+>>>>>>> Added x265 (HEVC) encoder
               make && \
               make install && \
               make distclean && \
@@ -100,7 +116,7 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               make install && \
               rm -rf ${DIR}
 
-yum remove -y autoconf automake gcc gcc-c++ git libtool nasm  zlib-devel tar xz perl libgomp libstdc++-devel openssl-devel
+yum remove -y autoconf automake gcc gcc-c++ git libtool nasm  zlib-devel tar xz perl libgomp libstdc++-devel openssl-devel mercurial cmake
 yum clean all
 rm -rf /var/lib/yum/yumdb/*
 echo "/usr/local/lib" > /etc/ld.so.conf.d/libc.conf
