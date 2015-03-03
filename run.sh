@@ -6,7 +6,7 @@ set -euo pipefail
 
 
 
-yum install -y autoconf automake gcc gcc-c++ git libtool make nasm zlib-devel tar xz
+yum install -y autoconf automake gcc gcc-c++ git libtool make nasm zlib-devel openssl-devel tar xz
 
 
 # yasm
@@ -83,7 +83,7 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               cd ffmpeg-${FFMPEG_VERSION} && \
               ./configure --prefix="${SRC}" --extra-cflags="-I${SRC}/include" --extra-ldflags="-L${SRC}/lib" --bindir="${SRC}/bin" \
               --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libxvid --enable-gpl \
-              --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small && \
+              --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small --enable-gnutls && \
               make && \
               make install && \
               make distclean && \
@@ -100,7 +100,7 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               make install && \
               rm -rf ${DIR}
 
-yum remove -y autoconf automake gcc gcc-c++ git libtool nasm  zlib-devel tar xz perl libgomp libstdc++-devel
+yum remove -y autoconf automake gcc gcc-c++ git libtool nasm  zlib-devel tar xz perl libgomp libstdc++-devel openssl-devel
 yum clean all
 rm -rf /var/lib/yum/yumdb/*
 echo "/usr/local/lib" > /etc/ld.so.conf.d/libc.conf
