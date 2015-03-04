@@ -29,8 +29,8 @@ COPY          run.sh /tmp/run.sh
 # See https://github.com/jrottenberg/ffmpeg/blob/master/run.sh
 RUN           bash /tmp/run.sh
 
-
-
+# Let's make sure the app built correctly
+RUN           ffmpeg -buildconf 
 
 
 
