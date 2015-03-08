@@ -7,7 +7,7 @@ set -euo pipefail
 
 
 
-yum install -y autoconf automake gcc gcc-c++ git libtool make nasm zlib-devel openssl-devel tar xz mercurial cmake
+yum install -y autoconf automake gcc gcc-c++ git libtool make nasm zlib-devel openssl-devel tar xz mercurial cmake perl which
 
 
 # yasm
@@ -28,7 +28,7 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               ./configure --prefix="$SRC" --bindir="${SRC}/bin" --enable-static && \
               make && \
               make install && \
-              make distclean&& \
+              make distclean && \
               rm -rf ${DIR}
 
 # x265
@@ -39,6 +39,49 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               cmake . && \
               make && \
               make install && \
+              rm -rf ${DIR}
+
+# libogg
+DIR=$(mktemp -d) && cd ${DIR} && \
+              curl -Os http://downloads.xiph.org/releases/ogg/libogg-${OGG_VERSION}.tar.gz && \
+              tar xzvf libogg-${OGG_VERSION}.tar.gz && \
+              cd libogg-${OGG_VERSION} && \
+              ./configure --prefix="$SRC" --bindir="${SRC}/bin" --disable-shared && \
+              make && \
+              make install && \
+              make distclean && \
+              rm -rf ${DIR}
+
+# libopus
+DIR=$(mktemp -d) && cd ${DIR} && \
+              git clone --depth 1 git://git.opus-codec.org/opus.git && \
+              cd opus && \
+              autoreconf -fiv && \
+              ./configure --prefix="$SRC" --disable-shared && \
+              make && \
+              make install && \
+              make distclean && \
+              rm -rf ${DIR}
+
+# libvorbis
+DIR=$(mktemp -d) && cd ${DIR} && \
+              curl -Os http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VERSION}.tar.gz && \
+              tar xzvf libvorbis-${VORBIS_VERSION}.tar.gz && \
+              cd libvorbis-${VORBIS_VERSION} && \
+              ./configure --prefix="$SRC" --with-ogg="$SRC" --bindir="${SRC}/bin" --disable-shared && \
+              make && \
+              make install && \
+              make distclean && \
+              rm -rf ${DIR}
+
+# libvpx
+DIR=$(mktemp -d) && cd ${DIR} && \
+              git clone --depth 1 https://chromium.googlesource.com/webm/libvpx.git && \
+              cd libvpx && \
+              ./configure --prefix="$SRC" --enable-vp8 --enable-vp9 --disable-examples && \
+              make && \
+              make install && \
+              make clean && \
               rm -rf ${DIR}
 
 # libmp3lame
@@ -93,13 +136,9 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               tar xzvf ffmpeg-${FFMPEG_VERSION}.tar.gz && \
               cd ffmpeg-${FFMPEG_VERSION} && \
               ./configure --prefix="${SRC}" --extra-cflags="-I${SRC}/include" --extra-ldflags="-L${SRC}/lib" --bindir="${SRC}/bin" \
-<<<<<<< HEAD
               --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libxvid --enable-gpl \
-              --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small --enable-ssl && \
-=======
-              --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libx265 --enable-libxvid --enable-gpl \
-              --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small && \
->>>>>>> Added x265 (HEVC) encoder
+              --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small --enable-ssl \
+              --enable-libx265 --enable-libopus --enable-libvorbis --enable-libvpx && \
               make && \
               make install && \
               make distclean && \
@@ -116,7 +155,7 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               make install && \
               rm -rf ${DIR}
 
-yum remove -y autoconf automake gcc gcc-c++ git libtool nasm  zlib-devel tar xz perl libgomp libstdc++-devel openssl-devel mercurial cmake
+yum remove -y autoconf automake gcc gcc-c++ git libtool nasm  zlib-devel tar xz perl libgomp libstdc++-devel openssl-devel mercurial cmake perl which
 yum clean all
 rm -rf /var/lib/yum/yumdb/*
 echo "/usr/local/lib" > /etc/ld.so.conf.d/libc.conf
