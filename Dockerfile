@@ -14,6 +14,8 @@ MAINTAINER    Julien Rottenberg <julien@rottenberg.info>
 ENV           FFMPEG_VERSION  2.5.4
 ENV           MPLAYER_VERSION 1.1.1
 ENV           YASM_VERSION    1.3.0
+ENV           OGG_VERSION     1.3.2
+ENV           VORBIS_VERSION  1.3.4
 ENV           LAME_VERSION    3.99.5
 ENV           FAAC_VERSION    1.28
 ENV           XVID_VERSION    1.3.3
