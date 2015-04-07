@@ -34,7 +34,7 @@ RUN           bash /tmp/run.sh
 # Let's make sure the app built correctly
 RUN           ffmpeg -buildconf 
 
-
+WORKDIR /tmp/workdir
 
 CMD           ["--help"]
 ENTRYPOINT    ["ffmpeg"]
