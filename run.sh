@@ -143,6 +143,9 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               make install && \
               make distclean && \
               hash -r && \
+              cd tools
+              make qt-faststart
+              cp qt-faststart ${SRC}/bin
               rm -rf ${DIR}
 
 # mplayer
