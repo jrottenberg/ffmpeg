@@ -1,6 +1,6 @@
 # ffmpeg
 #
-# VERSION               2.7.1-1
+# VERSION               2.7.2-1
 #
 # From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
 #
@@ -11,7 +11,7 @@ MAINTAINER    Julien Rottenberg <julien@rottenberg.info>
 
 
 
-ENV           FFMPEG_VERSION  2.7.1
+ENV           FFMPEG_VERSION  2.7.2
 ENV           MPLAYER_VERSION 1.1.1
 ENV           YASM_VERSION    1.3.0
 ENV           OGG_VERSION     1.3.2
