@@ -1,11 +1,11 @@
 FFMPEG for Docker on Centos7
 ============================
 
-This repo has a Dockerfile to create a Docker image with FFMPEG. It compiles FFMPEG from sources following instructions from the [Centos Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Centos).
+This project prepares a minimalist Docker image with FFMPEG. It compiles FFMPEG from sources following instructions from the [Centos Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Centos).
 
 You can install the latest build of this image by running `docker pull jrottenberg/ffmpeg`.
 
-This image can likely be used as a base for an encoding farm, based on centos.
+This image can be used as a base for an encoding farm, based on centos7.
 
 Test
 ----
@@ -54,3 +54,19 @@ See what's inside the beast
 $ docker run -it --entrypoint='bash' jrottenberg/ffmpeg
 bash-4.1# for i in yasm x264 x265 ogg opus vorbis vpx mp3lame faac xvid fdk ;do echo $i; find /usr/local/ -name "*$i*";done
 ```
+
+Keep uptodate
+-------------
+
+-	FFMPEG_VERSION https://github.com/FFmpeg/FFmpeg/blob/master/Changelog
+-	MPLAYER_VERSION http://www.mplayerhq.hu/MPlayer/releases/
+-	YASM_VERSION https://github.com/yasm/yasm/releases
+-	OGG_VERSION https://xiph.org/downloads/
+-	VORBIS_VERSION https://xiph.org/downloads/
+-	LAME_VERSION http://lame.sourceforge.net/download.php
+-	OPUS_VERSION https://www.opus-codec.org/downloads/
+-	FAAC_VERSION http://www.audiocoding.com/downloads.html
+-	VPX_VERSION https://github.com/webmproject/libvpx/releases
+-	XVID_VERSION https://labs.xvid.com/source/
+-	FDKAAC_VERSION https://github.com/mstorsjo/fdk-aac/releases
+-	X265_VERSION https://bitbucket.org/multicoreware/x265/downloads
