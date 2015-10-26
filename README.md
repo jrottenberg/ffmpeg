@@ -11,7 +11,7 @@ Test
 ----
 
 ```
-$ docker run jrottenberg/ffmpeg
+$ docker run jrottenberg/ffmpeg -buildconf
 ffmpeg version 2.8.1 Copyright (c) 2000-2015 the FFmpeg developers
   built with gcc 4.8.3 (GCC) 20140911 (Red Hat 4.8.3-9)
   configuration: --prefix=/usr/local --extra-cflags=-I/usr/local/include --extra-ldflags=-L/usr/local/lib --bindir=/usr/local/bin --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libxvid --enable-gpl --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small --enable-openssl --enable-libx265 --enable-libopus --enable-libvorbis --enable-libvpx
@@ -24,9 +24,30 @@ ffmpeg version 2.8.1 Copyright (c) 2000-2015 the FFmpeg developers
   libswscale      3.  1.101 /  3.  1.101
   libswresample   1.  2.101 /  1.  2.101
   libpostproc    53.  3.100 / 53.  3.100
-Hyper fast Audio and Video encoder
-usage: ffmpeg [options] [[infile options] -i infile]... {[outfile options] outfile}...
-[...]
+
+  configuration:
+    --prefix=/usr/local
+    --extra-cflags=-I/usr/local/include
+    --extra-ldflags=-L/usr/local/lib
+    --bindir=/usr/local/bin
+    --extra-libs=-ldl
+    --enable-version3
+    --enable-libfaac
+    --enable-libmp3lame
+    --enable-libx264
+    --enable-libxvid
+    --enable-gpl
+    --enable-postproc
+    --enable-nonfree
+    --enable-avresample
+    --enable-libfdk_aac
+    --disable-debug
+    --enable-small
+    --enable-openssl
+    --enable-libx265
+    --enable-libopus
+    --enable-libvorbis
+    --enable-libvpx
 ```
 
 Capture output from the container to the host running the command
