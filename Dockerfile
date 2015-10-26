@@ -1,40 +1,36 @@
 # ffmpeg
 #
-# VERSION               2.7.2-1
+# VERSION               2.8.1-1
 #
 # From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
 #
-FROM          centos:centos6
+FROM          centos:7
 MAINTAINER    Julien Rottenberg <julien@rottenberg.info>
 
 
-
-
-
-ENV           FFMPEG_VERSION  2.7.2
-ENV           MPLAYER_VERSION 1.1.1
+ENV           FFMPEG_VERSION  2.8.1
+ENV           MPLAYER_VERSION 1.2
 ENV           YASM_VERSION    1.3.0
 ENV           OGG_VERSION     1.3.2
 ENV           VORBIS_VERSION  1.3.4
 ENV           LAME_VERSION    3.99.5
+ENV           OPUS_VERSION    1.1
 ENV           FAAC_VERSION    1.28
+ENV           VPX_VERSION     1.4.0
 ENV           XVID_VERSION    1.3.3
 ENV           FDKAAC_VERSION  0.1.3
-ENV           SRC             /usr/local
-ENV           LD_LIBRARY_PATH ${SRC}/lib
-ENV           PKG_CONFIG_PATH ${SRC}/lib/pkgconfig
+ENV           X265_VERSION    1.8
 
 
-
-COPY          run.sh /tmp/run.sh
+WORKDIR       /tmp/workdir
 
 # See https://github.com/jrottenberg/ffmpeg/blob/master/run.sh
-RUN           bash /tmp/run.sh
+COPY          run.sh /tmp/run.sh
+RUN           /tmp/run.sh
 
 # Let's make sure the app built correctly
-RUN           ffmpeg -buildconf 
+RUN           ffmpeg -buildconf
 
-WORKDIR /tmp/workdir
 
 CMD           ["--help"]
 ENTRYPOINT    ["ffmpeg"]
