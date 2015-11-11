@@ -8,7 +8,7 @@ export MAKEFLAGS="-j$[$(nproc) + 1]"
 export SRC=/usr/local
 export PKG_CONFIG_PATH=${SRC}/lib/pkgconfig
 
-yum install -y autoconf automake gcc gcc-c++ git libtool make nasm zlib-devel openssl-devel tar cmake perl which
+yum install -y autoconf automake gcc gcc-c++ git libtool make nasm zlib-devel openssl-devel tar cmake perl which bzip2
 
 # yasm
 DIR=$(mktemp -d) && cd ${DIR} && \
@@ -66,6 +66,17 @@ DIR=$(mktemp -d) && cd ${DIR} && \
 DIR=$(mktemp -d) && cd ${DIR} && \
               curl -s http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VERSION}.tar.gz | tar zxvf - -C . && \
               cd libvorbis-${VORBIS_VERSION} && \
+              ./configure --prefix="${SRC}" --with-ogg="${SRC}" --bindir="${SRC}/bin" \
+              --disable-shared --datadir=${DIR} && \
+              make && \
+              make install && \
+              make distclean && \
+              rm -rf ${DIR}
+
+# libtheora
+DIR=$(mktemp -d) && cd ${DIR} && \
+              curl -s http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.bz2 | tar jxvf - -C . && \
+              cd libtheora-${THEORA_VERSION} && \
               ./configure --prefix="${SRC}" --with-ogg="${SRC}" --bindir="${SRC}/bin" \
               --disable-shared --datadir=${DIR} && \
               make && \
@@ -135,7 +146,7 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame \
               --enable-libx264 --enable-libxvid --enable-gpl \
               --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac \
-              --disable-debug --enable-small --enable-openssl \
+              --disable-debug --enable-small --enable-openssl --enable-libtheora \
               --enable-libx265 --enable-libopus --enable-libvorbis --enable-libvpx && \
               make && \
               make install && \
