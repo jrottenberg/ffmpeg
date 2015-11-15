@@ -1,6 +1,6 @@
 # ffmpeg
 #
-# VERSION               2.8.1-1
+# VERSION               2.8
 #
 # From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
 #
@@ -8,7 +8,7 @@ FROM          centos:7
 MAINTAINER    Julien Rottenberg <julien@rottenberg.info>
 
 
-ENV           FFMPEG_VERSION=2.8.1 \
+ENV           FFMPEG_VERSION=2.8.2 \
               MPLAYER_VERSION=1.2  \
               YASM_VERSION=1.3.0   \
               OGG_VERSION=1.3.2    \
