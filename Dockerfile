@@ -4,6 +4,9 @@
 #
 # From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
 #
+# https://hub.docker.com/r/jrottenberg/ffmpeg/
+#
+#
 FROM          centos:7
 MAINTAINER    Julien Rottenberg <julien@rottenberg.info>
 
@@ -22,7 +25,6 @@ ENV           FFMPEG_VERSION=2.8.2 \
               FDKAAC_VERSION=0.1.4 \
               X265_VERSION=1.8
 
-
 WORKDIR       /tmp/workdir
 
 # See https://github.com/jrottenberg/ffmpeg/blob/master/run.sh
@@ -30,8 +32,8 @@ COPY          run.sh /tmp/run.sh
 RUN           /tmp/run.sh
 
 # Let's make sure the app built correctly
+# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/
 RUN           ffmpeg -buildconf
-
 
 CMD           ["--help"]
 ENTRYPOINT    ["ffmpeg"]
