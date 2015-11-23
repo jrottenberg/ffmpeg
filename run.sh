@@ -21,9 +21,9 @@ DIR=$(mktemp -d) && cd ${DIR} && \
               make distclean && \
               rm -rf ${DIR}
 
-# x264  TODO : pin version
+# x264  TODO : pin version, at least we use stable branch
 DIR=$(mktemp -d) && cd ${DIR} && \
-              git clone --depth 1 git://git.videolan.org/x264 && \
+              git clone -b stable  --single-branch --depth 1 git://git.videolan.org/x264 && \
               cd x264 && \
               ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-static && \
               make && \
