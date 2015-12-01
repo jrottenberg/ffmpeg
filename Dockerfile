@@ -11,8 +11,7 @@ FROM          centos:7
 MAINTAINER    Julien Rottenberg <julien@rottenberg.info>
 
 
-ENV           FFMPEG_VERSION=2.8.2 \
-              MPLAYER_VERSION=1.2  \
+ENV           FFMPEG_VERSION=2.8.3 \
               YASM_VERSION=1.3.0   \
               OGG_VERSION=1.3.2    \
               VORBIS_VERSION=1.3.5 \
