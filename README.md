@@ -82,16 +82,15 @@ bash-4.1# for i in yasm x264 x265 ogg opus theora vorbis vpx mp3lame faac xvid f
 Keep uptodate
 -------------
 
--	FFMPEG_VERSION https://github.com/FFmpeg/FFmpeg/blob/master/Changelog
--	MPLAYER_VERSION http://www.mplayerhq.hu/MPlayer/releases/
--	YASM_VERSION https://github.com/yasm/yasm/releases
--	OGG_VERSION https://xiph.org/downloads/
--	VORBIS_VERSION https://xiph.org/downloads/
--	THEORA_VERSION https://xiph.org/downloads/
--	LAME_VERSION http://lame.sourceforge.net/download.php
--	OPUS_VERSION https://www.opus-codec.org/downloads/
--	FAAC_VERSION http://www.audiocoding.com/downloads.html
--	VPX_VERSION https://github.com/webmproject/libvpx/releases
--	XVID_VERSION https://labs.xvid.com/source/
--	FDKAAC_VERSION https://github.com/mstorsjo/fdk-aac/releases
--	X265_VERSION https://bitbucket.org/multicoreware/x265/downloads
+-	FFMPEG_VERSION 2.8.3 https://github.com/FFmpeg/FFmpeg/blob/master/Changelog
+-	YASM_VERSION 1.3.0 https://github.com/yasm/yasm/releases
+-	OGG_VERSION 1.3.2 https://xiph.org/downloads/
+-	VORBIS_VERSION 1.3.5 https://xiph.org/downloads/
+-	THEORA_VERSION 1.1.1 https://xiph.org/downloads/
+-	LAME_VERSION 3.99.5 http://lame.sourceforge.net/download.php
+-	OPUS_VERSION 1.1.1 https://www.opus-codec.org/downloads/
+-	FAAC_VERSION 1.28 http://www.audiocoding.com/downloads.html
+-	VPX_VERSION 1.4.0 https://github.com/webmproject/libvpx/releases
+-	XVID_VERSION 1.3.4 https://labs.xvid.com/source/
+-	FDKAAC_VERSION 0.1.4 https://github.com/mstorsjo/fdk-aac/releases
+-	X265_VERSION 1.8 https://bitbucket.org/multicoreware/x265/downloads
