@@ -82,7 +82,7 @@ bash-4.1# for i in yasm x264 x265 ogg opus theora vorbis vpx mp3lame faac xvid f
 Keep uptodate
 -------------
 
--	FFMPEG_VERSION 2.8.4 https://github.com/FFmpeg/FFmpeg/blob/master/Changelog
+-	FFMPEG_VERSION 2.8.5 https://github.com/FFmpeg/FFmpeg/blob/master/Changelog
 -	YASM_VERSION 1.3.0 https://github.com/yasm/yasm/releases
 -	OGG_VERSION 1.3.2 https://xiph.org/downloads/
 -	VORBIS_VERSION 1.3.5 https://xiph.org/downloads/

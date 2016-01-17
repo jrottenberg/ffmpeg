@@ -16,7 +16,7 @@ ENTRYPOINT    ["ffmpeg"]
 WORKDIR       /tmp/workdir
 
 
-ENV           FFMPEG_VERSION=2.8.4 \
+ENV           FFMPEG_VERSION=2.8.5 \
               YASM_VERSION=1.3.0   \
               OGG_VERSION=1.3.2    \
               VORBIS_VERSION=1.3.5 \
