@@ -16,7 +16,7 @@ ENTRYPOINT    ["ffmpeg"]
 WORKDIR       /tmp/workdir
 
 
-ENV           FFMPEG_VERSION=2.8.5 \
+ENV           FFMPEG_VERSION=2.8.6 \
               YASM_VERSION=1.3.0   \
               OGG_VERSION=1.3.2    \
               VORBIS_VERSION=1.3.5 \
@@ -27,7 +27,7 @@ ENV           FFMPEG_VERSION=2.8.5 \
               VPX_VERSION=1.5.0    \
               XVID_VERSION=1.3.4   \
               FDKAAC_VERSION=0.1.4 \
-              X265_VERSION=1.8
+              X265_VERSION=1.9
 
 
 # See https://github.com/jrottenberg/ffmpeg/blob/master/run.sh
