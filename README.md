@@ -13,19 +13,18 @@ Test
 ----
 
 ```
-$ docker run jrottenberg/ffmpeg -buildconf
-ffmpeg version 2.8.1 Copyright (c) 2000-2015 the FFmpeg developers
-  built with gcc 4.8.3 (GCC) 20140911 (Red Hat 4.8.3-9)
+ffmpeg version 3.0 Copyright (c) 2000-2016 the FFmpeg developers
+  built with gcc 4.8.5 (GCC) 20150623 (Red Hat 4.8.5-4)
   configuration: --prefix=/usr/local --extra-cflags=-I/usr/local/include --extra-ldflags=-L/usr/local/lib --bindir=/usr/local/bin --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libxvid --enable-gpl --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small --enable-openssl --enable-libtheora --enable-libx265 --enable-libopus --enable-libvorbis --enable-libvpx
-  libavutil      54. 31.100 / 54. 31.100
-  libavcodec     56. 60.100 / 56. 60.100
-  libavformat    56. 40.101 / 56. 40.101
-  libavdevice    56.  4.100 / 56.  4.100
-  libavfilter     5. 40.101 /  5. 40.101
-  libavresample   2.  1.  0 /  2.  1.  0
-  libswscale      3.  1.101 /  3.  1.101
-  libswresample   1.  2.101 /  1.  2.101
-  libpostproc    53.  3.100 / 53.  3.100
+  libavutil      55. 17.103 / 55. 17.103
+  libavcodec     57. 24.102 / 57. 24.102
+  libavformat    57. 25.100 / 57. 25.100
+  libavdevice    57.  0.101 / 57.  0.101
+  libavfilter     6. 31.100 /  6. 31.100
+  libavresample   3.  0.  0 /  3.  0.  0
+  libswscale      4.  0.100 /  4.  0.100
+  libswresample   2.  0.101 /  2.  0.101
+  libpostproc    54.  0.100 / 54.  0.100
 
   configuration:
     --prefix=/usr/local
@@ -82,7 +81,7 @@ bash-4.1# for i in yasm x264 x265 ogg opus theora vorbis vpx mp3lame faac xvid f
 Keep uptodate
 -------------
 
--	FFMPEG_VERSION 2.8.6 https://github.com/FFmpeg/FFmpeg/blob/master/Changelog
+-	FFMPEG_VERSION 3.0 https://github.com/FFmpeg/FFmpeg/blob/master/Changelog
 -	YASM_VERSION 1.3.0 https://github.com/yasm/yasm/releases
 -	OGG_VERSION 1.3.2 https://xiph.org/downloads/
 -	VORBIS_VERSION 1.3.5 https://xiph.org/downloads/
