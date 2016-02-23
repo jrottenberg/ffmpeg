@@ -1,6 +1,8 @@
 FFMPEG for Docker on Centos7
 ============================
 
+[![Image Size](https://img.shields.io/imagelayers/image-size/jrottenberg/ffmpeg/latest.svg?style=plastic)](https://imagelayers.io/?images=jrottenberg%2Fffmpeg:latest) [![Image Layers](https://img.shields.io/imagelayers/layers/jrottenberg/ffmpeg/latest.svg?style=plastic)](https://imagelayers.io/?images=jrottenberg%2Fffmpeg:latest) [![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/) [![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
+
 This project prepares a minimalist Docker image with FFMPEG. It compiles FFMPEG from sources following instructions from the [Centos Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Centos).
 
 You can install the latest build of this image by running `docker pull jrottenberg/ffmpeg`.
