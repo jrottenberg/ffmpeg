@@ -1,6 +1,5 @@
 # ffmpeg - http://ffmpeg.org/download.html
 #
-# VERSION               2.8
 #
 # From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
 #
@@ -16,7 +15,7 @@ ENTRYPOINT    ["ffmpeg"]
 WORKDIR       /tmp/workdir
 
 
-ENV           FFMPEG_VERSION=3.0 \
+ENV           FFMPEG_VERSION=3.0.1 \
               YASM_VERSION=1.3.0   \
               OGG_VERSION=1.3.2    \
               VORBIS_VERSION=1.3.5 \
