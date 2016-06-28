@@ -14,7 +14,7 @@ ENTRYPOINT  ["ffmpeg"]
 WORKDIR     /tmp/workdir
 
 
-ENV         FFMPEG_VERSION=3.0.2 \
+ENV         FFMPEG_VERSION=3.1 \
             FAAC_VERSION=1.28    \
             FDKAAC_VERSION=0.1.4 \
             LAME_VERSION=3.99.5  \
@@ -236,6 +236,6 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         apt-get clean -y && \
         rm -rf /var/lib/apt/lists && \
         ffmpeg -buildconf
-        
+
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
