@@ -1,0 +1,10 @@
+sudo: required
+
+language: bash
+
+services:
+  - docker
+
+script:
+  - docker build -t jrottenberg/ffmpeg .
+  - docker run jrottenberg/ffmpeg -buildconf
