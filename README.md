@@ -9,6 +9,21 @@ You can install the latest build of this image by running `docker pull jrottenbe
 
 This image can be used as a base for an encoding farm, based on centos7.
 
+Ubuntu builds
+--------------
+
+You can use jrottenberg/ffmpeg:ubuntu or  jrottenberg/ffmpeg:3.1-ubuntu
+to get the latest build based on ubuntu.
+
+Note : I'll make ubuntu the default after 3.1
+ie you'll find centos based image using jrottenberg/ffmpeg:3.x-centos
+
+```
+ffmpeg                                                      ubuntu              571384c84090        12 hours ago        289.3 MB
+ffmpeg                                                      centos              4478825e57ee        8 weeks ago         341 MB
+```
+
+
 Please use [Github issues](https://github.com/jrottenberg/ffmpeg/issues/new) to report any bug or missing feature.
 
 Test
@@ -83,7 +98,7 @@ bash-4.1# for i in yasm x264 x265 ogg opus theora vorbis vpx mp3lame faac xvid f
 Keep uptodate
 -------------
 
--	FFMPEG_VERSION 3.0.2 https://github.com/FFmpeg/FFmpeg/blob/master/Changelog
+-	FFMPEG_VERSION 3.1 https://github.com/FFmpeg/FFmpeg/blob/master/Changelog
 -	YASM_VERSION 1.3.0 https://github.com/yasm/yasm/releases
 -	OGG_VERSION 1.3.2 https://xiph.org/downloads/
 -	VORBIS_VERSION 1.3.5 https://xiph.org/downloads/
