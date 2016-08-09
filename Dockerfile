@@ -14,7 +14,7 @@ ENTRYPOINT  ["ffmpeg"]
 WORKDIR     /tmp/workdir
 
 
-ENV         FFMPEG_VERSION=3.1.1 \
+ENV         FFMPEG_VERSION=3.1.2 \
             FAAC_VERSION=1.28    \
             FDKAAC_VERSION=0.1.4 \
             LAME_VERSION=3.99.5  \
@@ -75,13 +75,15 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
 
 # x265
         DIR=$(mktemp -d) && cd ${DIR} && \
-        curl -s https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz | \
+        curl -s https://bitbucket.org/multicoreware/x265/downloads/x265_{X265_VERSION}.tar.gz | \
         tar zxf - -C . && \
         cd x265_${X265_VERSION}/source && \
         cmake -G "Unix Makefiles" . && \
         cmake . && \
         make && \
+        ../build/linux/multilib.sh && \
         make install && \
+        build/linux/multilib.sh && \
         rm -rf ${DIR} && \
 # libogg
         DIR=$(mktemp -d) && cd ${DIR} && \

@@ -14,7 +14,7 @@ ENTRYPOINT  ["ffmpeg"]
 WORKDIR     /tmp/workdir
 
 
-ENV         FFMPEG_VERSION=3.1.1 \
+ENV         FFMPEG_VERSION=3.1.2 \
             FAAC_VERSION=1.28    \
             FDKAAC_VERSION=0.1.4 \
             LAME_VERSION=3.99.5  \
@@ -61,6 +61,7 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         cmake . && \
         make && \
         make install && \
+        build/linux/multilib.sh && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # libogg
