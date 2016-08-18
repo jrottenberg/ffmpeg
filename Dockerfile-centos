@@ -14,7 +14,7 @@ ENTRYPOINT  ["ffmpeg"]
 WORKDIR     /tmp/workdir
 
 
-ENV         FFMPEG_VERSION=3.1.2 \
+ENV         FFMPEG_VERSION=3.1.1 \
             FAAC_VERSION=1.28    \
             FDKAAC_VERSION=0.1.4 \
             LAME_VERSION=3.99.5  \
@@ -23,7 +23,7 @@ ENV         FFMPEG_VERSION=3.1.2 \
             THEORA_VERSION=1.1.1 \
             YASM_VERSION=1.3.0   \
             VORBIS_VERSION=1.3.5 \
-            VPX_VERSION=1.5.0    \
+            VPX_VERSION=1.6.0    \
             XVID_VERSION=1.3.4   \
             X265_VERSION=1.9     \
             SRC=/usr/local       \
@@ -31,18 +31,31 @@ ENV         FFMPEG_VERSION=3.1.2 \
 
 RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
-        yum install -y autoconf automake gcc gcc-c++ git libtool make nasm zlib-devel openssl-devel tar cmake perl which bzip2 && \
+        yum install -y autoconf \
+        automake \
+        bzip2 \
+        cmake \
+        gcc \
+        gcc-c++ \
+        git \
+        libtool \
+        make \
+        nasm \
+        perl \
+        openssl-devel \
+        tar \
+        which \
+        zlib-devel && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # yasm
-        curl -sL https://github.com/yasm/yasm/archive/v${YASM_VERSION}.tar.gz | \
-        tar zxf - -C . && \
+        curl -sLL https://github.com/yasm/yasm/archive/v${YASM_VERSION}.tar.gz | tar zxf - -C . && \
         cd ${DIR}/yasm-${YASM_VERSION} && \
         ./autogen.sh && \
         ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --docdir=${DIR} -mandir=${DIR}&& \
         make && \
         make install && \
         make distclean && \
-        rm -rf ${DIR}&& \
+        rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # x264  TODO : pin version, at least we use the stable branch
         git clone -b stable  --single-branch --depth 1 git://git.videolan.org/x264 && \
@@ -54,19 +67,17 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # x265
-        curl -s https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz | \
+        curl -s https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
         tar zxf - -C . && \
         cd x265_${X265_VERSION}/source && \
         cmake -G "Unix Makefiles" . && \
         cmake . && \
         make && \
         make install && \
-        build/linux/multilib.sh && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # libogg
-        curl -s http://downloads.xiph.org/releases/ogg/libogg-${OGG_VERSION}.tar.gz | \
-        tar zxf - -C . && \
+        curl -sL http://downloads.xiph.org/releases/ogg/libogg-${OGG_VERSION}.tar.gz | tar zxf - -C . && \
         cd libogg-${OGG_VERSION} && \
         ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --disable-shared --datadir=${DIR} && \
         make && \
@@ -75,8 +86,7 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # libopus
-        curl -s http://downloads.xiph.org/releases/opus/opus-${OPUS_VERSION}.tar.gz | \
-        tar zxf - -C . && \
+        curl -sL http://downloads.xiph.org/releases/opus/opus-${OPUS_VERSION}.tar.gz | tar zxf - -C . && \
         cd opus-${OPUS_VERSION} && \
         autoreconf -fiv && \
         ./configure --prefix="${SRC}" --disable-shared --datadir="${DIR}" && \
@@ -86,8 +96,7 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # libvorbis
-        curl -s http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VERSION}.tar.gz | \
-        tar zxf - -C . && \
+        curl -sL http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VERSION}.tar.gz | tar zxf - -C . && \
         cd libvorbis-${VORBIS_VERSION} && \
         ./configure --prefix="${SRC}" --with-ogg="${SRC}" --bindir="${SRC}/bin" \
         --disable-shared --datadir="${DIR}" && \
@@ -97,8 +106,7 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # libtheora
-        curl -s http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.bz2 | \
-        tar jxvf - -C . && \
+        curl -sL http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.bz2 | tar jxvf - -C . && \
         cd libtheora-${THEORA_VERSION} && \
         ./configure --prefix="${SRC}" --with-ogg="${SRC}" --bindir="${SRC}/bin" \
         --disable-shared --datadir="${DIR}" && \
@@ -108,8 +116,7 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # libvpx
-        curl -s https://codeload.github.com/webmproject/libvpx/tar.gz/v${VPX_VERSION} | \
-        tar zxf - -C . && \
+        curl -sL https://codeload.github.com/webmproject/libvpx/tar.gz/v${VPX_VERSION} | tar zxf - -C . && \
         cd libvpx-${VPX_VERSION} && \
         ./configure --prefix="${SRC}" --enable-vp8 --enable-vp9 --disable-examples --disable-docs && \
         make && \
@@ -118,18 +125,16 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # libmp3lame
-        curl -Ls https://downloads.sf.net/project/lame/lame/${LAME_VERSION%.*}/lame-${LAME_VERSION}.tar.gz \
-        | tar zxf - -C . && \
+        curl -Ls https://downloads.sf.net/project/lame/lame/${LAME_VERSION%.*}/lame-${LAME_VERSION}.tar.gz | tar zxf - -C . && \
         cd lame-${LAME_VERSION} && \
         ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --disable-shared --enable-nasm --datadir="${DIR}" && \
         make && \
         make install && \
-        make distclean&& \
+        make distclean && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) &&  cd ${DIR} && \
 # faac + http://stackoverflow.com/a/4320377
-        curl -Lss https://downloads.sf.net/faac/faac-${FAAC_VERSION}.tar.gz | \
-        tar zxf - -C . && \
+        curl -Lss https://downloads.sf.net/faac/faac-${FAAC_VERSION}.tar.gz | tar zxf - -C . && \
         cd faac-${FAAC_VERSION} && \
         sed -i '126d' common/mp4v2/mpeg4ip.h && \
         ./bootstrap && \
@@ -139,8 +144,7 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # xvid
-        curl -L -s  http://downloads.xvid.org/downloads/xvidcore-${XVID_VERSION}.tar.gz | \
-        tar zxf - -C . && \
+        curl -sL http://downloads.xvid.org/downloads/xvidcore-${XVID_VERSION}.tar.gz | tar zxf - -C . && \
         cd xvidcore/build/generic && \
         ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --datadir="${DIR}" && \
         make && \
@@ -148,8 +152,7 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # fdk-aac
-        curl -s https://codeload.github.com/mstorsjo/fdk-aac/tar.gz/v${FDKAAC_VERSION} | \
-        tar zxf - -C . && \
+        curl -sL https://codeload.github.com/mstorsjo/fdk-aac/tar.gz/v${FDKAAC_VERSION} | tar zxf - -C . && \
         cd fdk-aac-${FDKAAC_VERSION} && \
         autoreconf -fiv && \
         ./configure --prefix="${SRC}" --disable-shared --datadir="${DIR}" && \
@@ -159,8 +162,7 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         rm -rf ${DIR}&& \
         DIR=$(mktemp -d) && cd ${DIR} && \
 # ffmpeg
-        curl -s http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz | \
-        tar zxf - -C . && \
+        curl -sL http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz | tar zxf - -C . && \
         cd ffmpeg-${FFMPEG_VERSION} && \
         ./configure --prefix="${SRC}" \
         --extra-cflags="-I${SRC}/include" \
@@ -194,7 +196,10 @@ RUN     export MAKEFLAGS="-j$[$(nproc) + 1]" && \
         make qt-faststart && \
         cp qt-faststart ${SRC}/bin && \
         rm -rf ${DIR} && \
-        yum history -y undo last && yum clean all && rm -rf /var/lib/yum/* && \
+# cleanup
+        cd && \
+        yum history -y undo last && yum clean all && \
+        rm -rf /var/lib/yum/* && \
         ffmpeg -buildconf
 
 
