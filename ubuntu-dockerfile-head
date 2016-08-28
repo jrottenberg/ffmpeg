@@ -1,0 +1,37 @@
+# ffmpeg - http://ffmpeg.org/download.html
+#
+# From https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
+#
+# https://hub.docker.com/r/jrottenberg/ffmpeg/
+#
+#
+FROM        ubuntu:16.04
+MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+
+
+CMD         ["--help"]
+ENTRYPOINT  ["ffmpeg"]
+WORKDIR     /tmp/workdir
+
+
+ENV         %%ENV%%
+
+RUN      buildDeps="autoconf \
+                    automake \
+                    cmake \
+                    curl \
+                    bzip2 \
+                    g++ \
+                    gcc \
+                    git \
+                    libtool \
+                    make \
+                    nasm \
+                    perl \
+                    pkg-config \
+                    python \
+                    libssl-dev \
+                    zlib1g-dev" && \
+        export MAKEFLAGS="-j$(($(nproc) + 1))" && \
+        apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates && \

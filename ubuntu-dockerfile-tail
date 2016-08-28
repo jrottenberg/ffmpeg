@@ -1,0 +1,10 @@
+## cleanup
+       cd && \
+       apt-get purge -y ${buildDeps} && \
+       apt-get autoremove -y && \
+       apt-get clean -y && \
+       rm -rf /var/lib/apt/lists && \
+       ffmpeg -buildconf
+
+# Let's make sure the app built correctly
+# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

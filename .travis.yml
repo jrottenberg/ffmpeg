@@ -1,10 +1,24 @@
-sudo: required
-
 language: bash
+services: docker
 
-services:
-  - docker
+env:
+ - VERSION=2.7.7 VARIANT=centos
+ - VERSION=2.7.7 VARIANT=ubuntu
+ - VERSION=2.8.7 VARIANT=centos
+ - VERSION=2.8.7 VARIANT=ubuntu
+ - VERSION=3.0.2 VARIANT=centos
+ - VERSION=3.0.2 VARIANT=ubuntu
+ - VERSION=3.1.2 VARIANT=centos
+ - VERSION=3.1.2 VARIANT=ubuntu
+
+before_script:
+  - env | sort
+  - cd "${VERSION}/${VARIANT}"
+  - image="ffmpeg:${VERSION}-${VARIANT}"
 
 script:
-  - docker build -t jrottenberg/ffmpeg .
-  - docker run jrottenberg/ffmpeg -buildconf
+  - docker build -t "$image" .
+after_script:
+
+  - docker images
+# vim:set et ts=2 sw=2:

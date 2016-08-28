@@ -1,0 +1,36 @@
+# ffmpeg - http://ffmpeg.org/download.html
+#
+# From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
+#
+# https://hub.docker.com/r/jrottenberg/ffmpeg/
+#
+#
+FROM        centos:7
+MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+
+
+CMD         ["--help"]
+ENTRYPOINT  ["ffmpeg"]
+WORKDIR     /tmp/workdir
+
+
+ENV         %%ENV%%
+
+RUN     buildDeps="autoconf \
+                   automake \
+                   bzip2 \
+                   cmake \
+                   gcc \
+                   gcc-c++ \
+                   git \
+                   libtool \
+                   make \
+                   nasm \
+                   perl \
+                   openssl-devel \
+                   tar \
+                   which \
+                   zlib-devel" && \
+        export MAKEFLAGS="-j$(($(nproc) + 1))" && \
+        echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
+        yum install -y ${buildDeps} && \
