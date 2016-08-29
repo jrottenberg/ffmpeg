@@ -34,3 +34,12 @@ RUN     buildDeps="autoconf \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum install -y ${buildDeps} && \
+%%RUN%%
+# cleanup
+        cd && \
+        yum history -y undo last && yum clean all && \
+        rm -rf /var/lib/yum/* && \
+        ffmpeg -buildconf
+
+# Let's make sure the app built correctly
+# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

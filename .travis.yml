@@ -13,11 +13,10 @@ env:
 
 before_script:
   - env | sort
-  - cd "${VERSION}/${VARIANT}"
   - image="ffmpeg:${VERSION}-${VARIANT}"
 
 script:
-  - docker build -t "$image" .
+  - docker build -t "${image}" ${VERSION}/${VARIANT}
 after_script:
 
   - docker images

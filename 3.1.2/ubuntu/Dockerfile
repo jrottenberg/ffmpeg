@@ -14,19 +14,19 @@ ENTRYPOINT  ["ffmpeg"]
 WORKDIR     /tmp/workdir
 
 
-ENV         FFMPEG_VERSION=3.1.2 
-            FAAC_VERSION=1.28    
-            FDKAAC_VERSION=0.1.4 
-            LAME_VERSION=3.99.5  
-            OGG_VERSION=1.3.2    
-            OPUS_VERSION=1.1.1   
-            THEORA_VERSION=1.1.1 
-            YASM_VERSION=1.3.0   
-            VORBIS_VERSION=1.3.5 
-            VPX_VERSION=1.6.0    
-            XVID_VERSION=1.3.4   
-            X265_VERSION=2.0     
-            X264_VERSION=20160826-2245-stable 
+ENV         FFMPEG_VERSION=3.1.2 \
+            FAAC_VERSION=1.28    \
+            FDKAAC_VERSION=0.1.4 \
+            LAME_VERSION=3.99.5  \
+            OGG_VERSION=1.3.2    \
+            OPUS_VERSION=1.1.1   \
+            THEORA_VERSION=1.1.1 \
+            YASM_VERSION=1.3.0   \
+            VORBIS_VERSION=1.3.5 \
+            VPX_VERSION=1.6.0    \
+            XVID_VERSION=1.3.4   \
+            X265_VERSION=2.0     \
+            X264_VERSION=20160826-2245-stable \
             SRC=/usr/local
 
 RUN      buildDeps="autoconf \
@@ -198,7 +198,6 @@ RUN      buildDeps="autoconf \
         make qt-faststart && \
         cp qt-faststart ${SRC}/bin && \
         rm -rf ${DIR} && \
- 
 ## cleanup
        cd && \
        apt-get purge -y ${buildDeps} && \

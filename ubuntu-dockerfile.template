@@ -35,3 +35,14 @@ RUN      buildDeps="autoconf \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates && \
+%%RUN%%
+## cleanup
+       cd && \
+       apt-get purge -y ${buildDeps} && \
+       apt-get autoremove -y && \
+       apt-get clean -y && \
+       rm -rf /var/lib/apt/lists && \
+       ffmpeg -buildconf
+
+# Let's make sure the app built correctly
+# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

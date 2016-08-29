@@ -1,4 +1,3 @@
-
         DIR=$(mktemp -d) && cd ${DIR} && \
 ## yasm http://yasm.tortall.net/
         curl -sL https://github.com/yasm/yasm/archive/v${YASM_VERSION}.tar.gz | \
@@ -148,4 +147,3 @@
         make qt-faststart && \
         cp qt-faststart ${SRC}/bin && \
         rm -rf ${DIR} && \
- 
