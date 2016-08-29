@@ -27,6 +27,7 @@ ENV         FFMPEG_VERSION=3.1.2 \
             XVID_VERSION=1.3.4   \
             X265_VERSION=2.0     \
             X264_VERSION=20160826-2245-stable \
+            PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
             SRC=/usr/local
 
 RUN      buildDeps="autoconf \
@@ -61,7 +62,7 @@ RUN      buildDeps="autoconf \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 ## x264 http://www.videolan.org/developers/x264.html TODO : pin version, at least we use the stable branch
-        curl -s ftp://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
+        curl -sL https://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
         tar -jx --strip-components=1 && \
         ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-static && \
         make && \
@@ -70,7 +71,7 @@ RUN      buildDeps="autoconf \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 ## x265 http://x265.org/
-        curl -s https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
+        curl -sL https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
         tar -zx && \
         cd x265_${X265_VERSION}/build/linux && \
         sh multilib.sh && \
@@ -126,7 +127,7 @@ RUN      buildDeps="autoconf \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 ## libmp3lame http://lame.sourceforge.net/
-        curl -Ls https://downloads.sf.net/project/lame/lame/${LAME_VERSION%.*}/lame-${LAME_VERSION}.tar.gz | \
+        curl -sL https://downloads.sf.net/project/lame/lame/${LAME_VERSION%.*}/lame-${LAME_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --disable-shared --enable-nasm --datadir="${DIR}" && \
         make && \
@@ -135,7 +136,7 @@ RUN      buildDeps="autoconf \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 ## faac https://sourceforge.net/projects/faac/ +  http://stackoverflow.com/a/4320377
-        curl -L https://downloads.sf.net/faac/faac-${FAAC_VERSION}.tar.gz | \
+        curl -sL https://downloads.sf.net/faac/faac-${FAAC_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         sed -i '126d' common/mp4v2/mpeg4ip.h && \
         ./bootstrap && \

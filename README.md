@@ -1,8 +1,9 @@
 FFMPEG for Docker on Centos7
 ============================
 
-[![Image Size](https://img.shields.io/imagelayers/image-size/jrottenberg/ffmpeg/latest.svg?style=plastic)](https://imagelayers.io/?images=jrottenberg%2Fffmpeg:latest) [![Image Layers](https://img.shields.io/imagelayers/layers/jrottenberg/ffmpeg/latest.svg?style=plastic)](https://imagelayers.io/?images=jrottenberg%2Fffmpeg:latest) [![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/) [![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
+ [![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/) [![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
 [![Travis](https://img.shields.io/travis/jrottenberg/ffmpeg.svg?maxAge=300?style=plastic)](https://travis-ci.org/jrottenberg/ffmpeg)
+[![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?maxAge=2592000?style=plastic)](https://github.com/jrottenberg/ffmpeg/)
 
 This project prepares a minimalist Docker image with FFMPEG. It compiles FFMPEG from sources following instructions from the [Centos Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Centos).
 
@@ -96,8 +97,10 @@ $ docker run -it --entrypoint='bash' jrottenberg/ffmpeg
 bash-4.1# for i in yasm x264 x265 ogg opus theora vorbis vpx mp3lame faac xvid fdk ;do echo $i; find /usr/local/ -name "*$i*";done
 ```
 
-Keep uptodate
+Keep up to date
 -------------
+
+See Dockerfile-env
 
 -	FFMPEG_VERSION 3.1.3 https://github.com/FFmpeg/FFmpeg/blob/master/Changelog
 -	YASM_VERSION 1.3.0 https://github.com/yasm/yasm/releases
@@ -111,4 +114,4 @@ Keep uptodate
 -	XVID_VERSION 1.3.5 https://labs.xvid.com/source/
 -	FDKAAC_VERSION 0.1.4 https://github.com/mstorsjo/fdk-aac/releases
 -	X265_VERSION 2.0 https://bitbucket.org/multicoreware/x265/downloads
-- X264_VERSION latest_stable http://www.videolan.org/developers/x264.html
+- X264_VERSION 20160826-2245-stable http://www.videolan.org/developers/x264.html
