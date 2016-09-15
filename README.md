@@ -111,4 +111,4 @@ Keep uptodate
 -	XVID_VERSION 1.3.5 https://labs.xvid.com/source/
 -	FDKAAC_VERSION 0.1.4 https://github.com/mstorsjo/fdk-aac/releases
 -	X265_VERSION 2.0 https://bitbucket.org/multicoreware/x265/downloads
--   X2654_VERSION latest_stable http://www.videolan.org/developers/x264.html
+- X264_VERSION latest_stable http://www.videolan.org/developers/x264.html
