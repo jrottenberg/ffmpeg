@@ -13,7 +13,7 @@ This image can be used as a base for an encoding farm, based on centos7.
 Ubuntu builds
 --------------
 
-You can use jrottenberg/ffmpeg:ubuntu or  jrottenberg/ffmpeg:3.1or  jrottenberg/ffmpeg:3
+You can use jrottenberg/ffmpeg:ubuntu or jrottenberg/ffmpeg:3.1 or jrottenberg/ffmpeg:3
 to get the latest build based on ubuntu.
 
 Note : I'll make ubuntu the default after 3.1
