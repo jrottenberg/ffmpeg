@@ -1,25 +1,40 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
 
-cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
+cd $(cd ${0%/*} && pwd -P);
 
-versions=( "$@" )
-if [ ${#versions[@]} -eq 0 ]; then
-  versions=( */ )
+
+majors=( "$@" )
+if [ ${#majors[@]} -eq 0 ]; then
+  majors=( */ )
 fi
-versions=( "${versions[@]%/}" )
+majors=( "${majors[@]%/}" )
 
 travisEnv=''
+
+
 #
-for version in "${versions[@]}"; do
+for major in "${majors[@]}"; do
+  minor=$(curl -sSL --compressed http://ffmpeg.org/releases/ | grep '<a href="ffmpeg-'"${major}." | sed -E 's!.*<a href="ffmpeg-([^"/]+)/?".*!\1!' | cut -f 3 -d . | sort -n | tail -1)
+  version=${major}.${minor}
   ENV="$(sed s*%%FFMPEG_VERSION%%*${version}*g Dockerfile-env)"
-  for variant in centos ubuntu; do
+
+  for variant in ubuntu centos; do
+    if [[ $variant == 'ubuntu' ]]; then
+      DOCKERFILE=${major}/Dockerfile
+      TRAVIS_VARIANT=""
+    else
+      DOCKERFILE=${major}/${variant}/Dockerfile
+      TRAVIS_VARIANT="VARIANT=${variant}"
+    fi
+
     sed -e "s*%%ENV%%*${ENV}*g" ${variant}-dockerfile.template  \
 		    -e '/%%RUN%%/{
     s/%%RUN%%//g
     r Dockerfile-run
-	}' > ${version}/${variant}/Dockerfile
-    travisEnv+="\n - VERSION=${version} VARIANT=${variant}"
+	}' > ${DOCKERFILE}
+    travisEnv+="\n - major=${major} ${TRAVIS_VARIANT}"
   done
 done
 travis="$(awk -v 'RS=\n\n' '$1 == "env:" { $0 = "env:'"$travisEnv"'" } { printf "%s%s", $0, RS }' .travis.yml)"

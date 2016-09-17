@@ -1,11 +1,11 @@
 # ffmpeg - http://ffmpeg.org/download.html
 #
-# From https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
+# From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
 #
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:16.04
+FROM        centos:7
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
 
@@ -14,7 +14,7 @@ ENTRYPOINT  ["ffmpeg"]
 WORKDIR     /tmp/workdir
 
 
-ENV         FFMPEG_VERSION=3.0.2 \
+ENV         FFMPEG_VERSION=3.0.3 \
             FAAC_VERSION=1.28    \
             FDKAAC_VERSION=0.1.4 \
             LAME_VERSION=3.99.5  \
@@ -30,25 +30,24 @@ ENV         FFMPEG_VERSION=3.0.2 \
             PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
             SRC=/usr/local
 
-RUN      buildDeps="autoconf \
-                    automake \
-                    cmake \
-                    curl \
-                    bzip2 \
-                    g++ \
-                    gcc \
-                    git \
-                    libtool \
-                    make \
-                    nasm \
-                    perl \
-                    pkg-config \
-                    python \
-                    libssl-dev \
-                    zlib1g-dev" && \
+RUN     buildDeps="autoconf \
+                   automake \
+                   bzip2 \
+                   cmake \
+                   gcc \
+                   gcc-c++ \
+                   git \
+                   libtool \
+                   make \
+                   nasm \
+                   perl \
+                   openssl-devel \
+                   tar \
+                   which \
+                   zlib-devel" && \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
-        apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates && \
+        echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
+        yum install -y ${buildDeps} && \
 
         DIR=$(mktemp -d) && cd ${DIR} && \
 ## yasm http://yasm.tortall.net/
@@ -199,13 +198,11 @@ RUN      buildDeps="autoconf \
         make qt-faststart && \
         cp qt-faststart ${SRC}/bin && \
         rm -rf ${DIR} && \
-## cleanup
-       cd && \
-       apt-get purge -y ${buildDeps} && \
-       apt-get autoremove -y && \
-       apt-get clean -y && \
-       rm -rf /var/lib/apt/lists && \
-       ffmpeg -buildconf
+# cleanup
+        cd && \
+        yum history -y undo last && yum clean all && \
+        rm -rf /var/lib/yum/* && \
+        ffmpeg -buildconf
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
