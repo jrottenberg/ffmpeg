@@ -2,10 +2,10 @@ FFMPEG for Docker on Centos7
 ============================
 
  [![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/) [![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
-[![Travis](https://img.shields.io/travis/jrottenberg/ffmpeg.svg?maxAge=300?style=plastic)](https://travis-ci.org/jrottenberg/ffmpeg)
+[![Travis](https://img.shields.io/travis/jrottenberg/ffmpeg/master.svg?maxAge=300?style=plastic)](https://travis-ci.org/jrottenberg/ffmpeg)
 [![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?maxAge=2592000?style=plastic)](https://github.com/jrottenberg/ffmpeg/)
 
-This project prepares a minimalist Docker image with FFMPEG. It compiles FFMPEG from sources following instructions from the [Centos Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Centos).
+This project prepares a minimalist Docker image with FFMPEG. It compiles FFMPEG from sources following instructions from the [Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide).
 
 You can install the latest build of this image by running `docker pull jrottenberg/ffmpeg`.
 
@@ -17,12 +17,12 @@ Ubuntu builds
 You can use jrottenberg/ffmpeg:ubuntu or jrottenberg/ffmpeg:3.1 or jrottenberg/ffmpeg:3
 to get the latest build based on ubuntu.
 
-Note : I'll make ubuntu the default after 3.1
-ie you'll find centos based image using jrottenberg/ffmpeg:3.x-centos
+Note : I've made ubuntu the default after 3.1
+ie you'll find centos based image using `ffmpeg:X.Y-centos` or `ffmpeg:centos` to get the latest.
 
 ```
-ffmpeg                                                      ubuntu              571384c84090        12 hours ago        289.3 MB
-ffmpeg                                                      centos              4478825e57ee        8 weeks ago         341 MB
+ffmpeg     ubuntu     571384c84090        12 hours ago        289.3 MB
+ffmpeg     centos     4478825e57ee        8 weeks ago         341 MB
 ```
 
 

@@ -55,13 +55,13 @@ RUN      buildDeps="autoconf \
         curl -sL https://github.com/yasm/yasm/archive/v${YASM_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         ./autogen.sh && \
-        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --docdir=${DIR} -mandir=${DIR}&& \
+        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --datadir=${DIR} && \
         make && \
         make install && \
         make distclean && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
-## x264 http://www.videolan.org/developers/x264.html TODO : pin version, at least we use the stable branch
+## x264 http://www.videolan.org/developers/x264.html
         curl -sL https://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
         tar -jx --strip-components=1 && \
         ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-static && \
@@ -74,7 +74,7 @@ RUN      buildDeps="autoconf \
         curl -sL https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
         tar -zx && \
         cd x265_${X265_VERSION}/build/linux && \
-        sh multilib.sh && \
+        ./multilib.sh && \
         make -C 8bit install && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
