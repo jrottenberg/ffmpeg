@@ -2,20 +2,20 @@ language: bash
 services: docker
 
 env:
- - major=2.8 
+ - major=2.8
  - major=2.8 VARIANT=centos
- - major=3.0 
+ - major=3.0
  - major=3.0 VARIANT=centos
- - major=3.1 
+ - major=3.1
  - major=3.1 VARIANT=centos
 
 before_script:
   - env | sort
-  - image="ffmpeg:${VERSION}-${VARIANT}"
+  - image="ffmpeg:${VERSION}-${VARIANT:-ubuntu}"
 
 script:
-  - docker build -t "${image}" ${VERSION}/${VARIANT}
+  - docker build -t "${image}" ${VERSION}/${VARIANT:-ubuntu}
+  
 after_script:
-
   - docker images
 # vim:set et ts=2 sw=2:
