@@ -1,6 +1,6 @@
 # ffmpeg - http://ffmpeg.org/download.html
 #
-# From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
+# From https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
 #
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
@@ -14,7 +14,7 @@ ENTRYPOINT  ["ffmpeg"]
 WORKDIR     /tmp/workdir
 
 
-ENV         FFMPEG_VERSION=3.1.3 \
+ENV         FFMPEG_VERSION=2.8.8 \
             FAAC_VERSION=1.28    \
             FDKAAC_VERSION=0.1.4 \
             LAME_VERSION=3.99.5  \
@@ -27,6 +27,7 @@ ENV         FFMPEG_VERSION=3.1.3 \
             XVID_VERSION=1.3.4   \
             X265_VERSION=2.0     \
             X264_VERSION=20160826-2245-stable \
+            PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
             SRC=/usr/local
 
 RUN      buildDeps="autoconf \
@@ -48,19 +49,20 @@ RUN      buildDeps="autoconf \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates && \
+
         DIR=$(mktemp -d) && cd ${DIR} && \
 ## yasm http://yasm.tortall.net/
         curl -sL https://github.com/yasm/yasm/archive/v${YASM_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         ./autogen.sh && \
-        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --docdir=${DIR} -mandir=${DIR}&& \
+        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --datadir=${DIR} && \
         make && \
         make install && \
         make distclean && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
-## x264 http://www.videolan.org/developers/x264.html TODO : pin version, at least we use the stable branch
-        curl -s ftp://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
+## x264 http://www.videolan.org/developers/x264.html
+        curl -sL https://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
         tar -jx --strip-components=1 && \
         ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-static && \
         make && \
@@ -69,14 +71,14 @@ RUN      buildDeps="autoconf \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 ## x265 http://x265.org/
-        curl -s https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
+        curl -sL https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
         tar -zx && \
         cd x265_${X265_VERSION}/build/linux && \
-        sh multilib.sh && \
+        ./multilib.sh && \
         make -C 8bit install && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
-## libogg https://www.xiph.org/ogg/ 
+## libogg https://www.xiph.org/ogg/
         curl -sL http://downloads.xiph.org/releases/ogg/libogg-${OGG_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --disable-shared --datadir=${DIR} && \
@@ -125,7 +127,7 @@ RUN      buildDeps="autoconf \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 ## libmp3lame http://lame.sourceforge.net/
-        curl -Ls https://downloads.sf.net/project/lame/lame/${LAME_VERSION%.*}/lame-${LAME_VERSION}.tar.gz | \
+        curl -sL https://downloads.sf.net/project/lame/lame/${LAME_VERSION%.*}/lame-${LAME_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --disable-shared --enable-nasm --datadir="${DIR}" && \
         make && \
@@ -134,7 +136,7 @@ RUN      buildDeps="autoconf \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
 ## faac https://sourceforge.net/projects/faac/ +  http://stackoverflow.com/a/4320377
-        curl -L https://downloads.sf.net/faac/faac-${FAAC_VERSION}.tar.gz | \
+        curl -sL https://downloads.sf.net/faac/faac-${FAAC_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         sed -i '126d' common/mp4v2/mpeg4ip.h && \
         ./bootstrap && \
@@ -197,14 +199,13 @@ RUN      buildDeps="autoconf \
         make qt-faststart && \
         cp qt-faststart ${SRC}/bin && \
         rm -rf ${DIR} && \
- ## cleanup
-        cd && \
-        echo "purge" && \
-        apt-get purge -y ${buildDeps} && \
-        apt-get autoremove -y && \
-        apt-get clean -y && \
-        rm -rf /var/lib/apt/lists && \
-        ffmpeg -buildconf
+## cleanup
+       cd && \
+       apt-get purge -y ${buildDeps} && \
+       apt-get autoremove -y && \
+       apt-get clean -y && \
+       rm -rf /var/lib/apt/lists && \
+       ffmpeg -buildconf
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

@@ -1,0 +1,48 @@
+# ffmpeg - http://ffmpeg.org/download.html
+#
+# From https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
+#
+# https://hub.docker.com/r/jrottenberg/ffmpeg/
+#
+#
+FROM        ubuntu:16.04
+MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+
+
+CMD         ["--help"]
+ENTRYPOINT  ["ffmpeg"]
+WORKDIR     /tmp/workdir
+
+
+ENV         %%ENV%%
+
+RUN      buildDeps="autoconf \
+                    automake \
+                    cmake \
+                    curl \
+                    bzip2 \
+                    g++ \
+                    gcc \
+                    git \
+                    libtool \
+                    make \
+                    nasm \
+                    perl \
+                    pkg-config \
+                    python \
+                    libssl-dev \
+                    zlib1g-dev" && \
+        export MAKEFLAGS="-j$(($(nproc) + 1))" && \
+        apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates && \
+%%RUN%%
+## cleanup
+       cd && \
+       apt-get purge -y ${buildDeps} && \
+       apt-get autoremove -y && \
+       apt-get clean -y && \
+       rm -rf /var/lib/apt/lists && \
+       ffmpeg -buildconf
+
+# Let's make sure the app built correctly
+# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

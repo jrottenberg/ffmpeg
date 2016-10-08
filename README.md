@@ -1,10 +1,11 @@
 FFMPEG for Docker on Centos7
 ============================
 
-[![Image Size](https://img.shields.io/imagelayers/image-size/jrottenberg/ffmpeg/latest.svg?style=plastic)](https://imagelayers.io/?images=jrottenberg%2Fffmpeg:latest) [![Image Layers](https://img.shields.io/imagelayers/layers/jrottenberg/ffmpeg/latest.svg?style=plastic)](https://imagelayers.io/?images=jrottenberg%2Fffmpeg:latest) [![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/) [![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
-[![Travis](https://img.shields.io/travis/jrottenberg/ffmpeg.svg?maxAge=300?style=plastic)](https://travis-ci.org/jrottenberg/ffmpeg)
+ [![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/) [![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
+[![Travis](https://img.shields.io/travis/jrottenberg/ffmpeg/master.svg?maxAge=300?style=plastic)](https://travis-ci.org/jrottenberg/ffmpeg)
+[![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?maxAge=2592000?style=plastic)](https://github.com/jrottenberg/ffmpeg/)
 
-This project prepares a minimalist Docker image with FFMPEG. It compiles FFMPEG from sources following instructions from the [Centos Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Centos).
+This project prepares a minimalist Docker image with FFMPEG. It compiles FFMPEG from sources following instructions from the [Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide).
 
 You can install the latest build of this image by running `docker pull jrottenberg/ffmpeg`.
 
@@ -16,12 +17,12 @@ Ubuntu builds
 You can use jrottenberg/ffmpeg:ubuntu or jrottenberg/ffmpeg:3.1 or jrottenberg/ffmpeg:3
 to get the latest build based on ubuntu.
 
-Note : I'll make ubuntu the default after 3.1
-ie you'll find centos based image using jrottenberg/ffmpeg:3.x-centos
+Note : I've made ubuntu the default after 3.1
+ie you'll find centos based image using `ffmpeg:X.Y-centos` or `ffmpeg:centos` to get the latest.
 
 ```
-ffmpeg                                                      ubuntu              571384c84090        12 hours ago        289.3 MB
-ffmpeg                                                      centos              4478825e57ee        8 weeks ago         341 MB
+ffmpeg     ubuntu     571384c84090        12 hours ago        289.3 MB
+ffmpeg     centos     4478825e57ee        8 weeks ago         341 MB
 ```
 
 
@@ -92,23 +93,26 @@ See what's inside the beast
 ---------------------------
 
 ```
-$ docker run -it --entrypoint='bash' jrottenberg/ffmpeg
-bash-4.1# for i in yasm x264 x265 ogg opus theora vorbis vpx mp3lame faac xvid fdk ;do echo $i; find /usr/local/ -name "*$i*";done
+docker run -it --entrypoint='bash' jrottenberg/ffmpeg
+
+for i in yasm x264 x265 ogg opus theora vorbis vpx mp3lame faac xvid fdk ;do echo $i; find /usr/local/ -name "*$i*";done
 ```
 
-Keep uptodate
+Keep up to date
 -------------
 
--	FFMPEG_VERSION 3.1.3 https://github.com/FFmpeg/FFmpeg/blob/master/Changelog
--	YASM_VERSION 1.3.0 https://github.com/yasm/yasm/releases
--	OGG_VERSION 1.3.2 https://xiph.org/downloads/
--	VORBIS_VERSION 1.3.5 https://xiph.org/downloads/
--	THEORA_VERSION 1.1.1 https://xiph.org/downloads/
--	LAME_VERSION 3.99.5 http://lame.sourceforge.net/download.php
--	OPUS_VERSION 1.1.1 https://www.opus-codec.org/downloads/
--	FAAC_VERSION 1.28 http://www.audiocoding.com/downloads.html
--	VPX_VERSION 1.6.0 https://github.com/webmproject/libvpx/releases
--	XVID_VERSION 1.3.5 https://labs.xvid.com/source/
--	FDKAAC_VERSION 0.1.4 https://github.com/mstorsjo/fdk-aac/releases
--	X265_VERSION 2.0 https://bitbucket.org/multicoreware/x265/downloads
-- X264_VERSION latest_stable http://www.videolan.org/developers/x264.html
+See Dockerfile ENV
+
+- FFMPEG_VERSION 3.1.3 http://ffmpeg.org/releases/
+- YASM_VERSION 1.3.0 https://github.com/yasm/yasm/releases
+- OGG_VERSION 1.3.2 https://xiph.org/downloads/
+- VORBIS_VERSION 1.3.5 https://xiph.org/downloads/
+- THEORA_VERSION 1.1.1 https://xiph.org/downloads/
+- LAME_VERSION 3.99.5 http://lame.sourceforge.net/download.php
+- OPUS_VERSION 1.1.1 https://www.opus-codec.org/downloads/
+- FAAC_VERSION 1.28 http://www.audiocoding.com/downloads.html
+- VPX_VERSION 1.6.0 https://github.com/webmproject/libvpx/releases
+- XVID_VERSION 1.3.5 https://labs.xvid.com/source/
+- FDKAAC_VERSION 0.1.4 https://github.com/mstorsjo/fdk-aac/releases
+- X265_VERSION 2.0 https://bitbucket.org/multicoreware/x265/downloads
+- X264_VERSION 20160826-2245-stable http://www.videolan.org/developers/x264.html
