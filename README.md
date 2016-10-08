@@ -93,25 +93,26 @@ See what's inside the beast
 ---------------------------
 
 ```
-$ docker run -it --entrypoint='bash' jrottenberg/ffmpeg
-bash-4.1# for i in yasm x264 x265 ogg opus theora vorbis vpx mp3lame faac xvid fdk ;do echo $i; find /usr/local/ -name "*$i*";done
+docker run -it --entrypoint='bash' jrottenberg/ffmpeg
+
+for i in yasm x264 x265 ogg opus theora vorbis vpx mp3lame faac xvid fdk ;do echo $i; find /usr/local/ -name "*$i*";done
 ```
 
 Keep up to date
 -------------
 
-See Dockerfile-env
+See Dockerfile ENV
 
--	FFMPEG_VERSION 3.1.3 https://github.com/FFmpeg/FFmpeg/blob/master/Changelog
--	YASM_VERSION 1.3.0 https://github.com/yasm/yasm/releases
--	OGG_VERSION 1.3.2 https://xiph.org/downloads/
--	VORBIS_VERSION 1.3.5 https://xiph.org/downloads/
--	THEORA_VERSION 1.1.1 https://xiph.org/downloads/
--	LAME_VERSION 3.99.5 http://lame.sourceforge.net/download.php
--	OPUS_VERSION 1.1.1 https://www.opus-codec.org/downloads/
--	FAAC_VERSION 1.28 http://www.audiocoding.com/downloads.html
--	VPX_VERSION 1.6.0 https://github.com/webmproject/libvpx/releases
--	XVID_VERSION 1.3.5 https://labs.xvid.com/source/
--	FDKAAC_VERSION 0.1.4 https://github.com/mstorsjo/fdk-aac/releases
--	X265_VERSION 2.0 https://bitbucket.org/multicoreware/x265/downloads
+- FFMPEG_VERSION 3.1.3 http://ffmpeg.org/releases/
+- YASM_VERSION 1.3.0 https://github.com/yasm/yasm/releases
+- OGG_VERSION 1.3.2 https://xiph.org/downloads/
+- VORBIS_VERSION 1.3.5 https://xiph.org/downloads/
+- THEORA_VERSION 1.1.1 https://xiph.org/downloads/
+- LAME_VERSION 3.99.5 http://lame.sourceforge.net/download.php
+- OPUS_VERSION 1.1.1 https://www.opus-codec.org/downloads/
+- FAAC_VERSION 1.28 http://www.audiocoding.com/downloads.html
+- VPX_VERSION 1.6.0 https://github.com/webmproject/libvpx/releases
+- XVID_VERSION 1.3.5 https://labs.xvid.com/source/
+- FDKAAC_VERSION 0.1.4 https://github.com/mstorsjo/fdk-aac/releases
+- X265_VERSION 2.0 https://bitbucket.org/multicoreware/x265/downloads
 - X264_VERSION 20160826-2245-stable http://www.videolan.org/developers/x264.html
