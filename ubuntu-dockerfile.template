@@ -31,6 +31,7 @@ RUN      buildDeps="autoconf \
                     pkg-config \
                     python \
                     libssl-dev \
+                    yasm \
                     zlib1g-dev" && \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         apt-get -yqq update && \
