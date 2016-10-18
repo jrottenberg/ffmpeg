@@ -20,7 +20,7 @@ for major in "${majors[@]}"; do
   version=${major}.${minor}
   ENV="$(sed s*%%FFMPEG_VERSION%%*${version}*g Dockerfile-env)"
 
-  for variant in ubuntu centos; do
+  for variant in ubuntu alpine centos; do
     if [[ $variant == 'ubuntu' ]]; then
       DOCKERFILE=${major}/Dockerfile
       TRAVIS_VARIANT=""
