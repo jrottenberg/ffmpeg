@@ -34,7 +34,7 @@ Test
 ```
 ffmpeg version 3.0 Copyright (c) 2000-2016 the FFmpeg developers
   built with gcc 4.8.5 (GCC) 20150623 (Red Hat 4.8.5-4)
-  configuration: --prefix=/usr/local --extra-cflags=-I/usr/local/include --extra-ldflags=-L/usr/local/lib --bindir=/usr/local/bin --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libxvid --enable-gpl --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small --enable-openssl --enable-libtheora --enable-libx265 --enable-libopus --enable-libvorbis --enable-libvpx
+  configuration: --prefix=/usr/local --extra-cflags=-I/usr/local/include --extra-ldflags=-L/usr/local/lib --bindir=/usr/local/bin --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libxvid --enable-gpl --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small --enable-openssl --enable-libtheora --enable-libx265 --enable-libopus --enable-libvorbis --enable-libvpx --enable-libspeex
   libavutil      55. 17.103 / 55. 17.103
   libavcodec     57. 24.102 / 57. 24.102
   libavformat    57. 25.100 / 57. 25.100
@@ -67,6 +67,7 @@ ffmpeg version 3.0 Copyright (c) 2000-2016 the FFmpeg developers
     --enable-libtheora
     --enable-libx265
     --enable-libopus
+    --enable-libspeex
     --enable-libvorbis
     --enable-libvpx
 ```
@@ -110,6 +111,7 @@ See Dockerfile ENV
 - THEORA_VERSION 1.1.1 https://xiph.org/downloads/
 - LAME_VERSION 3.99.5 http://lame.sourceforge.net/download.php
 - OPUS_VERSION 1.1.1 https://www.opus-codec.org/downloads/
+- SPEEX_VERSION 1.2rc1 https://github.com/xiph/speex/
 - FAAC_VERSION 1.28 http://www.audiocoding.com/downloads.html
 - VPX_VERSION 1.6.0 https://github.com/webmproject/libvpx/releases
 - XVID_VERSION 1.3.5 https://labs.xvid.com/source/

@@ -20,6 +20,7 @@ ENV         FFMPEG_VERSION=2.8.8 \
             LAME_VERSION=3.99.5  \
             OGG_VERSION=1.3.2    \
             OPUS_VERSION=1.1.1   \
+            SPEEX_VERSION=1.2rc1 \
             THEORA_VERSION=1.1.1 \
             YASM_VERSION=1.3.0   \
             VORBIS_VERSION=1.3.5 \
@@ -92,6 +93,16 @@ RUN      buildDeps="autoconf \
         tar -zx --strip-components=1 && \
         autoreconf -fiv && \
         ./configure --prefix="${SRC}" --disable-shared --datadir="${DIR}" && \
+        make && \
+        make install && \
+        make distclean && \
+        rm -rf ${DIR} && \
+        DIR=$(mktemp -d) && cd ${DIR} && \
+## libspeex http://speex.org/
+        curl -s http://downloads.xiph.org/releases/speex/speex-${SPEEX_VERSION}.tar.gz | \
+        tar zxf - -C . && \
+        cd speex-${SPEEX_VERSION} && \
+        ./configure --prefix="${SRC}" --disable-shared --datadir="${DIR}" --disable-dependency-tracking && \
         make && \
         make install && \
         make distclean && \
@@ -183,6 +194,7 @@ RUN      buildDeps="autoconf \
         --enable-libvpx \
         --enable-libx264 \
         --enable-libx265 \
+        --enable-libspeex \
         --enable-libxvid \
         --enable-gpl \
         --enable-avresample \
