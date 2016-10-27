@@ -21,6 +21,7 @@ RUN     buildDeps="autoconf \
                    bzip2 \
                    cmake \
                    curl \
+		   coreutils \
                    g++ \
                    gcc \
                    libtool \
@@ -30,11 +31,12 @@ RUN     buildDeps="autoconf \
                    yasm \
                    zlib-dev" && \
         export MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" && \
-        apk  add --update ${buildDeps} && \
+        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates && \
 %%RUN%%
 # cleanup
         cd && \
-        apk del ${buildDeps} && rm -rf /var/cache/apk/* && \
+        apk del ${buildDeps} && \
+	rm -rf /var/cache/apk/* /usr/local/include && \
         ffmpeg -buildconf
 
 # Let's make sure the app built correctly

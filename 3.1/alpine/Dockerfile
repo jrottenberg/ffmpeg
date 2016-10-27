@@ -1,11 +1,9 @@
 # ffmpeg - http://ffmpeg.org/download.html
 #
-# From https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
-#
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:16.04
+FROM        alpine:3.4
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
 
@@ -30,26 +28,24 @@ ENV         FFMPEG_VERSION=3.1.5 \
             PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
             SRC=/usr/local
 
-RUN      buildDeps="autoconf \
-                    automake \
-                    cmake \
-                    curl \
-                    bzip2 \
-                    g++ \
-                    gcc \
-                    git \
-                    libtool \
-                    make \
-                    nasm \
-                    perl \
-                    pkg-config \
-                    python \
-                    libssl-dev \
-                    yasm \
-                    zlib1g-dev" && \
-        export MAKEFLAGS="-j$(($(nproc) + 1))" && \
-        apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates && \
+RUN     buildDeps="autoconf \
+                   automake \
+                   bash \
+                   binutils \
+                   bzip2 \
+                   cmake \
+                   curl \
+		   coreutils \
+                   g++ \
+                   gcc \
+                   libtool \
+                   make \
+                   openssl-dev \
+                   tar \
+                   yasm \
+                   zlib-dev" && \
+        export MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" && \
+        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates && \
 
         DIR=$(mktemp -d) && cd ${DIR} && \
 ## x264 http://www.videolan.org/developers/x264.html
@@ -186,13 +182,11 @@ RUN      buildDeps="autoconf \
         make qt-faststart && \
         cp qt-faststart ${SRC}/bin && \
         rm -rf ${DIR} && \
-## cleanup
-       cd && \
-       apt-get purge -y ${buildDeps} && \
-       apt-get autoremove -y && \
-       apt-get clean -y && \
-       rm -rf /var/lib/apt/lists && \
-       ffmpeg -buildconf
+# cleanup
+        cd && \
+        apk del ${buildDeps} && \
+	rm -rf /var/cache/apk/* /usr/local/include && \
+        ffmpeg -buildconf
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
