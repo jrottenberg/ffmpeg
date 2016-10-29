@@ -15,11 +15,9 @@ WORKDIR     /tmp/workdir
 
 
 ENV         FFMPEG_VERSION=3.1.5 \
-            FAAC_VERSION=1.28    \
             FDKAAC_VERSION=0.1.4 \
             LAME_VERSION=3.99.5  \
             OGG_VERSION=1.3.2    \
-	    OPENJPEG_VERSION=2.1.2 \
             OPUS_VERSION=1.1.1   \
             THEORA_VERSION=1.1.1 \
             YASM_VERSION=1.3.0   \
@@ -49,7 +47,7 @@ RUN     buildDeps="autoconf \
                    zlib-devel" && \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
-        yum --enablerepo=extras install epel-release && \
+        yum --enablerepo=extras install -y epel-release && \
         yum install -y ${buildDeps} && \
 
         DIR=$(mktemp -d) && cd ${DIR} && \
