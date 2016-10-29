@@ -47,7 +47,7 @@ RUN     buildDeps="autoconf \
                    zlib-devel" && \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
-        yum --enablerepo=extras install -y epel-release && \
+        yum --enablerepo=extras install epel-release && \
         yum install -y ${buildDeps} && \
 
         DIR=$(mktemp -d) && cd ${DIR} && \
@@ -152,7 +152,6 @@ RUN     buildDeps="autoconf \
         --enable-version3 \
         --enable-libfdk_aac \
         --enable-libmp3lame \
-	--enable-libopenjpeg \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \
