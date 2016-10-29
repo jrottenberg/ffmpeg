@@ -148,7 +148,6 @@ RUN     buildDeps="autoconf \
         --enable-version3 \
         --enable-libfdk_aac \
         --enable-libmp3lame \
-	--enable-libopenjpeg \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \
