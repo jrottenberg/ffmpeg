@@ -17,6 +17,7 @@ ENV         FFMPEG_VERSION=3.1.5 \
             FDKAAC_VERSION=0.1.4 \
             LAME_VERSION=3.99.5  \
             OGG_VERSION=1.3.2    \
+	    OPENJPEG_VERSION=2.1.2 \
             OPUS_VERSION=1.1.1   \
             THEORA_VERSION=1.1.1 \
             YASM_VERSION=1.3.0   \
@@ -115,16 +116,6 @@ RUN     buildDeps="autoconf \
         make install && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
-## faac https://sourceforge.net/projects/faac/ +  http://stackoverflow.com/a/4320377
-        curl -sL https://downloads.sf.net/faac/faac-${FAAC_VERSION}.tar.gz | \
-        tar -zx --strip-components=1 && \
-	curl http://git.alpinelinux.org/cgit/aports/plain/main/faac/fix-libc-internals.patch | patch -p1  && \
-        ./bootstrap && \
-        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --datadir="${DIR}" --disable-static && \
-        make && \
-        make install && \
-        rm -rf ${DIR} && \
-        DIR=$(mktemp -d) && cd ${DIR} && \
 ## xvid https://www.xvid.com/
         curl -sL http://downloads.xvid.org/downloads/xvidcore-${XVID_VERSION}.tar.gz | \
         tar -zx && \
@@ -157,9 +148,9 @@ RUN     buildDeps="autoconf \
 	--disable-ffplay \
         --extra-libs=-ldl \
         --enable-version3 \
-        --enable-libfaac \
         --enable-libfdk_aac \
         --enable-libmp3lame \
+	--enable-libopenjpeg \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \
@@ -167,7 +158,7 @@ RUN     buildDeps="autoconf \
         --enable-libx264 \
         --enable-libx265 \
         --enable-libxvid \
-        --enable-gpl \
+	--enable-gpl \
         --enable-avresample \
         --enable-postproc \
         --enable-nonfree \
