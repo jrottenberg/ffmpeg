@@ -1,11 +1,9 @@
 # ffmpeg - http://ffmpeg.org/download.html
 #
-# From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
-#
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        centos:7
+FROM        alpine:3.4
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
 
@@ -31,24 +29,22 @@ ENV         FFMPEG_VERSION=2.8.8 \
 
 RUN     buildDeps="autoconf \
                    automake \
+                   bash \
+                   binutils \
                    bzip2 \
                    cmake \
+                   curl \
+		   coreutils \
+                   g++ \
                    gcc \
-                   gcc-c++ \
-                   git \
                    libtool \
                    make \
-                   nasm \
-                   perl \
-                   openssl-devel \
+                   openssl-dev \
                    tar \
                    yasm \
-                   which \
-                   zlib-devel" && \
-        export MAKEFLAGS="-j$(($(nproc) + 1))" && \
-        echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
-        yum --enablerepo=extras install -y epel-release && \
-        yum install -y ${buildDeps} && \
+                   zlib-dev" && \
+        export MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" && \
+        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates && \
 
         DIR=$(mktemp -d) && cd ${DIR} && \
 ## x264 http://www.videolan.org/developers/x264.html
@@ -176,8 +172,8 @@ RUN     buildDeps="autoconf \
         rm -rf ${DIR} && \
 # cleanup
         cd && \
-        yum history -y undo last && yum clean all && \
-        rm -rf /var/lib/yum/* && \
+        apk del ${buildDeps} && \
+	rm -rf /var/cache/apk/* /usr/local/include && \
         ffmpeg -buildconf
 
 # Let's make sure the app built correctly
