@@ -19,6 +19,7 @@ ENV         FFMPEG_VERSION=3.2 \
             LAME_VERSION=3.99.5  \
             OGG_VERSION=1.3.2    \
             OPUS_VERSION=1.1.1   \
+	    OPENJPEG_VERSION=2.1.2 \
             THEORA_VERSION=1.1.1 \
             YASM_VERSION=1.3.0   \
             VORBIS_VERSION=1.3.5 \
@@ -137,6 +138,15 @@ RUN     buildDeps="autoconf \
         make distclean && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
+## openjpeg https://github.com/uclouvain/openjpeg
+	curl -sL https://github.com/uclouvain/openjpeg/archive/v${OPENJPEG_VERSION}.tar.gz | \
+	tar -zx --strip-components=1 && \
+	cmake -DBUILD_THIRDPARTY:BOOL=ON -DOPENJPEG_INSTALL_BIN_DIR=${DIR} . && \
+	make && \
+	make install && \
+	make clean && \
+	rm -rf ${DIR} && \
+	DIR=$(mktemp -d) && cd ${DIR} && \
 ## ffmpeg https://ffmpeg.org/
         curl -sL http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
@@ -152,6 +162,7 @@ RUN     buildDeps="autoconf \
         --enable-version3 \
         --enable-libfdk_aac \
         --enable-libmp3lame \
+	--enable-libopenjpeg \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \

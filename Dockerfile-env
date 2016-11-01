@@ -3,6 +3,7 @@ FFMPEG_VERSION=%%FFMPEG_VERSION%% \\\
             LAME_VERSION=3.99.5  \\\
             OGG_VERSION=1.3.2    \\\
             OPUS_VERSION=1.1.1   \\\
+            OPENJPEG_VERSION=2.1.2 \\\
             THEORA_VERSION=1.1.1 \\\
             YASM_VERSION=1.3.0   \\\
             VORBIS_VERSION=1.3.5 \\\
