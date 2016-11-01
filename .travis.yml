@@ -4,18 +4,9 @@ language: bash
 services: docker
 
 env:
- - major=2.8 
- - major=2.8 VARIANT=alpine
- - major=2.8 VARIANT=centos
  - major=3.0 
  - major=3.0 VARIANT=alpine
  - major=3.0 VARIANT=centos
- - major=3.1 
- - major=3.1 VARIANT=alpine
- - major=3.1 VARIANT=centos
- - major=3.2 
- - major=3.2 VARIANT=alpine
- - major=3.2 VARIANT=centos
 
 before_script:
   - env | sort
