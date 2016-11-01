@@ -17,7 +17,6 @@ ENV         FFMPEG_VERSION=3.1.5 \
             FDKAAC_VERSION=0.1.4 \
             LAME_VERSION=3.99.5  \
             OGG_VERSION=1.3.2    \
-	    OPENJPEG_VERSION=2.1.2 \
             OPUS_VERSION=1.1.1   \
             THEORA_VERSION=1.1.1 \
             YASM_VERSION=1.3.0   \

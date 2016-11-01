@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -euox pipefail
 
 cd $(cd ${0%/*} && pwd -P);
 
@@ -17,7 +17,11 @@ travisEnv=''
 #
 for major in "${majors[@]}"; do
   minor=$(curl -sSL --compressed http://ffmpeg.org/releases/ | grep '<a href="ffmpeg-'"${major}." | sed -E 's!.*<a href="ffmpeg-([^"/]+)/?".*!\1!' | cut -f 3 -d . | sort -n | tail -1)
-  version=${major}.${minor}
+  if [ "x${minor}" = 'xtar' ]; then
+  	version=${major}
+  else 
+	version=${major}.${minor}
+  fi
   ENV="$(sed s*%%FFMPEG_VERSION%%*${version}*g Dockerfile-env)"
 
   for variant in ubuntu alpine centos; do
@@ -29,11 +33,16 @@ for major in "${majors[@]}"; do
       TRAVIS_VARIANT="VARIANT=${variant}"
     fi
 
-    sed -e "s*%%ENV%%*${ENV}*g" ${variant}-dockerfile.template  \
-		    -e '/%%RUN%%/{
-    s/%%RUN%%//g
-    r Dockerfile-run
-	}' > ${DOCKERFILE}
+    if [ -e $DOCKERFILE ]; then
+      sed -i -e "s/FFMPEG_VERSION=.*/FFMPEG_VERSION=$version \\\\/" $DOCKERFILE
+    else
+      mkdir -p $(dirname $DOCKERFILE)
+      sed -e "s*%%ENV%%*${ENV}*g" ${variant}-dockerfile.template  \
+	      -e '/%%RUN%%/{
+		  s/%%RUN%%//g
+	          r Dockerfile-run
+	      }' > ${DOCKERFILE}
+    fi
     travisEnv+="\n - major=${major} ${TRAVIS_VARIANT}"
   done
 done
