@@ -13,6 +13,7 @@ WORKDIR     /tmp/workdir
 
 
 ENV         FFMPEG_VERSION=3.1.5 \
+            FAAC_VERSION=1.28    \
             FDKAAC_VERSION=0.1.4 \
             LAME_VERSION=3.99.5  \
             OGG_VERSION=1.3.2    \
