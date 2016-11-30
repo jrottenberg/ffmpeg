@@ -21,11 +21,12 @@ RUN     buildDeps="autoconf \
                    bzip2 \
                    cmake \
                    curl \
-		   coreutils \
+                   coreutils \
                    g++ \
                    gcc \
                    libtool \
                    make \
+                   python \
                    openssl-dev \
                    tar \
                    yasm \

@@ -60,7 +60,7 @@ for version in keep_version:
 
         with open('Dockerfile-env', 'r') as tmpfile:
            env_content = tmpfile.read()
-        with open(variant + '-dockerfile.template', 'r') as tmpfile:
+        with open('Dockerfile-template.' + variant , 'r') as tmpfile:
            template = tmpfile.read()
         with open('Dockerfile-run', 'r') as tmpfile:
            run_content = tmpfile.read()
