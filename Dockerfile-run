@@ -10,8 +10,8 @@ make distclean && \
 rm -rf ${DIR} && \
 DIR=$(mktemp -d) && cd ${DIR} && \
 ## x264 http://www.videolan.org/developers/x264.html
-curl -sL https://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 && \
-echo "${OGG_256SUM}"| sha256sum --check
+curl -sLO https://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 && \
+echo "${OGG_256SUM}"| sha256sum --check && \
 tar -jx --strip-components=1 && \
 ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-static && \
 make && \
@@ -97,7 +97,7 @@ make install && \
 make distclean&& \
 rm -rf ${DIR} && \
 DIR=$(mktemp -d) && cd ${DIR} && \
-## faac https://sourceforge.net/projects/faac/ +  http://stackoverflow.com/a/4320377
+## faac https://sourceforge.net/projects/faac/ + http://stackoverflow.com/a/4320377
 curl -sL https://downloads.sf.net/faac/faac-${FAAC_VERSION}.tar.gz | \
 tar -zx --strip-components=1 && \
 sed -i '126d' common/mp4v2/mpeg4ip.h && \

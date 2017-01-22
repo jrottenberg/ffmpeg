@@ -9,20 +9,25 @@ import urllib2
 from distutils.version import StrictVersion
 
 MIN_VERSION='2.8'
+VARIANTS = ['ubuntu', 'alpine', 'centos']
 
-# response = urllib2.urlopen('https://ffmpeg.org/releases/')
-# ffmpeg_releases = response.read()
-#
-# parse_re = re.compile('ffmpeg-([.0-9]*).tar.bz2.asc<\/a>\s+')
-# all_versions = parse_re.findall(ffmpeg_releases)
-# all_versions.sort(key=StrictVersion, reverse=True)
-#
-# version, all_versions = all_versions[0], all_versions[1:]
+travis = []
+response = urllib2.urlopen('https://ffmpeg.org/releases/')
+ffmpeg_releases = response.read()
 
-version = '3.2.1'
-all_versions = ['3.2', '3.1.5', '3.0.9', '3.0.5','2.9']
+parse_re = re.compile('ffmpeg-([.0-9]*).tar.bz2.asc<\/a>\s+')
+all_versions = parse_re.findall(ffmpeg_releases)
+all_versions.sort(key=StrictVersion, reverse=True)
+
+version, all_versions = all_versions[0], all_versions[1:]
+
+
+# # offline mode
+# version = '3.2.1'
+# all_versions = ['3.2', '3.1.5', '3.0.9', '3.0.5','2.9']
+
+
 last = version.split('.')
-print last
 keep_version = [version]
 
 for cur in all_versions:
@@ -39,5 +44,38 @@ for cur in all_versions:
         keep_version.append(cur)
         last = tmp
 
-for v in keep_version:
-    
+for version in keep_version:
+    for variant in VARIANTS:
+        if variant == 'ubuntu':
+            dockerfile = '%s/Dockerfile' % version[0:3]
+            travis.append(' - VERSION=%s' % version)
+        else:
+            dockerfile = '%s/%s/Dockerfile' % (version[0:3], variant)
+            travis.append(' - VERSION=%s VARIANT=%s' % (version, variant))
+
+
+        d = os.path.dirname(dockerfile)
+        if not os.path.exists(dockerfile):
+            os.makedirs(d)
+
+        with open('Dockerfile-env', 'r') as tmpfile:
+           env_content = tmpfile.read()
+        with open(variant + '-dockerfile.template', 'r') as tmpfile:
+           template = tmpfile.read()
+        with open('Dockerfile-run', 'r') as tmpfile:
+           run_content = tmpfile.read()
+        env_content = env_content.replace('%%FFMPEG_VERSION%%', version)
+        docker_content = template.replace('%%ENV%%', env_content)
+        docker_content = docker_content.replace('%%RUN%%', run_content)
+
+        with open(dockerfile, 'w') as dfile:
+          dfile.write(docker_content)
+
+
+with open('travis.template', 'r') as tmpfile:
+   template = tmpfile.read()
+travis = template.replace('%%VERSIONS%%', '\n'.join(travis))
+
+
+with open('.travis.yml', 'w') as travisfile:
+  travisfile.write(travis)
