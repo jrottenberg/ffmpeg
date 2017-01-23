@@ -95,7 +95,7 @@ RUN     buildDeps="autoconf \
 # RUN  \## libvorbis https://xiph.org/vorbis/
         curl -sLO http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VERSION}.tar.gz && \
         echo ${VORBIS_SHA256SUM} | sha256sum --check && \
-        tar -zx --strip-components=1 -f opus-${VORBIS_VERSION}.tar.gz && \
+        tar -zx --strip-components=1 -f libvorbis-${VORBIS_VERSION}.tar.gz && \
         ./configure --prefix="${SRC}" --with-ogg="${SRC}" --bindir="${SRC}/bin" \
         --disable-static --datadir="${DIR}" && \
         make && \

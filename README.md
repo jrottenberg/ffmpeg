@@ -99,9 +99,9 @@ for i in yasm x264 x265 ogg opus theora vorbis vpx mp3lame faac xvid fdk ;do ech
 ```
 
 Keep up to date
--------------
+---------------
 
-See Dockerfile ENV
+See Dockerfile-env to update a version
 
 - FFMPEG_VERSION 3.1.3 http://ffmpeg.org/releases/
 - YASM_VERSION 1.3.0 https://github.com/yasm/yasm/releases
@@ -116,3 +116,19 @@ See Dockerfile ENV
 - FDKAAC_VERSION 0.1.4 https://github.com/mstorsjo/fdk-aac/releases
 - X265_VERSION 2.0 https://bitbucket.org/multicoreware/x265/downloads
 - X264_VERSION 20160826-2245-stable http://www.videolan.org/developers/x264.html
+
+Contribute
+-----------
+
+
+```
+
+${EDITOR} Dockerfile-env
+
+./update.py # generates the Dockerfile
+
+docker build -t my-build VERSION/path/
+```
+
+
+Commit the env file AND all the generated Dockerfile for a merge request.
