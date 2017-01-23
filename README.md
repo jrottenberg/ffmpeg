@@ -18,11 +18,15 @@ You can use jrottenberg/ffmpeg:ubuntu or jrottenberg/ffmpeg:3.1 or jrottenberg/f
 to get the latest build based on ubuntu.
 
 Note : I've made ubuntu the default after 3.1
-ie you'll find centos based image using `ffmpeg:X.Y-centos` or `ffmpeg:centos` to get the latest.
 
+You'll find centos based image using `ffmpeg:X.Y-centos` or `ffmpeg:centos` to get the latest.
+alpine images  `ffmpeg:X.Y-alpine` or `ffmpeg:alpine` to get the latest.
+
+For information :
 ```
-ffmpeg     ubuntu     571384c84090        12 hours ago        289.3 MB
-ffmpeg     centos     4478825e57ee        8 weeks ago         341 MB
+u-3.2               ubuntu              1e998987f2da        2 minutes ago        205.5 MB
+c-3.2               centos              b73e2e768092        9 minutes ago        274.4 MB
+a-3.2               alpine              5da8a4eaeb41        45 minutes ago       73.64 MB
 ```
 
 
