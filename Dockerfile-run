@@ -32,6 +32,16 @@
         make install && \
         rm -rf ${DIR} && \
         DIR=$(mktemp -d) && cd ${DIR} && \
+## libspeex http://speex.org/
+        curl -s http://downloads.xiph.org/releases/speex/speex-${SPEEX_VERSION}.tar.gz | \
+        tar zxf - -C . && \
+        cd speex-${SPEEX_VERSION} && \
+        ./configure --prefix="${SRC}" --disable-shared --datadir="${DIR}" --disable-dependency-tracking && \
+        make && \
+        make install && \
+        make distclean && \
+        rm -rf ${DIR} && \
+        DIR=$(mktemp -d) && cd ${DIR} && \
 ## libvorbis https://xiph.org/vorbis/
         curl -sL http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
@@ -106,6 +116,7 @@
         --enable-libvpx \
         --enable-libx264 \
         --enable-libx265 \
+        --enable-libspeex \
         --enable-libxvid \
 	--enable-gpl \
         --enable-avresample \
