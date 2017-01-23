@@ -48,10 +48,10 @@ for version in keep_version:
     for variant in VARIANTS:
         if variant == 'ubuntu':
             dockerfile = '%s/Dockerfile' % version[0:3]
-            travis.append(' - VERSION=%s' % version)
+            travis.append(' - VERSION=%s' % version[0:3])
         else:
             dockerfile = '%s/%s/Dockerfile' % (version[0:3], variant)
-            travis.append(' - VERSION=%s VARIANT=%s' % (version, variant))
+            travis.append(' - VERSION=%s VARIANT=%s' % (version[0:3], variant))
 
 
         d = os.path.dirname(dockerfile)

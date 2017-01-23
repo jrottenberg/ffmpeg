@@ -11,7 +11,7 @@ before_script:
   - image="ffmpeg:${VERSION}-${VARIANT:-ubuntu}"
 
 script:
-  - docker build -t "${image}" ${majVERSIONor}/${VARIANT}
+  - docker build -t "${image}" ${VERSION}/${VARIANT}
 
 after_script:
   - docker images
