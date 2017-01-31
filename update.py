@@ -4,18 +4,18 @@
 # Get latest release from ffmpeg.org
 import os, sys
 import re
-import operator
 import urllib2
 from distutils.version import StrictVersion
 
 MIN_VERSION='2.8'
 VARIANTS = ['ubuntu', 'alpine', 'centos']
+FFMPEG_RELEASES='https://ffmpeg.org/releases/'
 
 travis = []
-response = urllib2.urlopen('https://ffmpeg.org/releases/')
+response = urllib2.urlopen(FFMPEG_RELEASES)
 ffmpeg_releases = response.read()
 
-parse_re = re.compile('ffmpeg-([.0-9]*).tar.bz2.asc<\/a>\s+')
+parse_re = re.compile('ffmpeg-([.0-9]+).tar.bz2.asc<\/a>\s+')
 all_versions = parse_re.findall(ffmpeg_releases)
 all_versions.sort(key=StrictVersion, reverse=True)
 
@@ -53,11 +53,6 @@ for version in keep_version:
             dockerfile = '%s/%s/Dockerfile' % (version[0:3], variant)
             travis.append(' - VERSION=%s VARIANT=%s' % (version[0:3], variant))
 
-
-        d = os.path.dirname(dockerfile)
-        if not os.path.exists(dockerfile):
-            os.makedirs(d)
-
         with open('Dockerfile-env', 'r') as tmpfile:
            env_content = tmpfile.read()
         with open('Dockerfile-template.' + variant , 'r') as tmpfile:
@@ -67,6 +62,10 @@ for version in keep_version:
         env_content = env_content.replace('%%FFMPEG_VERSION%%', version)
         docker_content = template.replace('%%ENV%%', env_content)
         docker_content = docker_content.replace('%%RUN%%', run_content)
+
+        d = os.path.dirname(dockerfile)
+        if not os.path.exists(dockerfile):
+            os.makedirs(d)
 
         with open(dockerfile, 'w') as dfile:
           dfile.write(docker_content)
