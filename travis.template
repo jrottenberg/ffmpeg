@@ -1,0 +1,18 @@
+sudo: required
+
+language: bash
+services: docker
+
+env:
+%%VERSIONS%%
+
+before_script:
+  - env | sort
+  - image="ffmpeg:${VERSION}-${VARIANT:-ubuntu}"
+
+script:
+  - docker build -t "${image}" ${VERSION}/${VARIANT}
+
+after_script:
+  - docker images
+# vim:set et ts=2 sw=2:
