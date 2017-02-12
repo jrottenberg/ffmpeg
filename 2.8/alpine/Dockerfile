@@ -12,7 +12,7 @@ ENTRYPOINT  ["ffmpeg"]
 WORKDIR     /tmp/workdir
 
 
-ENV         FFMPEG_VERSION=2.8.10 \
+ENV         FFMPEG_VERSION=2.8.11 \
             FDKAAC_VERSION=0.1.4 \
             LAME_VERSION=3.99.5  \
             OGG_VERSION=1.3.2    \
