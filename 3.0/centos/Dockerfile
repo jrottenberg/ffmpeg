@@ -14,18 +14,19 @@ ENTRYPOINT  ["ffmpeg"]
 WORKDIR     /tmp/workdir
 
 
-ENV         FFMPEG_VERSION=3.0.7 \
-            FDKAAC_VERSION=0.1.4 \
-            LAME_VERSION=3.99.5  \
-            OGG_VERSION=1.3.2    \
-            OPUS_VERSION=1.1.4   \
-            THEORA_VERSION=1.1.1 \
-            YASM_VERSION=1.3.0   \
-            VORBIS_VERSION=1.3.5 \
-            VPX_VERSION=1.6.1    \
-            XVID_VERSION=1.3.4   \
-            X265_VERSION=2.2     \
+ENV         FFMPEG_VERSION=3.0.7     \
+            FDKAAC_VERSION=0.1.4      \
+            LAME_VERSION=3.99.5       \
+            OGG_VERSION=1.3.2         \
+            OPENCOREAMR_VERSION=0.1.4 \
+            OPUS_VERSION=1.1.4        \
+            THEORA_VERSION=1.1.1      \
+            VORBIS_VERSION=1.3.5      \
+            VPX_VERSION=1.6.1         \
             X264_VERSION=20160826-2245-stable \
+            X265_VERSION=2.2          \
+            XVID_VERSION=1.3.4        \
+            YASM_VERSION=1.3.0        \
             PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
             SRC=/usr/local
 
@@ -58,24 +59,36 @@ RUN     buildDeps="autoconf \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum --enablerepo=extras install -y epel-release && \
         yum install -y ${buildDeps} && \
+#RUN  \
+## opencore-amr https://sourceforge.net/projects/opencore-amr/
         DIR=$(mktemp -d) && cd ${DIR} && \
-## x264 http://www.videolan.org/developers/x264.html
-        curl -sL https://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
-        tar -jx --strip-components=1 && \
-        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-pic --enable-shared --disable-cli && \
+        curl -sL https://downloads.sf.net/project/opencore-amr/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz | \
+        tar -zx --strip-components=1 && \
+        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-shared --datadir=${DIR} && \
         make && \
         make install && \
         rm -rf ${DIR} && \
+#RUN  \
+## x264 http://www.videolan.org/developers/x264.html
+       DIR=$(mktemp -d) && cd ${DIR} && \
+       curl -sL https://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
+       tar -jx --strip-components=1 && \
+       ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-pic --enable-shared --disable-cli && \
+       make && \
+       make install && \
+       rm -rf ${DIR} && \
+#RUN  \
+## x265 http://x265.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
-# RUN  \## x265 http://x265.org/
         curl -sL https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
         tar -zx && \
         cd x265_${X265_VERSION}/build/linux && \
         ./multilib.sh && \
         make -C 8bit install && \
         rm -rf ${DIR} && \
+#RUN  \
+## libogg https://www.xiph.org/ogg/
         DIR=$(mktemp -d) && cd ${DIR} && \
-# RUN  \## libogg https://www.xiph.org/ogg/
         curl -sLO http://downloads.xiph.org/releases/ogg/libogg-${OGG_VERSION}.tar.gz && \
         echo ${OGG_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f libogg-${OGG_VERSION}.tar.gz && \
@@ -83,8 +96,9 @@ RUN     buildDeps="autoconf \
         make && \
         make install && \
         rm -rf ${DIR} && \
+#RUN  \
+## libopus https://www.opus-codec.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
-# RUN  \## libopus https://www.opus-codec.org/
         curl -sLO http://downloads.xiph.org/releases/opus/opus-${OPUS_VERSION}.tar.gz && \
         echo ${OPUS_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f opus-${OPUS_VERSION}.tar.gz && \
@@ -93,8 +107,9 @@ RUN     buildDeps="autoconf \
         make && \
         make install && \
         rm -rf ${DIR} && \
+#RUN  \
+## libvorbis https://xiph.org/vorbis/
         DIR=$(mktemp -d) && cd ${DIR} && \
-# RUN  \## libvorbis https://xiph.org/vorbis/
         curl -sLO http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VERSION}.tar.gz && \
         echo ${VORBIS_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f libvorbis-${VORBIS_VERSION}.tar.gz && \
@@ -103,8 +118,9 @@ RUN     buildDeps="autoconf \
         make && \
         make install && \
         rm -rf ${DIR} && \
+#RUN  \
+## libtheora http://www.theora.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
-# RUN  \## libtheora http://www.theora.org/
         curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
         echo ${THEORA_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
@@ -113,24 +129,27 @@ RUN     buildDeps="autoconf \
         make && \
         make install && \
         rm -rf ${DIR} && \
+#RUN  \
+## libvpx https://www.webmproject.org/code/
         DIR=$(mktemp -d) && cd ${DIR} && \
-# RUN  \## libvpx https://www.webmproject.org/code/
         curl -sL https://codeload.github.com/webmproject/libvpx/tar.gz/v${VPX_VERSION} | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${SRC}" --enable-vp8 --enable-vp9 --enable-pic --disable-debug --disable-examples --disable-docs --disable-install-bins --enable-shared && \
         make && \
         make install && \
         rm -rf ${DIR} && \
+#RUN  \
+## libmp3lame http://lame.sourceforge.net/
         DIR=$(mktemp -d) && cd ${DIR} && \
-# RUN  \## libmp3lame http://lame.sourceforge.net/
         curl -sL https://downloads.sf.net/project/lame/lame/${LAME_VERSION%.*}/lame-${LAME_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --disable-static --enable-nasm --datarootdir="${DIR}" && \
         make && \
         make install && \
         rm -rf ${DIR} && \
+#RUN  \
+## xvid https://www.xvid.com/
         DIR=$(mktemp -d) && cd ${DIR} && \
-# RUN  \## xvid https://www.xvid.com/
         curl -sLO http://downloads.xvid.org/downloads/xvidcore-${XVID_VERSION}.tar.gz && \
         echo ${XVID_SHA256SUM} | sha256sum --check && \
         tar -zx -f xvidcore-${XVID_VERSION}.tar.gz && \
@@ -139,8 +158,9 @@ RUN     buildDeps="autoconf \
         make && \
         make install && \
         rm -rf ${DIR} && \
+#RUN  \
+## fdk-aac https://github.com/mstorsjo/fdk-aac
         DIR=$(mktemp -d) && cd ${DIR} && \
-# RUN  \## fdk-aac https://github.com/mstorsjo/fdk-aac
         curl -sL https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         autoreconf -fiv && \
@@ -149,8 +169,9 @@ RUN     buildDeps="autoconf \
         make install && \
         make distclean && \
         rm -rf ${DIR} && \
+#RUN  \
+## ffmpeg https://ffmpeg.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
-# RUN  \## ffmpeg https://ffmpeg.org/
         gpg --keyserver ha.pool.sks-keyservers.net --recv-keys ${FFMPEG_KEY} && \
         curl -sLO http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
         curl -sLO http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz.asc && \
@@ -166,6 +187,8 @@ RUN     buildDeps="autoconf \
         --disable-ffplay \
         --extra-libs=-ldl \
         --enable-version3 \
+        --enable-libopencore-amrnb \
+        --enable-libopencore-amrwb \
         --enable-libfdk_aac \
         --enable-libmp3lame \
         --enable-libopus \
