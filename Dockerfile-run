@@ -1,4 +1,3 @@
-#date
 #RUN  \
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
         DIR=$(mktemp -d) && cd ${DIR} && \
@@ -10,6 +9,7 @@
         rm -rf ${DIR} && \
 #RUN  \
 ## x264 http://www.videolan.org/developers/x264.html
+       DIR=$(mktemp -d) && cd ${DIR} && \
        curl -sL https://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
        tar -jx --strip-components=1 && \
        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-pic --enable-shared --disable-cli && \
@@ -116,16 +116,14 @@
         curl -sLO http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz.asc && \
         gpg --batch  --verify ffmpeg-${FFMPEG_VERSION}.tar.gz.asc ffmpeg-${FFMPEG_VERSION}.tar.gz && \
         tar -zx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.gz && \
-        ./configure --prefix="${SRC}" \
-        --extra-cflags="-I${SRC}/include" \
-        --extra-ldflags="-L${SRC}/lib" \
+        ./configure \
         --bindir="${SRC}/bin" \
+        --disable-debug \
         --disable-doc \
-        --disable-static \
-        --enable-shared \
         --disable-ffplay \
-        --extra-libs=-ldl \
-        --enable-version3 \
+        --disable-static \
+        --enable-avresample \
+        --enable-gpl \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
         --enable-libfdk_aac \
@@ -137,13 +135,16 @@
         --enable-libx264 \
         --enable-libx265 \
         --enable-libxvid \
-        --enable-gpl \
-        --enable-avresample \
-        --enable-postproc \
         --enable-nonfree \
-        --disable-debug \
+        --enable-openssl \
+        --enable-postproc \
+        --enable-shared \
         --enable-small \
-        --enable-openssl && \
+        --enable-version3 \
+        --extra-cflags="-I${SRC}/include" \
+        --extra-ldflags="-L${SRC}/lib" \
+        --extra-libs=-ldl \
+        --prefix="${SRC}" && \
         make && \
         make install && \
         make distclean && \
