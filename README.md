@@ -107,19 +107,21 @@ Keep up to date
 
 See Dockerfile-env to update a version
 
-- FFMPEG_VERSION 3.1.3 http://ffmpeg.org/releases/
-- YASM_VERSION 1.3.0 https://github.com/yasm/yasm/releases
-- OGG_VERSION 1.3.2 https://xiph.org/downloads/
-- VORBIS_VERSION 1.3.5 https://xiph.org/downloads/
-- THEORA_VERSION 1.1.1 https://xiph.org/downloads/
-- LAME_VERSION 3.99.5 http://lame.sourceforge.net/download.php
-- OPUS_VERSION 1.1.1 https://www.opus-codec.org/downloads/
-- FAAC_VERSION 1.28 http://www.audiocoding.com/downloads.html
-- VPX_VERSION 1.6.0 https://github.com/webmproject/libvpx/releases
-- XVID_VERSION 1.3.5 https://labs.xvid.com/source/
-- FDKAAC_VERSION 0.1.4 https://github.com/mstorsjo/fdk-aac/releases
-- X265_VERSION 2.0 https://bitbucket.org/multicoreware/x265/downloads
-- X264_VERSION 20160826-2245-stable http://www.videolan.org/developers/x264.html
+- [FFMPEG_VERSION](http://ffmpeg.org/releases/)
+
+- [OGG_VERSION](https://xiph.org/downloads/))
+- [OPENCOREAMR_VERSION](https://sourceforge.net/projects/opencore-amr/files/opencore-amr/)
+- [VORBIS_VERSION](https://xiph.org/downloads/)
+- [THEORA_VERSION](https://xiph.org/downloads/)
+- [LAME_VERSION](http://lame.sourceforge.net/download.php)
+- [OPUS_VERSION](https://www.opus-codec.org/downloads/)
+- [FAAC_VERSION](http://www.audiocoding.com/downloads.html)
+- [VPX_VERSION](https://github.com/webmproject/libvpx/releases)
+- [XVID_VERSION](https://labs.xvid.com/source/)
+- [FDKAAC_VERSION](https://github.com/mstorsjo/fdk-aac/releases)
+- [X264_VERSION](http://www.videolan.org/developers/x264.html)
+- [X265_VERSION](https://bitbucket.org/multicoreware/x265/downloads/)
+
 
 Contribute
 -----------
@@ -132,6 +134,9 @@ ${EDITOR} Dockerfile-env
 ./update.py # generates the Dockerfile
 
 docker build -t my-build VERSION/path/
+
+# make sure all variants pass before Travis does
+find ffmpeg/ -name Dockerfile | xargs  dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
 ```
 
 
