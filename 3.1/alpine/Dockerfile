@@ -13,7 +13,7 @@ WORKDIR     /tmp/workdir
 
 
 ENV         FFMPEG_VERSION=3.1.7     \
-            FDKAAC_VERSION=0.1.4      \
+            FDKAAC_VERSION=0.1.5      \
             LAME_VERSION=3.99.5       \
             OGG_VERSION=1.3.2         \
             OPENCOREAMR_VERSION=0.1.4 \
@@ -21,8 +21,8 @@ ENV         FFMPEG_VERSION=3.1.7     \
             THEORA_VERSION=1.1.1      \
             VORBIS_VERSION=1.3.5      \
             VPX_VERSION=1.6.1         \
-            X264_VERSION=20160826-2245-stable \
-            X265_VERSION=2.2          \
+            X264_VERSION=20170226-2245-stable \
+            X265_VERSION=2.3          \
             XVID_VERSION=1.3.4        \
             PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
             SRC=/usr/local
