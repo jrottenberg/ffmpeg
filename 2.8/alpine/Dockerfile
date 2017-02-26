@@ -24,7 +24,6 @@ ENV         FFMPEG_VERSION=2.8.11     \
             X264_VERSION=20160826-2245-stable \
             X265_VERSION=2.2          \
             XVID_VERSION=1.3.4        \
-            YASM_VERSION=1.3.0        \
             PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
             SRC=/usr/local
 
@@ -175,16 +174,14 @@ RUN     buildDeps="autoconf \
         curl -sLO http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz.asc && \
         gpg --batch  --verify ffmpeg-${FFMPEG_VERSION}.tar.gz.asc ffmpeg-${FFMPEG_VERSION}.tar.gz && \
         tar -zx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.gz && \
-        ./configure --prefix="${SRC}" \
-        --extra-cflags="-I${SRC}/include" \
-        --extra-ldflags="-L${SRC}/lib" \
+        ./configure \
         --bindir="${SRC}/bin" \
+        --disable-debug \
         --disable-doc \
-        --disable-static \
-        --enable-shared \
         --disable-ffplay \
-        --extra-libs=-ldl \
-        --enable-version3 \
+        --disable-static \
+        --enable-avresample \
+        --enable-gpl \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
         --enable-libfdk_aac \
@@ -196,13 +193,16 @@ RUN     buildDeps="autoconf \
         --enable-libx264 \
         --enable-libx265 \
         --enable-libxvid \
-        --enable-gpl \
-        --enable-avresample \
-        --enable-postproc \
         --enable-nonfree \
-        --disable-debug \
+        --enable-openssl \
+        --enable-postproc \
+        --enable-shared \
         --enable-small \
-        --enable-openssl && \
+        --enable-version3 \
+        --extra-cflags="-I${SRC}/include" \
+        --extra-ldflags="-L${SRC}/lib" \
+        --extra-libs=-ldl \
+        --prefix="${SRC}" && \
         make && \
         make install && \
         make distclean && \
