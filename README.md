@@ -99,7 +99,7 @@ See what's inside the beast
 ```
 docker run -it --entrypoint='bash' jrottenberg/ffmpeg
 
-for i in yasm x264 x265 ogg opus theora vorbis vpx mp3lame faac xvid fdk ;do echo $i; find /usr/local/ -name "*$i*";done
+for i in ogg amr vorbis theora mp3lame opus vpx xvid fdk x264 x265;do echo $i; find /usr/local/ -name *$i*;done
 ```
 
 Keep up to date
@@ -109,7 +109,7 @@ See Dockerfile-env to update a version
 
 - [FFMPEG_VERSION](http://ffmpeg.org/releases/)
 
-- [OGG_VERSION](https://xiph.org/downloads/))
+- [OGG_VERSION](https://xiph.org/downloads/)
 - [OPENCOREAMR_VERSION](https://sourceforge.net/projects/opencore-amr/files/opencore-amr/)
 - [VORBIS_VERSION](https://xiph.org/downloads/)
 - [THEORA_VERSION](https://xiph.org/downloads/)
