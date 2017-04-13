@@ -4,6 +4,9 @@ language: bash
 services: docker
 
 env:
+ - VERSION=3.3
+ - VERSION=3.3 VARIANT=alpine
+ - VERSION=3.3 VARIANT=centos
  - VERSION=3.2
  - VERSION=3.2 VARIANT=alpine
  - VERSION=3.2 VARIANT=centos
