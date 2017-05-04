@@ -64,7 +64,7 @@ for version in keep_version:
         docker_content = docker_content.replace('%%RUN%%', run_content)
 
         d = os.path.dirname(dockerfile)
-        if not os.path.exists(dockerfile):
+        if not os.path.exists(d):
             os.makedirs(d)
 
         with open(dockerfile, 'w') as dfile:
