@@ -171,7 +171,7 @@ RUN      buildDeps="autoconf \
 #RUN  \
 ## ffmpeg https://ffmpeg.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
-        gpg --keyserver hkps://hkps.pool.sks-keyservers.net --recv-keys ${FFMPEG_KEY} && \
+        gpg --keyserver pool.sks-keyservers.net --recv-keys ${FFMPEG_KEY} && \
         curl -sLO http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
         curl -sLO http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz.asc && \
         gpg --batch  --verify ffmpeg-${FFMPEG_VERSION}.tar.gz.asc ffmpeg-${FFMPEG_VERSION}.tar.gz && \
