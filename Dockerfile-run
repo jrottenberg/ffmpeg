@@ -119,6 +119,16 @@ RUN \
 #        ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}" && \
 #        make && \
 #        make install
+## openjpeg https://github.com/uclouvain/openjpeg
+RUN \
+        DIR=/tmp/openjpeg && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sL https://github.com/uclouvain/openjpeg/archive/v${OPENJPEG_VERSION}.tar.gz | \
+        tar -zx --strip-components=1 && \
+        cmake -DBUILD_THIRDPARTY:BOOL=ON -DOPENJPEG_INSTALL_BIN_DIR=${DIR} . && \
+        make && \
+        make install
 ### ffmpeg https://ffmpeg.org/
 RUN \
         DIR=/tmp/ffmpeg && \
@@ -138,6 +148,7 @@ RUN \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
         --enable-libmp3lame \
+        --enable-libopenjpeg \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \

@@ -22,6 +22,7 @@ ENV         FFMPEG_VERSION=2.8.11     \
             LAME_VERSION=3.99.5       \
             OGG_VERSION=1.3.2         \
             OPENCOREAMR_VERSION=0.1.4 \
+            OPENJPEG_VERSION=2.1.2    \
             OPUS_VERSION=1.1.4        \
             THEORA_VERSION=1.1.1      \
             VORBIS_VERSION=1.3.5      \
@@ -172,14 +173,24 @@ RUN \
         make && \
         make install
 ### fdk-aac https://github.com/mstorsjo/fdk-aac
+#RUN \
+#        DIR=/tmp/fdk-aac && \
+#        mkdir -p ${DIR} && \
+#        cd ${DIR} && \
+#        curl -sL https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz | \
+#        tar -zx --strip-components=1 && \
+#        autoreconf -fiv && \
+#        ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}" && \
+#        make && \
+#        make install
+## openjpeg https://github.com/uclouvain/openjpeg
 RUN \
-        DIR=/tmp/fdk-aac && \
+        DIR=/tmp/openjpeg && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz | \
+        curl -sL https://github.com/uclouvain/openjpeg/archive/v${OPENJPEG_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
-        autoreconf -fiv && \
-        ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}" && \
+        cmake -DBUILD_THIRDPARTY:BOOL=ON -DOPENJPEG_INSTALL_BIN_DIR=${DIR} . && \
         make && \
         make install
 ### ffmpeg https://ffmpeg.org/
@@ -201,6 +212,7 @@ RUN \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
         --enable-libmp3lame \
+        --enable-libopenjpeg \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \
