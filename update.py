@@ -8,7 +8,7 @@ import urllib2
 from distutils.version import StrictVersion
 
 MIN_VERSION='2.8'
-VARIANTS = ['ubuntu', 'alpine', 'centos']
+VARIANTS = ['ubuntu', 'alpine', 'centos', 'scratch']
 FFMPEG_RELEASES='https://ffmpeg.org/releases/'
 
 travis = []
