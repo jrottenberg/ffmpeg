@@ -166,16 +166,16 @@ RUN \
         make && \
         make install
 ### fdk-aac https://github.com/mstorsjo/fdk-aac
-RUN \
-        DIR=/tmp/fdk-aac && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sL https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz | \
-        tar -zx --strip-components=1 && \
-        autoreconf -fiv && \
-        ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}" && \
-        make && \
-        make install
+#RUN \
+#        DIR=/tmp/fdk-aac && \
+#        mkdir -p ${DIR} && \
+#        cd ${DIR} && \
+#        curl -sL https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz | \
+#        tar -zx --strip-components=1 && \
+#        autoreconf -fiv && \
+#        ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}" && \
+#        make && \
+#        make install
 ### ffmpeg https://ffmpeg.org/
 RUN \
         DIR=/tmp/ffmpeg && \
