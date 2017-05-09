@@ -5,14 +5,18 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:16.04
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+FROM        ubuntu:16.04 AS base
 
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates && \
+        apt-get autoremove -y && \
+        apt-get clean -y
 
-CMD         ["--help"]
-ENTRYPOINT  ["ffmpeg"]
-WORKDIR     /tmp/workdir
+FROM base as build
 
+ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
+ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
+ARG        PREFIX=/opt/ffmpeg
 
 ENV         %%ENV%%
 
@@ -35,15 +39,22 @@ RUN      buildDeps="autoconf \
                     zlib1g-dev" && \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates && \
+        apt-get install -yq --no-install-recommends ${buildDeps}
 %%RUN%%
 ## cleanup
-        cd && \
-        apt-get purge -y ${buildDeps} && \
-        apt-get autoremove -y && \
-        apt-get clean -y && \
-        rm -rf /var/lib/apt/lists && \
-        ffmpeg -buildconf
+RUN \
+        cp $(ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3) /usr/local/lib/ && \
+        cp ${PREFIX}/bin/* /usr/local/bin/ && \
+        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/
+
+FROM        base AS release
+MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+
+CMD         ["--help"]
+ENTRYPOINT  ["ffmpeg"]
+ENV         LD_LIBRARY_PATH=/usr/local/lib
+
+COPY --from=build /usr/local /usr/local/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

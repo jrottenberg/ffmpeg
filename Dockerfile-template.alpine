@@ -2,15 +2,20 @@
 #
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
-#
-FROM        alpine:3.4
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+# 
+
+FROM        alpine:3.5 AS base
+
+RUN     apk  add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
 
 
-CMD         ["--help"]
-ENTRYPOINT  ["ffmpeg"]
+FROM        base AS build
+
 WORKDIR     /tmp/workdir
 
+ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
+ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
+ARG        PREFIX=/opt/ffmpeg
 
 ENV         %%ENV%%
 
@@ -22,6 +27,7 @@ RUN     buildDeps="autoconf \
                    cmake \
                    curl \
                    coreutils \
+                   file \
                    g++ \
                    gcc \
                    gnupg \
@@ -33,13 +39,24 @@ RUN     buildDeps="autoconf \
                    yasm \
                    zlib-dev" && \
         export MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" && \
-        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates && \
-%%RUN%%
-# cleanup
-        cd && \
-        apk del ${buildDeps} && \
-	rm -rf /var/cache/apk/* /usr/local/include && \
-        ffmpeg -buildconf
+        apk  add --update ${buildDeps} 
 
+%%RUN%%
+
+RUN \
+    cp $(ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3) /usr/local/lib/ && \
+    cp ${PREFIX}/bin/* /usr/local/bin/ && \
+    cp -r ${PREFIX}/share/ffmpeg /usr/local/share/
+
+### Release Stage
+FROM        base AS release
+MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+
+CMD         ["--help"]
+ENTRYPOINT  ["ffmpeg"]
+WORKDIR /opt/ffmpeg
+
+COPY --from=build /usr/local /usr/local
+           
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
