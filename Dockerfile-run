@@ -109,6 +109,17 @@
         make distclean && \
         rm -rf ${DIR} && \
 #RUN  \
+## freetype https://www.freetype.org/
+        DIR=$(mktemp -d) && cd ${DIR} && \
+        curl -sLO http://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.gz && \
+        echo ${FREETYPE_SHA256SUM} | sha256sum --check && \
+        tar -zx --strip-components=1 -f freetype-${FREETYPE_VERSION}.tar.gz && \
+        ./configure --disable-static --enable-shared && \
+        make && \
+        make install && \
+        make distclean && \
+        rm -rf ${DIR} && \
+#RUN  \
 ## ffmpeg https://ffmpeg.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
         gpg --keyserver pool.sks-keyservers.net --recv-keys ${FFMPEG_KEY} && \
@@ -127,6 +138,7 @@
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
         --enable-libfdk_aac \
+        --enable-libfreetype \
         --enable-libmp3lame \
         --enable-libopus \
         --enable-libtheora \

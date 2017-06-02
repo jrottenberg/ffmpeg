@@ -73,6 +73,7 @@ ffmpeg version 3.0 Copyright (c) 2000-2016 the FFmpeg developers
     --enable-libopus
     --enable-libvorbis
     --enable-libvpx
+    --enable-libfreetype
 ```
 
 Capture output from the container to the host running the command
@@ -119,6 +120,7 @@ See Dockerfile-env to update a version
 - [VPX_VERSION](https://github.com/webmproject/libvpx/releases)
 - [XVID_VERSION](https://labs.xvid.com/source/)
 - [FDKAAC_VERSION](https://github.com/mstorsjo/fdk-aac/releases)
+- [FREETYPE_VERSION](http://download.savannah.gnu.org/releases/freetype/)
 - [X264_VERSION](http://www.videolan.org/developers/x264.html)
 - [X265_VERSION](https://bitbucket.org/multicoreware/x265/downloads/)
 
