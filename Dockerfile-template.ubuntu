@@ -43,6 +43,7 @@ RUN      buildDeps="autoconf \
         apt-get autoremove -y && \
         apt-get clean -y && \
         rm -rf /var/lib/apt/lists && \
+        ldconfig && \
         ffmpeg -buildconf
 
 # Let's make sure the app built correctly

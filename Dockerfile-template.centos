@@ -41,6 +41,7 @@ RUN     buildDeps="autoconf \
         cd && \
         yum history -y undo last && yum clean all && \
         rm -rf /var/lib/yum/* && \
+        ldconfig && \
         ffmpeg -buildconf
 
 # Let's make sure the app built correctly
