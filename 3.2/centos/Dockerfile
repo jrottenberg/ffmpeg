@@ -60,7 +60,7 @@ RUN     buildDeps="autoconf \
                    zlib-devel" && \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
-        yum --enablerepo=extras install -y epel-release && \
+        yum --enablerepo=extras install -y epel-release libgomp && \
         yum install -y ${buildDeps} libgomp1 && \
 #RUN  \
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
@@ -245,7 +245,6 @@ RUN     buildDeps="autoconf \
         cd && \
         yum history -y undo last && yum clean all && \
         rm -rf /var/lib/yum/* && \
-        ldconfig && \
         ffmpeg -buildconf
 
 # Let's make sure the app built correctly

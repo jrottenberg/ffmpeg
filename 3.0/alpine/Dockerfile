@@ -243,7 +243,6 @@ RUN     buildDeps="autoconf \
         cd && \
         apk del ${buildDeps} && \
 	rm -rf /var/cache/apk/* /usr/local/include && \
-        ldconfig && \
         ffmpeg -buildconf
 
 # Let's make sure the app built correctly
