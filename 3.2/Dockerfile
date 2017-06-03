@@ -61,7 +61,7 @@ RUN      buildDeps="autoconf \
                     zlib1g-dev" && \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates && \
+        apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates libgomp1 && \
 #RUN  \
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
         DIR=$(mktemp -d) && cd ${DIR} && \

@@ -61,7 +61,7 @@ RUN     buildDeps="autoconf \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum --enablerepo=extras install -y epel-release && \
-        yum install -y ${buildDeps} && \
+        yum install -y ${buildDeps} libgomp1 && \
 #RUN  \
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
         DIR=$(mktemp -d) && cd ${DIR} && \
