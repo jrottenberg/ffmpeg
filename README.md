@@ -140,8 +140,8 @@ ${EDITOR} Dockerfile-env
 docker build -t my-build VERSION/path/
 
 # make sure all variants pass before Travis does
-find ffmpeg/ -name Dockerfile | xargs  dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
+find ffmpeg/ -name Dockerfile | xargs dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
 ```
 
 
-Commit the env file AND all the generated Dockerfile for a merge request.
+Commit the env file THEN all the generated Dockerfile for a merge request. So it's easier to find the template change.
