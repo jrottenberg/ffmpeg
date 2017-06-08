@@ -47,7 +47,6 @@ RUN     buildDeps="autoconf \
                    coreutils \
                    g++ \
                    gcc \
-                   gnupg \
                    libtool \
                    make \
                    python \
