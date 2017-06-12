@@ -27,6 +27,7 @@ ENV         FFMPEG_VERSION=2.8.12     \
             X265_VERSION=2.3          \
             XVID_VERSION=1.3.4        \
             FREETYPE_VERSION=2.5.5    \
+            LIBVIDSTAB_VERSION=1.1.0    \
             PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
             SRC=/usr/local
 
@@ -37,6 +38,8 @@ ARG         VORBIS_SHA256SUM="6efbcecdd3e5dfbf090341b485da9d176eb250d893e3eb378c
 ARG         THEORA_SHA256SUM="40952956c47811928d1e7922cda3bc1f427eb75680c3c37249c91e949054916b  libtheora-1.1.1.tar.gz"
 ARG         XVID_SHA256SUM="4e9fd62728885855bc5007fe1be58df42e5e274497591fec37249e1052ae316f  xvidcore-1.3.4.tar.gz"
 ARG         FREETYPE_SHA256SUM="5d03dd76c2171a7601e9ce10551d52d4471cf92cd205948e60289251daddffa8  freetype-2.5.5.tar.gz"
+ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb  v1.1.0.tar.gz"
+
 
 
 RUN     buildDeps="autoconf \
@@ -57,8 +60,8 @@ RUN     buildDeps="autoconf \
                    zlib-devel" && \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
-        yum --enablerepo=extras install -y epel-release && \
-        yum install -y ${buildDeps} && \
+        yum --enablerepo=extras install -y epel-release libgomp && \
+        yum install -y ${buildDeps} libgomp1 && \
 #RUN  \
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
         DIR=$(mktemp -d) && cd ${DIR} && \
@@ -181,6 +184,16 @@ RUN     buildDeps="autoconf \
         make distclean && \
         rm -rf ${DIR} && \
 #RUN  \
+## libvstab https://github.com/georgmartius/vid.stab
+        DIR=$(mktemp -d) && cd ${DIR} && \
+        curl -sLO https://github.com/georgmartius/vid.stab/archive/v${LIBVIDSTAB_VERSION}.tar.gz &&\
+        echo ${LIBVIDSTAB_SHA256SUM} | sha256sum --check && \
+        tar -zx --strip-components=1 -f v${LIBVIDSTAB_VERSION}.tar.gz && \
+        cmake . && \
+        make && \
+        make install && \
+        rm -rf ${DIR} && \
+#RUN  \
 ## ffmpeg https://ffmpeg.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
@@ -197,6 +210,7 @@ RUN     buildDeps="autoconf \
         --enable-libopencore-amrwb \
         --enable-libfdk_aac \
         --enable-libfreetype \
+        --enable-libvidstab \
         --enable-libmp3lame \
         --enable-libopus \
         --enable-libtheora \

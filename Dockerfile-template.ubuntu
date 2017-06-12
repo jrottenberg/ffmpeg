@@ -35,7 +35,7 @@ RUN      buildDeps="autoconf \
                     zlib1g-dev" && \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates && \
+        apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates libgomp1 && \
 %%RUN%%
 ## cleanup
         cd && \
@@ -43,6 +43,7 @@ RUN      buildDeps="autoconf \
         apt-get autoremove -y && \
         apt-get clean -y && \
         rm -rf /var/lib/apt/lists && \
+        ldconfig && \
         ffmpeg -buildconf
 
 # Let's make sure the app built correctly

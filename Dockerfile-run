@@ -120,6 +120,16 @@
         make distclean && \
         rm -rf ${DIR} && \
 #RUN  \
+## libvstab https://github.com/georgmartius/vid.stab
+        DIR=$(mktemp -d) && cd ${DIR} && \
+        curl -sLO https://github.com/georgmartius/vid.stab/archive/v${LIBVIDSTAB_VERSION}.tar.gz &&\
+        echo ${LIBVIDSTAB_SHA256SUM} | sha256sum --check && \
+        tar -zx --strip-components=1 -f v${LIBVIDSTAB_VERSION}.tar.gz && \
+        cmake . && \
+        make && \
+        make install && \
+        rm -rf ${DIR} && \
+#RUN  \
 ## ffmpeg https://ffmpeg.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
@@ -136,6 +146,7 @@
         --enable-libopencore-amrwb \
         --enable-libfdk_aac \
         --enable-libfreetype \
+        --enable-libvidstab \
         --enable-libmp3lame \
         --enable-libopus \
         --enable-libtheora \
