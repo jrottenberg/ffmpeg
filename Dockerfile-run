@@ -130,6 +130,16 @@
         make install && \
         rm -rf ${DIR} && \
 #RUN  \
+## libass https://github.com/libass/libass
+        DIR=$(mktemp -d) && cd ${DIR} && \
+        curl -sLO https://github.com/libass/libass/archive/${LIBASS_VERSION}.tar.gz &&\
+        echo ${LIBASS_SHA256SUM} | sha256sum --check && \
+        tar -zx --strip-components=1 -f v${LIBVIDSTAB_VERSION}.tar.gz && \
+        cmake . && \
+        make && \
+        make install && \
+        rm -rf ${DIR} && \
+#RUN  \
 ## ffmpeg https://ffmpeg.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
@@ -142,6 +152,7 @@
         --disable-static \
         --enable-avresample \
         --enable-gpl \
+        --enable-libass \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
         --enable-libfdk_aac \
