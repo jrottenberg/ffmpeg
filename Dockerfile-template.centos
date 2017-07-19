@@ -15,7 +15,7 @@ WORKDIR     /tmp/workdir
 
 
 ENV         %%ENV%%
-ENV         LD_LIBRARY_PATH=${SRC}/lib
+ARG         LD_LIBRARY_PATH=${SRC}/lib
 
 RUN     buildDeps="autoconf \
                    automake \
