@@ -15,15 +15,18 @@ WORKDIR     /tmp/workdir
 
 
 ENV         %%ENV%%
+ARG         LD_LIBRARY_PATH=${SRC}/lib
 
 RUN      buildDeps="autoconf \
                     automake \
                     cmake \
                     curl \
                     bzip2 \
+                    libexpat1-dev \
                     g++ \
                     gcc \
                     git \
+                    gperf \
                     libtool \
                     make \
                     nasm \
@@ -35,7 +38,7 @@ RUN      buildDeps="autoconf \
                     zlib1g-dev" && \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates libgomp1 && \
+        apt-get install -yq --no-install-recommends ${buildDeps} ca-certificates libgomp1 expat && \
 %%RUN%%
 ## cleanup
         cd && \
