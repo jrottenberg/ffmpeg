@@ -114,7 +114,7 @@
         curl -sLO http://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.gz && \
         echo ${FREETYPE_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f freetype-${FREETYPE_VERSION}.tar.gz && \
-        ./configure --disable-static --enable-shared && \
+        ./configure --prefix="${SRC}" --disable-static --enable-shared && \
         make && \
         make install && \
         make distclean && \
@@ -125,7 +125,26 @@
         curl -sLO https://github.com/georgmartius/vid.stab/archive/v${LIBVIDSTAB_VERSION}.tar.gz &&\
         echo ${LIBVIDSTAB_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f v${LIBVIDSTAB_VERSION}.tar.gz && \
-        cmake . && \
+        cmake -DCMAKE_INSTALL_PREFIX="${SRC}" . && \
+        make && \
+        make install && \
+        rm -rf ${DIR} && \
+#RUN  \
+## fridibi https://www.fribidi.org/
+        DIR=$(mktemp -d) && cd ${DIR} && \
+        curl -sLO http://fribidi.org/download/fribidi-${FRIBIDI_VERSION}.tar.bz2 &&\
+        echo ${FRIBIDI_SHA256SUM} | sha256sum --check && \
+        tar -jx --strip-components=1 -f fribidi-${FRIBIDI_VERSION}.tar.bz2 && \
+        ./configure -prefix="${SRC}" --disable-static --enable-shared && \
+        make && \
+        make install && \
+        rm -rf ${DIR} && \
+#RUN  \
+## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
+        DIR=$(mktemp -d) && cd ${DIR} && \
+        curl -sLO https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 &&\
+        tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
+        ./configure -prefix="${SRC}" --disable-static --enable-shared && \
         make && \
         make install && \
         rm -rf ${DIR} && \
@@ -134,8 +153,9 @@
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO https://github.com/libass/libass/archive/${LIBASS_VERSION}.tar.gz &&\
         echo ${LIBASS_SHA256SUM} | sha256sum --check && \
-        tar -zx --strip-components=1 -f v${LIBVIDSTAB_VERSION}.tar.gz && \
-        cmake . && \
+        tar -zx --strip-components=1 -f ${LIBASS_VERSION}.tar.gz && \
+        ./autogen.sh && \
+        ./configure -prefix="${SRC}" --disable-static --enable-shared && \
         make && \
         make install && \
         rm -rf ${DIR} && \

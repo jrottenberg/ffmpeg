@@ -15,14 +15,17 @@ WORKDIR     /tmp/workdir
 
 
 ENV         %%ENV%%
+ENV         LD_LIBRARY_PATH=${SRC}/lib
 
 RUN     buildDeps="autoconf \
                    automake \
                    bzip2 \
                    cmake \
+                   expat-devel \
                    gcc \
                    gcc-c++ \
                    git \
+                   gperf \
                    libtool \
                    make \
                    nasm \
@@ -34,7 +37,7 @@ RUN     buildDeps="autoconf \
                    zlib-devel" && \
         export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
-        yum --enablerepo=extras install -y epel-release libgomp && \
+        yum --enablerepo=extras install -y epel-release libgomp expat && \
         yum install -y ${buildDeps} libgomp1 && \
 %%RUN%%
 # cleanup
