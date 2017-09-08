@@ -3,12 +3,10 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        alpine:3.4
+FROM        alpine:3.4 as builder
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
 
-CMD         ["--help"]
-ENTRYPOINT  ["ffmpeg"]
 WORKDIR     /tmp/workdir
 
 
@@ -61,172 +59,174 @@ RUN     buildDeps="autoconf \
                    openssl-dev \
                    tar \
                    yasm \
+                   nasm \
                    zlib-dev \
                    expat-dev" && \
         export MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" && \
-        apk add --update ${buildDeps} libgcc libstdc++ ca-certificates libgomp expat && \
-#RUN  \
+        apk add --update ${buildDeps} libgcc libstdc++ ca-certificates libgomp expat
+RUN  \
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sL https://downloads.sf.net/project/opencore-amr/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
-        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-shared --datadir=${DIR} && \
-        make && \
+        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-static --datadir=${DIR} && \
+        make -j 4 && \
         make install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## x264 http://www.videolan.org/developers/x264.html
        DIR=$(mktemp -d) && cd ${DIR} && \
        curl -sL https://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
        tar -jx --strip-components=1 && \
-       ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-pic --enable-shared --disable-cli && \
-       make && \
+       ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --enable-static --disable-cli && \
+       make -j 4 && \
        make install && \
-       rm -rf ${DIR} && \
-#RUN  \
+       rm -rf ${DIR}
+RUN  \
 ## x265 http://x265.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sL https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
         tar -zx && \
         cd x265_${X265_VERSION}/build/linux && \
         ./multilib.sh && \
-        make -C 8bit install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        make -j 4 -C 8bit install && \
+        rm -rf ${DIR}
+RUN  \
 ## libogg https://www.xiph.org/ogg/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO http://downloads.xiph.org/releases/ogg/libogg-${OGG_VERSION}.tar.gz && \
         echo ${OGG_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f libogg-${OGG_VERSION}.tar.gz && \
-        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --disable-static --datarootdir=${DIR} && \
-        make && \
+        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --disable-shared --datarootdir=${DIR} && \
+        make -j 4 && \
         make install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## libopus https://www.opus-codec.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO https://archive.mozilla.org/pub/opus/opus-${OPUS_VERSION}.tar.gz && \
         echo ${OPUS_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f opus-${OPUS_VERSION}.tar.gz && \
         autoreconf -fiv && \
-        ./configure --prefix="${SRC}" --disable-static --datadir="${DIR}" && \
-        make && \
+        ./configure --prefix="${SRC}" --disable-shared --datadir="${DIR}" && \
+        make -j 4 && \
         make install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## libvorbis https://xiph.org/vorbis/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VERSION}.tar.gz && \
         echo ${VORBIS_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f libvorbis-${VORBIS_VERSION}.tar.gz && \
         ./configure --prefix="${SRC}" --with-ogg="${SRC}" --bindir="${SRC}/bin" \
-        --disable-static --datadir="${DIR}" && \
-        make && \
+        --disable-shared --datadir="${DIR}" && \
+        make -j 4 && \
         make install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## libtheora http://www.theora.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
         echo ${THEORA_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
         ./configure --prefix="${SRC}" --with-ogg="${SRC}" --bindir="${SRC}/bin" \
-        --disable-static --datadir="${DIR}" && \
-        make && \
+        --disable-shared --datadir="${DIR}" && \
+        make -j 4 && \
         make install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## libvpx https://www.webmproject.org/code/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sL https://codeload.github.com/webmproject/libvpx/tar.gz/v${VPX_VERSION} | \
         tar -zx --strip-components=1 && \
-        ./configure --prefix="${SRC}" --enable-vp8 --enable-vp9 --enable-pic --disable-debug --disable-examples --disable-docs --disable-install-bins --enable-shared && \
-        make && \
+        ./configure --prefix="${SRC}" --enable-vp8 --enable-vp9 --disable-debug \
+        --disable-examples --disable-docs --disable-install-bins --disable-unit-tests --enable-vp9-highbitdepth && \
+        make -j 4 && \
         make install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## libmp3lame http://lame.sourceforge.net/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sL https://downloads.sf.net/project/lame/lame/${LAME_VERSION%.*}/lame-${LAME_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
-        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --disable-static --enable-nasm --datarootdir="${DIR}" && \
-        make && \
+        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --disable-shared --enable-nasm --datarootdir="${DIR}" && \
+        make -j 4 && \
         make install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## xvid https://www.xvid.com/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO http://downloads.xvid.org/downloads/xvidcore-${XVID_VERSION}.tar.gz && \
         echo ${XVID_SHA256SUM} | sha256sum --check && \
         tar -zx -f xvidcore-${XVID_VERSION}.tar.gz && \
         cd xvidcore/build/generic && \
-        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --datadir="${DIR}" --disable-static --enable-shared && \
-        make && \
+        ./configure --prefix="${SRC}" --bindir="${SRC}/bin" --datadir="${DIR}" --enable-static --disable-shared && \
+        make -j 4 && \
         make install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## fdk-aac https://github.com/mstorsjo/fdk-aac
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sL https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         autoreconf -fiv && \
-        ./configure --prefix="${SRC}" --disable-static --datadir="${DIR}" && \
-        make && \
+        ./configure --prefix="${SRC}" --disable-shared --datadir="${DIR}" && \
+        make -j 4 && \
         make install && \
         make distclean && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## freetype https://www.freetype.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO http://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.gz && \
         echo ${FREETYPE_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f freetype-${FREETYPE_VERSION}.tar.gz && \
-        ./configure --prefix="${SRC}" --disable-static --enable-shared && \
-        make && \
+        ./configure --prefix="${SRC}" --enable-static --disable-shared && \
+        make -j 4 && \
         make install && \
         make distclean && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## libvstab https://github.com/georgmartius/vid.stab
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO https://github.com/georgmartius/vid.stab/archive/v${LIBVIDSTAB_VERSION}.tar.gz &&\
         echo ${LIBVIDSTAB_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f v${LIBVIDSTAB_VERSION}.tar.gz && \
-        cmake -DCMAKE_INSTALL_PREFIX="${SRC}" . && \
-        make && \
+        cmake -DCMAKE_INSTALL_PREFIX="${SRC}" -DBUILD_SHARED_LIBS:bool=off -DBUILD_STATIC_LIBS:bool=on . && \
+        make -j 4 && \
         make install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## fridibi https://www.fribidi.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO http://fribidi.org/download/fribidi-${FRIBIDI_VERSION}.tar.bz2 &&\
         echo ${FRIBIDI_SHA256SUM} | sha256sum --check && \
         tar -jx --strip-components=1 -f fribidi-${FRIBIDI_VERSION}.tar.bz2 && \
-        ./configure -prefix="${SRC}" --disable-static --enable-shared && \
-        make && \
+        ./configure -prefix="${SRC}" --enable-static --disable-shared && \
+        make -j 4 && \
         make install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 &&\
         tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
-        ./configure -prefix="${SRC}" --disable-static --enable-shared && \
-        make && \
+        ./configure -prefix="${SRC}" --enable-static --disable-shared && \
+        make -j 4 && \
         make install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## libass https://github.com/libass/libass
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO https://github.com/libass/libass/archive/${LIBASS_VERSION}.tar.gz &&\
         echo ${LIBASS_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f ${LIBASS_VERSION}.tar.gz && \
         ./autogen.sh && \
-        ./configure -prefix="${SRC}" --disable-static --enable-shared && \
-        make && \
+        ./configure -prefix="${SRC}" --enable-static --disable-shared && \
+        make -j 4 && \
         make install && \
-        rm -rf ${DIR} && \
-#RUN  \
+        rm -rf ${DIR}
+RUN  \
 ## ffmpeg https://ffmpeg.org/
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
@@ -236,7 +236,6 @@ RUN     buildDeps="autoconf \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
-        --disable-static \
         --enable-avresample \
         --enable-gpl \
         --enable-libass \
@@ -256,14 +255,14 @@ RUN     buildDeps="autoconf \
         --enable-nonfree \
         --enable-openssl \
         --enable-postproc \
-        --enable-shared \
         --enable-small \
         --enable-version3 \
-        --extra-cflags="-I${SRC}/include" \
-        --extra-ldflags="-L${SRC}/lib" \
+        --pkg-config-flags="--static" \
+        --extra-cflags="-I${SRC}/include -static" \
+        --extra-ldflags="-L${SRC}/lib -static" \
         --extra-libs=-ldl \
         --prefix="${SRC}" && \
-        make && \
+        make -j 4 && \
         make install && \
         make distclean && \
         hash -r && \
@@ -280,3 +279,11 @@ RUN     buildDeps="autoconf \
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
+
+FROM        alpine:3.4
+MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+
+COPY --from=builder /usr/local/bin/ff* /usr/local/bin/
+
+CMD         ["--help"]
+ENTRYPOINT  ["ffmpeg"]
