@@ -30,17 +30,17 @@ RUN     buildDeps="autoconf \
                    file \
                    g++ \
                    gcc \
-                   gnupg \
+                   gperf \
                    libtool \
                    make \
                    python \
                    openssl-dev \
                    tar \
                    yasm \
-                   zlib-dev" && \
+                   zlib-dev \
+                   expat-dev" && \
         export MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" && \
-        apk  add --update ${buildDeps} 
-
+        apk  add --no-cache --update ${buildDeps} 
 %%RUN%%
 
 RUN \

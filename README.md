@@ -73,6 +73,8 @@ ffmpeg version 3.0 Copyright (c) 2000-2016 the FFmpeg developers
     --enable-libopus
     --enable-libvorbis
     --enable-libvpx
+    --enable-libfreetype
+    --enable-libvidstab
 ```
 
 Capture output from the container to the host running the command
@@ -119,6 +121,8 @@ See Dockerfile-env to update a version
 - [VPX_VERSION](https://github.com/webmproject/libvpx/releases)
 - [XVID_VERSION](https://labs.xvid.com/source/)
 - [FDKAAC_VERSION](https://github.com/mstorsjo/fdk-aac/releases)
+- [FREETYPE_VERSION](http://download.savannah.gnu.org/releases/freetype/)
+- [LIBVIDSTAB_VERSION](https://github.com/georgmartius/vid.stab/releases)
 - [X264_VERSION](http://www.videolan.org/developers/x264.html)
 - [X265_VERSION](https://bitbucket.org/multicoreware/x265/downloads/)
 
@@ -136,8 +140,8 @@ ${EDITOR} Dockerfile-env
 docker build -t my-build VERSION/path/
 
 # make sure all variants pass before Travis does
-find ffmpeg/ -name Dockerfile | xargs  dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
+find ffmpeg/ -name Dockerfile | xargs dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
 ```
 
 
-Commit the env file AND all the generated Dockerfile for a merge request.
+Commit the env file THEN all the generated Dockerfile for a merge request. So it's easier to find the template change.

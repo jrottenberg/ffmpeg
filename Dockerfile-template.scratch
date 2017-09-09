@@ -22,10 +22,11 @@ RUN     buildDeps="autoconf \
                    cmake \
                    curl \
                    coreutils \
+                   expat-dev \
                    file \
                    g++ \
                    gcc \
-                   gnupg \
+                   gperf \
                    libtool \
                    make \
                    python \

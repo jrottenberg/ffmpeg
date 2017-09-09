@@ -46,7 +46,7 @@ RUN \
         DIR=/tmp/opus && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sLO http://downloads.xiph.org/releases/opus/opus-${OPUS_VERSION}.tar.gz && \
+        curl -sLO https://archive.mozilla.org/pub/opus/opus-${OPUS_VERSION}.tar.gz && \
         echo ${OPUS_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f opus-${OPUS_VERSION}.tar.gz && \
         autoreconf -fiv && \
@@ -126,18 +126,68 @@ RUN \
         cd ${DIR} && \
         curl -sL https://github.com/uclouvain/openjpeg/archive/v${OPENJPEG_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
-        cmake -DBUILD_THIRDPARTY:BOOL=ON -DOPENJPEG_INSTALL_BIN_DIR=${DIR} . && \
+        cmake -DBUILD_THIRDPARTY:BOOL=ON -DOPENJPEG_INSTALL_BIN_DIR=${SRC} . && \
         make && \
         make install
-### ffmpeg https://ffmpeg.org/
-RUN \
-        DIR=/tmp/ffmpeg && \
+RUN  \
+## freetype https://www.freetype.org/
+        DIR=/tmp/freetype && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        gpg --keyserver ha.pool.sks-keyservers.net --recv-keys ${FFMPEG_KEY} && \
-        curl -sLO http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
-        curl -sLO http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz.asc && \
-        gpg --batch  --verify ffmpeg-${FFMPEG_VERSION}.tar.gz.asc ffmpeg-${FFMPEG_VERSION}.tar.gz && \
+        curl -sLO http://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.gz && \
+        echo ${FREETYPE_SHA256SUM} | sha256sum --check && \
+        tar -zx --strip-components=1 -f freetype-${FREETYPE_VERSION}.tar.gz && \
+        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
+        make && \
+        make install 
+RUN  \
+## libvstab https://github.com/georgmartius/vid.stab
+        DIR=/tmp/vid.stab && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/georgmartius/vid.stab/archive/v${LIBVIDSTAB_VERSION}.tar.gz &&\
+        echo ${LIBVIDSTAB_SHA256SUM} | sha256sum --check && \
+        tar -zx --strip-components=1 -f v${LIBVIDSTAB_VERSION}.tar.gz && \
+        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
+        make && \
+        make install 
+RUN  \
+## fridibi https://www.fribidi.org/
+        DIR=/tmp/fribidi && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO http://fribidi.org/download/fribidi-${FRIBIDI_VERSION}.tar.bz2 &&\
+        echo ${FRIBIDI_SHA256SUM} | sha256sum --check && \
+        tar -jx --strip-components=1 -f fribidi-${FRIBIDI_VERSION}.tar.bz2 && \
+        ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
+        make && \
+        make install
+RUN  \
+## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
+        DIR=/tmp/fontconfig && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 &&\
+        tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
+        ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
+        make && \
+        make install 
+RUN  \
+## libass https://github.com/libass/libass
+        DIR=/tmp/libass && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/libass/libass/archive/${LIBASS_VERSION}.tar.gz &&\
+        echo ${LIBASS_SHA256SUM} | sha256sum --check && \
+        tar -zx --strip-components=1 -f ${LIBASS_VERSION}.tar.gz && \
+        ./autogen.sh && \
+        ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
+        make && \
+        make install 
+RUN  \
+## ffmpeg https://ffmpeg.org/
+        DIR=$(mktemp -d) && cd ${DIR} && \
+        curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
         tar -zx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.gz && \
         ./configure \
         --disable-debug \
@@ -147,6 +197,10 @@ RUN \
         --enable-avresample \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
+        --enable-gpl \
+        --enable-libass \
+        --enable-libfreetype \
+        --enable-libvidstab \
         --enable-libmp3lame \
         --enable-libopenjpeg \
         --enable-libopus \

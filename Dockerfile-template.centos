@@ -14,14 +14,17 @@ ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 
 ENV         %%ENV%%
+ARG         LD_LIBRARY_PATH=${SRC}/lib
 
 RUN     buildDeps="autoconf \
                    automake \
                    bzip2 \
                    cmake \
+                   expat-devel \
                    gcc \
                    gcc-c++ \
                    git \
+                   gperf \
                    libtool \
                    make \
                    nasm \

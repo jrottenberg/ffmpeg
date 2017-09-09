@@ -4,7 +4,12 @@
 #
 # 
 
-FROM        alpine:3.5 AS build
+FROM        alpine:3.5 AS base
+
+RUN     apk  add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
+
+
+FROM        base AS build
 
 WORKDIR     /tmp/workdir
 
@@ -12,7 +17,7 @@ ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 
-ENV         FFMPEG_VERSION=2.8.13     \
+ENV         FFMPEG_VERSION=3.3.3     \
             FDKAAC_VERSION=0.1.5      \
             LAME_VERSION=3.99.5       \
             LIBASS_VERSION=0.13.7     \  
@@ -51,7 +56,6 @@ RUN     buildDeps="autoconf \
                    cmake \
                    curl \
                    coreutils \
-                   expat-dev \
                    file \
                    g++ \
                    gcc \
@@ -62,10 +66,10 @@ RUN     buildDeps="autoconf \
                    openssl-dev \
                    tar \
                    yasm \
-                   zlib-dev" && \
+                   zlib-dev \
+                   expat-dev" && \
         export MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" && \
-        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
-
+        apk  add --no-cache --update ${buildDeps} 
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -194,7 +198,7 @@ RUN \
         cd ${DIR} && \
         curl -sL https://github.com/uclouvain/openjpeg/archive/v${OPENJPEG_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
-        cmake -DBUILD_THIRDPARTY:BOOL=ON -DOPENJPEG_INSTALL_BIN_DIR=${SRC} . && \
+        cmake -DBUILD_THIRDPARTY:BOOL=ON -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
         make && \
         make install
 RUN  \
@@ -257,63 +261,62 @@ RUN  \
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
         tar -zx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.gz && \
-        ./configure \
-        --disable-debug \
-        --disable-doc \
-        --disable-ffplay \
-        --enable-shared \
-        --enable-avresample \
-        --enable-libopencore-amrnb \
-        --enable-libopencore-amrwb \
-        --enable-gpl \
-        --enable-libass \
-        --enable-libfreetype \
-        --enable-libvidstab \
-        --enable-libmp3lame \
-        --enable-libopenjpeg \
-        --enable-libopus \
-        --enable-libtheora \
-        --enable-libvorbis \
-        --enable-libvpx \
-        --enable-libx265 \
-        --enable-libxvid \
-        --enable-gpl \
-        --enable-libx264 \
-        #--enable-nonfree \
-        #--enable-openssl \
-        #--enable-libfdk_aac \
-        --enable-postproc \
-        --enable-small \
-        --enable-version3 \
-        --extra-cflags="-I${PREFIX}/include" \
-        --extra-ldflags="-L${PREFIX}/lib" \
-        --extra-libs=-ldl \
-        --prefix="${PREFIX}" && \
-        make && \
-        make install && \
-        make distclean && \
-        hash -r && \
-        cd tools && \
-        make qt-faststart && \
-        cp qt-faststart ${PREFIX}/bin
-
-
-RUN \
-        mkdir -p /tmp/fakeroot/lib  && \
-        cp $(ldd ${PREFIX}/bin/ffmpeg | grep -o '/.\+\.so[^ ]*' | sort | uniq) /tmp/fakeroot/lib && \
-        for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
-        cp -r ${PREFIX}/bin /tmp/fakeroot/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/
-
-### Release Stage
-FROM        scratch AS release
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
-
-CMD         ["--help"]
-ENTRYPOINT  ["/bin/ffmpeg"]
-WORKDIR /
-
-COPY --from=build /tmp/fakeroot/ /
-           
-# Let's make sure the app built correctly
+        echo "HI"
+#        ./configure \
+#        --disable-debug \
+#        --disable-doc \
+#        --disable-ffplay \
+#        --enable-shared \
+#        --enable-avresample \
+#        --enable-libopencore-amrnb \
+#        --enable-libopencore-amrwb \
+#        --enable-gpl \
+#        --enable-libass \
+#        --enable-libfreetype \
+#        --enable-libvidstab \
+#        --enable-libmp3lame \
+#        --enable-libopenjpeg \
+#        --enable-libopus \
+#        --enable-libtheora \
+#        --enable-libvorbis \
+#        --enable-libvpx \
+#        --enable-libx265 \
+#        --enable-libxvid \
+#        --enable-gpl \
+#        --enable-libx264 \
+#        #--enable-nonfree \
+#        #--enable-openssl \
+#        #--enable-libfdk_aac \
+#        --enable-postproc \
+#        --enable-small \
+#        --enable-version3 \
+#        --extra-cflags="-I${PREFIX}/include" \
+#        --extra-ldflags="-L${PREFIX}/lib" \
+#        --extra-libs=-ldl \
+#        --prefix="${PREFIX}" && \
+#        make && \
+#        make install && \
+#        make distclean && \
+#        hash -r && \
+#        cd tools && \
+#        make qt-faststart && \
+#        cp qt-faststart ${PREFIX}/bin
+#
+#
+#RUN \
+#    cp $(ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3) /usr/local/lib/ && \
+#    cp ${PREFIX}/bin/* /usr/local/bin/ && \
+#    cp -r ${PREFIX}/share/ffmpeg /usr/local/share/
+#
+#### Release Stage
+#FROM        base AS release
+#MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+#
+#CMD         ["--help"]
+#ENTRYPOINT  ["ffmpeg"]
+#WORKDIR /opt/ffmpeg
+#
+#COPY --from=build /usr/local /usr/local
+#           
+## Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
