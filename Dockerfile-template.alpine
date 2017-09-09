@@ -16,6 +16,7 @@ WORKDIR     /tmp/workdir
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
+ARG        MAKEFLAGS="-j4"
 
 ENV         %%ENV%%
 
@@ -39,7 +40,6 @@ RUN     buildDeps="autoconf \
                    yasm \
                    zlib-dev \
                    expat-dev" && \
-        export MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" && \
         apk  add --no-cache --update ${buildDeps} 
 %%RUN%%
 

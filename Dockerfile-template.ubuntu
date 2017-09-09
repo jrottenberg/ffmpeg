@@ -17,6 +17,7 @@ FROM base as build
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
+ARG        MAKEFLAGS="-j4"
 
 ENV         %%ENV%%
 ARG         LD_LIBRARY_PATH=${SRC}/lib
@@ -40,7 +41,6 @@ RUN      buildDeps="autoconf \
                     libssl-dev \
                     yasm \
                     zlib1g-dev" && \
-        export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
 %%RUN%%

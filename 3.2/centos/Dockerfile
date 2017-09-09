@@ -12,6 +12,7 @@ WORKDIR     /tmp/workdir
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
+ARG        MAKEFLAGS="-j4"
 
 ENV         FFMPEG_VERSION=3.2.7     \
             FDKAAC_VERSION=0.1.5      \
@@ -43,7 +44,6 @@ ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a
 ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a47889315526adbafd7  0.13.7.tar.gz"
 ARG         FRIBIDI_SHA256SUM="08222a6212bbc2276a2d55c3bf370109ae4a35b689acbc66571ad2a670595a8e  fribidi-0.19.7.tar.bz2"
 
-ARG         LD_LIBRARY_PATH=${SRC}/lib
 
 RUN     buildDeps="autoconf \
                    automake \
@@ -63,7 +63,6 @@ RUN     buildDeps="autoconf \
                    yasm \
                    which \
                    zlib-devel" && \
-        export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum --enablerepo=extras install -y epel-release && \
         yum install -y ${buildDeps} 
@@ -75,7 +74,7 @@ RUN \
         curl -sL https://downloads.sf.net/project/opencore-amr/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --enable-shared  && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install 
 ## x264 http://www.videolan.org/developers/x264.html
 RUN \
@@ -85,7 +84,7 @@ RUN \
         curl -sL https://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
         tar -jx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --enable-shared --enable-pic --disable-cli && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install
 ### x265 http://x265.org/
 RUN \
@@ -108,7 +107,7 @@ RUN \
         echo ${OGG_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f libogg-${OGG_VERSION}.tar.gz && \
         ./configure --prefix="${PREFIX}" --enable-shared  && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install
 ### libopus https://www.opus-codec.org/
 RUN \
@@ -120,7 +119,7 @@ RUN \
         tar -zx --strip-components=1 -f opus-${OPUS_VERSION}.tar.gz && \
         autoreconf -fiv && \
         ./configure --prefix="${PREFIX}" --enable-shared && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install
 ### libvorbis https://xiph.org/vorbis/
 RUN \
@@ -131,7 +130,7 @@ RUN \
         echo ${VORBIS_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f libvorbis-${VORBIS_VERSION}.tar.gz && \
         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install
 ### libtheora http://www.theora.org/
 RUN \
@@ -142,7 +141,7 @@ RUN \
         echo ${THEORA_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install
 ### libvpx https://www.webmproject.org/code/
 RUN \
@@ -153,7 +152,7 @@ RUN \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --enable-vp8 --enable-vp9 --enable-pic --enable-shared \
         --disable-debug --disable-examples --disable-docs --disable-install-bins  && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install
 ### libmp3lame http://lame.sourceforge.net/
 RUN \
@@ -163,7 +162,7 @@ RUN \
         curl -sL https://downloads.sf.net/project/lame/lame/${LAME_VERSION%.*}/lame-${LAME_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --enable-shared --enable-nasm --enable-pic --disable-frontend && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install
 ### xvid https://www.xvid.com/
 RUN \
@@ -175,7 +174,7 @@ RUN \
         tar -zx -f xvidcore-${XVID_VERSION}.tar.gz && \
         cd xvidcore/build/generic && \
         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --datadir="${DIR}" --enable-shared --enable-shared && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install
 ### fdk-aac https://github.com/mstorsjo/fdk-aac
 #RUN \
@@ -186,7 +185,7 @@ RUN \
 #        tar -zx --strip-components=1 && \
 #        autoreconf -fiv && \
 #        ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}" && \
-#        make && \
+#        make ${MAKEFLAGS} && \
 #        make install
 ## openjpeg https://github.com/uclouvain/openjpeg
 RUN \
@@ -196,7 +195,7 @@ RUN \
         curl -sL https://github.com/uclouvain/openjpeg/archive/v${OPENJPEG_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         cmake -DBUILD_THIRDPARTY:BOOL=ON -DOPENJPEG_INSTALL_BIN_DIR=${SRC} . && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install
 RUN  \
 ## freetype https://www.freetype.org/
@@ -207,7 +206,7 @@ RUN  \
         echo ${FREETYPE_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f freetype-${FREETYPE_VERSION}.tar.gz && \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install 
 RUN  \
 ## libvstab https://github.com/georgmartius/vid.stab
@@ -218,7 +217,7 @@ RUN  \
         echo ${LIBVIDSTAB_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f v${LIBVIDSTAB_VERSION}.tar.gz && \
         cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install 
 RUN  \
 ## fridibi https://www.fribidi.org/
@@ -229,7 +228,7 @@ RUN  \
         echo ${FRIBIDI_SHA256SUM} | sha256sum --check && \
         tar -jx --strip-components=1 -f fribidi-${FRIBIDI_VERSION}.tar.bz2 && \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install
 RUN  \
 ## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
@@ -239,7 +238,7 @@ RUN  \
         curl -sLO https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 &&\
         tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install 
 RUN  \
 ## libass https://github.com/libass/libass
@@ -251,7 +250,7 @@ RUN  \
         tar -zx --strip-components=1 -f ${LIBASS_VERSION}.tar.gz && \
         ./autogen.sh && \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install 
 RUN  \
 ## ffmpeg https://ffmpeg.org/
@@ -290,7 +289,7 @@ RUN  \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
         --prefix="${PREFIX}" && \
-        make && \
+        make ${MAKEFLAGS} && \
         make install && \
         make distclean && \
         hash -r && \
