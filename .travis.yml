@@ -1,4 +1,5 @@
 sudo: required
+dist: trusty
 
 language: bash
 services: docker
@@ -24,6 +25,12 @@ env:
  - VERSION=2.8 VARIANT=alpine
  - VERSION=2.8 VARIANT=centos
  - VERSION=2.8 VARIANT=scratch
+
+before_install:
+    - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    - sudo apt-get update
+    - sudo apt-get -y install docker-ce
 
 before_script:
   - env | sort
