@@ -274,7 +274,7 @@ RUN  \
         --enable-libfreetype \
         --enable-libvidstab \
         --enable-libmp3lame \
-        --enable-libopenjpeg \
+         \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \
