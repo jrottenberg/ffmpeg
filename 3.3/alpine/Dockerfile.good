@@ -1,20 +1,23 @@
 # ffmpeg - http://ffmpeg.org/download.html
 #
-# From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
-#
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
-#
-FROM        centos:7 AS build
+# 
+
+FROM        alpine:3.5 AS base
+
+RUN     apk  add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
+
+
+FROM        base AS build
 
 WORKDIR     /tmp/workdir
 
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
-ARG        MAKEFLAGS="-j"
 
-ENV         FFMPEG_VERSION=3.2.7     \
+ENV         FFMPEG_VERSION=3.3.3     \
             FDKAAC_VERSION=0.1.5      \
             LAME_VERSION=3.99.5       \
             LIBASS_VERSION=0.13.7     \  
@@ -47,25 +50,26 @@ ARG         FRIBIDI_SHA256SUM="08222a6212bbc2276a2d55c3bf370109ae4a35b689acbc665
 
 RUN     buildDeps="autoconf \
                    automake \
+                   bash \
+                   binutils \
                    bzip2 \
                    cmake \
-                   expat-devel \
+                   curl \
+                   coreutils \
+                   file \
+                   g++ \
                    gcc \
-                   gcc-c++ \
-                   git \
                    gperf \
                    libtool \
                    make \
-                   nasm \
-                   perl \
-                   openssl-devel \
+                   python \
+                   openssl-dev \
                    tar \
                    yasm \
-                   which \
-                   zlib-devel" && \
-        echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
-        yum --enablerepo=extras install -y epel-release && \
-        yum install -y ${buildDeps} 
+                   zlib-dev \
+                   expat-dev" && \
+        export MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" && \
+        apk  add --no-cache --update ${buildDeps} 
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -257,62 +261,62 @@ RUN  \
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
         tar -zx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.gz && \
-        ./configure \
-        --disable-debug \
-        --disable-doc \
-        --disable-ffplay \
-        --enable-shared \
-        --enable-avresample \
-        --enable-libopencore-amrnb \
-        --enable-libopencore-amrwb \
-        --enable-gpl \
-        --enable-libass \
-        --enable-libfreetype \
-        --enable-libvidstab \
-        --enable-libmp3lame \
-        --enable-libopenjpeg \
-        --enable-libopus \
-        --enable-libtheora \
-        --enable-libvorbis \
-        --enable-libvpx \
-        --enable-libx265 \
-        --enable-libxvid \
-        --enable-gpl \
-        --enable-libx264 \
-        #--enable-nonfree \
-        #--enable-openssl \
-        #--enable-libfdk_aac \
-        --enable-postproc \
-        --enable-small \
-        --enable-version3 \
-        --extra-cflags="-I${PREFIX}/include" \
-        --extra-ldflags="-L${PREFIX}/lib" \
-        --extra-libs=-ldl \
-        --prefix="${PREFIX}" && \
-        make && \
-        make install && \
-        make distclean && \
-        hash -r && \
-        cd tools && \
-        make qt-faststart && \
-        cp qt-faststart ${PREFIX}/bin
-
-RUN \
-        cp $(ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3) /usr/local/lib64/ && \
-        cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib64 ffmpeg -buildconf
-
-
-FROM        centos:7
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
-
-CMD         ["--help"]
-ENTRYPOINT  ["ffmpeg"]
-
-ENV LD_LIBRARY_PATH=/usr/local/lib64
-
-COPY --from=build /usr/local/ /usr/local/
-
-# Let's make sure the app built correctly
+        echo "HI"
+#        ./configure \
+#        --disable-debug \
+#        --disable-doc \
+#        --disable-ffplay \
+#        --enable-shared \
+#        --enable-avresample \
+#        --enable-libopencore-amrnb \
+#        --enable-libopencore-amrwb \
+#        --enable-gpl \
+#        --enable-libass \
+#        --enable-libfreetype \
+#        --enable-libvidstab \
+#        --enable-libmp3lame \
+#        --enable-libopenjpeg \
+#        --enable-libopus \
+#        --enable-libtheora \
+#        --enable-libvorbis \
+#        --enable-libvpx \
+#        --enable-libx265 \
+#        --enable-libxvid \
+#        --enable-gpl \
+#        --enable-libx264 \
+#        #--enable-nonfree \
+#        #--enable-openssl \
+#        #--enable-libfdk_aac \
+#        --enable-postproc \
+#        --enable-small \
+#        --enable-version3 \
+#        --extra-cflags="-I${PREFIX}/include" \
+#        --extra-ldflags="-L${PREFIX}/lib" \
+#        --extra-libs=-ldl \
+#        --prefix="${PREFIX}" && \
+#        make && \
+#        make install && \
+#        make distclean && \
+#        hash -r && \
+#        cd tools && \
+#        make qt-faststart && \
+#        cp qt-faststart ${PREFIX}/bin
+#
+#
+#RUN \
+#    cp $(ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3) /usr/local/lib/ && \
+#    cp ${PREFIX}/bin/* /usr/local/bin/ && \
+#    cp -r ${PREFIX}/share/ffmpeg /usr/local/share/
+#
+#### Release Stage
+#FROM        base AS release
+#MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+#
+#CMD         ["--help"]
+#ENTRYPOINT  ["ffmpeg"]
+#WORKDIR /opt/ffmpeg
+#
+#COPY --from=build /usr/local /usr/local
+#           
+## Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

@@ -5,17 +5,16 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        centos:7
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+FROM        centos:7 AS build
 
-
-CMD         ["--help"]
-ENTRYPOINT  ["ffmpeg"]
 WORKDIR     /tmp/workdir
 
+ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
+ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
+ARG        PREFIX=/opt/ffmpeg
+ARG        MAKEFLAGS="-j"
 
 ENV         %%ENV%%
-ARG         LD_LIBRARY_PATH=${SRC}/lib
 
 RUN     buildDeps="autoconf \
                    automake \
@@ -35,16 +34,26 @@ RUN     buildDeps="autoconf \
                    yasm \
                    which \
                    zlib-devel" && \
-        export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
-        yum --enablerepo=extras install -y epel-release libgomp expat && \
-        yum install -y ${buildDeps} libgomp1 && \
+        yum --enablerepo=extras install -y epel-release && \
+        yum install -y ${buildDeps} 
 %%RUN%%
-# cleanup
-        cd && \
-        yum history -y undo last && yum clean all && \
-        rm -rf /var/lib/yum/* && \
-        ffmpeg -buildconf
+RUN \
+        cp $(ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3) /usr/local/lib64/ && \
+        cp ${PREFIX}/bin/* /usr/local/bin/ && \
+        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+        LD_LIBRARY_PATH=/usr/local/lib64 ffmpeg -buildconf
+
+
+FROM        centos:7
+MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+
+CMD         ["--help"]
+ENTRYPOINT  ["ffmpeg"]
+
+ENV LD_LIBRARY_PATH=/usr/local/lib64
+
+COPY --from=build /usr/local/ /usr/local/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

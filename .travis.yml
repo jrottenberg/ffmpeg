@@ -7,25 +7,36 @@ env:
  - VERSION=3.3
  - VERSION=3.3 VARIANT=alpine
  - VERSION=3.3 VARIANT=centos
+ - VERSION=3.3 VARIANT=scratch
  - VERSION=3.2
  - VERSION=3.2 VARIANT=alpine
  - VERSION=3.2 VARIANT=centos
+ - VERSION=3.2 VARIANT=scratch
  - VERSION=3.1
  - VERSION=3.1 VARIANT=alpine
  - VERSION=3.1 VARIANT=centos
+ - VERSION=3.1 VARIANT=scratch
  - VERSION=3.0
  - VERSION=3.0 VARIANT=alpine
  - VERSION=3.0 VARIANT=centos
+ - VERSION=3.0 VARIANT=scratch
  - VERSION=2.8
  - VERSION=2.8 VARIANT=alpine
  - VERSION=2.8 VARIANT=centos
+ - VERSION=2.8 VARIANT=scratch
+
+before_install:
+    - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    - sudo apt-get update
+    - sudo apt-get -y install docker-ce
 
 before_script:
   - env | sort
   - image="ffmpeg:${VERSION}-${VARIANT:-ubuntu}"
 
 script:
-  - docker build -t "${image}" ${VERSION}/${VARIANT}
+  - docker build -t "${image}" --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" ${VERSION}/${VARIANT}
 
 after_script:
   - docker images

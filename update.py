@@ -8,7 +8,7 @@ import urllib2
 from distutils.version import StrictVersion
 
 MIN_VERSION='2.8'
-VARIANTS = ['ubuntu', 'alpine', 'centos']
+VARIANTS = ['ubuntu', 'alpine', 'centos', 'scratch']
 FFMPEG_RELEASES='https://ffmpeg.org/releases/'
 
 travis = []
@@ -62,9 +62,12 @@ for version in keep_version:
         env_content = env_content.replace('%%FFMPEG_VERSION%%', version)
         docker_content = template.replace('%%ENV%%', env_content)
         docker_content = docker_content.replace('%%RUN%%', run_content)
+        ## OpenJpeg 2.1 is not support in 2.8
+        if version[0:3] == '2.8':
+            docker_content = docker_content.replace('--enable-libopenjpeg', '')
 
         d = os.path.dirname(dockerfile)
-        if not os.path.exists(dockerfile):
+        if not os.path.exists(d):
             os.makedirs(d)
 
         with open(dockerfile, 'w') as dfile:
