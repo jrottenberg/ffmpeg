@@ -301,7 +301,7 @@ RUN \
         cp $(ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3) /usr/local/lib64/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
+        LD_LIBRARY_PATH=/usr/local/lib64 ffmpeg -buildconf
 
 
 FROM        centos:7
