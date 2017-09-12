@@ -305,7 +305,9 @@ RUN  \
 RUN \
     cp $(ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3) /usr/local/lib/ && \
     cp ${PREFIX}/bin/* /usr/local/bin/ && \
-    cp -r ${PREFIX}/share/ffmpeg /usr/local/share/
+    cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
+
 
 ### Release Stage
 FROM        base AS release
@@ -316,6 +318,7 @@ ENTRYPOINT  ["ffmpeg"]
 WORKDIR /opt/ffmpeg
 
 COPY --from=build /usr/local /usr/local
+
            
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

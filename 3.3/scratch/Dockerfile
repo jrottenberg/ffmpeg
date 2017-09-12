@@ -13,7 +13,7 @@ ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j"
 
-ENV         FFMPEG_VERSION=3.3.3     \
+ENV         FFMPEG_VERSION=3.3.4     \
             FDKAAC_VERSION=0.1.5      \
             LAME_VERSION=3.99.5       \
             LIBASS_VERSION=0.13.7     \  
@@ -303,7 +303,9 @@ RUN \
         cp $(ldd ${PREFIX}/bin/ffmpeg | grep -o '/.\+\.so[^ ]*' | sort | uniq) /tmp/fakeroot/lib && \
         for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
         cp -r ${PREFIX}/bin /tmp/fakeroot/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/
+        cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/ && \
+        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
+
 
 ### Release Stage
 FROM        scratch AS release
