@@ -16,7 +16,7 @@ WORKDIR     /tmp/workdir
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
-ARG        MAKEFLAGS="-j"
+ARG        MAKEFLAGS="-j2"
 
 ENV         FFMPEG_VERSION=3.1.10     \
             FDKAAC_VERSION=0.1.5      \
