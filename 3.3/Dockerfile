@@ -8,7 +8,7 @@
 FROM        ubuntu:16.04 AS base
 
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates && \
+        apt-get install -yq --no-install-recommends ca-certificates libgomp1 libexpat1-dev && \
         apt-get autoremove -y && \
         apt-get clean -y
 
@@ -55,7 +55,6 @@ RUN      buildDeps="autoconf \
                     cmake \
                     curl \
                     bzip2 \
-                    libexpat1-dev \
                     g++ \
                     gcc \
                     git \
