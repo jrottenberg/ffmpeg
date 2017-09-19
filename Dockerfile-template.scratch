@@ -41,7 +41,7 @@ RUN     buildDeps="autoconf \
 
 RUN \
         mkdir -p /tmp/fakeroot/lib  && \
-        cp $(ldd ${PREFIX}/bin/ffmpeg | grep -o '/.\+\.so[^ ]*' | sort | uniq) /tmp/fakeroot/lib && \
+        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i {} /tmp/fakeroot/lib/ && \
         for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
         cp -r ${PREFIX}/bin /tmp/fakeroot/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/
