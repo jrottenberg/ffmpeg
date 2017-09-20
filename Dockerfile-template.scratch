@@ -41,7 +41,7 @@ RUN     buildDeps="autoconf \
 
 RUN \
         mkdir -p /tmp/fakeroot/lib  && \
-        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /tmp/fakeroot/lib/ && \
+        ldd ${PREFIX}/bin/ffmpeg | cut -d ' ' -f 3 | strings | xargs -I R cp R /tmp/fakeroot/lib/ && \
         for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
         cp -r ${PREFIX}/bin /tmp/fakeroot/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/ && \
@@ -56,6 +56,7 @@ ENTRYPOINT  ["/bin/ffmpeg"]
 WORKDIR /
 
 COPY --from=build /tmp/fakeroot/ /
+
            
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

@@ -6,7 +6,7 @@
 
 FROM        alpine:3.5 AS base
 
-RUN     apk  add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
+RUN     apk  add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat
 
 
 FROM        base AS build
@@ -317,6 +317,8 @@ ENTRYPOINT  ["ffmpeg"]
 WORKDIR /opt/ffmpeg
 
 COPY --from=build /usr/local /usr/local
+
+RUN ffmpeg -buildconf
            
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
