@@ -8,7 +8,7 @@
 FROM        ubuntu:16.04 AS base
 
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
         apt-get autoremove -y && \
         apt-get clean -y
 
@@ -182,16 +182,16 @@ RUN \
         make && \
         make install
 ### fdk-aac https://github.com/mstorsjo/fdk-aac
-#RUN \
-#        DIR=/tmp/fdk-aac && \
-#        mkdir -p ${DIR} && \
-#        cd ${DIR} && \
-#        curl -sL https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz | \
-#        tar -zx --strip-components=1 && \
-#        autoreconf -fiv && \
-#        ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}" && \
-#        make && \
-#        make install
+RUN \
+        DIR=/tmp/fdk-aac && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sL https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz | \
+        tar -zx --strip-components=1 && \
+        autoreconf -fiv && \
+        ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}" && \
+        make && \
+        make install
 ## openjpeg https://github.com/uclouvain/openjpeg
 RUN \
         DIR=/tmp/openjpeg && \
@@ -202,8 +202,8 @@ RUN \
         cmake -DBUILD_THIRDPARTY:BOOL=ON -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
         make && \
         make install
-RUN  \
 ## freetype https://www.freetype.org/
+RUN  \
         DIR=/tmp/freetype && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -213,8 +213,8 @@ RUN  \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
         make && \
         make install 
-RUN  \
 ## libvstab https://github.com/georgmartius/vid.stab
+RUN  \
         DIR=/tmp/vid.stab && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -224,8 +224,8 @@ RUN  \
         cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
         make && \
         make install 
-RUN  \
 ## fridibi https://www.fribidi.org/
+RUN  \
         DIR=/tmp/fribidi && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -235,8 +235,8 @@ RUN  \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
         make && \
         make install
-RUN  \
 ## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
+RUN  \
         DIR=/tmp/fontconfig && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -245,8 +245,8 @@ RUN  \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
         make && \
         make install 
-RUN  \
 ## libass https://github.com/libass/libass
+RUN  \
         DIR=/tmp/libass && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -257,8 +257,8 @@ RUN  \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
         make && \
         make install 
-RUN  \
 ## ffmpeg https://ffmpeg.org/
+RUN  \
         DIR=$(mktemp -d) && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
         tar -zx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.gz && \
@@ -284,9 +284,9 @@ RUN  \
         --enable-libxvid \
         --enable-gpl \
         --enable-libx264 \
-        #--enable-nonfree \
-        #--enable-openssl \
-        #--enable-libfdk_aac \
+        --enable-nonfree \
+        --enable-openssl \
+        --enable-libfdk_aac \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
@@ -309,7 +309,6 @@ RUN \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
         LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
 
-
 FROM        base AS release
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
@@ -318,6 +317,8 @@ ENTRYPOINT  ["ffmpeg"]
 ENV         LD_LIBRARY_PATH=/usr/local/lib
 
 COPY --from=build /usr/local /usr/local/
+
+RUN ffmpeg -buildconf
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
