@@ -12,6 +12,7 @@ WORKDIR     /tmp/workdir
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
+ARG        MAKEFLAGS="-j2"
 
 ENV         FFMPEG_VERSION=2.8.13     \
             FDKAAC_VERSION=0.1.5      \
@@ -43,7 +44,6 @@ ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a
 ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a47889315526adbafd7  0.13.7.tar.gz"
 ARG         FRIBIDI_SHA256SUM="08222a6212bbc2276a2d55c3bf370109ae4a35b689acbc66571ad2a670595a8e  fribidi-0.19.7.tar.bz2"
 
-ARG         LD_LIBRARY_PATH=${SRC}/lib
 
 RUN     buildDeps="autoconf \
                    automake \
@@ -63,7 +63,6 @@ RUN     buildDeps="autoconf \
                    yasm \
                    which \
                    zlib-devel" && \
-        export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum --enablerepo=extras install -y epel-release && \
         yum install -y ${buildDeps} 
@@ -271,7 +270,7 @@ RUN  \
         --enable-libfreetype \
         --enable-libvidstab \
         --enable-libmp3lame \
-        --enable-libopenjpeg \
+         \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \
@@ -299,9 +298,10 @@ RUN  \
         cp qt-faststart ${PREFIX}/bin
 
 RUN \
-        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i {} /usr/local/lib64/ && \
+        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib64/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/
+        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+        LD_LIBRARY_PATH=/usr/local/lib64 ffmpeg -buildconf
 
 FROM        centos:7
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>

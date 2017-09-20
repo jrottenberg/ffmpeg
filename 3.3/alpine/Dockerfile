@@ -16,6 +16,7 @@ WORKDIR     /tmp/workdir
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
+ARG        MAKEFLAGS="-j2"
 
 ENV         FFMPEG_VERSION=3.3.4     \
             FDKAAC_VERSION=0.1.5      \
@@ -68,7 +69,6 @@ RUN     buildDeps="autoconf \
                    yasm \
                    zlib-dev \
                    expat-dev" && \
-        export MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" && \
         apk  add --no-cache --update ${buildDeps} 
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
@@ -303,9 +303,10 @@ RUN  \
 
 
 RUN \
-    ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i {} /usr/local/lib/ && \
+    ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
     cp ${PREFIX}/bin/* /usr/local/bin/ && \
-    cp -r ${PREFIX}/share/ffmpeg /usr/local/share/
+    cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
 
 ### Release Stage
 FROM        base AS release

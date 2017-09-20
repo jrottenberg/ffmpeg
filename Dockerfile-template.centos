@@ -12,9 +12,9 @@ WORKDIR     /tmp/workdir
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
+ARG        MAKEFLAGS="-j2"
 
 ENV         %%ENV%%
-ARG         LD_LIBRARY_PATH=${SRC}/lib
 
 RUN     buildDeps="autoconf \
                    automake \
@@ -34,15 +34,15 @@ RUN     buildDeps="autoconf \
                    yasm \
                    which \
                    zlib-devel" && \
-        export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum --enablerepo=extras install -y epel-release && \
         yum install -y ${buildDeps} 
 %%RUN%%
 RUN \
-        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i {} /usr/local/lib64/ && \
+        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib64/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/
+        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+        LD_LIBRARY_PATH=/usr/local/lib64 ffmpeg -buildconf
 
 FROM        centos:7
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>

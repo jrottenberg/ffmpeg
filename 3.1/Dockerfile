@@ -8,7 +8,7 @@
 FROM        ubuntu:16.04 AS base
 
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
         apt-get autoremove -y && \
         apt-get clean -y
 
@@ -17,6 +17,7 @@ FROM base as build
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
+ARG        MAKEFLAGS="-j2"
 
 ENV         FFMPEG_VERSION=3.1.10     \
             FDKAAC_VERSION=0.1.5      \
@@ -48,7 +49,6 @@ ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a
 ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a47889315526adbafd7  0.13.7.tar.gz"
 ARG         FRIBIDI_SHA256SUM="08222a6212bbc2276a2d55c3bf370109ae4a35b689acbc66571ad2a670595a8e  fribidi-0.19.7.tar.bz2"
 
-ARG         LD_LIBRARY_PATH=${SRC}/lib
 
 RUN      buildDeps="autoconf \
                     automake \
@@ -69,7 +69,6 @@ RUN      buildDeps="autoconf \
                     libssl-dev \
                     yasm \
                     zlib1g-dev" && \
-        export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
@@ -305,18 +304,19 @@ RUN  \
 
 ## cleanup
 RUN \
-        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i {} /usr/local/lib/ && \
+        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/
+        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
 
-#FROM        base AS release
-#MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
-#
-#CMD         ["--help"]
-#ENTRYPOINT  ["ffmpeg"]
-#ENV         LD_LIBRARY_PATH=/usr/local/lib
-#
-#COPY --from=build /usr/local /usr/local/
+FROM        base AS release
+MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+
+CMD         ["--help"]
+ENTRYPOINT  ["ffmpeg"]
+ENV         LD_LIBRARY_PATH=/usr/local/lib
+
+COPY --from=build /usr/local /usr/local/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
