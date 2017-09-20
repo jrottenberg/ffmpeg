@@ -8,7 +8,7 @@
 FROM        ubuntu:16.04 AS base
 
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
         apt-get autoremove -y && \
         apt-get clean -y
 
@@ -17,9 +17,9 @@ FROM base as build
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
+ARG        MAKEFLAGS="-j2"
 
 ENV         %%ENV%%
-ARG         LD_LIBRARY_PATH=${SRC}/lib
 
 RUN      buildDeps="autoconf \
                     automake \
@@ -40,15 +40,15 @@ RUN      buildDeps="autoconf \
                     libssl-dev \
                     yasm \
                     zlib1g-dev" && \
-        export MAKEFLAGS="-j$(($(nproc) + 1))" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
 %%RUN%%
 ## cleanup
 RUN \
-        cp $(ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3) /usr/local/lib/ && \
+        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/
+        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
 
 FROM        base AS release
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
@@ -58,6 +58,8 @@ ENTRYPOINT  ["ffmpeg"]
 ENV         LD_LIBRARY_PATH=/usr/local/lib
 
 COPY --from=build /usr/local /usr/local/
+
+RUN ffmpeg -buildconf
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

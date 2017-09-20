@@ -62,6 +62,9 @@ for version in keep_version:
         env_content = env_content.replace('%%FFMPEG_VERSION%%', version)
         docker_content = template.replace('%%ENV%%', env_content)
         docker_content = docker_content.replace('%%RUN%%', run_content)
+        ## OpenJpeg 2.1 is not support in 2.8
+        if version[0:3] == '2.8':
+            docker_content = docker_content.replace('--enable-libopenjpeg', '')
 
         d = os.path.dirname(dockerfile)
         if not os.path.exists(d):
