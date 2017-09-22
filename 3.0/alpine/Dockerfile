@@ -2,7 +2,7 @@
 #
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
-# 
+#
 
 FROM        alpine:3.5 AS base
 
@@ -69,7 +69,7 @@ RUN     buildDeps="autoconf \
                    yasm \
                    zlib-dev \
                    expat-dev" && \
-        apk  add --no-cache --update ${buildDeps} 
+        apk  add --no-cache --update ${buildDeps}
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -79,7 +79,8 @@ RUN \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --enable-shared  && \
         make && \
-        make install 
+        make install && \
+        rm -rf ${DIR} 
 ## x264 http://www.videolan.org/developers/x264.html
 RUN \
         DIR=/tmp/x264 && \
@@ -89,7 +90,8 @@ RUN \
         tar -jx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --enable-shared --enable-pic --disable-cli && \
         make && \
-        make install
+        make install && \
+        rm -rf ${DIR}
 ### x265 http://x265.org/
 RUN \
         DIR=/tmp/x265 && \
@@ -101,7 +103,8 @@ RUN \
         sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
         sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh && \
         ./multilib.sh && \
-        make -C 8bit install
+        make -C 8bit install && \
+        rm -rf ${DIR}
 ### libogg https://www.xiph.org/ogg/
 RUN \
         DIR=/tmp/ogg && \
@@ -112,7 +115,8 @@ RUN \
         tar -zx --strip-components=1 -f libogg-${OGG_VERSION}.tar.gz && \
         ./configure --prefix="${PREFIX}" --enable-shared  && \
         make && \
-        make install
+        make install && \
+        rm -rf ${DIR}
 ### libopus https://www.opus-codec.org/
 RUN \
         DIR=/tmp/opus && \
@@ -124,7 +128,8 @@ RUN \
         autoreconf -fiv && \
         ./configure --prefix="${PREFIX}" --enable-shared && \
         make && \
-        make install
+        make install && \
+        rm -rf ${DIR}
 ### libvorbis https://xiph.org/vorbis/
 RUN \
         DIR=/tmp/vorbis && \
@@ -135,7 +140,8 @@ RUN \
         tar -zx --strip-components=1 -f libvorbis-${VORBIS_VERSION}.tar.gz && \
         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
         make && \
-        make install
+        make install && \
+        rm -rf ${DIR}
 ### libtheora http://www.theora.org/
 RUN \
         DIR=/tmp/theora && \
@@ -146,7 +152,8 @@ RUN \
         tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
         make && \
-        make install
+        make install && \
+        rm -rf ${DIR}
 ### libvpx https://www.webmproject.org/code/
 RUN \
         DIR=/tmp/vpx && \
@@ -157,7 +164,8 @@ RUN \
         ./configure --prefix="${PREFIX}" --enable-vp8 --enable-vp9 --enable-pic --enable-shared \
         --disable-debug --disable-examples --disable-docs --disable-install-bins  && \
         make && \
-        make install
+        make install && \
+        rm -rf ${DIR}
 ### libmp3lame http://lame.sourceforge.net/
 RUN \
         DIR=/tmp/lame && \
@@ -167,7 +175,8 @@ RUN \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --enable-shared --enable-nasm --enable-pic --disable-frontend && \
         make && \
-        make install
+        make install && \
+        rm -rf ${DIR}
 ### xvid https://www.xvid.com/
 RUN \
         DIR=/tmp/xvid && \
@@ -179,7 +188,8 @@ RUN \
         cd xvidcore/build/generic && \
         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --datadir="${DIR}" --enable-shared --enable-shared && \
         make && \
-        make install
+        make install && \
+        rm -rf ${DIR}
 ### fdk-aac https://github.com/mstorsjo/fdk-aac
 RUN \
         DIR=/tmp/fdk-aac && \
@@ -190,7 +200,8 @@ RUN \
         autoreconf -fiv && \
         ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}" && \
         make && \
-        make install
+        make install && \
+        rm -rf ${DIR}
 ## openjpeg https://github.com/uclouvain/openjpeg
 RUN \
         DIR=/tmp/openjpeg && \
@@ -200,7 +211,8 @@ RUN \
         tar -zx --strip-components=1 && \
         cmake -DBUILD_THIRDPARTY:BOOL=ON -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
         make && \
-        make install
+        make install && \
+        rm -rf ${DIR}
 ## freetype https://www.freetype.org/
 RUN  \
         DIR=/tmp/freetype && \
@@ -211,7 +223,8 @@ RUN  \
         tar -zx --strip-components=1 -f freetype-${FREETYPE_VERSION}.tar.gz && \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
         make && \
-        make install 
+        make install && \
+        rm -rf ${DIR}
 ## libvstab https://github.com/georgmartius/vid.stab
 RUN  \
         DIR=/tmp/vid.stab && \
@@ -222,7 +235,8 @@ RUN  \
         tar -zx --strip-components=1 -f v${LIBVIDSTAB_VERSION}.tar.gz && \
         cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
         make && \
-        make install 
+        make install && \
+        rm -rf ${DIR}
 ## fridibi https://www.fribidi.org/
 RUN  \
         DIR=/tmp/fribidi && \
@@ -233,7 +247,8 @@ RUN  \
         tar -jx --strip-components=1 -f fribidi-${FRIBIDI_VERSION}.tar.bz2 && \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
         make && \
-        make install
+        make install && \
+        rm -rf ${DIR}
 ## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
 RUN  \
         DIR=/tmp/fontconfig && \
@@ -243,7 +258,8 @@ RUN  \
         tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
         make && \
-        make install 
+        make install && \
+        rm -rf ${DIR}
 ## libass https://github.com/libass/libass
 RUN  \
         DIR=/tmp/libass && \
@@ -255,7 +271,8 @@ RUN  \
         ./autogen.sh && \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
         make && \
-        make install 
+        make install && \
+        rm -rf ${DIR}
 ## ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=$(mktemp -d) && cd ${DIR} && \
@@ -318,7 +335,5 @@ WORKDIR /opt/ffmpeg
 
 COPY --from=build /usr/local /usr/local
 
-RUN ffmpeg -buildconf
-           
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
