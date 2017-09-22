@@ -2,7 +2,7 @@
 #
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
-# 
+#
 
 FROM        alpine:3.5 AS base
 
@@ -69,7 +69,7 @@ RUN     buildDeps="autoconf \
                    yasm \
                    zlib-dev \
                    expat-dev" && \
-        apk  add --no-cache --update ${buildDeps} 
+        apk  add --no-cache --update ${buildDeps}
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -318,7 +318,5 @@ WORKDIR /opt/ffmpeg
 
 COPY --from=build /usr/local /usr/local
 
-RUN ffmpeg -buildconf
-           
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

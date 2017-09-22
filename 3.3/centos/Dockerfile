@@ -8,7 +8,7 @@
 FROM    centos:7 AS base
 
 RUN     yum -y install libgomp && \
-        yum clean all;    
+        yum clean all;
 
 
 FROM        base AS build
@@ -71,7 +71,7 @@ RUN     buildDeps="autoconf \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum --enablerepo=extras install -y epel-release && \
-        yum install -y ${buildDeps} 
+        yum install -y ${buildDeps}
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -318,8 +318,6 @@ ENTRYPOINT  ["ffmpeg"]
 ENV LD_LIBRARY_PATH=/usr/local/lib64
 
 COPY --from=build /usr/local/ /usr/local/
-
-RUN ffmpeg -buildconf
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
