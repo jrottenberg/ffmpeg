@@ -25,9 +25,11 @@ scratch images `ffmpeg:X.Y-scratch` to get the latest. (Scratch is an experiment
 
 For information :
 ```
-u-3.2               ubuntu              1e998987f2da        2 minutes ago        205.5 MB
-c-3.2               centos              b73e2e768092        9 minutes ago        274.4 MB
-a-3.2               alpine              5da8a4eaeb41        45 minutes ago       73.64 MB
+ubuntu-3.3          ubuntu              d6b632a4fe7f        3 seconds ago        221MB
+alpine-3.3          alpine              725234fc4162        40 minutes ago       65.6MB
+centos-3/3          centos              28221bb909aa        About an hour ago    264MB
+scratch-3.3         scratch             34724534bb88        15 minutes ago       48.6MB
+
 ```
 
 
@@ -122,6 +124,7 @@ See Dockerfile-env to update a version
 - [FDKAAC_VERSION](https://github.com/mstorsjo/fdk-aac/releases): [Liberal but not a license of patented technologies](https://github.com/mstorsjo/fdk-aac/blob/master/NOTICE)
 - [FREETYPE_VERSION](http://download.savannah.gnu.org/releases/freetype/): [GNU General Public License (GPL) version 2](https://www.freetype.org/license.html)
 - [LIBVIDSTAB_VERSION](https://github.com/georgmartius/vid.stab/releases): [GNU General Public License (GPL) version 2](https://github.com/georgmartius/vid.stab/blob/master/LICENSE)
+- [LIBFRIDIBI_VERSION](https://www.fribidi.org/): [GNU General Public License (GPL) version 2](https://cgit.freedesktop.org/fribidi/fribidi/plain/COPYING)
 - [X264_VERSION](http://www.videolan.org/developers/x264.html): [GNU General Public License (GPL) version 2](https://git.videolan.org/?p=x264.git;a=blob_plain;f=COPYING;hb=HEAD)
 - [X265_VERSION](https://bitbucket.org/multicoreware/x265/downloads/):[GNU General Public License (GPL) version 2](https://bitbucket.org/multicoreware/x265/raw/f8ae7afc1f61ed0db3b2f23f5d581706fe6ed677/COPYING)
 
