@@ -1,32 +1,35 @@
-FFMPEG for Docker on Centos7
-============================
+FFmpeg Docker image
+==================
 
  [![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/) [![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
 [![Travis](https://img.shields.io/travis/jrottenberg/ffmpeg/master.svg?maxAge=300?style=plastic)](https://travis-ci.org/jrottenberg/ffmpeg)
 [![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?maxAge=2592000?style=plastic)](https://github.com/jrottenberg/ffmpeg/)
 
-This project prepares a minimalist Docker image with FFMPEG. It compiles FFMPEG from sources following instructions from the [Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide).
+This project prepares a minimalist Docker image with FFmpeg. It compiles FFmpeg from sources following instructions from the [Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide).
 
 You can install the latest build of this image by running `docker pull jrottenberg/ffmpeg`.
 
-This image can be used as a base for an encoding farm, based on centos7.
+This image can be used as a base for an encoding farm.
 
 Ubuntu builds
 --------------
 
-You can use jrottenberg/ffmpeg:ubuntu or jrottenberg/ffmpeg:3.1 or jrottenberg/ffmpeg:3
+You can use jrottenberg/ffmpeg or jrottenberg/ffmpeg:3.3
 to get the latest build based on ubuntu.
 
 Note : I've made ubuntu the default after 3.1
 
 You'll find centos based image using `ffmpeg:X.Y-centos` or `ffmpeg:centos` to get the latest.
-alpine images  `ffmpeg:X.Y-alpine` or `ffmpeg:alpine` to get the latest.
+alpine images  `ffmpeg:X.Y-alpine` to get the latest.
+scratch images `ffmpeg:X.Y-scratch` to get the latest. (Scratch is an experimental image containing only FFmpeg and libraries)
 
 For information :
 ```
-u-3.2               ubuntu              1e998987f2da        2 minutes ago        205.5 MB
-c-3.2               centos              b73e2e768092        9 minutes ago        274.4 MB
-a-3.2               alpine              5da8a4eaeb41        45 minutes ago       73.64 MB
+centos-3.3          centos              28221bb909aa        About an hour ago    264MB
+ubuntu-3.3          ubuntu              d6b632a4fe7f        3 seconds ago        221MB
+alpine-3.3          alpine              725234fc4162        40 minutes ago       65.6MB
+scratch-3.3         scratch             34724534bb88        15 minutes ago       48.6MB
+
 ```
 
 
@@ -109,22 +112,21 @@ Keep up to date
 
 See Dockerfile-env to update a version
 
-- [FFMPEG_VERSION](http://ffmpeg.org/releases/)
-
-- [OGG_VERSION](https://xiph.org/downloads/)
-- [OPENCOREAMR_VERSION](https://sourceforge.net/projects/opencore-amr/files/opencore-amr/)
-- [VORBIS_VERSION](https://xiph.org/downloads/)
-- [THEORA_VERSION](https://xiph.org/downloads/)
-- [LAME_VERSION](http://lame.sourceforge.net/download.php)
-- [OPUS_VERSION](https://www.opus-codec.org/downloads/)
-- [FAAC_VERSION](http://www.audiocoding.com/downloads.html)
-- [VPX_VERSION](https://github.com/webmproject/libvpx/releases)
-- [XVID_VERSION](https://labs.xvid.com/source/)
-- [FDKAAC_VERSION](https://github.com/mstorsjo/fdk-aac/releases)
-- [FREETYPE_VERSION](http://download.savannah.gnu.org/releases/freetype/)
-- [LIBVIDSTAB_VERSION](https://github.com/georgmartius/vid.stab/releases)
-- [X264_VERSION](http://www.videolan.org/developers/x264.html)
-- [X265_VERSION](https://bitbucket.org/multicoreware/x265/downloads/)
+- [FFMPEG_VERSION](http://ffmpeg.org/releases/): [GNU Lesser General Public License (LGPL) version 2.1](https://ffmpeg.org/legal.html)
+- [OGG_VERSION](https://xiph.org/downloads/): [BSD-style license](https://git.xiph.org/?p=mirrors/ogg.git;a=blob_plain;f=COPYING;hb=HEAD)
+- [OPENCOREAMR_VERSION](https://sourceforge.net/projects/opencore-amr/files/opencore-amr/): [Apache License](https://sourceforge.net/p/opencore-amr/code/ci/master/tree/LICENSE)
+- [VORBIS_VERSION](https://xiph.org/downloads/): [BSD-style license](https://git.xiph.org/?p=mirrors/vorbis.git;a=blob_plain;f=COPYING;hb=HEAD)
+- [THEORA_VERSION](https://xiph.org/downloads/): [BSD-style license](https://git.xiph.org/?p=mirrors/theora.git;a=blob_plain;f=COPYING;hb=HEAD)
+- [LAME_VERSION](http://lame.sourceforge.net/download.php): [GNU Lesser General Public License (LGPL) version 2.1](http://lame.cvs.sourceforge.net/viewvc/lame/lame/LICENSE?revision=1.9)
+- [OPUS_VERSION](https://www.opus-codec.org/downloads/): [BSD-style license](https://www.opus-codec.org/license/)
+- [VPX_VERSION](https://github.com/webmproject/libvpx/releases): [BSD-style license](https://github.com/webmproject/libvpx/blob/master/LICENSE)
+- [XVID_VERSION](https://labs.xvid.com/source/): [GNU General Public Licence (GPL) version 2](http://websvn.xvid.org/cvs/viewvc.cgi/trunk/xvidcore/LICENSE?revision=851)
+- [FDKAAC_VERSION](https://github.com/mstorsjo/fdk-aac/releases): [Liberal but not a license of patented technologies](https://github.com/mstorsjo/fdk-aac/blob/master/NOTICE)
+- [FREETYPE_VERSION](http://download.savannah.gnu.org/releases/freetype/): [GNU General Public License (GPL) version 2](https://www.freetype.org/license.html)
+- [LIBVIDSTAB_VERSION](https://github.com/georgmartius/vid.stab/releases): [GNU General Public License (GPL) version 2](https://github.com/georgmartius/vid.stab/blob/master/LICENSE)
+- [LIBFRIDIBI_VERSION](https://www.fribidi.org/): [GNU General Public License (GPL) version 2](https://cgit.freedesktop.org/fribidi/fribidi/plain/COPYING)
+- [X264_VERSION](http://www.videolan.org/developers/x264.html): [GNU General Public License (GPL) version 2](https://git.videolan.org/?p=x264.git;a=blob_plain;f=COPYING;hb=HEAD)
+- [X265_VERSION](https://bitbucket.org/multicoreware/x265/downloads/):[GNU General Public License (GPL) version 2](https://bitbucket.org/multicoreware/x265/raw/f8ae7afc1f61ed0db3b2f23f5d581706fe6ed677/COPYING)
 
 
 Contribute
