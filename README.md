@@ -24,13 +24,10 @@ alpine images  `ffmpeg:X.Y-alpine` to get the latest.
 scratch images `ffmpeg:X.Y-scratch` to get the latest. (Scratch is an experimental image containing only FFmpeg and libraries)
 
 For information :
-```
-centos-3.3          centos              28221bb909aa        About an hour ago    264MB
+```centos-3.3          centos              28221bb909aa        About an hour ago    264MB
 ubuntu-3.3          ubuntu              d6b632a4fe7f        3 seconds ago        221MB
 alpine-3.3          alpine              725234fc4162        40 minutes ago       65.6MB
-scratch-3.3         scratch             34724534bb88        15 minutes ago       48.6MB
-
-```
+scratch-3.3         scratch             34724534bb88        15 minutes ago       48.6MB```
 
 
 Please use [Github issues](https://github.com/jrottenberg/ffmpeg/issues/new) to report any bug or missing feature.
@@ -39,45 +36,51 @@ Test
 ----
 
 ```
-ffmpeg version 3.0 Copyright (c) 2000-2016 the FFmpeg developers
-  built with gcc 4.8.5 (GCC) 20150623 (Red Hat 4.8.5-4)
-  configuration: --prefix=/usr/local --extra-cflags=-I/usr/local/include --extra-ldflags=-L/usr/local/lib --bindir=/usr/local/bin --extra-libs=-ldl --enable-version3 --enable-libfaac --enable-libmp3lame --enable-libx264 --enable-libxvid --enable-gpl --enable-postproc --enable-nonfree --enable-avresample --enable-libfdk_aac --disable-debug --enable-small --enable-openssl --enable-libtheora --enable-libx265 --enable-libopus --enable-libvorbis --enable-libvpx
-  libavutil      55. 17.103 / 55. 17.103
-  libavcodec     57. 24.102 / 57. 24.102
-  libavformat    57. 25.100 / 57. 25.100
-  libavdevice    57.  0.101 / 57.  0.101
-  libavfilter     6. 31.100 /  6. 31.100
-  libavresample   3.  0.  0 /  3.  0.  0
-  libswscale      4.  0.100 /  4.  0.100
-  libswresample   2.  0.101 /  2.  0.101
-  libpostproc    54.  0.100 / 54.  0.100
+ffmpeg version 3.3.4 Copyright (c) 2000-2017 the FFmpeg developers
+  built with gcc 5.4.0 (Ubuntu 5.4.0-6ubuntu1~16.04.4) 20160609
+  configuration: --disable-debug --disable-doc --disable-ffplay --enable-shared --enable-avresample --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-gpl --enable-libass --enable-libfreetype --enable-libvidstab --enable-libmp3lame --enable-libopenjpeg --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx265 --enable-libxvid --enable-gpl --enable-libx264 --enable-nonfree --enable-openssl --enable-libfdk_aac --enable-postproc --enable-small --enable-version3 --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib --extra-libs=-ldl --prefix=/opt/ffmpeg
+  libavutil      55. 58.100 / 55. 58.100
+  libavcodec     57. 89.100 / 57. 89.100
+  libavformat    57. 71.100 / 57. 71.100
+  libavdevice    57.  6.100 / 57.  6.100
+  libavfilter     6. 82.100 /  6. 82.100
+  libavresample   3.  5.  0 /  3.  5.  0
+  libswscale      4.  6.100 /  4.  6.100
+  libswresample   2.  7.100 /  2.  7.100
+  libpostproc    54.  5.100 / 54.  5.100
 
   configuration:
-    --prefix=/usr/local
-    --extra-cflags=-I/usr/local/include
-    --extra-ldflags=-L/usr/local/lib
-    --bindir=/usr/local/bin
-    --extra-libs=-ldl
-    --enable-version3
-    --enable-libfaac
-    --enable-libmp3lame
-    --enable-libx264
-    --enable-libxvid
-    --enable-gpl
-    --enable-postproc
-    --enable-nonfree
-    --enable-avresample
-    --enable-libfdk_aac
     --disable-debug
-    --enable-small
-    --enable-openssl
-    --enable-libtheora
-    --enable-libx265
-    --enable-libopus
-    --enable-libvorbis
-    --enable-libvpx
+    --disable-doc
+    --disable-ffplay
+    --enable-shared
+    --enable-avresample
+    --enable-libopencore-amrnb
+    --enable-libopencore-amrwb
+    --enable-gpl
+    --enable-libass
     --enable-libfreetype
     --enable-libvidstab
+    --enable-libmp3lame
+    --enable-libopenjpeg
+    --enable-libopus
+    --enable-libtheora
+    --enable-libvorbis
+    --enable-libvpx
+    --enable-libx265
+    --enable-libxvid
+    --enable-gpl
+    --enable-libx264
+    --enable-nonfree
+    --enable-openssl
+    --enable-libfdk_aac
+    --enable-postproc
+    --enable-small
+    --enable-version3
+    --extra-cflags=-I/opt/ffmpeg/include
+    --extra-ldflags=-L/opt/ffmpeg/lib
+    --extra-libs=-ldl
+    --prefix=/opt/ffmpeg
 ```
 
 Capture output from the container to the host running the command
