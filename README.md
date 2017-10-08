@@ -24,10 +24,13 @@ alpine images  `ffmpeg:X.Y-alpine` to get the latest.
 scratch images `ffmpeg:X.Y-scratch` to get the latest. (Scratch is an experimental image containing only FFmpeg and libraries)
 
 For information :
-```centos-3.3          centos              28221bb909aa        About an hour ago    264MB
+
+```
+centos-3.3          centos              28221bb909aa        About an hour ago    264MB
 ubuntu-3.3          ubuntu              d6b632a4fe7f        3 seconds ago        221MB
 alpine-3.3          alpine              725234fc4162        40 minutes ago       65.6MB
-scratch-3.3         scratch             34724534bb88        15 minutes ago       48.6MB```
+scratch-3.3         scratch             34724534bb88        15 minutes ago       48.6MB
+```
 
 
 Please use [Github issues](https://github.com/jrottenberg/ffmpeg/issues/new) to report any bug or missing feature.
