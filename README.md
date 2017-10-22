@@ -140,16 +140,18 @@ Contribute
 
 
 ```
+# Add / fix stuff
+${EDITOR} templates/
 
-${EDITOR} Dockerfile-env
+# Generates the Dockerfile for all variants
+./update.py
 
-./update.py # generates the Dockerfile
+# Test a specific variant
+docker build -t my-build docker-images/VERSION/
 
-docker build -t my-build VERSION/path/
-
-# make sure all variants pass before Travis does
+# Make sure all variants pass before Travis does
 find ffmpeg/ -name Dockerfile | xargs dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
 ```
 
 
-Commit the env file THEN all the generated Dockerfile for a merge request. So it's easier to find the template change.
+Commit the templates files THEN all the generated Dockerfile for a merge request. So it's easier to review the template change.

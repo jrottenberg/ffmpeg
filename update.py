@@ -21,12 +21,6 @@ all_versions.sort(key=StrictVersion, reverse=True)
 
 version, all_versions = all_versions[0], all_versions[1:]
 
-
-# # offline mode
-# version = '3.2.1'
-# all_versions = ['3.2', '3.1.5', '3.0.9', '3.0.5','2.9']
-
-
 last = version.split('.')
 keep_version = [version]
 
@@ -47,22 +41,22 @@ for cur in all_versions:
 for version in keep_version:
     for variant in VARIANTS:
         if variant == 'ubuntu':
-            dockerfile = '%s/Dockerfile' % version[0:3]
+            dockerfile = 'docker-images/%s/Dockerfile' % version[0:3]
             travis.append(' - VERSION=%s' % version[0:3])
         else:
-            dockerfile = '%s/%s/Dockerfile' % (version[0:3], variant)
+            dockerfile = 'docker-images/%s/%s/Dockerfile' % (version[0:3], variant)
             travis.append(' - VERSION=%s VARIANT=%s' % (version[0:3], variant))
 
-        with open('Dockerfile-env', 'r') as tmpfile:
+        with open('templates/Dockerfile-env', 'r') as tmpfile:
            env_content = tmpfile.read()
-        with open('Dockerfile-template.' + variant , 'r') as tmpfile:
+        with open('templates/Dockerfile-template.' + variant , 'r') as tmpfile:
            template = tmpfile.read()
-        with open('Dockerfile-run', 'r') as tmpfile:
+        with open('templates/Dockerfile-run', 'r') as tmpfile:
            run_content = tmpfile.read()
         env_content = env_content.replace('%%FFMPEG_VERSION%%', version)
         docker_content = template.replace('%%ENV%%', env_content)
         docker_content = docker_content.replace('%%RUN%%', run_content)
-        ## OpenJpeg 2.1 is not support in 2.8
+        ## OpenJpeg 2.1 is not supported in 2.8
         if version[0:3] == '2.8':
             docker_content = docker_content.replace('--enable-libopenjpeg', '')
 
@@ -74,7 +68,7 @@ for version in keep_version:
           dfile.write(docker_content)
 
 
-with open('travis.template', 'r') as tmpfile:
+with open('templates/travis.template', 'r') as tmpfile:
    template = tmpfile.read()
 travis = template.replace('%%VERSIONS%%', '\n'.join(travis))
 

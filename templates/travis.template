@@ -17,7 +17,7 @@ before_script:
   - image="ffmpeg:${VERSION}-${VARIANT:-ubuntu}"
 
 script:
-  - docker build -t "${image}" --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" ${VERSION}/${VARIANT}
+  - docker build -t "${image}" --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
   - docker run --rm ${image} -buildconf
 
 after_script:
