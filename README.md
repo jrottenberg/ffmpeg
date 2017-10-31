@@ -95,7 +95,8 @@ Capture output from the container to the host running the command
             $ffmpeg_options  - > out.mp4
 ```
 
-### Example
+### Examples
+#### Extract 5s @00:49:42 into a GIF
 
 ```
  docker run jrottenberg/ffmpeg -stats  \
@@ -103,6 +104,17 @@ Capture output from the container to the host running the command
         -loop 0  \
         -final_delay 500 -c:v gif -f gif -ss 00:49:42 -t 5 - > trow_ball.gif
 ```
+
+#### Convert 10bits MKV into a 10Bits MP4
+```
+ docker run -v $PWD:/tmp jrottenberg/ffmpeg:3.4-scratch \
+        -stats \ 
+        -i http://www.jell.yfish.us/media/jellyfish-20-mbps-hd-hevc-10bit.mkv \
+        -c:v libx265 -pix_fmt yuv420p10 \
+        -t 5 -f mp4 /tmp/test.mp4
+```
+Use yuv420p10 for 12 bits output.
+
 
 See what's inside the beast
 ---------------------------
