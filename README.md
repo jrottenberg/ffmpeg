@@ -113,7 +113,8 @@ Capture output from the container to the host running the command
         -c:v libx265 -pix_fmt yuv420p10 \
         -t 5 -f mp4 /tmp/test.mp4
 ```
-Use yuv420p10 for 12 bits output.
+The image has been compiled with [X265 Multilib](https://x265.readthedocs.io/en/default/api.html#multi-library-interface).
+Use the pixel format switch to change the number of bits per pixel by suffixing it with 10 for 10bits or 12 for 12bits.
 
 
 See what's inside the beast
