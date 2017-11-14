@@ -331,7 +331,6 @@ MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
-WORKDIR /opt/ffmpeg
 
 COPY --from=build /usr/local /usr/local
 
