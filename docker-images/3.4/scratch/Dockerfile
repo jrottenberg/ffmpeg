@@ -329,7 +329,6 @@ MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
 CMD         ["--help"]
 ENTRYPOINT  ["/bin/ffmpeg"]
-WORKDIR /
 
 COPY --from=build /tmp/fakeroot/ /
 
