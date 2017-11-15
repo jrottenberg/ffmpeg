@@ -170,7 +170,7 @@ RUN  \
         DIR=/tmp/fribidi && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sLO https:////github.com/fribidi/fribidi/archive/{FRIDIBI_VERSION}.tar.gz && \
+        curl -sLO https://github.com/fribidi/fribidi/archive/{FRIDIBI_VERSION}.tar.gz && \
         echo ${FRIBIDI_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f fribidi-${FRIBIDI_VERSION}.tar.bz2 && \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
