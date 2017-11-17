@@ -46,7 +46,7 @@ ARG         XVID_SHA256SUM="4e9fd62728885855bc5007fe1be58df42e5e274497591fec3724
 ARG         FREETYPE_SHA256SUM="5d03dd76c2171a7601e9ce10551d52d4471cf92cd205948e60289251daddffa8  freetype-2.5.5.tar.gz"
 ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb  v1.1.0.tar.gz"
 ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a47889315526adbafd7  0.13.7.tar.gz"
-ARG         FRIBIDI_SHA256SUM="08222a6212bbc2276a2d55c3bf370109ae4a35b689acbc66571ad2a670595a8e  fribidi-0.19.7.tar.bz2"
+ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8  0.19.7.tar.gz"
 
 
 RUN     buildDeps="autoconf \
@@ -238,13 +238,16 @@ RUN  \
         make install && \
         rm -rf ${DIR}
 ## fridibi https://www.fribidi.org/
+# + https://github.com/fribidi/fribidi/issues/8
 RUN  \
         DIR=/tmp/fribidi && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sLO http://fribidi.org/download/fribidi-${FRIBIDI_VERSION}.tar.bz2 &&\
+        curl -sLO https://github.com/fribidi/fribidi/archive/${FRIBIDI_VERSION}.tar.gz && \
         echo ${FRIBIDI_SHA256SUM} | sha256sum --check && \
-        tar -jx --strip-components=1 -f fribidi-${FRIBIDI_VERSION}.tar.bz2 && \
+        tar -zx --strip-components=1 -f ${FRIBIDI_VERSION}.tar.gz && \
+        sed -i 's/^SUBDIRS =.*/SUBDIRS=gen.tab charset lib/' Makefile.am && \
+        ./bootstrap --no-config && \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
         make && \
         make install && \
