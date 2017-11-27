@@ -303,7 +303,6 @@ RUN  \
         --enable-libvpx \
         --enable-libx265 \
         --enable-libxvid \
-        --enable-gpl \
         --enable-libx264 \
         --enable-nonfree \
         --enable-openssl \
