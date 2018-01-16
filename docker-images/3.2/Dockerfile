@@ -70,6 +70,7 @@ RUN      buildDeps="autoconf \
                     pkg-config \
                     python \
                     libssl-dev \
+                    libssh-dev \
                     yasm \
                     zlib1g-dev" && \
         apt-get -yqq update && \
@@ -321,6 +322,7 @@ RUN  \
         --enable-libx264 \
         --enable-nonfree \
         --enable-openssl \
+        --enable-libssh \
         --enable-libfdk_aac \
         --enable-libkvazaar \
         --enable-postproc \

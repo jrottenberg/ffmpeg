@@ -33,6 +33,7 @@ RUN     buildDeps="autoconf \
                    make \
                    python \
                    openssl-dev \
+                   libssh-dev \
                    tar \
                    yasm \
                    zlib-dev" && \

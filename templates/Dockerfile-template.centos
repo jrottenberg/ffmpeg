@@ -36,6 +36,7 @@ RUN     buildDeps="autoconf \
                    nasm \
                    perl \
                    openssl-devel \
+                   libssh-devel \
                    tar \
                    yasm \
                    which \
