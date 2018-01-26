@@ -2,7 +2,7 @@
 #
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
-# 
+#
 
 FROM        alpine:3.5 AS build
 
@@ -16,14 +16,14 @@ ARG        MAKEFLAGS="-j2"
 ENV         FFMPEG_VERSION=3.4.1     \
             FDKAAC_VERSION=0.1.5      \
             LAME_VERSION=3.99.5       \
-            LIBASS_VERSION=0.13.7     \  
+            LIBASS_VERSION=0.13.7     \
             OGG_VERSION=1.3.2         \
             OPENCOREAMR_VERSION=0.1.4 \
             OPUS_VERSION=1.2          \
             OPENJPEG_VERSION=2.1.2    \
             THEORA_VERSION=1.1.1      \
             VORBIS_VERSION=1.3.5      \
-            VPX_VERSION=1.6.1         \
+            VPX_VERSION=1.7.0         \
             X264_VERSION=20170226-2245-stable \
             X265_VERSION=2.3          \
             XVID_VERSION=1.3.4        \
@@ -52,6 +52,7 @@ RUN     buildDeps="autoconf \
                    cmake \
                    curl \
                    coreutils \
+                   diffutils \
                    expat-dev \
                    file \
                    g++ \
@@ -334,6 +335,6 @@ ENTRYPOINT  ["/bin/ffmpeg"]
 
 COPY --from=build /tmp/fakeroot/ /
 
-           
+
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
