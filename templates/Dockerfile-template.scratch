@@ -2,7 +2,7 @@
 #
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
-# 
+#
 
 FROM        alpine:3.5 AS build
 
@@ -23,6 +23,7 @@ RUN     buildDeps="autoconf \
                    cmake \
                    curl \
                    coreutils \
+                   diffutils \
                    expat-dev \
                    file \
                    g++ \
@@ -56,6 +57,6 @@ ENTRYPOINT  ["/bin/ffmpeg"]
 
 COPY --from=build /tmp/fakeroot/ /
 
-           
+
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
