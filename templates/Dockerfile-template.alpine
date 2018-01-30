@@ -28,6 +28,7 @@ RUN     buildDeps="autoconf \
                    cmake \
                    curl \
                    coreutils \
+                   diffutils \
                    file \
                    g++ \
                    gcc \
