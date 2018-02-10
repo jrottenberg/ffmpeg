@@ -252,7 +252,7 @@ RUN  \
         sed -i 's/^SUBDIRS =.*/SUBDIRS=gen.tab charset lib/' Makefile.am && \
         ./bootstrap --no-config && \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
-        make && \
+        make -j 1 && \
         make install && \
         rm -rf ${DIR}
 ## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
@@ -321,7 +321,7 @@ RUN  \
         --enable-nonfree \
         --enable-openssl \
         --enable-libfdk_aac \
-        --enable-libkvazaar \
+         \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
