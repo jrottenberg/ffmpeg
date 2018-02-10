@@ -204,6 +204,19 @@ RUN  \
         make && \
         make install && \
         rm -rf ${DIR}
+## kvazaar https://github.com/ultravideo/kvazaar
+RUN \
+        DIR=/tmp/kvazaar && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/ultravideo/kvazaar/archive/v${KVAZAAR_VERSION}.tar.gz &&\
+        tar -zx --strip-components=1 -f v${KVAZAAR_VERSION}.tar.gz && \
+        ./autogen.sh && \
+        ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+   
 ## ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=$(mktemp -d) && cd ${DIR} && \
@@ -233,6 +246,7 @@ RUN  \
         --enable-nonfree \
         --enable-openssl \
         --enable-libfdk_aac \
+        --enable-libkvazaar \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
