@@ -62,6 +62,7 @@ RUN     buildDeps="autoconf \
                    make \
                    python \
                    openssl-dev \
+                   libssh-dev \
                    tar \
                    yasm \
                    zlib-dev" && \
@@ -301,6 +302,7 @@ RUN  \
         --enable-libx264 \
         --enable-nonfree \
         --enable-openssl \
+        --enable-libssh \
         --enable-libfdk_aac \
         --enable-postproc \
         --enable-small \
