@@ -31,6 +31,7 @@ ENV         FFMPEG_VERSION=3.1.11     \
             FRIBIDI_VERSION=0.19.7    \
             FONTCONFIG_VERSION=2.12.4 \
             LIBVIDSTAB_VERSION=1.1.0  \
+            KVAZAAR_VERSION=1.2.0     \
             SRC=/usr/local
 
 ARG         OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692  libogg-1.3.2.tar.gz"
@@ -246,7 +247,7 @@ RUN  \
         sed -i 's/^SUBDIRS =.*/SUBDIRS=gen.tab charset lib/' Makefile.am && \
         ./bootstrap --no-config && \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
-        make && \
+        make -j 1 && \
         make install && \
         rm -rf ${DIR}
 ## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
@@ -273,6 +274,19 @@ RUN  \
         make && \
         make install && \
         rm -rf ${DIR}
+## kvazaar https://github.com/ultravideo/kvazaar
+RUN \
+        DIR=/tmp/kvazaar && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/ultravideo/kvazaar/archive/v${KVAZAAR_VERSION}.tar.gz &&\
+        tar -zx --strip-components=1 -f v${KVAZAAR_VERSION}.tar.gz && \
+        ./autogen.sh && \
+        ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+   
 ## ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=$(mktemp -d) && cd ${DIR} && \
@@ -302,6 +316,7 @@ RUN  \
         --enable-nonfree \
         --enable-openssl \
         --enable-libfdk_aac \
+        --enable-libkvazaar \
         --enable-postproc \
         --enable-small \
         --enable-version3 \

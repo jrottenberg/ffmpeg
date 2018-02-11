@@ -59,6 +59,7 @@ for version in keep_version:
         ## OpenJpeg 2.1 is not supported in 2.8
         if version[0:3] == '2.8':
             docker_content = docker_content.replace('--enable-libopenjpeg', '')
+            docker_content = docker_content.replace('--enable-libkvazaar', '')
 
         d = os.path.dirname(dockerfile)
         if not os.path.exists(d):
