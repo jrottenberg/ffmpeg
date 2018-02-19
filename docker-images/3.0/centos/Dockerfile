@@ -7,7 +7,7 @@
 #
 FROM    centos:7 AS base
 
-RUN     yum -y install libgomp libssh2 && \
+RUN     yum -y install libgomp libssh && \
         yum clean all;
 
 
