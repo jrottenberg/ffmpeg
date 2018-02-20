@@ -15,7 +15,7 @@ semver_re='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
 iwantplate="ruby $template_dir/iwantplate.rb"
 
 for version in `$iwantplate --list-versions | tr -d '\r' | head -n 1`; do
-    for variant in `$iwantplate --list-variants | tr -d '\r' | head -n 3`; do
+    for variant in `$iwantplate --list-variants | tr -d '\r'`; do
         release=`echo $version | sed -e "s/$semver_re/\1.\2/"`
         mkdir -p ${dockerfile_dir}/${release}/${variant}
         ${iwantplate} -V ${variant} -v ${version} > ${dockerfile_dir}/${release}/${variant}/Dockerfile
