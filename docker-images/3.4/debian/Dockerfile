@@ -1,10 +1,12 @@
-FROM centos:centos7 as base
+FROM debian:buster as base
 
 WORKDIR /tmp/workdir
 
 RUN set -e ; \
-yum -y install libgomp libssh freetype fontconfig fribidi ; \
-yum clean all
+apt-get update -yqq ; \
+apt-get install -yqq --no-install-recommends ca-certificates expat libgomp1 libfreetype6 libfribidi0 fontconfig ; \
+apt-get autoremove -y ; \
+apt-get clean -y
 
 FROM base AS build
 
@@ -18,7 +20,32 @@ ENV FFMPEG_VERSION=3.4.2 \
 	    SRC=/usr/local
 
 RUN set -e ;\
-yum --enablerepo=extras install -y epel-release ; yum groupinstall "Development tools" -y ; yum install -y bzip2 cmake expat-devel freetype-devel fribidi-devel fontconfig-devel openssl-devel libssh-devel tar yasm which zlib-devel
+apt-get update -yqq ;\
+apt-get install -yqq --no-install-recommends \
+autoconf \
+automake \
+bzip2 \
+cmake \
+curl \
+dirmngr \
+g++ \
+gcc \
+git \
+gnupg2 \
+gperf \
+libexpat1-dev \
+libfontconfig1-dev \
+libfreetype6-dev \
+libfribidi-dev \
+libssl-dev \
+libtool \
+make \
+nasm \
+perl \
+pkg-config \
+python \
+yasm \
+zlib1g-dev
 
 
 ARG OGG_SHA256SUM=c2e8a485110b97550f453226ec644ebac6cb29d1caef2902c007edab4308d985
@@ -71,7 +98,7 @@ rm -rf ${dir}
 
 
 
-ARG X264_VERSION=20171104-2245-stable
+ARG X264_VERSION=20180210-2245-stable
 RUN set -e ;\
 dir=/tmp/x264 ;\
 mkdir -p ${dir} ;\
