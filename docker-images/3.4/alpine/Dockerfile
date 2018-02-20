@@ -6,7 +6,7 @@
 
 FROM        alpine:3.5 AS base
 
-RUN     apk  add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat
+RUN     apk  add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat libssh
 
 
 FROM        base AS build
@@ -67,6 +67,7 @@ RUN     buildDeps="autoconf \
                    make \
                    python \
                    openssl-dev \
+                   libssh-dev \
                    tar \
                    yasm \
                    zlib-dev \
@@ -319,6 +320,7 @@ RUN  \
         --enable-libx264 \
         --enable-nonfree \
         --enable-openssl \
+        --enable-libssh \
         --enable-libfdk_aac \
         --enable-libkvazaar \
         --enable-postproc \

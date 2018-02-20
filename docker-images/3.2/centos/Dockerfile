@@ -7,7 +7,7 @@
 #
 FROM    centos:7 AS base
 
-RUN     yum -y install libgomp && \
+RUN     yum -y install libgomp libssh && \
         yum clean all;
 
 
@@ -66,6 +66,7 @@ RUN     buildDeps="autoconf \
                    nasm \
                    perl \
                    openssl-devel \
+                   libssh-devel \
                    tar \
                    yasm \
                    which \
@@ -320,6 +321,7 @@ RUN  \
         --enable-libx264 \
         --enable-nonfree \
         --enable-openssl \
+        --enable-libssh \
         --enable-libfdk_aac \
         --enable-libkvazaar \
         --enable-postproc \

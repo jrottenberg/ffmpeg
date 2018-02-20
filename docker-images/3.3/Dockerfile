@@ -10,7 +10,7 @@ FROM        ubuntu:16.04 AS base
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libssh-4 && \
         apt-get autoremove -y && \
         apt-get clean -y
 
@@ -70,6 +70,7 @@ RUN      buildDeps="autoconf \
                     pkg-config \
                     python \
                     libssl-dev \
+                    libssh-dev \
                     yasm \
                     zlib1g-dev" && \
         apt-get -yqq update && \
@@ -321,6 +322,7 @@ RUN  \
         --enable-libx264 \
         --enable-nonfree \
         --enable-openssl \
+        --enable-libssh \
         --enable-libfdk_aac \
         --enable-libkvazaar \
         --enable-postproc \
