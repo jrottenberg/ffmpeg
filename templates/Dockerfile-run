@@ -245,7 +245,6 @@ RUN  \
         --enable-libx264 \
         --enable-nonfree \
         --enable-openssl \
-        --enable-libssh \
         --enable-libfdk_aac \
         --enable-libkvazaar \
         --enable-postproc \
