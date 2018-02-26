@@ -21,7 +21,7 @@ ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
 
-ENV         FFMPEG_VERSION=3.3.6     \
+ENV         FFMPEG_VERSION=snapshot     \
             FDKAAC_VERSION=0.1.5      \
             LAME_VERSION=3.99.5       \
             LIBASS_VERSION=0.13.7     \
@@ -79,7 +79,7 @@ RUN \
         DIR=/tmp/opencore-amr && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://downloads.sf.net/project/opencore-amr/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz | \
+        curl -sL https://10gbps-io.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --enable-shared  && \
         make && \
@@ -175,7 +175,7 @@ RUN \
         DIR=/tmp/lame && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://downloads.sf.net/project/lame/lame/${LAME_VERSION%.*}/lame-${LAME_VERSION}.tar.gz | \
+        curl -sL https://10gbps-io.dl.sourceforge.net/project/lame/lame/$(echo ${LAME_VERSION} | sed -e 's/[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)/\1.\2/')/lame-${LAME_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --enable-shared --enable-nasm --enable-pic --disable-frontend && \
         make && \
@@ -296,8 +296,8 @@ RUN \
 ## ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=$(mktemp -d) && cd ${DIR} && \
-        curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
-        tar -zx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.gz && \
+        curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
+        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
         ./configure \
         --disable-debug \
         --disable-doc \
