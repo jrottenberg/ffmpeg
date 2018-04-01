@@ -25,7 +25,7 @@ ENV         FFMPEG_VERSION=3.3.6     \
             LAME_VERSION=3.99.5       \
             LIBASS_VERSION=0.13.7     \
             OGG_VERSION=1.3.2         \
-            OPENCOREAMR_VERSION=0.1.4 \
+            OPENCOREAMR_VERSION=0.1.5 \
             OPUS_VERSION=1.2          \
             OPENJPEG_VERSION=2.1.2    \
             THEORA_VERSION=1.1.1      \
@@ -78,12 +78,12 @@ RUN \
         DIR=/tmp/opencore-amr && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://10gbps-io.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz | \
+        curl -sL https://kent.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --enable-shared  && \
         make && \
         make install && \
-        rm -rf ${DIR} 
+        rm -rf ${DIR}
 ## x264 http://www.videolan.org/developers/x264.html
 RUN \
         DIR=/tmp/x264 && \
@@ -174,7 +174,7 @@ RUN \
         DIR=/tmp/lame && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://10gbps-io.dl.sourceforge.net/project/lame/lame/$(echo ${LAME_VERSION} | sed -e 's/[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)/\1.\2/')/lame-${LAME_VERSION}.tar.gz | \
+        curl -sL https://kent.dl.sourceforge.net/project/lame/lame/$(echo ${LAME_VERSION} | sed -e 's/[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)/\1.\2/')/lame-${LAME_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --enable-shared --enable-nasm --enable-pic --disable-frontend && \
         make && \
@@ -291,7 +291,7 @@ RUN \
         make && \
         make install && \
         rm -rf ${DIR}
-   
+
 ## ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=$(mktemp -d) && cd ${DIR} && \
