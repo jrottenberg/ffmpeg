@@ -40,6 +40,7 @@ ENV         FFMPEG_VERSION=snapshot     \
             FONTCONFIG_VERSION=2.12.4 \
             LIBVIDSTAB_VERSION=1.1.0  \
             KVAZAAR_VERSION=1.2.0     \
+            AOM_VERSION=master        \
             SRC=/usr/local
 
 ARG         OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692  libogg-1.3.2.tar.gz"
@@ -293,6 +294,20 @@ RUN \
         make install && \
         rm -rf ${DIR}
 
+RUN \
+        dir=/tmp/aom ; \
+        mkdir -p ${dir} ; \
+        cd ${dir} ; \
+        curl -sLO https://aomedia.googlesource.com/aom/+archive/${AOM_VERSION}.tar.gz ; \
+        tar -zx -f ${AOM_VERSION}.tar.gz ; \
+        rm -rf CMakeCache.txt CMakeFiles ; \
+        mkdir -p ./aom_build ; \
+        cd ./aom_build ; \ 
+        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 ../aom; \
+        make ; \
+        make install ; \
+        rm -rf ${dir}
+
 ## ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=$(mktemp -d) && cd ${DIR} && \
@@ -323,6 +338,7 @@ RUN  \
         --enable-openssl \
         --enable-libfdk_aac \
         --enable-libkvazaar \
+        --enable-libaom \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
