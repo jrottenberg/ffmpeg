@@ -8,6 +8,10 @@ env:
  - VERSION=snapshot VARIANT=alpine
  - VERSION=snapshot VARIANT=centos
  - VERSION=snapshot VARIANT=scratch
+ - VERSION=4.0 VARIANT=ubuntu
+ - VERSION=4.0 VARIANT=alpine
+ - VERSION=4.0 VARIANT=centos
+ - VERSION=4.0 VARIANT=scratch
  - VERSION=3.4 VARIANT=ubuntu
  - VERSION=3.4 VARIANT=alpine
  - VERSION=3.4 VARIANT=centos
