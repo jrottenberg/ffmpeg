@@ -332,7 +332,7 @@ RUN  \
         --enable-openssl \
         --enable-libfdk_aac \
          \
-         \
+        \
         --enable-postproc \
         --enable-small \
         --enable-version3 \

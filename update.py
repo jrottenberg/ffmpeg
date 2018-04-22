@@ -65,8 +65,8 @@ for version in keep_version:
         if version[0:3] == '2.8':
             docker_content = docker_content.replace('--enable-libopenjpeg', '')
             docker_content = docker_content.replace('--enable-libkvazaar', '')
-        if version != 'snapshot' and version[0:3] != '4.0':
-            docker_content = docker_content.replace('--enable-libaom', '')
+        if (version != 'snapshot' and version[0:3] != '4.0') or variant == 'centos':
+            docker_content = re.sub(r"--enable-libaom [^\\]*", "", docker_content)
 
         d = os.path.dirname(dockerfile)
         if not os.path.exists(d):
