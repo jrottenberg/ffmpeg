@@ -1,27 +1,26 @@
 # ffmpeg - http://ffmpeg.org/download.html
 #
-# From https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
+# From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
 #
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:16.04 AS base
+FROM    centos:7 AS base
+
+RUN     yum -y install libgomp && \
+        yum clean all;
+
+
+FROM        base AS build
 
 WORKDIR     /tmp/workdir
-
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
-        apt-get autoremove -y && \
-        apt-get clean -y
-
-FROM base as build
 
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
 
-ENV         FFMPEG_VERSION=3.3.7     \
+ENV         FFMPEG_VERSION=4.0     \
             FDKAAC_VERSION=0.1.5      \
             LAME_VERSION=3.99.5       \
             LIBASS_VERSION=0.13.7     \
@@ -54,27 +53,27 @@ ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a4788
 ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8  0.19.7.tar.gz"
 
 
-RUN      buildDeps="autoconf \
-                    automake \
-                    cmake \
-                    curl \
-                    bzip2 \
-                    libexpat1-dev \
-                    g++ \
-                    gcc \
-                    git \
-                    gperf \
-                    libtool \
-                    make \
-                    nasm \
-                    perl \
-                    pkg-config \
-                    python \
-                    libssl-dev \
-                    yasm \
-                    zlib1g-dev" && \
-        apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ${buildDeps}
+RUN     buildDeps="autoconf \
+                   automake \
+                   bzip2 \
+                   cmake \
+                   expat-devel \
+                   gcc \
+                   gcc-c++ \
+                   git \
+                   gperf \
+                   libtool \
+                   make \
+                   nasm \
+                   perl \
+                   openssl-devel \
+                   tar \
+                   yasm \
+                   which \
+                   zlib-devel" && \
+        echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
+        yum --enablerepo=extras install -y epel-release && \
+        yum install -y ${buildDeps}
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -354,21 +353,21 @@ RUN  \
         make qt-faststart && \
         cp qt-faststart ${PREFIX}/bin
 
-## cleanup
 RUN \
-        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
+        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib64/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
+        LD_LIBRARY_PATH=/usr/local/lib64 ffmpeg -buildconf
 
-FROM        base AS release
+FROM        base
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
-ENV         LD_LIBRARY_PATH=/usr/local/lib
 
-COPY --from=build /usr/local /usr/local/
+ENV LD_LIBRARY_PATH=/usr/local/lib64
+
+COPY --from=build /usr/local/ /usr/local/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
