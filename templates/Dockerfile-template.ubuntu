@@ -62,5 +62,10 @@ ENV         LD_LIBRARY_PATH=/usr/local/lib
 
 COPY --from=build /usr/local /usr/local/
 
+RUN \
+	apt-get update -y && \
+	apt-get install -y libva-drm1 && \
+	rm -rf /var/lib/apt/lists/*
+
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
