@@ -39,6 +39,7 @@ RUN     buildDeps="autoconf \
                    tar \
                    yasm \
                    which \
+                   libva-devel \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum --enablerepo=extras install -y epel-release && \

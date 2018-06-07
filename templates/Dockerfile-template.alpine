@@ -40,6 +40,7 @@ RUN     buildDeps="autoconf \
                    tar \
                    yasm \
                    zlib-dev \
+                   libva-dev \
                    expat-dev" && \
         apk  add --no-cache --update ${buildDeps}
 %%RUN%%
