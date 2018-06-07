@@ -70,6 +70,7 @@ RUN     buildDeps="autoconf \
                    tar \
                    yasm \
                    which \
+                   libva-devel \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum --enablerepo=extras install -y epel-release && \
@@ -341,6 +342,7 @@ RUN  \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
+        --enable-vaapi \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
