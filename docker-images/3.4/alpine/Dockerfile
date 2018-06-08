@@ -370,5 +370,8 @@ ENTRYPOINT  ["ffmpeg"]
 
 COPY --from=build /usr/local /usr/local
 
+RUN \
+	apk add --no-cache --update libva
+
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

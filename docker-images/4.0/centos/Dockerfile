@@ -373,7 +373,7 @@ COPY --from=build /usr/local/ /usr/local/
 
 RUN \
 	yum install -y libva && \
-	yum clean all
+	rm -rf /var/cache/yum
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
