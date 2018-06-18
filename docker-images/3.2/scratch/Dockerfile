@@ -66,7 +66,6 @@ RUN     buildDeps="autoconf \
                    openssl-dev \
                    tar \
                    yasm \
-                   libva-dev \
                    zlib-dev" && \
         apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
 
