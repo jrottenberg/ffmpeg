@@ -8,34 +8,42 @@ env:
  - VERSION=snapshot VARIANT=alpine
  - VERSION=snapshot VARIANT=centos
  - VERSION=snapshot VARIANT=scratch
+ - VERSION=snapshot VARIANT=vaapi
  - VERSION=4.0 VARIANT=ubuntu
  - VERSION=4.0 VARIANT=alpine
  - VERSION=4.0 VARIANT=centos
  - VERSION=4.0 VARIANT=scratch
+ - VERSION=4.0 VARIANT=vaapi
  - VERSION=3.4 VARIANT=ubuntu
  - VERSION=3.4 VARIANT=alpine
  - VERSION=3.4 VARIANT=centos
  - VERSION=3.4 VARIANT=scratch
+ - VERSION=3.4 VARIANT=vaapi
  - VERSION=3.3 VARIANT=ubuntu
  - VERSION=3.3 VARIANT=alpine
  - VERSION=3.3 VARIANT=centos
  - VERSION=3.3 VARIANT=scratch
+ - VERSION=3.3 VARIANT=vaapi
  - VERSION=3.2 VARIANT=ubuntu
  - VERSION=3.2 VARIANT=alpine
  - VERSION=3.2 VARIANT=centos
  - VERSION=3.2 VARIANT=scratch
+ - VERSION=3.2 VARIANT=vaapi
  - VERSION=3.1 VARIANT=ubuntu
  - VERSION=3.1 VARIANT=alpine
  - VERSION=3.1 VARIANT=centos
  - VERSION=3.1 VARIANT=scratch
+ - VERSION=3.1 VARIANT=vaapi
  - VERSION=3.0 VARIANT=ubuntu
  - VERSION=3.0 VARIANT=alpine
  - VERSION=3.0 VARIANT=centos
  - VERSION=3.0 VARIANT=scratch
+ - VERSION=3.0 VARIANT=vaapi
  - VERSION=2.8 VARIANT=ubuntu
  - VERSION=2.8 VARIANT=alpine
  - VERSION=2.8 VARIANT=centos
  - VERSION=2.8 VARIANT=scratch
+ - VERSION=2.8 VARIANT=vaapi
 
 branches:
   only:
