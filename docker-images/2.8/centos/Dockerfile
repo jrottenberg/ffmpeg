@@ -70,6 +70,7 @@ RUN     buildDeps="autoconf \
                    tar \
                    yasm \
                    which \
+                   libva-devel \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum --enablerepo=extras install -y epel-release && \
@@ -341,6 +342,7 @@ RUN  \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
+        --enable-vaapi \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
@@ -368,6 +370,10 @@ ENTRYPOINT  ["ffmpeg"]
 ENV LD_LIBRARY_PATH=/usr/local/lib64
 
 COPY --from=build /usr/local/ /usr/local/
+
+RUN \
+	yum install -y libva && \
+	rm -rf /var/cache/yum
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

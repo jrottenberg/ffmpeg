@@ -71,6 +71,7 @@ RUN     buildDeps="autoconf \
                    tar \
                    yasm \
                    zlib-dev \
+                   libva-dev \
                    expat-dev" && \
         apk  add --no-cache --update ${buildDeps}
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
@@ -340,6 +341,7 @@ RUN  \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
+        --enable-vaapi \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
@@ -367,6 +369,9 @@ CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
 COPY --from=build /usr/local /usr/local
+
+RUN \
+	apk add --no-cache --update libva
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
