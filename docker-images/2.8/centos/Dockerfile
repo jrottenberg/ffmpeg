@@ -338,6 +338,7 @@ RUN  \
         --enable-libfdk_aac \
          \
         \
+        --extra-libs=-lpthread \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
