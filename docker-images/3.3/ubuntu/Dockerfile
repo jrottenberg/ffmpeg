@@ -302,7 +302,7 @@ RUN \
         tar -zx -f ${AOM_VERSION}.tar.gz ; \
         rm -rf CMakeCache.txt CMakeFiles ; \
         mkdir -p ./aom_build ; \
-        cd ./aom_build ; \ 
+        cd ./aom_build ; \
         cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 ..; \
         make ; \
         make install ; \
@@ -342,7 +342,6 @@ RUN  \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
-        --enable-vaapi \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
