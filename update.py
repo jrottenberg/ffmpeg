@@ -67,6 +67,8 @@ for version in keep_version:
             docker_content = docker_content.replace('--enable-libkvazaar', '')
         if (version != 'snapshot' and version[0:3] != '4.0') or variant == 'centos':
             docker_content = re.sub(r"--enable-libaom [^\\]*", "", docker_content)
+        if (version == 'snapshot' or version[0:3] == '4.0') and variant == 'vaapi':
+            docker_content = re.sub(r"--enable-vaapi \ [^\\]*", "", docker_content)
 
         d = os.path.dirname(dockerfile)
         if not os.path.exists(d):
