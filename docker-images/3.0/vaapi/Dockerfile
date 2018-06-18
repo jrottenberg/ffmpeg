@@ -318,6 +318,7 @@ RUN  \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
+        --enable-vaapi \
         --enable-shared \
         --enable-avresample \
         --enable-libopencore-amrnb \
@@ -340,7 +341,6 @@ RUN  \
         --enable-libfdk_aac \
         --enable-libkvazaar \
         \
-        --extra-libs=-lpthread \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
@@ -355,7 +355,6 @@ RUN  \
         cd tools && \
         make qt-faststart && \
         cp qt-faststart ${PREFIX}/bin
-
 ## cleanup
 RUN \
         ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
