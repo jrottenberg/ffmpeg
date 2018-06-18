@@ -318,6 +318,7 @@ RUN  \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
+        --enable-vaapi \
         --enable-shared \
         --enable-avresample \
         --enable-libopencore-amrnb \
@@ -339,7 +340,8 @@ RUN  \
         --enable-openssl \
         --enable-libfdk_aac \
         --enable-libkvazaar \
-        --enable-libaom --extra-libs=-lpthread \
+        --enable-libaom \
+        --extra-libs=-lpthread \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
