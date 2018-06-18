@@ -340,8 +340,7 @@ RUN  \
         --enable-openssl \
         --enable-libfdk_aac \
         --enable-libkvazaar \
-        --enable-libaom \
-        --extra-libs=-lpthread \
+        --enable-libaom --extra-libs=-lpthread \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
@@ -356,7 +355,6 @@ RUN  \
         cd tools && \
         make qt-faststart && \
         cp qt-faststart ${PREFIX}/bin
-
 ## cleanup
 RUN \
         ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \

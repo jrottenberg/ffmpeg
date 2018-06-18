@@ -333,7 +333,6 @@ RUN  \
         --enable-libfdk_aac \
         --enable-libkvazaar \
         \
-        --extra-libs=-lpthread \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
@@ -348,7 +347,6 @@ RUN  \
         cd tools && \
         make qt-faststart && \
         cp qt-faststart ${PREFIX}/bin
-
 
 RUN \
         mkdir -p /tmp/fakeroot/lib  && \
