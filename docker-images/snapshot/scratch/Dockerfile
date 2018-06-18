@@ -66,6 +66,7 @@ RUN     buildDeps="autoconf \
                    openssl-dev \
                    tar \
                    yasm \
+                   libva-dev \
                    zlib-dev" && \
         apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
 
@@ -336,6 +337,7 @@ RUN  \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
+        --enable-vaapi \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
