@@ -121,10 +121,11 @@ Thanks to [qmfrederik](https://github.com/qmfrederik) for the vaapi ubuntu based
 
  jrottenberg/ffmpeg:vaapi or jrottenberg/ffmpeg:vaapi-${VERSION}
 
-Run the container with the device attached /dev/dri from your host into the container :
+- Run the container with the device attached /dev/dri from your host into the container :
+
 `docker run --device /dev/dri:/dev/dri -v $(pwd):/mnt jrottenberg/ffmpeg:vaapi [...]`
-Have the Intel drivers up and running on your host. You can run `vainfo` (part of vainfo package on Ubuntu) to determine whether your graphics card has been recognized correctly.
-Run ffmpeg with the correct parameters, this is the same as when running [ffmpeg natively](https://trac.ffmpeg.org/wiki/Hardware/VAAPI).
+- Have the Intel drivers up and running on your host. You can run `vainfo` (part of vainfo package on Ubuntu) to determine whether your graphics card has been recognized correctly.
+- Run ffmpeg with the correct parameters, this is the same as when running [ffmpeg natively](https://trac.ffmpeg.org/wiki/Hardware/VAAPI).
 
 
 See what's inside the beast
