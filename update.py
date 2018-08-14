@@ -70,6 +70,10 @@ for version in keep_version:
         if (version == 'snapshot' or version[0] >= '3') and variant == 'vaapi':
             docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n        --enable-vaapi')
 
+        # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
+        if variant == 'vaapi' and (version[0] < '3' or (version[0] == '3' and version[3] < '3')):
+            docker_content = docker_content.replace('ubuntu:18.04', 'ubuntu:16.04')
+
         d = os.path.dirname(dockerfile)
         if not os.path.exists(d):
             os.makedirs(d)
