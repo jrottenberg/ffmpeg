@@ -26,10 +26,10 @@ scratch images `ffmpeg:X.Y-scratch` to get the latest. (Scratch is an experiment
 For information :
 
 ```
-centos-3.3          centos              28221bb909aa        About an hour ago    264MB
-ubuntu-3.3          ubuntu              d6b632a4fe7f        3 seconds ago        221MB
-alpine-3.3          alpine              725234fc4162        40 minutes ago       65.6MB
-scratch-3.3         scratch             34724534bb88        15 minutes ago       48.6MB
+3.3-centos          centos              28221bb909aa        About an hour ago    264MB
+3.3-ubuntu          ubuntu              d6b632a4fe7f        3 seconds ago        221MB
+3.3-alpine          alpine              725234fc4162        40 minutes ago       65.6MB
+3.3-scratch         scratch             34724534bb88        15 minutes ago       48.6MB
 ```
 
 
