@@ -44,13 +44,13 @@ snapshot-alpine     27mb    2018-08-16
 3.0-centos          94mb    2018-08-16
 2.8-scratch         16mb    2018-08-16
 2.8                 90mb    2018-08-16
-
 ```
-(<details><summary>How the 'recent images' was generated</summary>
+
+<details><summary>(How the 'recent images' was generated)</summary>
 ```
     $ curl --silent https://hub.docker.com/v2/repositories/jrottenberg/ffmpeg/tags/?page_size=500 | jq -cr ".results|sort_by(.name)|reverse[]|.sz=(.full_size/1048576|floor|tostring+\"mb\")|[.name,( (20-(.name|length))*\" \" ),.sz,( (8-(.sz|length))*\" \"),.last_updated[:10]]|@text|gsub(\"[,\\\"\\\]\\\[]\";null)" | grep 2018-08
 ```
-</details>)
+</details>
 
 Please use [Github issues](https://github.com/jrottenberg/ffmpeg/issues/new) to report any bug or missing feature.
 
