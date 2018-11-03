@@ -13,7 +13,7 @@ ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
 
-ENV         FFMPEG_VERSION=3.4.4     \
+ENV         FFMPEG_VERSION=3.4.5     \
             FDKAAC_VERSION=0.1.5      \
             LAME_VERSION=3.99.5       \
             LIBASS_VERSION=0.13.7     \
@@ -369,4 +369,3 @@ COPY --from=build /tmp/fakeroot/ /
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
-
