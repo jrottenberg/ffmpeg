@@ -369,4 +369,3 @@ COPY --from=build /tmp/fakeroot/ /
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
-
