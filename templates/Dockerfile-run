@@ -1,3 +1,16 @@
+## libvmaf https://github.com/Netflix/vmaf
+RUN \
+        DIR=/tmp/vmaf && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sL https://github.com/Netflix/vmaf/archive/v${VMAF_VERSION}.tar.gz | \
+        tar -zx --strip-components=1 && \
+        cd ptools && \
+        make && \
+        cd ../wrapper && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -265,6 +278,7 @@ RUN  \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
+        --enable-libvmaf \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
