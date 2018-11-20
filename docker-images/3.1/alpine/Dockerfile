@@ -6,7 +6,7 @@
 
 FROM        alpine:3.5 AS base
 
-RUN     apk  add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat
+RUN     apk  add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat git
 
 
 FROM        base AS build
@@ -37,7 +37,7 @@ ENV         FFMPEG_VERSION=3.1.11     \
             FONTCONFIG_VERSION=2.12.4 \
             LIBVIDSTAB_VERSION=1.1.0  \
             KVAZAAR_VERSION=1.2.0     \
-            AOM_VERSION=master        \
+            AOM_VERSION=v1.0.0        \
             SRC=/usr/local
 
 ARG         OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692  libogg-1.3.2.tar.gz"
@@ -308,9 +308,14 @@ RUN \
 
 ## ffmpeg https://ffmpeg.org/
 RUN  \
-        DIR=$(mktemp -d) && cd ${DIR} && \
+        DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
+        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
+
+
+
+RUN \
+        DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         ./configure \
         --disable-debug \
         --disable-doc \

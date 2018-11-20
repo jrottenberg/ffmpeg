@@ -13,7 +13,7 @@ ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
 
-ENV         FFMPEG_VERSION=2.8.15     \
+ENV         FFMPEG_VERSION=4.1     \
             FDKAAC_VERSION=0.1.5      \
             LAME_VERSION=3.99.5       \
             LIBASS_VERSION=0.13.7     \
@@ -326,7 +326,7 @@ RUN \
         --enable-libfreetype \
         --enable-libvidstab \
         --enable-libmp3lame \
-         \
+        --enable-libopenjpeg \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \
@@ -337,7 +337,7 @@ RUN \
         --enable-nonfree \
         --enable-openssl \
         --enable-libfdk_aac \
-         \
+        --enable-libkvazaar \
         \
         --enable-postproc \
         --enable-small \
