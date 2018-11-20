@@ -4,7 +4,12 @@
 #
 #
 
-FROM        alpine:3.5 AS build
+FROM        alpine:3.5 AS base
+
+RUN     apk  add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat git
+
+
+FROM        base AS build
 
 WORKDIR     /tmp/workdir
 
@@ -13,7 +18,7 @@ ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
 
-ENV         FFMPEG_VERSION=2.8.15     \
+ENV         FFMPEG_VERSION=4.1     \
             FDKAAC_VERSION=0.1.5      \
             LAME_VERSION=3.99.5       \
             LIBASS_VERSION=0.13.7     \
@@ -55,7 +60,6 @@ RUN     buildDeps="autoconf \
                    curl \
                    coreutils \
                    diffutils \
-                   expat-dev \
                    file \
                    g++ \
                    gcc \
@@ -67,9 +71,8 @@ RUN     buildDeps="autoconf \
                    tar \
                    yasm \
                    zlib-dev \
-                   git" && \
-        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
-
+                   expat-dev" && \
+        apk  add --no-cache --update ${buildDeps}
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -326,7 +329,7 @@ RUN \
         --enable-libfreetype \
         --enable-libvidstab \
         --enable-libmp3lame \
-         \
+        --enable-libopenjpeg \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \
@@ -337,7 +340,7 @@ RUN \
         --enable-nonfree \
         --enable-openssl \
         --enable-libfdk_aac \
-         \
+        --enable-libkvazaar \
         \
         --enable-postproc \
         --enable-small \
@@ -356,22 +359,19 @@ RUN \
 
 
 RUN \
-        mkdir -p /tmp/fakeroot/lib  && \
-        ldd ${PREFIX}/bin/ffmpeg | cut -d ' ' -f 3 | strings | xargs -I R cp R /tmp/fakeroot/lib/ && \
-        for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
-        cp -r ${PREFIX}/bin /tmp/fakeroot/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/ && \
-        LD_LIBRARY_PATH=/tmp/fakeroot/lib /tmp/fakeroot/bin/ffmpeg -buildconf
+    ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
+    cp ${PREFIX}/bin/* /usr/local/bin/ && \
+    cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
 
 ### Release Stage
-FROM        scratch AS release
+FROM        base AS release
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
 CMD         ["--help"]
-ENTRYPOINT  ["/bin/ffmpeg"]
+ENTRYPOINT  ["ffmpeg"]
 
-COPY --from=build /tmp/fakeroot/ /
-
+COPY --from=build /usr/local /usr/local
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

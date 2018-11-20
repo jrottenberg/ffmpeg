@@ -1,19 +1,27 @@
 # ffmpeg - http://ffmpeg.org/download.html
 #
+# From https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
+#
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-
-FROM        alpine:3.5 AS build
+FROM        ubuntu:16.04 AS base
 
 WORKDIR     /tmp/workdir
+
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
+        apt-get autoremove -y && \
+        apt-get clean -y
+
+FROM base as build
 
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
 
-ENV         FFMPEG_VERSION=2.8.15     \
+ENV         FFMPEG_VERSION=4.1     \
             FDKAAC_VERSION=0.1.5      \
             LAME_VERSION=3.99.5       \
             LIBASS_VERSION=0.13.7     \
@@ -46,30 +54,27 @@ ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a4788
 ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8  0.19.7.tar.gz"
 
 
-RUN     buildDeps="autoconf \
-                   automake \
-                   bash \
-                   binutils \
-                   bzip2 \
-                   cmake \
-                   curl \
-                   coreutils \
-                   diffutils \
-                   expat-dev \
-                   file \
-                   g++ \
-                   gcc \
-                   gperf \
-                   libtool \
-                   make \
-                   python \
-                   openssl-dev \
-                   tar \
-                   yasm \
-                   zlib-dev \
-                   git" && \
-        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
-
+RUN      buildDeps="autoconf \
+                    automake \
+                    cmake \
+                    curl \
+                    bzip2 \
+                    libexpat1-dev \
+                    g++ \
+                    gcc \
+                    git \
+                    gperf \
+                    libtool \
+                    make \
+                    nasm \
+                    perl \
+                    pkg-config \
+                    python \
+                    libssl-dev \
+                    yasm \
+                    zlib1g-dev" && \
+        apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ${buildDeps}
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -326,7 +331,7 @@ RUN \
         --enable-libfreetype \
         --enable-libvidstab \
         --enable-libmp3lame \
-         \
+        --enable-libopenjpeg \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \
@@ -337,7 +342,7 @@ RUN \
         --enable-nonfree \
         --enable-openssl \
         --enable-libfdk_aac \
-         \
+        --enable-libkvazaar \
         \
         --enable-postproc \
         --enable-small \
@@ -354,24 +359,21 @@ RUN \
         make qt-faststart && \
         cp qt-faststart ${PREFIX}/bin
 
-
+## cleanup
 RUN \
-        mkdir -p /tmp/fakeroot/lib  && \
-        ldd ${PREFIX}/bin/ffmpeg | cut -d ' ' -f 3 | strings | xargs -I R cp R /tmp/fakeroot/lib/ && \
-        for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
-        cp -r ${PREFIX}/bin /tmp/fakeroot/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/ && \
-        LD_LIBRARY_PATH=/tmp/fakeroot/lib /tmp/fakeroot/bin/ffmpeg -buildconf
+        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
+        cp ${PREFIX}/bin/* /usr/local/bin/ && \
+        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
 
-### Release Stage
-FROM        scratch AS release
+FROM        base AS release
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
 CMD         ["--help"]
-ENTRYPOINT  ["/bin/ffmpeg"]
+ENTRYPOINT  ["ffmpeg"]
+ENV         LD_LIBRARY_PATH=/usr/local/lib
 
-COPY --from=build /tmp/fakeroot/ /
-
+COPY --from=build /usr/local /usr/local/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
