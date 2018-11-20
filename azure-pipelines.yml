@@ -1,0 +1,69 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+jobs:
+- job: Build
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  strategy:
+    maxParallel: 10
+    matrix:
+      ubuntu_snapshot:
+        VERSION: snapshot
+        VARIANT: ubuntu
+      ubuntu_41:
+        VERSION: 4.1
+        VARIANT: ubuntu
+      ubuntu_40:
+        VERSION: 4.0
+        VARIANT: ubuntu
+      ubuntu_34:
+        VERSION: 3.4
+        VARIANT: ubuntu
+      ubuntu_33:
+        VERSION: 3.3
+        VARIANT: ubuntu
+      ubuntu_32:
+        VERSION: 3.2
+        VARIANT: ubuntu
+      ubuntu_31:
+        VERSION: 3.1
+        VARIANT: ubuntu
+      ubuntu_30:
+        VERSION: 3.0
+        VARIANT: ubuntu
+      ubuntu_28:
+        VERSION: 2.8
+        VARIANT: ubuntu
+      vaapi_snapshot:
+        VERSION: snapshot
+        VARIANT: vaapi
+      vaapi_41:
+        VERSION: 4.1
+        VARIANT: vaapi
+      vaapi_40:
+        VERSION: 4.0
+        VARIANT: vaapi
+      vaapi_34:
+        VERSION: 3.4
+        VARIANT: vaapi
+      vaapi_33:
+        VERSION: 3.3
+        VARIANT: vaapi
+      vaapi_32:
+        VERSION: 3.2
+        VARIANT: vaapi
+      vaapi_31:
+        VERSION: 3.1
+        VARIANT: vaapi
+      vaapi_30:
+        VERSION: 3.0
+        VARIANT: vaapi
+      vaapi_28:
+        VERSION: 2.8
+        VARIANT: vaapi
+  steps:
+  - script: |
+      docker build -t "ffmpeg:${VERSION}-${VARIANT}" --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
