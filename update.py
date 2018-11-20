@@ -13,6 +13,7 @@ VARIANTS = ['ubuntu', 'alpine', 'centos', 'scratch', 'vaapi']
 FFMPEG_RELEASES = 'https://ffmpeg.org/releases/'
 
 travis = []
+azure = []
 response = urllib2.urlopen(FFMPEG_RELEASES)
 ffmpeg_releases = response.read()
 
@@ -47,10 +48,12 @@ for version in keep_version:
             dockerfile = 'docker-images/%s/%s/Dockerfile' % (
                 version, variant)
             travis.append(' - VERSION=%s VARIANT=%s' % (version, variant))
+            azure.append('      %s_%s:\n        VERSION: %s\n        VARIANT: %s' % (version.replace('.', '_'), variant, version, variant))
         else:
             dockerfile = 'docker-images/%s/%s/Dockerfile' % (
                 version[0:3], variant)
             travis.append(' - VERSION=%s VARIANT=%s' % (version[0:3], variant))
+            azure.append('      %s_%s:\n        VERSION: %s\n        VARIANT: %s' % (version[0:3].replace('.', '_'), variant, version[0:3], variant))
 
         with open('templates/Dockerfile-env', 'r') as tmpfile:
             env_content = tmpfile.read()
@@ -98,3 +101,11 @@ travis = template.replace('%%VERSIONS%%', '\n'.join(travis))
 
 with open('.travis.yml', 'w') as travisfile:
     travisfile.write(travis)
+
+with open('templates/azure.template', 'r') as tmpfile:
+    template = tmpfile.read()
+azure = template.replace('%%VERSIONS%%', '\n'.join(azure))
+
+
+with open('azure-pipelines.yml', 'w') as azurefile:
+    azurefile.write(azure)
