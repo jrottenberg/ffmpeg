@@ -9,6 +9,11 @@ env:
  - VERSION=snapshot VARIANT=centos
  - VERSION=snapshot VARIANT=scratch
  - VERSION=snapshot VARIANT=vaapi
+ - VERSION=4.1 VARIANT=ubuntu
+ - VERSION=4.1 VARIANT=alpine
+ - VERSION=4.1 VARIANT=centos
+ - VERSION=4.1 VARIANT=scratch
+ - VERSION=4.1 VARIANT=vaapi
  - VERSION=4.0 VARIANT=ubuntu
  - VERSION=4.0 VARIANT=alpine
  - VERSION=4.0 VARIANT=centos
