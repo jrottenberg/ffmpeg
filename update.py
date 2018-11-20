@@ -76,6 +76,13 @@ for version in keep_version:
             docker_content = docker_content.replace('libva-drm2', 'libva-drm1')
             docker_content = docker_content.replace('libva2', 'libva1')
 
+        patch = ''
+        if version[0:3] == '4.0':
+            with open('templates/Dockerfile-patch-4.0', 'r') as tmpfile:
+                patch = tmpfile.read()
+
+        docker_content = docker_content.replace('%%FFMPEG_PATCH%%', patch)
+
         d = os.path.dirname(dockerfile)
         if not os.path.exists(d):
             os.makedirs(d)
