@@ -1,0 +1,11 @@
+jobs:
+- job: Build
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  strategy:
+    maxParallel: 10
+    matrix:
+%%VERSIONS%%
+  steps:
+  - script: |
+      docker build -t "ffmpeg:${VERSION}-${VARIANT}" --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
