@@ -240,7 +240,7 @@ RUN  \
 %%FFMPEG_PATCH%%
 
 RUN \
-        DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
+        DIR=/tmp/ffmpeg && cd ${DIR} && \
         ./configure \
         --disable-debug \
         --disable-doc \
