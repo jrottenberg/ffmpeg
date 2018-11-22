@@ -1,0 +1,145 @@
+jobs:
+- job: Build
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  strategy:
+    maxParallel: 10
+    matrix:
+      snapshot_ubuntu:
+        VERSION: snapshot
+        VARIANT: ubuntu
+      snapshot_alpine:
+        VERSION: snapshot
+        VARIANT: alpine
+      snapshot_centos:
+        VERSION: snapshot
+        VARIANT: centos
+      snapshot_scratch:
+        VERSION: snapshot
+        VARIANT: scratch
+      snapshot_vaapi:
+        VERSION: snapshot
+        VARIANT: vaapi
+      4_1_ubuntu:
+        VERSION: 4.1
+        VARIANT: ubuntu
+      4_1_alpine:
+        VERSION: 4.1
+        VARIANT: alpine
+      4_1_centos:
+        VERSION: 4.1
+        VARIANT: centos
+      4_1_scratch:
+        VERSION: 4.1
+        VARIANT: scratch
+      4_1_vaapi:
+        VERSION: 4.1
+        VARIANT: vaapi
+      4_0_ubuntu:
+        VERSION: 4.0
+        VARIANT: ubuntu
+      4_0_alpine:
+        VERSION: 4.0
+        VARIANT: alpine
+      4_0_centos:
+        VERSION: 4.0
+        VARIANT: centos
+      4_0_scratch:
+        VERSION: 4.0
+        VARIANT: scratch
+      4_0_vaapi:
+        VERSION: 4.0
+        VARIANT: vaapi
+      3_4_ubuntu:
+        VERSION: 3.4
+        VARIANT: ubuntu
+      3_4_alpine:
+        VERSION: 3.4
+        VARIANT: alpine
+      3_4_centos:
+        VERSION: 3.4
+        VARIANT: centos
+      3_4_scratch:
+        VERSION: 3.4
+        VARIANT: scratch
+      3_4_vaapi:
+        VERSION: 3.4
+        VARIANT: vaapi
+      3_3_ubuntu:
+        VERSION: 3.3
+        VARIANT: ubuntu
+      3_3_alpine:
+        VERSION: 3.3
+        VARIANT: alpine
+      3_3_centos:
+        VERSION: 3.3
+        VARIANT: centos
+      3_3_scratch:
+        VERSION: 3.3
+        VARIANT: scratch
+      3_3_vaapi:
+        VERSION: 3.3
+        VARIANT: vaapi
+      3_2_ubuntu:
+        VERSION: 3.2
+        VARIANT: ubuntu
+      3_2_alpine:
+        VERSION: 3.2
+        VARIANT: alpine
+      3_2_centos:
+        VERSION: 3.2
+        VARIANT: centos
+      3_2_scratch:
+        VERSION: 3.2
+        VARIANT: scratch
+      3_2_vaapi:
+        VERSION: 3.2
+        VARIANT: vaapi
+      3_1_ubuntu:
+        VERSION: 3.1
+        VARIANT: ubuntu
+      3_1_alpine:
+        VERSION: 3.1
+        VARIANT: alpine
+      3_1_centos:
+        VERSION: 3.1
+        VARIANT: centos
+      3_1_scratch:
+        VERSION: 3.1
+        VARIANT: scratch
+      3_1_vaapi:
+        VERSION: 3.1
+        VARIANT: vaapi
+      3_0_ubuntu:
+        VERSION: 3.0
+        VARIANT: ubuntu
+      3_0_alpine:
+        VERSION: 3.0
+        VARIANT: alpine
+      3_0_centos:
+        VERSION: 3.0
+        VARIANT: centos
+      3_0_scratch:
+        VERSION: 3.0
+        VARIANT: scratch
+      3_0_vaapi:
+        VERSION: 3.0
+        VARIANT: vaapi
+      2_8_ubuntu:
+        VERSION: 2.8
+        VARIANT: ubuntu
+      2_8_alpine:
+        VERSION: 2.8
+        VARIANT: alpine
+      2_8_centos:
+        VERSION: 2.8
+        VARIANT: centos
+      2_8_scratch:
+        VERSION: 2.8
+        VARIANT: scratch
+      2_8_vaapi:
+        VERSION: 2.8
+        VARIANT: vaapi
+  steps:
+  - script: |
+      docker build -t "ffmpeg:${VERSION}-${VARIANT}" --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
