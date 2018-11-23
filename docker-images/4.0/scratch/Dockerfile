@@ -71,20 +71,7 @@ RUN     buildDeps="autoconf \
                    git" && \
         apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
 
-## libvmaf https://github.com/Netflix/vmaf
-RUN \
-        DIR=/tmp/vmaf && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sL https://github.com/Netflix/vmaf/archive/v${VMAF_VERSION}.tar.gz | \
-        tar -zx --strip-components=1 && \
-        cd ptools && \
-        make && \
-        cd ../wrapper && \
-        make && \
-        make install && \
-        rm -rf ${DIR}
-## opencore-amr https://sourceforge.net/projects/opencore-amr/
+# opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
         mkdir -p ${DIR} && \

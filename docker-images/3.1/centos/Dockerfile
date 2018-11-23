@@ -75,20 +75,7 @@ RUN     buildDeps="autoconf \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum --enablerepo=extras install -y epel-release && \
         yum install -y ${buildDeps}
-## libvmaf https://github.com/Netflix/vmaf
-RUN \
-        DIR=/tmp/vmaf && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sL https://github.com/Netflix/vmaf/archive/v${VMAF_VERSION}.tar.gz | \
-        tar -zx --strip-components=1 && \
-        cd ptools && \
-        make && \
-        cd ../wrapper && \
-        make && \
-        make install && \
-        rm -rf ${DIR}
-## opencore-amr https://sourceforge.net/projects/opencore-amr/
+# opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
         mkdir -p ${DIR} && \
