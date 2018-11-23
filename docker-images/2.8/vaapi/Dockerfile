@@ -374,7 +374,6 @@ RUN \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
-        --enable-libvmaf \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
