@@ -76,7 +76,7 @@ RUN      buildDeps="autoconf \
                     zlib1g-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
-# opencore-amr https://sourceforge.net/projects/opencore-amr/
+## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
         mkdir -p ${DIR} && \
@@ -307,7 +307,7 @@ RUN \
         make && \
         make install && \
         rm -rf ${DIR}
-
+## av1 https://aomedia.googlesource.com/aom
 RUN \
 	DIR=/tmp/aom && \
         git clone --branch ${AOM_VERSION} --depth 1 https://aomedia.googlesource.com/aom ${DIR} ; \

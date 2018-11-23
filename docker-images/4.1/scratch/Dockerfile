@@ -71,7 +71,7 @@ RUN     buildDeps="autoconf \
                    git" && \
         apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
 
-# opencore-amr https://sourceforge.net/projects/opencore-amr/
+## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
         mkdir -p ${DIR} && \
@@ -302,7 +302,7 @@ RUN \
         make && \
         make install && \
         rm -rf ${DIR}
-
+## av1 https://aomedia.googlesource.com/aom
 RUN \
 	DIR=/tmp/aom && \
         git clone --branch ${AOM_VERSION} --depth 1 https://aomedia.googlesource.com/aom ${DIR} ; \
