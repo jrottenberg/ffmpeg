@@ -41,6 +41,7 @@ ENV         FFMPEG_VERSION=2.8.15     \
             LIBVIDSTAB_VERSION=1.1.0  \
             KVAZAAR_VERSION=1.2.0     \
             AOM_VERSION=v1.0.0        \
+            VMAF_VERSION=1.3.9        \
             SRC=/usr/local
 
 ARG         OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692  libogg-1.3.2.tar.gz"
@@ -75,6 +76,19 @@ RUN      buildDeps="autoconf \
                     zlib1g-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
+## libvmaf https://github.com/Netflix/vmaf
+RUN \
+        DIR=/tmp/vmaf && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sL https://github.com/Netflix/vmaf/archive/v${VMAF_VERSION}.tar.gz | \
+        tar -zx --strip-components=1 && \
+        cd ptools && \
+        make && \
+        cd ../wrapper && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -230,6 +244,19 @@ RUN  \
         make && \
         make install && \
         rm -rf ${DIR}
+## libvmaf https://github.com/Netflix/vmaf
+RUN \
+        DIR=/tmp/vmaf && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sL https://github.com/Netflix/vmaf/archive/v${VMAF_VERSION}.tar.gz | \
+        tar -zx --strip-components=1 && \
+        cd ptools && \
+        make && \
+        cd ../wrapper && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
 ## libvstab https://github.com/georgmartius/vid.stab
 RUN  \
         DIR=/tmp/vid.stab && \
@@ -342,9 +369,11 @@ RUN \
         --enable-libfdk_aac \
          \
         \
+        --enable-libvmaf \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
+        --enable-libvmaf \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
