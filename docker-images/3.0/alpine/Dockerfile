@@ -37,7 +37,7 @@ ENV         FFMPEG_VERSION=3.0.12     \
             FONTCONFIG_VERSION=2.12.4 \
             LIBVIDSTAB_VERSION=1.1.0  \
             KVAZAAR_VERSION=1.2.0     \
-            AOM_VERSION=master        \
+            AOM_VERSION=1.0.0         \
             VMAF_VERSION=1.3.9        \
             SRC=/usr/local
 
