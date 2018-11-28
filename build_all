@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Run from the repository home directory.
+
+which parallel > /dev/null
+without_parallel=$?
+
+# Exit as soon as an error happens.
+#   Note that any image already built does not need be rebuilt
+#   on the next run.
+set -e
+
+if [[ $without_parallel = 1 ]]
+then
+  echo 'Will build without `parallel` (not found)...'
+  # Tested on BSD and GNU tools---so the verbosity.
+  exec_cmd="xargs -I {} docker build -t ffmpeg/{} {}"
+else
+  echo 'Will build with `parallel`...'
+  exec_cmd="parallel --no-notice \
+      -j 4 \
+      --results logs \
+      docker build -t ffmpeg/{} {}"
+fi
+
+find ../ffmpeg \
+  -name Dockerfile \
+  -exec dirname {} \; \
+  | cut -c 11- \
+  | $exec_cmd
