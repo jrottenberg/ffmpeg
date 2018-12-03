@@ -135,6 +135,16 @@ Capture output from the container to the host running the command
 The image has been compiled with [X265 Multilib](https://x265.readthedocs.io/en/default/api.html#multi-library-interface).
 Use the pixel format switch to change the number of bits per pixel by suffixing it with 10 for 10bits or 12 for 12bits.
 
+#### Convert a local GIF into a mp4 
+
+Let's assume ```original.gif``` is located in the current directory :
+```
+ docker run -v $PWD:/temp/ \
+        jrottenberg/ffmpeg:3.2-scratch -stats \
+        -i /temp/original.gif \
+        /temp/original-converted.mp4
+```
+
 #### Use hardware acceleration enabled build
 
 Thanks to [qmfrederik](https://github.com/qmfrederik) for the vaapi ubuntu based variant
