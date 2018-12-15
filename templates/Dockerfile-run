@@ -27,8 +27,9 @@ RUN \
         DIR=/tmp/x265 && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
-        tar -zx && \
+        curl -sLO https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz && \
+        echo ${X265_SHA256SUM} | sha256sum --check && \
+        tar -zx -f x265_${X265_VERSION}.tar.gz && \
         cd x265_${X265_VERSION}/build/linux && \
         sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
         sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh && \
