@@ -35,6 +35,7 @@ RUN     buildDeps="autoconf \
                    gperf \
                    libtool \
                    make \
+                   nasm \
                    python \
                    openssl-dev \
                    tar \
