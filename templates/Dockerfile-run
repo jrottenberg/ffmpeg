@@ -3,8 +3,9 @@ RUN \
         DIR=/tmp/opencore-amr && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://kent.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz | \
-        tar -zx --strip-components=1 && \
+        curl -sLO https://kent.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz && \
+        echo ${OPENCOREAMR_SHA256SUM} | sha256sum --check && \
+        tar -zx --strip-components=1 -f opencore-amr-${OPENCOREAMR_VERSION}.tar.gz && \
         ./configure --prefix="${PREFIX}" --enable-shared  && \
         make && \
         make install && \
