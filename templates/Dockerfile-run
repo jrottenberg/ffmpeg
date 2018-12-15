@@ -197,6 +197,20 @@ RUN  \
         make && \
         make install && \
         rm -rf ${DIR}
+## libvmaf https://github.com/Netflix/vmaf
+RUN \
+        DIR=/tmp/vmaf && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/Netflix/vmaf/archive/v${VMAF_VERSION}.tar.gz && \
+        echo ${VMAF_SHA256SUM} | sha256sum --check && \
+        tar -zx --strip-components=1 -f v${VMAF_VERSION}.tar.gz && \
+        cd ptools && \
+        make && \
+        cd ../wrapper && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
 ## libass https://github.com/libass/libass
 RUN  \
         DIR=/tmp/libass && \
@@ -275,6 +289,7 @@ RUN \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
+        --enable-libvmaf \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
