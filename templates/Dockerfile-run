@@ -166,7 +166,6 @@ RUN  \
         make install && \
         rm -rf ${DIR}
 ## fridibi https://www.fribidi.org/
-# + https://github.com/fribidi/fribidi/issues/8
 RUN  \
         DIR=/tmp/fribidi && \
         mkdir -p ${DIR} && \
@@ -174,8 +173,7 @@ RUN  \
         curl -sLO https://github.com/fribidi/fribidi/archive/${FRIBIDI_VERSION}.tar.gz && \
         echo ${FRIBIDI_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f ${FRIBIDI_VERSION}.tar.gz && \
-        sed -i 's/^SUBDIRS =.*/SUBDIRS=gen.tab charset lib/' Makefile.am && \
-        ./bootstrap --no-config && \
+        ./autogen.sh && \
         ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
         make -j 1 && \
         make install && \
