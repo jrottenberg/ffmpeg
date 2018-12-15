@@ -4,7 +4,7 @@
 #
 #
 
-FROM        alpine:3.5 AS build
+FROM        alpine:3.8 AS build
 
 WORKDIR     /tmp/workdir
 
@@ -24,7 +24,6 @@ RUN     buildDeps="autoconf \
                    curl \
                    coreutils \
                    diffutils \
-                   expat-dev \
                    file \
                    g++ \
                    gcc \
@@ -37,8 +36,8 @@ RUN     buildDeps="autoconf \
                    tar \
                    yasm \
                    zlib-dev \
-                   git" && \
-        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
+                   expat-dev" && \
+        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat git
 
 %%RUN%%
 
