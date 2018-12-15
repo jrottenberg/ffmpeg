@@ -99,8 +99,9 @@ RUN \
         DIR=/tmp/lame && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://kent.dl.sourceforge.net/project/lame/lame/$(echo ${LAME_VERSION} | sed -e 's/[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)/\1.\2/')/lame-${LAME_VERSION}.tar.gz | \
-        tar -zx --strip-components=1 && \
+        curl -sLO https://kent.dl.sourceforge.net/project/lame/lame/$(echo ${LAME_VERSION} | sed -e 's/[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)/\1.\2/')/lame-${LAME_VERSION}.tar.gz && \
+        echo ${LAME_SHA256SUM} | sha256sum --check && \
+        tar -zx --strip-components=1 -f lame-${LAME_VERSION}.tar.gz && \
         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --enable-shared --enable-nasm --enable-pic --disable-frontend && \
         make && \
         make install && \
