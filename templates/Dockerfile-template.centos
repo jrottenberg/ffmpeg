@@ -8,7 +8,8 @@
 FROM    centos:7 AS base
 
 RUN     yum -y install libgomp && \
-        yum clean all;
+        yum clean all && \
+        yum-config-manager --add-repo https://www.nasm.us/nasm.repo;
 
 
 FROM        base AS build
