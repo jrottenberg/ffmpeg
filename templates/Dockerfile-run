@@ -15,8 +15,9 @@ RUN \
         DIR=/tmp/x264 && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
-        tar -jx --strip-components=1 && \
+        curl -sLO https://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 && \
+        echo ${X264_SHA256SUM} | sha256sum --check && \
+        tar -jx --strip-components=1 -f x264-snapshot-${X264_VERSION}.tar.bz2 && \
         ./configure --prefix="${PREFIX}" --enable-shared --enable-pic --disable-cli && \
         make && \
         make install && \
