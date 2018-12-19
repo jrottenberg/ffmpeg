@@ -341,7 +341,7 @@ RUN \
         --enable-openssl \
         --enable-libfdk_aac \
         --enable-libkvazaar \
-        \
+        --enable-libaom --extra-libs=-lpthread \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
