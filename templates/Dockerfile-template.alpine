@@ -36,6 +36,7 @@ RUN     buildDeps="autoconf \
                    libtool \
                    make \
                    python \
+                   wget \
                    openssl-dev \
                    tar \
                    yasm \
