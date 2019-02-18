@@ -9,7 +9,7 @@ import urllib2
 from distutils.version import StrictVersion
 
 MIN_VERSION = '2.8'
-VARIANTS = ['ubuntu', 'alpine', 'centos', 'scratch', 'vaapi']
+VARIANTS = ['ubuntu', 'alpine', 'centos', 'scratch', 'vaapi', 'nvenc']
 FFMPEG_RELEASES = 'https://ffmpeg.org/releases/'
 
 travis = []
@@ -72,6 +72,9 @@ for version in keep_version:
             docker_content = re.sub(r"--enable-libaom [^\\]*", "", docker_content)
         if (version == 'snapshot' or version[0] >= '3') and variant == 'vaapi':
             docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n        --enable-vaapi')
+        if (version == 'snapshot' or version[0] >= '3') and variant == 'nvenc':
+            docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n        --enable-nvenc')
+
 
         # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
         if variant == 'vaapi' and (version[0] < '3' or (version[0] == '3' and version[2] < '3')):

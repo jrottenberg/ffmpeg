@@ -157,6 +157,16 @@ Thanks to [qmfrederik](https://github.com/qmfrederik) for the vaapi ubuntu based
 - Have the Intel drivers up and running on your host. You can run `vainfo` (part of vainfo package on Ubuntu) to determine whether your graphics card has been recognized correctly.
 - Run ffmpeg with the correct parameters, this is the same as when running [ffmpeg natively](https://trac.ffmpeg.org/wiki/Hardware/VAAPI).
 
+#### Use the Nvidia hardware encoder build
+
+ jrottenberg/ffmpeg:nvenc or jrottenberg/ffmpeg:nvenc-${VERSION}
+
+- Run the container with the nvidia docker runtime from your host into the container :
+
+`nvidia-docker run --rm -v /usr/lib/libnvidia-encode.so.1:/usr/local/lib/libnvidia-encode.so.1 -v /usr/lib/libnvcuvid.so.1:/usr/local/lib/libnvcuvid.so.1 jrottenberg/ffmpeg:nvenc [...] -c:v nvenc\_h264`
+
+- Have the Nvidia drivers up and running on your host. You can run `vainfo` (part of vainfo package on Ubuntu) to determine whether your graphics card has been recognized correctly.
+- Run ffmpeg with the correct parameters, this is the same as when running [ffmpeg natively](https://trac.ffmpeg.org/wiki/HWAccelIntro#NVENCNVDEC).
 
 See what's inside the beast
 ---------------------------
