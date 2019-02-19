@@ -163,10 +163,18 @@ Thanks to [qmfrederik](https://github.com/qmfrederik) for the vaapi ubuntu based
 
 - Run the container with the nvidia docker runtime from your host into the container :
 
-`nvidia-docker run --rm -v /usr/lib/libnvidia-encode.so.1:/usr/local/lib/libnvidia-encode.so.1 -v /usr/lib/libnvcuvid.so.1:/usr/local/lib/libnvcuvid.so.1 jrottenberg/ffmpeg:nvenc [...] -c:v nvenc\_h264`
+`nvidia-docker run --rm jrottenberg/ffmpeg:nvenc [...] -c:v nvenc\_h264`
+
 
 - Have the Nvidia drivers up and running on your host. You can run `vainfo` (part of vainfo package on Ubuntu) to determine whether your graphics card has been recognized correctly.
 - Run ffmpeg with the correct parameters, this is the same as when running [ffmpeg natively](https://trac.ffmpeg.org/wiki/HWAccelIntro#NVENCNVDEC).
+
+Known Issues: 
+- **`OpenEncodeSessionEx failed: unsupported device (2)`**
+    The docker images is based on NVIDIA driver version 410, is your using a different version,
+    the library might not recognize the hardware. Mount the nvcudvid.so library from the host 
+    to bridge the gap.
+    `-v /usr/lib/libnvcuvid.so.1:/usr/lib/libnvcuvid.so.1 ` 
 
 See what's inside the beast
 ---------------------------

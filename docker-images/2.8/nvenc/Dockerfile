@@ -10,7 +10,7 @@ FROM nvidia/cuda:10.0-runtime-ubuntu18.04 as base
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libnvidia-decode-410 && \
         apt-get autoremove -y && \
         apt-get clean -y
 
