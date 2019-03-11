@@ -318,8 +318,8 @@ RUN \
 	DIR=/tmp/svt && mkdir -p ${DIR} && cd ${DIR} && \
 	git clone https://github.com/OpenVisualCloud/SVT-AV1 && \
 	git clone https://github.com/intel/SVT-HEVC && \
-	cd ${DIR}/SVT-AV1 && cd Build/linux && build.sh release && cd release && make install && \
-	cd ${DIR}/SVT-HEVC && cd Build/linux && build.sh release && cd release &&  make install
+	cd ${DIR}/SVT-AV1 && cd Build/linux && ./build.sh release && cd release && make install && \
+	cd ${DIR}/SVT-HEVC && cd Build/linux && ./build.sh release && cd release &&  make install
 
 # Add ${DIR2}/SVT-VP9/ffmpeg_plugin/0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch later	
 RUN \
