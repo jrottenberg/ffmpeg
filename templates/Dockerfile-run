@@ -265,6 +265,7 @@ RUN \
         --enable-libfdk_aac \
         --enable-libkvazaar \
         --enable-libaom --extra-libs=-lpthread \
+        %%ENABLE_PATCH_CODECS%% \
         --enable-postproc \
         --enable-small \
         --enable-version3 \

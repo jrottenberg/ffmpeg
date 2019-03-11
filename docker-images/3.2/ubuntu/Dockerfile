@@ -342,6 +342,7 @@ RUN \
         --enable-libfdk_aac \
         --enable-libkvazaar \
         \
+         \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
