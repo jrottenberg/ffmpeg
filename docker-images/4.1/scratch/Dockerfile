@@ -308,19 +308,21 @@ RUN  \
         tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
 
 # SVT Codecs
-# Add https://github.com/OpenVisualCloud/SVT-VP9 later
 RUN \
 	DIR=/tmp/svt && mkdir -p ${DIR} && cd ${DIR} && \
 	git clone https://github.com/OpenVisualCloud/SVT-AV1 && \
 	git clone https://github.com/intel/SVT-HEVC && \
-	cd ${DIR}/SVT-AV1 && cd Build/linux && sed -i "/cmake/ s|\\\\$|-DCMAKE_INSTALL_PREFIX=${PREFIX} \\\|g" ./build.sh && ./build.sh release && cd release && make install && \
-	cd ${DIR}/SVT-HEVC && cd Build/linux && sed -i "/cmake/ s|\\\\$|-DCMAKE_INSTALL_PREFIX=${PREFIX} \\\|g" ./build.sh && ./build.sh release && cd release &&  make install
+	git clone https://github.com/OpenVisualCloud/SVT-VP9 && \
+	cd ${DIR}/SVT-AV1 && cd Build/linux && sed -i "/cmake/ s|\\\\$|-DCMAKE_INSTALL_PREFIX=${PREFIX} \\\|g" ./build.sh && ./build.sh release && cd release && make && make install && \
+	cd ${DIR}/SVT-HEVC && cd Build/linux && sed -i "/cmake/ s|\\\\$|-DCMAKE_INSTALL_PREFIX=${PREFIX} \\\|g" ./build.sh && ./build.sh release && cd release && make && make install
+#	cd ${DIR}/SVT-VP9 && cd Build/linux && sed -i "/cmake/ s|\\\\$|-DCMAKE_INSTALL_PREFIX=${PREFIX} \\\|g" ./build.sh && ./build.sh release && cd release && make && make install
 
-# Add ${DIR2}/SVT-VP9/ffmpeg_plugin/0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch later	
+# Apply patches	
 RUN \
-        DIR=/tmp/ffmpeg && DIR2=/tmp/svt && mkdir -p ${DIR} && mkdir -p ${DIR2} && cd ${DIR} && \
+    DIR=/tmp/ffmpeg && DIR2=/tmp/svt && mkdir -p ${DIR} && mkdir -p ${DIR2} && cd ${DIR} && \
 	git apply ${DIR2}/SVT-HEVC/ffmpeg_plugin/0001-lavc-svt_hevc-add-libsvt-hevc-encoder-wrapper.patch && \
 	git apply ${DIR2}/SVT-AV1/ffmpeg_plugin/0001-Add-ability-for-ffmpeg-to-run-svt-av1-with-svt-hevc.patch
+#	git apply ${DIR2}/SVT-VP9/ffmpeg_plugin/0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch
 
 
 RUN \

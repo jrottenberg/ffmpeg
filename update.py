@@ -80,18 +80,18 @@ for version in keep_version:
             docker_content = docker_content.replace('libva2', 'libva1')
 
         patch = ''
-	patch2 = ''
+        patch2 = ''
         if (version[0] > '4' or (version[0] == '4' and version[2] >= '1')) or version == 'snapshot':
             with open('templates/Dockerfile-patch-SVT', 'r') as tmpfile:
                 patch += tmpfile.read()
             with open('templates/Dockerfile-patch-SVT-enable', 'r') as tmpfile:
-		patch2 += tmpfile.read()
+                patch2 += tmpfile.read()
         if version[0:3] == '4.0':
             with open('templates/Dockerfile-patch-4.0', 'r') as tmpfile:
                 patch += tmpfile.read()
 
         docker_content = docker_content.replace('%%FFMPEG_PATCH%%', patch)
-	docker_content = docker_content.replace('%%ENABLE_PATCH_CODECS%%', patch2)
+        docker_content = docker_content.replace('%%ENABLE_PATCH_CODECS%%', patch2)
 
         d = os.path.dirname(dockerfile)
         if not os.path.exists(d):
