@@ -1,0 +1,192 @@
+---
+kind: pipeline
+name: 4.1-alpine-arm64
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+- name: build
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo:
+      from_secret: docker_repo
+    registry:
+      from_secret: docker_registry
+    dockerfile: docker-images/4.1/alpine/Dockerfile
+    tags: 4.1-alpine-arm64
+    build_args:
+      - MAKEFLAGS=-j96
+---
+kind: pipeline
+name: 4.1-scratch-arm64
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+- name: build
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo:
+      from_secret: docker_repo
+    registry:
+      from_secret: docker_registry
+    dockerfile: docker-images/4.1/scratch/Dockerfile
+    tags: 4.1-scratch-arm64
+    build_args:
+      - MAKEFLAGS=-j96
+---
+kind: pipeline
+name: 4.1-arm64
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+- name: build
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo:
+      from_secret: docker_repo
+    registry:
+      from_secret: docker_registry
+    dockerfile: docker-images/4.1/ubuntu/Dockerfile
+    tags: 4.1-arm64
+    build_args:
+      - MAKEFLAGS=-j96
+---
+kind: pipeline
+name: 4.1-alpine
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo:
+      from_secret: docker_repo
+    registry:
+      from_secret: docker_registry
+    dockerfile: docker-images/4.1/alpine/Dockerfile
+    tags: 4.1-alpine
+    build_args:
+      - MAKEFLAGS=-j24
+---
+kind: pipeline
+name: 4.1-centos
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo:
+      from_secret: docker_repo
+    registry:
+      from_secret: docker_registry
+    dockerfile: docker-images/4.1/centos/Dockerfile
+    tags: 4.1-centos
+    build_args:
+      - MAKEFLAGS=-j24
+---
+kind: pipeline
+name: 4.1-scratch
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo:
+      from_secret: docker_repo
+    registry:
+      from_secret: docker_registry
+    dockerfile: docker-images/4.1/scratch/Dockerfile
+    tags: 4.1-scratch
+    build_args:
+      - MAKEFLAGS=-j24
+---
+kind: pipeline
+name: 4.1
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo:
+      from_secret: docker_repo
+    registry:
+      from_secret: docker_registry
+    dockerfile: docker-images/4.1/ubuntu/Dockerfile
+    tags: 4.1
+    build_args:
+      - MAKEFLAGS=-j24
+---
+kind: pipeline
+name: 4.1-vaapi
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo:
+      from_secret: docker_repo
+    registry:
+      from_secret: docker_registry
+    dockerfile: docker-images/4.1/vaapi/Dockerfile
+    tags: 4.1-vaapi
+    build_args:
+      - MAKEFLAGS=-j24
