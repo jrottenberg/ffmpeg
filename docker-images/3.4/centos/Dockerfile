@@ -22,7 +22,7 @@ ARG        MAKEFLAGS="-j2"
 
 ENV         FFMPEG_VERSION=3.4.5     \
             FDKAAC_VERSION=0.1.5      \
-            LAME_VERSION=3.99.5       \
+            LAME_VERSION=3.100        \
             LIBASS_VERSION=0.13.7     \
             OGG_VERSION=1.3.2         \
             OPENCOREAMR_VERSION=0.1.5 \
