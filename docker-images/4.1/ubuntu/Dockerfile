@@ -21,19 +21,19 @@ ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
 
-ENV         FFMPEG_VERSION=4.1.3     \
-            FDKAAC_VERSION=0.1.5      \
+ENV         FFMPEG_VERSION=4.1.3      \
+            FDKAAC_VERSION=2.0.0      \
             LAME_VERSION=3.100        \
             LIBASS_VERSION=0.13.7     \
-            OGG_VERSION=1.3.2         \
+            OGG_VERSION=1.3.3         \
             OPENCOREAMR_VERSION=0.1.5 \
-            OPUS_VERSION=1.2          \
+            OPUS_VERSION=1.3.1        \
             OPENJPEG_VERSION=2.1.2    \
             THEORA_VERSION=1.1.1      \
             VORBIS_VERSION=1.3.5      \
             VPX_VERSION=1.8.0         \
-            X264_VERSION=20170226-2245-stable \
-            X265_VERSION=2.3          \
+            X264_VERSION=20190419-2245-stable \
+            X265_VERSION=3.0          \
             XVID_VERSION=1.3.4        \
             FREETYPE_VERSION=2.5.5    \
             FRIBIDI_VERSION=0.19.7    \
@@ -72,6 +72,7 @@ RUN      buildDeps="autoconf \
                     python \
                     libssl-dev \
                     yasm \
+                    nasm \
                     zlib1g-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
