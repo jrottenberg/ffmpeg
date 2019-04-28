@@ -158,6 +158,18 @@ Thanks to [qmfrederik](https://github.com/qmfrederik) for the vaapi ubuntu based
 - Run ffmpeg with the correct parameters, this is the same as when running [ffmpeg natively](https://trac.ffmpeg.org/wiki/Hardware/VAAPI).
 
 
+#### Use nvidia hardware acceleration enabled build
+Supports nvenc only on all ffmpeg versions, and hardware decoding and scaling on ffmpeg >= 4.0
+
+- Install nvidia drivers on host machine.
+- Install nvidia-docker (https://github.com/NVIDIA/nvidia-docker) on host machine.
+- Run container using "--runtime=nvidia" flag and use supported ffmpegs hwaccel options (https://trac.ffmpeg.org/wiki/HWAccelIntro) 
+
+Hardware encoding only:
+`docker run --runtime=nvidia jrottenberg/ffmpeg:nvidia-3.4 -i INPUT -c:v h264_nvenc -preset slow OUTPUT`
+Full hardware acceleration:
+`docker run --runtime=nvidia jrottenberg/ffmpeg:nvidia-4.1 -hwaccel cuvid -c:v h264_cuvid -i INPUT -vf scale_npp=-1:720 -c:v h264_nvenc -preset slow OUTPUT`
+
 See what's inside the beast
 ---------------------------
 
