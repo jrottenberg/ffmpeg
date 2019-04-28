@@ -78,8 +78,8 @@ for version in keep_version:
             docker_content = docker_content.replace('--extra-ldflags="-L${PREFIX}/lib"', '--extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64/ -L/usr/local/cuda/lib32/"')
             if (version == 'snapshot' or version[0] >= '4') :
                 docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n     	--enable-cuda \\\n        --enable-nvenc \\\n        --enable-cuvid \\\n        --enable-libnpp')
-            # Don't support hw scaling on older ffmpeg versions            
-            if (version == version[0] < '4') :
+            # Don't support hw decoding and scaling on older ffmpeg versions            
+            if (version[0] < '4') :
                 docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n      --enable-nvenc')
             # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
             if (version[0] < '3' or (version[0] == '3' and version[2] < '3')) :
