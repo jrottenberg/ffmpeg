@@ -5,8 +5,10 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:16.04 AS base
 
+FROM    nvidia/cudagl:9.2-devel-ubuntu18.04 AS devel-base
+
+ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
@@ -14,12 +16,24 @@ RUN     apt-get -yqq update && \
         apt-get autoremove -y && \
         apt-get clean -y
 
-FROM base as build
+FROM        nvidia/cudagl:9.2-runtime-ubuntu18.04 AS runtime-base
 
+ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
+WORKDIR     /tmp/workdir
+
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
+        apt-get autoremove -y && \
+        apt-get clean -y
+
+
+FROM  devel-base as build
+
+ENV        NVIDIA_HEADERS_VERSION=8.1.24.9
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
-ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
+ENV        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/ffmpeg/lib"
 ARG        PREFIX=/opt/ffmpeg
-ARG        MAKEFLAGS="-j2"
+ARG        MAKEFLAGS="-j12"
 
 ENV         FFMPEG_VERSION=4.0.4     \
             FDKAAC_VERSION=0.1.5      \
@@ -75,6 +89,17 @@ RUN      buildDeps="autoconf \
                     zlib1g-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
+
+RUN \ 
+	DIR=/tmp/nv-codec-headers && \
+	git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git ${DIR} && \
+	cd ${DIR} && \
+	git checkout n${NVIDIA_HEADERS_VERSION} && \ 
+	sed -i 's@/usr/local@'"$PREFIX"'@' Makefile && \
+	make && \
+	make install  && \
+    rm -rf ${DIR}
+
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -324,6 +349,10 @@ RUN \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
+     	--enable-cuda \
+        --enable-nvenc \
+        --enable-cuvid \
+        --enable-libnpp \
         --enable-shared \
         --enable-avresample \
         --enable-libopencore-amrnb \
@@ -349,8 +378,8 @@ RUN \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
-        --extra-cflags="-I${PREFIX}/include" \
-        --extra-ldflags="-L${PREFIX}/lib" \
+        --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/" \
+        --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64/ -L/usr/local/cuda/lib32/" \
         --extra-libs=-ldl \
         --prefix="${PREFIX}" && \
         make && \
@@ -368,14 +397,19 @@ RUN \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
         LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
 
-FROM        base AS release
+
+
+FROM        runtime-base AS release
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
-ENV         LD_LIBRARY_PATH=/usr/local/lib
+ENV         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
 
-COPY --from=build /usr/local /usr/local/
+COPY --from=build /usr/local/bin /usr/local/bin/
+COPY --from=build /usr/local/share /usr/local/share/
+COPY --from=build /usr/local/lib /usr/local/lib/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
+

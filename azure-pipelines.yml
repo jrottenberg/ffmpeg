@@ -20,6 +20,9 @@ jobs:
       snapshot_vaapi:
         VERSION: snapshot
         VARIANT: vaapi
+      snapshot_nvidia:
+        VERSION: snapshot
+        VARIANT: nvidia
       4_1_ubuntu:
         VERSION: 4.1
         VARIANT: ubuntu
@@ -35,6 +38,9 @@ jobs:
       4_1_vaapi:
         VERSION: 4.1
         VARIANT: vaapi
+      4_1_nvidia:
+        VERSION: 4.1
+        VARIANT: nvidia
       4_0_ubuntu:
         VERSION: 4.0
         VARIANT: ubuntu
@@ -50,6 +56,9 @@ jobs:
       4_0_vaapi:
         VERSION: 4.0
         VARIANT: vaapi
+      4_0_nvidia:
+        VERSION: 4.0
+        VARIANT: nvidia
       3_4_ubuntu:
         VERSION: 3.4
         VARIANT: ubuntu
@@ -65,6 +74,9 @@ jobs:
       3_4_vaapi:
         VERSION: 3.4
         VARIANT: vaapi
+      3_4_nvidia:
+        VERSION: 3.4
+        VARIANT: nvidia
       3_3_ubuntu:
         VERSION: 3.3
         VARIANT: ubuntu
@@ -80,6 +92,9 @@ jobs:
       3_3_vaapi:
         VERSION: 3.3
         VARIANT: vaapi
+      3_3_nvidia:
+        VERSION: 3.3
+        VARIANT: nvidia
       3_2_ubuntu:
         VERSION: 3.2
         VARIANT: ubuntu
@@ -95,6 +110,9 @@ jobs:
       3_2_vaapi:
         VERSION: 3.2
         VARIANT: vaapi
+      3_2_nvidia:
+        VERSION: 3.2
+        VARIANT: nvidia
       3_1_ubuntu:
         VERSION: 3.1
         VARIANT: ubuntu
@@ -110,6 +128,9 @@ jobs:
       3_1_vaapi:
         VERSION: 3.1
         VARIANT: vaapi
+      3_1_nvidia:
+        VERSION: 3.1
+        VARIANT: nvidia
       3_0_ubuntu:
         VERSION: 3.0
         VARIANT: ubuntu
@@ -125,6 +146,9 @@ jobs:
       3_0_vaapi:
         VERSION: 3.0
         VARIANT: vaapi
+      3_0_nvidia:
+        VERSION: 3.0
+        VARIANT: nvidia
       2_8_ubuntu:
         VERSION: 2.8
         VARIANT: ubuntu
@@ -140,6 +164,9 @@ jobs:
       2_8_vaapi:
         VERSION: 2.8
         VARIANT: vaapi
+      2_8_nvidia:
+        VERSION: 2.8
+        VARIANT: nvidia
   steps:
   - script: |
       docker build -t ffmpeg:${VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
