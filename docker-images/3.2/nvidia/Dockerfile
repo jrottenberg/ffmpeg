@@ -345,6 +345,7 @@ RUN \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
+      --enable-nvenc \
         --enable-shared \
         --enable-avresample \
         --enable-libopencore-amrnb \
