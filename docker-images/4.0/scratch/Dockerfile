@@ -307,10 +307,6 @@ RUN  \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
         tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
 
-RUN \
-        DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
-	curl -sLO https://github.com/FFmpeg/FFmpeg/commit/b69ea742ab23ad74b2ae2772764743642212a139.patch && \
-	git apply b69ea742ab23ad74b2ae2772764743642212a139.patch
 
 
 RUN \
