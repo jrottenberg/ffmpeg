@@ -5,7 +5,7 @@
 import os
 import sys
 import re
-import urllib2
+import urllib
 from distutils.version import StrictVersion
 
 MIN_VERSION = '2.8'

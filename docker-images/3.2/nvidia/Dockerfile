@@ -35,6 +35,7 @@ ENV        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/ffmpeg/lib"
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j12"
 
+<<<<<<< HEAD
 ENV         FFMPEG_VERSION=3.2.14 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
@@ -46,6 +47,13 @@ ENV         FFMPEG_VERSION=3.2.14 \
             LIBASS_VERSION=0.13.7 \
             LIBVIDSTAB_VERSION=1.1.0 \
             OGG_VERSION=1.3.2 \
+=======
+ENV         FFMPEG_VERSION=3.2.14     \
+            FDKAAC_VERSION=0.1.5      \
+            LAME_VERSION=3.100        \
+            LIBASS_VERSION=0.13.7     \
+            OGG_VERSION=1.3.2         \
+>>>>>>> 3.2.14
             OPENCOREAMR_VERSION=0.1.5 \
             OPUS_VERSION=1.2 \
             OPENJPEG_VERSION=2.1.2 \
