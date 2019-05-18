@@ -21,27 +21,27 @@ ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
 
-ENV         FFMPEG_VERSION=4.1.3     \
-            FDKAAC_VERSION=0.1.5      \
-            LAME_VERSION=3.100        \
-            LIBASS_VERSION=0.13.7     \
-            OGG_VERSION=1.3.2         \
-            OPENCOREAMR_VERSION=0.1.5 \
-            OPUS_VERSION=1.2          \
-            OPENJPEG_VERSION=2.1.2    \
-            THEORA_VERSION=1.1.1      \
-            VORBIS_VERSION=1.3.5      \
-            VPX_VERSION=1.8.0         \
-            X264_VERSION=20170226-2245-stable \
-            X265_VERSION=2.3          \
-            XVID_VERSION=1.3.4        \
-            FREETYPE_VERSION=2.5.5    \
-            FRIBIDI_VERSION=0.19.7    \
-            FONTCONFIG_VERSION=2.12.4 \
-            LIBVIDSTAB_VERSION=1.1.0  \
-            KVAZAAR_VERSION=1.2.0     \
-            AOM_VERSION=v1.0.0        \
-            SRC=/usr/local
+ENV         FFMPEG_VERSION=4.1.1     \
+        FDKAAC_VERSION=0.1.5      \
+        LAME_VERSION=3.100        \
+        LIBASS_VERSION=0.13.7     \
+        OGG_VERSION=1.3.2         \
+        OPENCOREAMR_VERSION=0.1.5 \
+        OPUS_VERSION=1.2          \
+        OPENJPEG_VERSION=2.1.2    \
+        THEORA_VERSION=1.1.1      \
+        VORBIS_VERSION=1.3.5      \
+        VPX_VERSION=1.8.0         \
+        X264_VERSION=20170226-2245-stable \
+        X265_VERSION=2.3          \
+        XVID_VERSION=1.3.4        \
+        FREETYPE_VERSION=2.5.5    \
+        FRIBIDI_VERSION=0.19.7    \
+        FONTCONFIG_VERSION=2.12.4 \
+        LIBVIDSTAB_VERSION=1.1.0  \
+        KVAZAAR_VERSION=1.2.0     \
+        AOM_VERSION=v1.0.0        \
+        SRC=/usr/local
 
 ARG         OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692  libogg-1.3.2.tar.gz"
 ARG         OPUS_SHA256SUM="77db45a87b51578fbc49555ef1b10926179861d854eb2613207dc79d9ec0a9a9  opus-1.2.tar.gz"
@@ -55,24 +55,24 @@ ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c2
 
 
 RUN      buildDeps="autoconf \
-                    automake \
-                    cmake \
-                    curl \
-                    bzip2 \
-                    libexpat1-dev \
-                    g++ \
-                    gcc \
-                    git \
-                    gperf \
-                    libtool \
-                    make \
-                    nasm \
-                    perl \
-                    pkg-config \
-                    python \
-                    libssl-dev \
-                    yasm \
-                    zlib1g-dev" && \
+        automake \
+        cmake \
+        curl \
+        bzip2 \
+        libexpat1-dev \
+        g++ \
+        gcc \
+        git \
+        gperf \
+        libtool \
+        make \
+        nasm \
+        perl \
+        pkg-config \
+        python \
+        libssl-dev \
+        yasm \
+        zlib1g-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
@@ -295,7 +295,7 @@ RUN \
         rm -rf ${DIR}
 
 RUN \
-	DIR=/tmp/aom && \
+        DIR=/tmp/aom && \
         git clone --branch ${AOM_VERSION} --depth 1 https://aomedia.googlesource.com/aom ${DIR} ; \
         cd ${DIR} ; \
         rm -rf CMakeCache.txt CMakeFiles ; \
