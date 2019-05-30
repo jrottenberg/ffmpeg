@@ -169,5 +169,5 @@ jobs:
         VARIANT: nvidia
   steps:
   - script: |
-      docker build -t ffmpeg:${VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
+      docker build -t ffmpeg:${VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(nproc) + 1))" docker-images/${VERSION}/${VARIANT}
       docker run --rm ffmpeg:${VERSION}-${VARIANT} -buildconf 
