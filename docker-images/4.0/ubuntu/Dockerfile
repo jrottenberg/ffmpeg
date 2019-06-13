@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # ffmpeg - http://ffmpeg.org/download.html
 #
 # From https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
@@ -391,6 +392,8 @@ COPY --from=build /usr/local /usr/local/
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
 =======
+=======
+>>>>>>> rewrite the dockerfile generation + vdapu + armv7 + dav1d
 FROM        ubuntu:18.04 AS base
 
 RUN     apt-get -yqq update && \
@@ -822,4 +825,7 @@ RUN test "base" = "base" && ldconfig /usr/local/lib /usr/local/lib64
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
+<<<<<<< HEAD
+>>>>>>> rewrite the dockerfile generation + vdapu + armv7 + dav1d
+=======
 >>>>>>> rewrite the dockerfile generation + vdapu + armv7 + dav1d
