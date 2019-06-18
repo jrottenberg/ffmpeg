@@ -1,9 +1,8 @@
-#!/usr/bin/env python
+#! /usr/bin/env python
 
-
-# Get latest release from ffmpeg.org
-import os
+from string import Template
 import sys
+<<<<<<< HEAD
 import re
 import urllib
 from distutils.version import StrictVersion
@@ -49,68 +48,181 @@ for version in keep_version:
                 version, variant)
             travis.append(' - VERSION=%s VARIANT=%s' % (version, variant))
             azure.append('      %s_%s:\n        VERSION: %s\n        VARIANT: %s' % (version.replace('.', '_'), variant, version, variant))
+=======
+import getopt
+import argparse
+import configparser
+from os import listdir, path
+
+variants = ['alpine', 'centos', 'ubuntu', 'nvidia', 'armv7']
+versions = ['snapshot', '4.1', '4.0', '3.4', '3.3', '3.2', '2.8']
+builddir = '/tmp/build'
+makeflags = '-j6'
+
+templates = "./templates"
+
+fragments = path.join(templates, "fragments")
+common = path.join(templates, "common")
+configfile_template = path.join(templates, 'config', "config_${version}.ini")
+
+class ActionEnableDisable(argparse.Action):
+    def __init__(self, option_strings, dest, default=None, required=False, help=None):
+        if len(option_strings) != 1:
+            raise ValueError('Only a single argument is allowed with enable/disable action')
+        if not option_strings[0].startswith('--'):
+            raise ValueError('Enable/Disable arguments must be prefixed with "--"')
+
+        opt_name = option_strings[0][2:]
+        opts = ['--enable-' + opt_name, '--disable-' + opt_name]
+        super(ActionEnableDisable, self).__init__(opts, dest, nargs=0, const=None, default=default, required=required, help=help)
+
+    def __call__(self, parser, namespace, values, option_strings=None):
+        if option_strings.startswith('--disable-'):
+            setattr(namespace, self.dest, False)
+>>>>>>> fix extra comma
         else:
-            dockerfile = 'docker-images/%s/%s/Dockerfile' % (
-                version[0:3], variant)
-            travis.append(' - VERSION=%s VARIANT=%s' % (version[0:3], variant))
-            azure.append('      %s_%s:\n        VERSION: %s\n        VARIANT: %s' % (version[0:3].replace('.', '_'), variant, version[0:3], variant))
+            setattr(namespace, self.dest, True)
 
-        with open('templates/Dockerfile-env', 'r') as tmpfile:
-            env_content = tmpfile.read()
-        with open('templates/Dockerfile-template.' + variant, 'r') as tmpfile:
-            template = tmpfile.read()
-        with open('templates/Dockerfile-run', 'r') as tmpfile:
-            run_content = tmpfile.read()
-        env_content = env_content.replace('%%FFMPEG_VERSION%%', version)
-        docker_content = template.replace('%%ENV%%', env_content)
-        docker_content = docker_content.replace('%%RUN%%', run_content)
-        # OpenJpeg 2.1 is not supported in 2.8
-        if version[0:3] == '2.8':
-            docker_content = docker_content.replace('--enable-libopenjpeg', '')
-            docker_content = docker_content.replace('--enable-libkvazaar', '')
-        if (version != 'snapshot' and version[0] < '4') or variant == 'centos':
-            docker_content = re.sub(r"--enable-libaom [^\\]*", "", docker_content)
-        if (version == 'snapshot' or version[0] >= '3') and variant == 'vaapi':
-            docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n        --enable-vaapi')
+def parser_gen():
+    parser = argparse.ArgumentParser(description='Dockerfile generator.')
+    for f in listdir(fragments):
+        if f != 'ffmpeg' and path.isfile(path.join(fragments, f)):
+            parser.add_argument('--' + f, action=ActionEnableDisable, default=None, help='enable/disable ' + f)
 
-        if variant == 'nvidia':
-            docker_content = docker_content.replace('--extra-cflags="-I${PREFIX}/include"', '--extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/"')
-            docker_content = docker_content.replace('--extra-ldflags="-L${PREFIX}/lib"', '--extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64/ -L/usr/local/cuda/lib32/"')
-            if (version == 'snapshot' or version[0] >= '4') :
-                docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n     	--enable-cuda \\\n        --enable-nvenc \\\n        --enable-cuvid \\\n        --enable-libnpp')
-            # Don't support hw decoding and scaling on older ffmpeg versions
-            if (version[0] < '4') :
-                docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n      --enable-nvenc')
-            # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
-            if (version[0] < '3' or (version[0] == '3' and version[2] < '3')) :
-                docker_content = docker_content.replace('-ubuntu18.04', '-ubuntu16.04')
+    parser.add_argument('--enable-all', help='set all external libraries to true', action='store_true', default=False)
+    parser.add_argument('variant', default='alpine', choices=variants)
+    parser.add_argument('version', default='4.1', choices=versions)
+    parser.add_argument('--with-bins', action='store_true', default=False )
+    parser.add_argument('--no-strip', action='store_true', default=False)
 
-        # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
-        if variant == 'vaapi' and (version[0] < '3' or (version[0] == '3' and version[2] < '3')):
-            docker_content = docker_content.replace('ubuntu:18.04', 'ubuntu:16.04')
-            docker_content = docker_content.replace('libva-drm2', 'libva-drm1')
-            docker_content = docker_content.replace('libva2', 'libva1')
+    outsize = parser.add_mutually_exclusive_group(required=False)
+    outsize.add_argument('--fat', help='keep everything', action='store_true', default=True)
+    outsize.add_argument('--slim', help='only keep libraries', action='store_true', default=False)
+    outsize.add_argument('--scratch', help='build from scratch', action='store_true', default=False)
 
-        d = os.path.dirname(dockerfile)
-        if not os.path.exists(d):
-            os.makedirs(d)
+    return parser
 
-        with open(dockerfile, 'w') as dfile:
-            dfile.write(docker_content)
+def kebab_arg(name):
+    return name.replace('_', '-')
+
+def snake_arg(name):
+    return name.replace('-', '_')
+
+def dockerfile_gen(args, config, packages):
+    variant = open(path.join(templates, 'variants', "Dockerfile.%s" % (getattr(args, 'variant'))))
+    src = Template(variant.read())
+
+    d={
+        'prefix': builddir,
+        'makeflags': makeflags,
+        'packages': '',
+        'dev_packages': ''
+      }
+
+   
+
+    deps = []
+    flags = []
+    default = False
+    if getattr(args, 'enable_all'):
+        delattr(args, 'enable_all')
+        default = True
+        
+    for section in config.sections():
+        dep = snake_arg(section)
+        if hasattr(args, dep) and getattr(args, dep) is None:
+            setattr(args, dep, default)
+
+    for arg in vars(args):
+        library = kebab_arg(arg)
+        if getattr(args, arg) and library in config:
+            if 'Variants' in config[library] and variant in config[library]['Variants'].split(','):
+                continue
+            if 'DependsOn' in config[library]:
+                if not config[library]['DependsOn'] in deps:
+                    for dependency in config[library]['DependsOn'].split(','):
+                        deps.append(dependency.strip())
+            if 'Flags' in config[library]:
+                if not config[library]['Flags'] in flags:
+                    for flag in config[library]['Flags'].split(','):
+                        flags.append(flag.strip())
+            if not library in deps:
+                deps.append(library)
+
+    for dep in deps + ['ffmpeg']:
+        if 'Install' in config[dep]:
+            for package in config[dep]['Install'].split(','):
+                d['packages'] = "%s %s" % (packages[getattr(args, 'variant')][package].strip(), d['packages'])
+        if 'InstallDev' in config[dep]:
+            for package in config[dep]['InstallDev'].split(','):
+                d['dev_packages'] = "%s %s" % (packages[getattr(args, 'variant')][package].strip(), d['dev_packages'])
+
+    result = src.safe_substitute(d)
+    print(result)
+
+    print ("")
+    print ("ARG\tFFMPEG_VERSION=%s" % (config.get('ffmpeg', 'Version')))
+    for dependency in deps:
+            if "Version" in config[dependency]:
+                print ("ARG\t%s_VERSION=%s" % (snake_arg(dependency.upper()), config.get(dependency, "Version")))
+
+    print ("")
+    for dependency in deps:
+        if "SHA256sum" in config[dependency]:
+            print ("ARG\t%s_SHA256SUM=%s" % (dependency.upper(), config.get(dependency, "SHA256sum")))
+
+    print("")
+    for dependency in deps:
+            with open(path.join(fragments, dependency)) as fragment:
+                print (fragment.read())
+
+    with open(path.join(fragments, 'ffmpeg')) as ffmpeg_fragment:
+        ffmpeg_template = Template(ffmpeg_fragment.read())
+        ffmpeg_flags = ' \\\n\t'.join(flags)
+
+        result = ffmpeg_template.safe_substitute({'lib_flags': ffmpeg_flags})
+        print(result)
+
+    if getattr(args, 'slim'):
+        assembly_type = 'slim'
+        release_pattern = {'source': 'base', 'entrypoint': 'ffmpeg', 'install_dir': '/usr/local'}
+        assembly_pattern = {
+            'bins': 'true' if getattr(args, 'with_bins') else 'false',
+            'strip': 'false' if getattr(args, 'no_strip') else 'true'
+            }
+    elif getattr(args, 'scratch'):
+        assembly_type = 'scratch'
+        release_pattern = {'source': 'scratch', 'entrypoint': '/bin/ffmpeg', 'install_dir': '/'}
+        assembly_pattern = {
+            'bins': 'true' if getattr(args, 'with_bins') else 'false',
+            'strip': 'false' if getattr(args, 'no_strip') else 'true'
+            }
+    else :
+        assembly_type = 'fat'
+        release_pattern = {'source': 'base', 'entrypoint': 'ffmpeg', 'install_dir': '/usr/local'}
+        assembly_pattern = {}
+
+    with open(path.join(common, assembly_type)) as assembly:
+        assembly_template = Template(assembly.read())            
+        print (assembly_template.safe_substitute(assembly_pattern))
+
+    with open(path.join(common, 'release')) as release:
+        release_template = Template(release.read())
+        print (release_template.safe_substitute(release_pattern))
 
 
-with open('templates/travis.template', 'r') as tmpfile:
-    template = tmpfile.read()
-travis = template.replace('%%VERSIONS%%', '\n'.join(travis))
 
+def main(argv):
+    args_parser = parser_gen()
+    config_parser = configparser.ConfigParser()
+    package_parser = configparser.ConfigParser()
 
-with open('.travis.yml', 'w') as travisfile:
-    travisfile.write(travis)
+    args = args_parser.parse_args()
+    configfile = Template(configfile_template)
 
-with open('templates/azure.template', 'r') as tmpfile:
-    template = tmpfile.read()
-azure = template.replace('%%VERSIONS%%', '\n'.join(azure))
+    config_parser.read(configfile.safe_substitute({'version': getattr(args, 'version')}))
+    package_parser.read(path.join(templates, 'variants', 'packages.ini'))
+    dockerfile_gen(args, config_parser, package_parser)
 
-
-with open('azure-pipelines.yml', 'w') as azurefile:
-    azurefile.write(azure)
+if __name__ == '__main__':
+    main(sys.argv)

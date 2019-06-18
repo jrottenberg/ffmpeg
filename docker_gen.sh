@@ -1,10 +1,10 @@
 #! /bin/sh
 
-variants=("ubuntu" "centos" "alpine", "nvidia", "arm32v7")
+variants=("ubuntu" "centos" "alpine" "nvidia" "arm32v7")
 versions=("2.8" "3.2" "3.3" "3.4" "4.0" "4.1" "snapshot")
 
 for variant in ${variants[*]}; do
-    for version in ${versions[*]}; do 
+    for version in ${versions[*]}; do
         echo "${variant}: ffmpeg-${version}"
         dir="docker-images/${version}/${variant}"
         mkdir -p ${dir}
@@ -13,7 +13,7 @@ for variant in ${variants[*]}; do
 done
 
 scratch_variant="alpine"
-for version in ${versions[*]}; do 
+for version in ${versions[*]}; do
     dir="docker-images/${version}/${variant}"
     mkdir -p ${dir}
     python3 update.py --scratch --enable-all ${scratch_variant} ${version} > ${dir}/Dockerfile
