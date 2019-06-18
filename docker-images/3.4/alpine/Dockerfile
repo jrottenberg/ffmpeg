@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # ffmpeg - http://ffmpeg.org/download.html
 #
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
@@ -390,6 +391,8 @@ COPY --from=build /usr/local /usr/local
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
 =======
+=======
+>>>>>>> fix extra comma
 FROM alpine:3.9 as base
 
 RUN apk add --no-cache --update libva  \
@@ -814,4 +817,7 @@ RUN test "base" = "base" && ldconfig /usr/local/lib /usr/local/lib64
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
+<<<<<<< HEAD
+>>>>>>> fix extra comma
+=======
 >>>>>>> fix extra comma
