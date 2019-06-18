@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # ffmpeg - http://ffmpeg.org/download.html
 #
 # From https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
@@ -425,6 +426,8 @@ COPY --from=build /usr/local/lib /usr/local/lib/
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
 
 =======
+=======
+>>>>>>> fix extra comma
 FROM        nvidia/cuda:10.1-runtime-ubuntu18.04 AS base
 
 ENV     NVIDIA_DRIVER_CAPABILITIES=video
@@ -857,4 +860,7 @@ RUN test "base" = "base" && ldconfig /usr/local/lib /usr/local/lib64
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
+<<<<<<< HEAD
+>>>>>>> fix extra comma
+=======
 >>>>>>> fix extra comma

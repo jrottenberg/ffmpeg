@@ -3,6 +3,7 @@
 from string import Template
 import sys
 <<<<<<< HEAD
+<<<<<<< HEAD
 import re
 import urllib
 from distutils.version import StrictVersion
@@ -49,6 +50,8 @@ for version in keep_version:
             travis.append(' - VERSION=%s VARIANT=%s' % (version, variant))
             azure.append('      %s_%s:\n        VERSION: %s\n        VARIANT: %s' % (version.replace('.', '_'), variant, version, variant))
 =======
+=======
+>>>>>>> fix extra comma
 import getopt
 import argparse
 import configparser
@@ -79,6 +82,9 @@ class ActionEnableDisable(argparse.Action):
     def __call__(self, parser, namespace, values, option_strings=None):
         if option_strings.startswith('--disable-'):
             setattr(namespace, self.dest, False)
+<<<<<<< HEAD
+>>>>>>> fix extra comma
+=======
 >>>>>>> fix extra comma
         else:
             setattr(namespace, self.dest, True)
