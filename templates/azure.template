@@ -1,3 +1,6 @@
+variables:
+  DOCKER: 'jrottenberg/ffmpeg'
+
 jobs:
 - job: Build
   pool:
@@ -7,6 +10,12 @@ jobs:
     matrix:
 %%VERSIONS%%
   steps:
-  - script: |
-      docker build -t ffmpeg:${VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
-      docker run --rm ffmpeg:${VERSION}-${VARIANT} -buildconf 
+  - bash: |
+      docker build -t ${DOCKER}:${VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
+      docker run --rm ${DOCKER}:${VERSION}-${VARIANT} -buildconf
+    displayName: Build docker image
+  - bash: |
+      docker login --username ${DOCKER_LOGIN} --password ${DOCKER_PASSWORD}
+      docker push ${DOCKER}:${VERSION}-${VARIANT}
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: Push docker image
