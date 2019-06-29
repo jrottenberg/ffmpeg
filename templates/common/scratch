@@ -1,0 +1,19 @@
+
+RUN \
+    if $bins; then \
+        LD_LIBRARY_PATH=${PREFIX}/lib ldd ${PREFIX}/bin/* | \
+        cut -d ' ' -f 3 | \
+        strings | \
+        xargs -i cp {} /usr/local/lib/ && \
+        cp ${PREFIX}/bin/ff* /usr/local/bin/ ; \
+    else \
+        LD_LIBRARY_PATH=${PREFIX}/lib ldd ${PREFIX}/bin/ffmpeg | \
+        cut -d ' ' -f 3 | \
+        strings | \
+        xargs -i cp {} /usr/local/lib/ && \
+        cp ${PREFIX}/bin/ff* /usr/local/bin/ ; \
+    fi && \
+    if $strip; then \
+        for lib in /usr/local/lib/*.so* /usr/local/bin/*; do strip --strip-all $lib; done ; \
+    fi && \
+    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf

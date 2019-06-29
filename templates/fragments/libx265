@@ -1,0 +1,13 @@
+### x265 http://x265.org/
+RUN \
+    DIR=x265 && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sL https://download.videolan.org/pub/videolan/x265/x265_${LIBX265_VERSION}.tar.gz  | \
+    tar -zx && \
+    cd x265_${LIBX265_VERSION}/build/linux && \
+    sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
+    sed -i "/^cmake/ s/$/ -DENABLE_CLI=ON/" multilib.sh && \
+    ./multilib.sh && \
+    make -C 8bit install && \
+    rm -rf ${DIR}

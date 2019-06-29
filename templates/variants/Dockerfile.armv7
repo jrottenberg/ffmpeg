@@ -1,0 +1,47 @@
+FROM arm32v7/alpine:3.9 as base
+
+RUN apk add --no-cache --update $packages \
+                                libgcc \
+                                libstdc++ \
+                                ca-certificates \
+                                libcrypto1.1 \
+                                libssl1.1 \
+                                libgomp \
+                                expat \
+                                libuuid
+
+FROM base as build
+
+WORKDIR     /tmp/workdir
+
+ARG PREFIX=$prefix 
+ARG MAKEFLAGS=$makeflags
+ARG PKG_CONFIG_PATH=$prefix/lib/pkgconfig
+
+RUN apk add --no-cache --update $dev_packages \
+                                autoconf \
+                                automake \
+                                bash \
+                                binutils \
+                                bzip2 \
+                                cmake \
+                                curl \
+                                coreutils \
+                                diffutils \
+                                file \
+                                g++ \
+                                git \
+                                gcc \
+                                gperf \
+                                libtool \
+                                make \
+                                python \
+                                openssl-dev \
+                                tar \
+                                yasm \
+                                nasm \
+                                zlib-dev \
+                                expat-dev \
+                                util-linux-dev \
+                                meson \
+                                ninja

@@ -1,0 +1,16 @@
+## openjpeg https://github.com/uclouvain/openjpeg
+RUN \
+        DIR=openjpeg && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        if test `echo ${LIBOPENJPEG_VERSION} | tr -d '.'` -ge '210'; then \
+                version_prefix='v'; \
+        else \
+                version_prefix='version.' ;\
+        fi && \
+        curl -sL https://github.com/uclouvain/openjpeg/archive/${version_prefix}${LIBOPENJPEG_VERSION}.tar.gz | \
+        tar -zx --strip-components=1 && \
+        cmake -DBUILD_THIRDPARTY:BOOL=ON -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
+        make && \
+        make install && \
+        rm -rf ${DIR}

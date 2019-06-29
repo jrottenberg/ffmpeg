@@ -1,0 +1,12 @@
+## libvstab https://github.com/georgmartius/vid.stab
+RUN  \
+    DIR=vid.stab && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sLO https://github.com/georgmartius/vid.stab/archive/v${LIBVIDSTAB_VERSION}.tar.gz &&\
+    echo "${LIBVIDSTAB_SHA256SUM}  v${LIBVIDSTAB_VERSION}.tar.gz" | sha256sum --check && \
+    tar -zx --strip-components=1 -f v${LIBVIDSTAB_VERSION}.tar.gz && \
+    cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
+    make && \
+    make install && \
+    rm -rf ${DIR}

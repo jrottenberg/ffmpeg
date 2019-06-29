@@ -1,0 +1,10 @@
+## dav1d https://code.videolan.org/videolan/dav1d
+RUN \
+    DIR=dav1d && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sLO https://code.videolan.org/videolan/dav1d/-/archive/${LIBDAV1D_VERSION}/dav1d-${LIBDAV1D_VERSION}.tar.gz && \
+    tar -zx --strip-components=1 -f dav1d-${LIBDAV1D_VERSION}.tar.gz && \
+    meson build --prefix ${PREFIX} --buildtype release && \
+    ninja -C build install && \
+    rm -rf ${DIR}

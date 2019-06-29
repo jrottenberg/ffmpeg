@@ -1,0 +1,8 @@
+RUN \ 
+	DIR=nv-codec-headers && \
+	git clone --branch n${NVENC_VERSION} --depth=1 https://git.videolan.org/git/ffmpeg/nv-codec-headers.git ${DIR} && \
+	cd ${DIR} && \
+	sed -i 's@/usr/local@'"$PREFIX"'@' Makefile && \
+	make && \
+	make install  && \
+    rm -rf ${DIR}

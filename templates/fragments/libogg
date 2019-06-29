@@ -1,0 +1,12 @@
+## libogg https://www.xiph.org/ogg/
+RUN \
+    DIR=ogg && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sLO http://downloads.xiph.org/releases/ogg/libogg-${LIBOGG_VERSION}.tar.gz && \
+    echo "${LIBOGG_SHA256SUM}  libogg-${LIBOGG_VERSION}.tar.gz" | sha256sum --check && \
+    tar -zx --strip-components=1 -f libogg-${LIBOGG_VERSION}.tar.gz && \
+    ./configure --prefix="${PREFIX}" --enable-shared  && \
+    make && \
+    make install && \
+    rm -rf ${DIR}

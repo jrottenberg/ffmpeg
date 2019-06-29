@@ -1,0 +1,12 @@
+RUN \
+    DIR=opus && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sLO https://archive.mozilla.org/pub/opus/opus-${LIBOPUS_VERSION}.tar.gz && \
+    echo "${LIBOPUS_SHA256SUM}  opus-${LIBOPUS_VERSION}.tar.gz"| sha256sum --check && \
+    tar -zx --strip-components=1 -f opus-${LIBOPUS_VERSION}.tar.gz && \
+    autoreconf -fiv && \
+    ./configure --prefix="${PREFIX}" --enable-shared && \
+    make && \
+    make install && \
+    rm -rf ${DIR}

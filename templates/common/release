@@ -1,0 +1,12 @@
+
+FROM        $source AS release
+MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+
+CMD         ["--help"]
+ENTRYPOINT  ["$entrypoint"]
+
+COPY --from=build /usr/local $install_dir
+RUN test "$source" = "base" && ldconfig /usr/local/lib /usr/local/lib64
+
+# Let's make sure the app built correctly
+# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
