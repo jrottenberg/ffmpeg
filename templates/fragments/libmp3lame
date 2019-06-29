@@ -1,0 +1,11 @@
+### libmp3lame http://lame.sourceforge.net/
+RUN \
+    DIR=lame && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sL https://kent.dl.sourceforge.net/project/lame/lame/$(echo ${LIBMP3LAME_VERSION} | sed -e 's/[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)/\1.\2/')/lame-${LIBMP3LAME_VERSION}.tar.gz | \
+    tar -zx --strip-components=1 && \
+    ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --enable-shared --enable-nasm --enable-pic && \
+    make && \
+    make install && \
+    rm -rf ${DIR}

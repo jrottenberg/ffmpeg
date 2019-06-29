@@ -1,0 +1,15 @@
+## fridibi https://www.fribidi.org/
+# + https://github.com/fribidi/fribidi/issues/8
+RUN  \
+    DIR=fribidi && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sLO https://github.com/fribidi/fribidi/archive/${LIBFRIBIDI_VERSION}.tar.gz && \
+    echo "${LIBFRIBIDI_SHA256SUM}  ${LIBFRIBIDI_VERSION}.tar.gz" | sha256sum --check && \
+    tar -zx --strip-components=1 -f ${LIBFRIBIDI_VERSION}.tar.gz && \
+    sed -i 's/^SUBDIRS =.*/SUBDIRS=gen.tab charset lib/' Makefile.am && \
+    ./bootstrap --no-config && \
+    ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
+    make -j 1 && \
+    make install && \
+    rm -rf ${DIR}

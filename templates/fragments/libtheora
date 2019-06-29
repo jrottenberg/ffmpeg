@@ -1,0 +1,12 @@
+### libtheora http://www.theora.org/
+RUN \
+        DIR=theora && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${LIBTHEORA_VERSION}.tar.gz && \
+        echo "${LIBTHEORA_SHA256SUM}  libtheora-${LIBTHEORA_VERSION}.tar.gz" | sha256sum --check && \
+        tar -zx --strip-components=1 -f libtheora-${LIBTHEORA_VERSION}.tar.gz && \
+        ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
+        make && \
+        make install && \
+        rm -rf ${DIR}

@@ -1,0 +1,11 @@
+## freetype https://www.freetype.org/
+RUN  \
+    DIR=freetype && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sLO https://download.savannah.gnu.org/releases/freetype/freetype-${LIBFREETYPE_VERSION}.tar.gz && \
+    tar -zx --strip-components=1 -f freetype-${LIBFREETYPE_VERSION}.tar.gz && \
+    ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
+    make && \
+    make install && \
+    rm -rf ${DIR}

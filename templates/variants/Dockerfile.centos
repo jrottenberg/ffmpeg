@@ -1,0 +1,83 @@
+FROM centos:7 as base
+
+RUN yum -y install $packages libgomp libuuid && \
+    echo "/usr/local/lib" > /etc/ld.so.conf.d/local.conf && \
+    echo "/usr/local/lib64" >> /etc/ld.so.conf.d/local.conf
+
+FROM base as build
+
+WORKDIR     /tmp/workdir
+
+ARG PREFIX=$prefix 
+ARG MAKEFLAGS=$makeflags
+ARG PKG_CONFIG_PATH=$prefix/lib/pkgconfig:$prefix/lib64/pkgconfig
+
+RUN yum --enablerepo=extras install -y epel-release && \
+    yum install -y \
+                $dev_packages \
+                autoconf \
+                automake \
+                bzip2 \
+                cmake \
+                expat-devel \
+                gcc \
+                gcc-c++ \
+                git \
+                gperf \
+                libtool \
+                make \
+                nasm \
+                perl \
+                openssl-devel \
+                tar \
+                yasm \
+                which \
+                zlib-devel \
+                libuuid-devel \
+                libcurl-devel \
+                xz-devel \
+                libarchive-devel \
+                python36 \
+                python36-pip
+
+#Centos is missing recent version of CMake (>= 3.5)
+RUN \
+    DIR=/tmp/cmake && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sL https://cmake.org/files/v3.5/cmake-3.5.2.tar.gz | \
+    tar -zx --strip-components=1 && \
+    ./bootstrap --system-libs --no-system-jsoncpp && \
+    make && \
+    make install && \
+    rm -rf ${DIR}
+
+#Centos is missing recent version of nasm (>= 2.13)
+RUN \
+    DIR=/tmp/nasm && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sL https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.gz | \
+    tar -zx --strip-components=1 && \
+    ./configure --prefix="/usr" && \
+    make && \
+    make install && \
+    rm -rf ${DIR}
+
+#Centos is missing ninja
+RUN \
+    DIR=/tmp/ninja && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sL https://github.com/ninja-build/ninja/archive/v1.9.0.tar.gz | \
+    tar -zx --strip-components=1 && \
+    python configure.py --bootstrap && \
+    cp ./ninja /usr/bin/ && \
+    rm -rf ${DIR}
+
+RUN \
+    DIR=/tmp/meson && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    pip3 install meson && \
+    rm -rf ${DIR}

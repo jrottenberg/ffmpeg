@@ -1,0 +1,40 @@
+FROM        ubuntu:18.04 AS base
+
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends $packages ca-certificates expat libgomp1 libuuid1 libssl1.0 && \
+        apt-get autoremove -y && \
+        apt-get clean -y
+
+FROM base as build
+
+WORKDIR     /tmp/workdir
+
+ARG PREFIX=$prefix 
+ARG MAKEFLAGS=$makeflags
+ARG PKG_CONFIG_PATH=$prefix/lib/pkgconfig
+
+RUN apt-get -yqq update && \
+    apt-get install -yq --no-install-recommends \
+        $dev_packages \
+        autoconf \
+        automake \
+        cmake \
+        curl \
+        bzip2 \
+        libexpat1-dev \
+        g++ \
+        gcc \
+        git \
+        gperf \
+        libtool \
+        make \
+        nasm \
+        perl \
+        pkg-config \
+        python \
+        libssl1.0-dev \
+        yasm \
+        zlib1g-dev \
+        uuid-dev \
+        ninja-build \
+        meson

@@ -1,0 +1,12 @@
+### xvid https://www.xvid.com/
+RUN \
+        DIR=xvid && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO http://downloads.xvid.org/downloads/xvidcore-${LIBXVID_VERSION}.tar.gz && \
+        tar -zx -f xvidcore-${LIBXVID_VERSION}.tar.gz && \
+        cd xvidcore/build/generic && \
+        ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --datadir="${DIR}" --enable-shared --enable-shared && \
+        make && \
+        make install && \
+        rm -rf ${DIR}

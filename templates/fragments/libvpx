@@ -1,0 +1,12 @@
+### libvpx https://www.webmproject.org/code/
+RUN \
+    DIR=vpx && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sL https://codeload.github.com/webmproject/libvpx/tar.gz/v${LIBVPX_VERSION} | \
+    tar -zx --strip-components=1 && \
+    ./configure --prefix="${PREFIX}" --enable-vp8 --enable-vp9 --enable-vp9-highbitdepth --enable-pic --enable-shared \
+    --disable-debug --disable-examples --disable-docs && \
+    make && \
+    make install && \
+    rm -rf ${DIR}

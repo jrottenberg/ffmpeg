@@ -1,0 +1,16 @@
+## kvazaar https://github.com/ultravideo/kvazaar
+RUN \
+    DIR=kvazaar && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sLO https://github.com/ultravideo/kvazaar/archive/v${LIBKVAZAAR_VERSION}.tar.gz &&\
+    tar -zx --strip-components=1 -f v${LIBKVAZAAR_VERSION}.tar.gz && \
+    if [ -e ./autogen.sh ]; then \
+        ./autogen.sh && \
+        ./configure -prefix="${PREFIX}" --disable-static --enable-shared ; \
+    else \
+        cd src ; \
+    fi && \
+    make && \
+    make install && \
+    rm -rf ${DIR}

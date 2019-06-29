@@ -1,0 +1,12 @@
+### libvorbis https://xiph.org/vorbis/
+RUN \
+    DIR=vorbis && \
+    mkdir -p ${DIR} && \
+    cd ${DIR} && \
+    curl -sLO http://downloads.xiph.org/releases/vorbis/libvorbis-${LIBVORBIS_VERSION}.tar.gz && \
+    echo "${LIBVORBIS_SHA256SUM}  libvorbis-${LIBVORBIS_VERSION}.tar.gz" | sha256sum --check && \
+    tar -zx --strip-components=1 -f libvorbis-${LIBVORBIS_VERSION}.tar.gz && \
+    ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
+    make && \
+    make install && \
+    rm -rf ${DIR}
