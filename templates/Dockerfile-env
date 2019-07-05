@@ -9,6 +9,7 @@ FFMPEG_VERSION=%%FFMPEG_VERSION%%     \
             THEORA_VERSION=1.1.1      \
             VORBIS_VERSION=1.3.5      \
             VPX_VERSION=1.8.0         \
+            WEBP_VERSION=1.0.2        \
             X264_VERSION=20170226-2245-stable \
             X265_VERSION=2.3          \
             XVID_VERSION=1.3.4        \
