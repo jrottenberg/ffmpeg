@@ -1,5 +1,7 @@
 variables:
-  DOCKER: 'jrottenberg/ffmpeg'
+- group: videotoolsbuild-dockerhub
+- name: DOCKER
+  value: jrottenberg/ffmpeg
 
 jobs:
 - job: Build
@@ -19,3 +21,5 @@ jobs:
       docker push ${DOCKER}:${VERSION}-${VARIANT}
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Push docker image
+    env:
+      DOCKER_PASSWORD: $(docker.password)
