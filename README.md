@@ -186,11 +186,11 @@ Capture output from the container to the host running the command
 
 #### Convert 10bits MKV into a 10Bits MP4
 ```
- docker run -v $PWD:/tmp jrottenberg/ffmpeg:3.4-scratch \
+ docker run -v $(pwd):$(pwd) -w $(pwd) jrottenberg/ffmpeg:3.4-scratch \
         -stats \
         -i http://www.jell.yfish.us/media/jellyfish-20-mbps-hd-hevc-10bit.mkv \
         -c:v libx265 -pix_fmt yuv420p10 \
-        -t 5 -f mp4 /tmp/test.mp4
+        -t 5 -f mp4 test.mp4
 ```
 The image has been compiled with [X265 Multilib](https://x265.readthedocs.io/en/default/api.html#multi-library-interface).
 Use the pixel format switch to change the number of bits per pixel by suffixing it with 10 for 10bits or 12 for 12bits.
@@ -199,10 +199,10 @@ Use the pixel format switch to change the number of bits per pixel by suffixing 
 
 Let's assume ```original.gif``` is located in the current directory :
 ```
- docker run -v $PWD:/temp/ \
+ docker run -v $(pwd):$(pwd) -w $(pwd)\
         jrottenberg/ffmpeg:3.2-scratch -stats \
-        -i /temp/original.gif \
-        /temp/original-converted.mp4
+        -i original.gif \
+        original-converted.mp4
 ```
 
 #### Use hardware acceleration enabled build
@@ -213,7 +213,7 @@ Thanks to [qmfrederik](https://github.com/qmfrederik) for the [vaapi ubuntu base
 
 - Run the container with the device attached /dev/dri from your host into the container :
 
-`docker run --device /dev/dri:/dev/dri -v $(pwd):/mnt jrottenberg/ffmpeg:vaapi [...]`
+`docker run --device /dev/dri:/dev/dri -v $(pwd):$(pwd) -w $(pwd) jrottenberg/ffmpeg:vaapi [...]`
 - Have the Intel drivers up and running on your host. You can run `vainfo` (part of vainfo package on Ubuntu) to determine whether your graphics card has been recognized correctly.
 - Run ffmpeg with the correct parameters, this is the same as when running [ffmpeg natively](https://trac.ffmpeg.org/wiki/Hardware/VAAPI).
 
