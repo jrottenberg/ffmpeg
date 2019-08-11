@@ -28,6 +28,24 @@ jobs:
       snapshot_nvidia:
         VERSION: snapshot
         VARIANT: nvidia
+      4_2_ubuntu:
+        VERSION: 4.2
+        VARIANT: ubuntu
+      4_2_alpine:
+        VERSION: 4.2
+        VARIANT: alpine
+      4_2_centos:
+        VERSION: 4.2
+        VARIANT: centos
+      4_2_scratch:
+        VERSION: 4.2
+        VARIANT: scratch
+      4_2_vaapi:
+        VERSION: 4.2
+        VARIANT: vaapi
+      4_2_nvidia:
+        VERSION: 4.2
+        VARIANT: nvidia
       4_1_ubuntu:
         VERSION: 4.1
         VARIANT: ubuntu
