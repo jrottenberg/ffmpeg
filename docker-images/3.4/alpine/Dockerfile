@@ -72,6 +72,7 @@ RUN     buildDeps="autoconf \
                    openssl-dev \
                    tar \
                    yasm \
+                   nasm \
                    zlib-dev \
                    expat-dev" && \
         apk  add --no-cache --update ${buildDeps}
