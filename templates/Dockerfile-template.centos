@@ -7,9 +7,9 @@
 #
 FROM    centos:7 AS base
 
-RUN     yum -y install libgomp && \
+RUN set -xe && \
+        yum -y install libgomp tzdata && \
         yum clean all;
-
 
 FROM        base AS build
 
@@ -22,7 +22,8 @@ ARG        MAKEFLAGS="-j2"
 
 ENV         %%ENV%%
 
-RUN     buildDeps="autoconf \
+RUN set -xe && \
+        buildDeps="autoconf \
                    automake \
                    bzip2 \
                    cmake \
@@ -33,27 +34,27 @@ RUN     buildDeps="autoconf \
                    gperf \
                    libtool \
                    make \
-                   nasm \
-                   perl \
                    openssl-devel \
+                   perl \
                    tar \
-                   yasm \
                    which \
+                   yasm \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum --enablerepo=extras install -y epel-release && \
         yum install -y ${buildDeps}
 %%RUN%%
-RUN \
+RUN set -xe && \
+        rm -f /usr/local/bin/nasm /usr/local/bin/ndisasm && \
         ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib64/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
         LD_LIBRARY_PATH=/usr/local/lib64 ffmpeg -buildconf
 
 FROM        base
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+LABEL maintainer="Julien Rottenberg <julien@rottenberg.info>"
 
-CMD         ["--help"]
+CMD         ["-version"]
 ENTRYPOINT  ["ffmpeg"]
 
 ENV LD_LIBRARY_PATH=/usr/local/lib64

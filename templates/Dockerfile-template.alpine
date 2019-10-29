@@ -6,8 +6,8 @@
 
 FROM        alpine:3.8 AS base
 
-RUN     apk  add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat git
-
+RUN set -xe && \
+        apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat git tzdata
 
 FROM        base AS build
 
@@ -20,32 +20,34 @@ ARG        MAKEFLAGS="-j2"
 
 ENV         %%ENV%%
 
-RUN     buildDeps="autoconf \
+RUN set -xe && \
+        buildDeps="autoconf \
                    automake \
                    bash \
                    binutils \
                    bzip2 \
                    cmake \
-                   curl \
                    coreutils \
+                   curl \
                    diffutils \
+                   expat-dev \
                    file \
                    g++ \
                    gcc \
                    gperf \
                    libtool \
                    make \
-                   python \
                    openssl-dev \
+                   python \
                    tar \
+                   xz \
                    yasm \
-                   nasm \
-                   zlib-dev \
-                   expat-dev" && \
-        apk  add --no-cache --update ${buildDeps}
+                   zlib-dev" && \
+        apk add --no-cache --update ${buildDeps}
 %%RUN%%
 
-RUN \
+RUN set -xe && \
+    rm -f /usr/local/bin/nasm /usr/local/bin/ndisasm && \
     ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
     cp ${PREFIX}/bin/* /usr/local/bin/ && \
     cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
@@ -53,9 +55,9 @@ RUN \
 
 ### Release Stage
 FROM        base AS release
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+LABEL maintainer="Julien Rottenberg <julien@rottenberg.info>"
 
-CMD         ["--help"]
+CMD         ["-version"]
 ENTRYPOINT  ["ffmpeg"]
 
 COPY --from=build /usr/local /usr/local

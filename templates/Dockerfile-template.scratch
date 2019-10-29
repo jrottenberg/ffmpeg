@@ -15,7 +15,8 @@ ARG        MAKEFLAGS="-j2"
 
 ENV         %%ENV%%
 
-RUN     buildDeps="autoconf \
+RUN set -xe && \
+        buildDeps="autoconf \
                    automake \
                    bash \
                    binutils \
@@ -34,15 +35,16 @@ RUN     buildDeps="autoconf \
                    python \
                    openssl-dev \
                    tar \
+                   xz \
                    yasm \
-                   nasm \
                    zlib-dev \
                    git" && \
         apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
 
 %%RUN%%
 
-RUN \
+RUN set -xe \
+        rm -f /usr/local/bin/nasm /usr/local/bin/ndisasm && \
         mkdir -p /tmp/fakeroot/lib  && \
         ldd ${PREFIX}/bin/ffmpeg | cut -d ' ' -f 3 | strings | xargs -I R cp R /tmp/fakeroot/lib/ && \
         for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
@@ -52,9 +54,9 @@ RUN \
 
 ### Release Stage
 FROM        scratch AS release
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+LABEL maintainer="Julien Rottenberg <julien@rottenberg.info>"
 
-CMD         ["--help"]
+CMD         ["-version"]
 ENTRYPOINT  ["/bin/ffmpeg"]
 
 COPY --from=build /tmp/fakeroot/ /

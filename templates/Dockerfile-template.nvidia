@@ -11,7 +11,8 @@ FROM    nvidia/cudagl:9.2-devel-ubuntu18.04 AS devel-base
 ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
 WORKDIR     /tmp/workdir
 
-RUN     apt-get -yqq update && \
+RUN set -xe && \
+        apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
         apt-get autoremove -y && \
         apt-get clean -y
@@ -21,8 +22,9 @@ FROM        nvidia/cudagl:9.2-runtime-ubuntu18.04 AS runtime-base
 ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
 WORKDIR     /tmp/workdir
 
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
+RUN set -xe && \
+        apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev tzdata && \
         apt-get autoremove -y && \
         apt-get clean -y
 
@@ -37,7 +39,8 @@ ARG        MAKEFLAGS="-j12"
 
 ENV         %%ENV%%
 
-RUN      buildDeps="autoconf \
+RUN set -xe && \
+         buildDeps="autoconf \
                     automake \
                     cmake \
                     curl \
@@ -49,7 +52,6 @@ RUN      buildDeps="autoconf \
                     gperf \
                     libtool \
                     make \
-                    nasm \
                     perl \
                     pkg-config \
                     python \
@@ -59,7 +61,7 @@ RUN      buildDeps="autoconf \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
 
-RUN \ 
+RUN set -xe && \
 	DIR=/tmp/nv-codec-headers && \
 	git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git ${DIR} && \
 	cd ${DIR} && \
@@ -71,7 +73,8 @@ RUN \
 
 %%RUN%%
 ## cleanup
-RUN \
+RUN set -xe && \
+        rm -f /usr/local/bin/nasm /usr/local/bin/ndisasm && \
         ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
@@ -80,9 +83,9 @@ RUN \
 
 
 FROM        runtime-base AS release
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+LABEL maintainer="Julien Rottenberg <julien@rottenberg.info>"
 
-CMD         ["--help"]
+CMD         ["-version"]
 ENTRYPOINT  ["ffmpeg"]
 ENV         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
 

@@ -11,7 +11,8 @@ FROM    nvidia/cudagl:9.2-devel-ubuntu16.04 AS devel-base
 ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
 WORKDIR     /tmp/workdir
 
-RUN     apt-get -yqq update && \
+RUN set -xe && \
+        apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
         apt-get autoremove -y && \
         apt-get clean -y
@@ -21,8 +22,9 @@ FROM        nvidia/cudagl:9.2-runtime-ubuntu16.04 AS runtime-base
 ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
 WORKDIR     /tmp/workdir
 
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
+RUN set -xe && \
+        apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev tzdata && \
         apt-get autoremove -y && \
         apt-get clean -y
 
@@ -37,40 +39,41 @@ ARG        MAKEFLAGS="-j12"
 
 ENV         FFMPEG_VERSION=3.2.14 \
             AOM_VERSION=v1.0.0 \
-            FDKAAC_VERSION=0.1.5 \
-            FONTCONFIG_VERSION=2.12.4 \
-            FREETYPE_VERSION=2.5.5 \
+            FDKAAC_VERSION=0.1.6 \
+            FONTCONFIG_VERSION=2.12.6 \
+            FREETYPE_VERSION=2.10.1 \
             FRIBIDI_VERSION=0.19.7 \
             KVAZAAR_VERSION=1.2.0 \
             LAME_VERSION=3.100 \
-            LIBASS_VERSION=0.13.7 \
+            LIBASS_VERSION=0.14.0 \
             LIBVIDSTAB_VERSION=1.1.0 \
+            NASM_VERSION=2.14.02 \
             OGG_VERSION=1.3.2 \
             OPENCOREAMR_VERSION=0.1.5 \
-            OPUS_VERSION=1.2 \
-            OPENJPEG_VERSION=2.1.2 \
+            OPENJPEG_VERSION=2.3.1 \
+            OPUS_VERSION=1.3.1 \
             THEORA_VERSION=1.1.1 \
-            VORBIS_VERSION=1.3.5 \
+            VORBIS_VERSION=1.3.6 \
             VPX_VERSION=1.8.0 \
             WEBP_VERSION=1.0.2 \
-            X264_VERSION=20170226-2245-stable \
-            X265_VERSION=3.1.1 \
+            X264_VERSION=20191009-2245-stable \
+            X265_VERSION=3.2 \
             XVID_VERSION=1.3.4 \
             SRC=/usr/local
 
-ARG         FREETYPE_SHA256SUM="5d03dd76c2171a7601e9ce10551d52d4471cf92cd205948e60289251daddffa8 freetype-2.5.5.tar.gz"
+ARG         FREETYPE_SHA256SUM="3a60d391fd579440561bf0e7f31af2222bc610ad6ce4d9d7bd2165bca8669110  freetype-2.10.1.tar.gz"
 ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8 0.19.7.tar.gz"
-ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a47889315526adbafd7 0.13.7.tar.gz"
+ARG         LIBASS_SHA256SUM="82e70ee1f9afe2e54ab4bf6510b83bb563fcb2af978f0f9da82e2dbc9ae0fd72  0.14.0.tar.gz"
 ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb v1.1.0.tar.gz"
 ARG         OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692 libogg-1.3.2.tar.gz"
-ARG         OPUS_SHA256SUM="77db45a87b51578fbc49555ef1b10926179861d854eb2613207dc79d9ec0a9a9 opus-1.2.tar.gz"
+ARG         OPUS_SHA256SUM="65b58e1e25b2a114157014736a3d9dfeaad8d41be1c8179866f144a2fb44ff9d  opus-1.3.1.tar.gz"
 ARG         THEORA_SHA256SUM="40952956c47811928d1e7922cda3bc1f427eb75680c3c37249c91e949054916b libtheora-1.1.1.tar.gz"
-ARG         VORBIS_SHA256SUM="6efbcecdd3e5dfbf090341b485da9d176eb250d893e3eb378c428a2db38301ce libvorbis-1.3.5.tar.gz"
+ARG         VORBIS_SHA256SUM="6ed40e0241089a42c48604dc00e362beee00036af2d8b3f46338031c9e0351cb  libvorbis-1.3.6.tar.gz"
 ARG         XVID_SHA256SUM="4e9fd62728885855bc5007fe1be58df42e5e274497591fec37249e1052ae316f xvidcore-1.3.4.tar.gz"
 
 
-
-RUN      buildDeps="autoconf \
+RUN set -xe && \
+         buildDeps="autoconf \
                     automake \
                     cmake \
                     curl \
@@ -82,7 +85,6 @@ RUN      buildDeps="autoconf \
                     gperf \
                     libtool \
                     make \
-                    nasm \
                     perl \
                     pkg-config \
                     python \
@@ -92,7 +94,7 @@ RUN      buildDeps="autoconf \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
 
-RUN \ 
+RUN set -xe && \
 	DIR=/tmp/nv-codec-headers && \
 	git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git ${DIR} && \
 	cd ${DIR} && \
@@ -102,8 +104,17 @@ RUN \
 	make install  && \
     rm -rf ${DIR}
 
-## opencore-amr https://sourceforge.net/projects/opencore-amr/
-RUN \
+### nasm install
+RUN set -xe && \
+        DIR=/tmp/nasm && mkdir "${DIR}" && cd "${DIR}" && \
+        curl -sL http://www.nasm.us/pub/nasm/releasebuilds/${NASM_VERSION}/nasm-${NASM_VERSION}.tar.xz | \
+        tar -Jx --strip-components=1 && \
+        ./configure && \
+        make "${MAKEFLAGS}" && \
+        make install
+
+### opencore-amr https://sourceforge.net/projects/opencore-amr/
+RUN set -xe && \
         DIR=/tmp/opencore-amr && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -113,8 +124,8 @@ RUN \
         make && \
         make install && \
         rm -rf ${DIR}
-## x264 http://www.videolan.org/developers/x264.html
-RUN \
+### x264 http://www.videolan.org/developers/x264.html
+RUN set -xe && \
         DIR=/tmp/x264 && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -125,7 +136,7 @@ RUN \
         make install && \
         rm -rf ${DIR}
 ### x265 http://x265.org/
-RUN \
+RUN set -xe && \
         DIR=/tmp/x265 && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -138,7 +149,7 @@ RUN \
         make -C 8bit install && \
         rm -rf ${DIR}
 ### libogg https://www.xiph.org/ogg/
-RUN \
+RUN set -xe && \
         DIR=/tmp/ogg && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -150,7 +161,7 @@ RUN \
         make install && \
         rm -rf ${DIR}
 ### libopus https://www.opus-codec.org/
-RUN \
+RUN set -xe && \
         DIR=/tmp/opus && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -163,7 +174,7 @@ RUN \
         make install && \
         rm -rf ${DIR}
 ### libvorbis https://xiph.org/vorbis/
-RUN \
+RUN set -xe && \
         DIR=/tmp/vorbis && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -175,7 +186,7 @@ RUN \
         make install && \
         rm -rf ${DIR}
 ### libtheora http://www.theora.org/
-RUN \
+RUN set -xe && \
         DIR=/tmp/theora && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -187,7 +198,7 @@ RUN \
         make install && \
         rm -rf ${DIR}
 ### libvpx https://www.webmproject.org/code/
-RUN \
+RUN set -xe && \
         DIR=/tmp/vpx && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -199,7 +210,7 @@ RUN \
         make install && \
         rm -rf ${DIR}
 ### libwebp https://developers.google.com/speed/webp/
-RUN \
+RUN set -xe && \
         DIR=/tmp/vebp && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -210,7 +221,7 @@ RUN \
         make install && \
         rm -rf ${DIR}
 ### libmp3lame http://lame.sourceforge.net/
-RUN \
+RUN set -xe && \
         DIR=/tmp/lame && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -221,7 +232,7 @@ RUN \
         make install && \
         rm -rf ${DIR}
 ### xvid https://www.xvid.com/
-RUN \
+RUN set -xe && \
         DIR=/tmp/xvid && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -234,7 +245,8 @@ RUN \
         make install && \
         rm -rf ${DIR}
 ### fdk-aac https://github.com/mstorsjo/fdk-aac
-RUN \
+# not update to v2 https://askubuntu.com/questions/1074181/failure-in-ffmpeg-compilation-on-ubuntu-16-04-recipe-for-target-libavcodec-li
+RUN set -xe && \
         DIR=/tmp/fdk-aac && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -245,8 +257,8 @@ RUN \
         make && \
         make install && \
         rm -rf ${DIR}
-## openjpeg https://github.com/uclouvain/openjpeg
-RUN \
+### openjpeg https://github.com/uclouvain/openjpeg
+RUN set -xe && \
         DIR=/tmp/openjpeg && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -256,8 +268,8 @@ RUN \
         make && \
         make install && \
         rm -rf ${DIR}
-## freetype https://www.freetype.org/
-RUN  \
+### freetype https://www.freetype.org/
+RUN set -xe && \
         DIR=/tmp/freetype && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -268,8 +280,8 @@ RUN  \
         make && \
         make install && \
         rm -rf ${DIR}
-## libvstab https://github.com/georgmartius/vid.stab
-RUN  \
+### libvstab https://github.com/georgmartius/vid.stab
+RUN set -xe && \
         DIR=/tmp/vid.stab && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -280,9 +292,9 @@ RUN  \
         make && \
         make install && \
         rm -rf ${DIR}
-## fridibi https://www.fribidi.org/
+### fridibi https://www.fribidi.org/
 # + https://github.com/fribidi/fribidi/issues/8
-RUN  \
+RUN set -xe && \
         DIR=/tmp/fribidi && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -295,8 +307,8 @@ RUN  \
         make -j 1 && \
         make install && \
         rm -rf ${DIR}
-## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
-RUN  \
+### fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
+RUN set -xe && \
         DIR=/tmp/fontconfig && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -306,8 +318,8 @@ RUN  \
         make && \
         make install && \
         rm -rf ${DIR}
-## libass https://github.com/libass/libass
-RUN  \
+### libass https://github.com/libass/libass
+RUN set -xe && \
         DIR=/tmp/libass && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -319,8 +331,8 @@ RUN  \
         make && \
         make install && \
         rm -rf ${DIR}
-## kvazaar https://github.com/ultravideo/kvazaar
-RUN \
+### kvazaar https://github.com/ultravideo/kvazaar
+RUN set -xe && \
         DIR=/tmp/kvazaar && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
@@ -331,8 +343,8 @@ RUN \
         make && \
         make install && \
         rm -rf ${DIR}
-
-RUN \
+### libaom AV1 https://aomedia.googlesource.com/aom
+RUN set -xe && \
 	DIR=/tmp/aom && \
         git clone --branch ${AOM_VERSION} --depth 1 https://aomedia.googlesource.com/aom ${DIR} ; \
         cd ${DIR} ; \
@@ -344,15 +356,15 @@ RUN \
         make install ; \
         rm -rf ${DIR}
 
-## ffmpeg https://ffmpeg.org/
-RUN  \
+### ffmpeg https://ffmpeg.org/
+RUN set -xe && \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
         tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
 
 
 
-RUN \
+RUN set -xe && \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         ./configure \
         --disable-debug \
@@ -398,7 +410,8 @@ RUN \
         cp qt-faststart ${PREFIX}/bin
 
 ## cleanup
-RUN \
+RUN set -xe && \
+        rm -f /usr/local/bin/nasm /usr/local/bin/ndisasm && \
         ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
@@ -407,9 +420,9 @@ RUN \
 
 
 FROM        runtime-base AS release
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+LABEL maintainer="Julien Rottenberg <julien@rottenberg.info>"
 
-CMD         ["--help"]
+CMD         ["-version"]
 ENTRYPOINT  ["ffmpeg"]
 ENV         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
 
