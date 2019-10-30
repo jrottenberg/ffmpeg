@@ -59,7 +59,6 @@ RUN set -xe && \
         buildDeps="autoconf \
                    automake \
                    bzip2 \
-                   cmake \
                    expat-devel \
                    gcc \
                    gcc-c++ \
@@ -75,7 +74,10 @@ RUN set -xe && \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         yum --enablerepo=extras install -y epel-release && \
-        yum install -y ${buildDeps}
+        yum install -y ${buildDeps} && \
+        curl -sL https://cmake.org/files/v3.15/cmake-3.15.4-Linux-x86_64.tar.gz | tar -xz --strip-components=1 && \
+        cp -nR share/cmake-3.15 /usr/share/ && cp -n bin/* /usr/bin/
+
 ### nasm install
 RUN set -xe && \
         DIR=/tmp/nasm && mkdir "${DIR}" && cd "${DIR}" && \
