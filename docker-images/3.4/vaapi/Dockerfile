@@ -403,7 +403,7 @@ COPY --from=build /usr/local /usr/local/
 
 RUN set -xe && \
 	apt-get update -y && \
-	apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver && \
+	apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver intel-gpu-tools && \
 	rm -rf /var/lib/apt/lists/*
 
 # Let's make sure the app built correctly
