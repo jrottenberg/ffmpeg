@@ -65,7 +65,7 @@ for version in keep_version:
         docker_content = template.replace('%%ENV%%', env_content)
         docker_content = docker_content.replace('%%RUN%%', run_content)
         # OpenJpeg 2.1 is not supported in 2.8
-        if version[0:3] == '2.8':
+        if (version[0] < '3' or (version[0] == '3' and version[2] < '4')):
             docker_content = docker_content.replace('--enable-libopenjpeg', '')
             docker_content = docker_content.replace('--enable-libkvazaar', '')
         if (version != 'snapshot' and version[0] < '4') or variant == 'centos':
@@ -82,7 +82,7 @@ for version in keep_version:
             if (version[0] < '4') :
                 docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n      --enable-nvenc')
             # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
-            if (version[0] < '3' or (version[0] == '3' and version[2] < '3')) :
+            if (version[0] < '3' or (version[0] == '3' and version[2] < '3')):
                 docker_content = docker_content.replace('-ubuntu18.04', '-ubuntu16.04')
 
         # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues

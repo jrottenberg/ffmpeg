@@ -351,7 +351,7 @@ RUN set -xe && \
         --enable-libfreetype \
         --enable-libvidstab \
         --enable-libmp3lame \
-        --enable-libopenjpeg \
+         \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \
@@ -363,7 +363,7 @@ RUN set -xe && \
         --enable-nonfree \
         --enable-openssl \
         --enable-libfdk_aac \
-        --enable-libkvazaar \
+         \
         \
         --enable-postproc \
         --enable-small \
