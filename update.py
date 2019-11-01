@@ -73,6 +73,9 @@ for version in keep_version:
         if (version == 'snapshot' or version[0] >= '3') and variant == 'vaapi':
             docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n        --enable-vaapi')
 
+        # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
+        if variant == 'ubuntu' and (version[0] < '3' or (version[0] == '3' and version[2] < '2')):
+            docker_content = docker_content.replace('ubuntu:18.04', 'ubuntu:16.04')
         if variant == 'nvidia':
             docker_content = docker_content.replace('--extra-cflags="-I${PREFIX}/include"', '--extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/"')
             docker_content = docker_content.replace('--extra-ldflags="-L${PREFIX}/lib"', '--extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64/ -L/usr/local/cuda/lib32/"')
