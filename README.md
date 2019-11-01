@@ -279,6 +279,9 @@ docker build -t my-build docker-images/VERSION/
 
 # Make sure all variants pass before Travis does
 find ffmpeg/ -name Dockerfile | xargs dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
+
+# Check successful all builds
+./check_build_successful.sh
 ```
 
 

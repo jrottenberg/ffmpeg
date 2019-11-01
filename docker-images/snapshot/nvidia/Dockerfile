@@ -35,7 +35,7 @@ ENV        NVIDIA_HEADERS_VERSION=8.1.24.9
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ENV        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/ffmpeg/lib"
 ARG        PREFIX=/opt/ffmpeg
-ARG        MAKEFLAGS="-j12"
+ARG        MAKEFLAGS="-j2"
 
 ENV         AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.6 \
