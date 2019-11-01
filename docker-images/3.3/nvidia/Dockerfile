@@ -37,8 +37,7 @@ ENV        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/ffmpeg/lib"
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j12"
 
-ENV         FFMPEG_VERSION=3.3.9 \
-            AOM_VERSION=v1.0.0 \
+ENV         AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.6 \
             FONTCONFIG_VERSION=2.12.6 \
             FREETYPE_VERSION=2.10.1 \
@@ -357,12 +356,11 @@ RUN set -xe && \
         rm -rf ${DIR}
 
 ### ffmpeg https://ffmpeg.org/
+ENV FFMPEG_VERSION=3.3.9
 RUN set -xe && \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
         tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
-
-
 
 RUN set -xe && \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \

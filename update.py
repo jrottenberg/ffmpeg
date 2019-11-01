@@ -61,7 +61,7 @@ for version in keep_version:
             template = tmpfile.read()
         with open('templates/Dockerfile-run', 'r') as tmpfile:
             run_content = tmpfile.read()
-        env_content = env_content.replace('%%FFMPEG_VERSION%%', version)
+        run_content = run_content.replace('%%FFMPEG_VERSION%%', version)
         docker_content = template.replace('%%ENV%%', env_content)
         docker_content = docker_content.replace('%%RUN%%', run_content)
         # OpenJpeg 2.1 is not supported in 2.8
