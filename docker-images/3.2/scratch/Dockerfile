@@ -388,6 +388,7 @@ RUN set -xe \
 ### Release Stage
 FROM        scratch AS release
 LABEL maintainer="Julien Rottenberg <julien@rottenberg.info>"
+LABEL ffmpeg=true
 
 CMD         ["-version"]
 ENTRYPOINT  ["/bin/ffmpeg"]
