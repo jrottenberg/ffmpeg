@@ -93,32 +93,7 @@ RUN set -xe && \
         make && \
         make install && \
         rm -rf ${DIR}
-### x264 http://www.videolan.org/developers/x264.html
-ARG X264_VERSION=20191009-2245-stable
-RUN set -xe && \
-        DIR=/tmp/x264 && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sL https://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
-        tar -jx --strip-components=1 && \
-        ./configure --prefix="${PREFIX}" --enable-shared --enable-pic --disable-cli && \
-        make && \
-        make install && \
-        rm -rf ${DIR}
-### x265 http://x265.org/
-ARG X265_VERSION=3.2
-RUN set -xe && \
-        DIR=/tmp/x265 && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sL https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
-        tar -zx && \
-        cd x265_${X265_VERSION}/build/linux && \
-        sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
-        sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh && \
-        ./multilib.sh && \
-        make -C 8bit install && \
-        rm -rf ${DIR}
+
 ### libogg https://www.xiph.org/ogg/
 ARG OGG_VERSION=1.3.2
 ARG OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692 libogg-1.3.2.tar.gz"
@@ -351,6 +326,33 @@ RUN set -xe && \
         cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 ..; \
         make ; \
         make install ; \
+        rm -rf ${DIR}
+
+### x264 http://www.videolan.org/developers/x264.html
+ARG X264_VERSION=20191009-2245-stable
+RUN set -xe && \
+        DIR=/tmp/x264 && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sL https://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 | \
+        tar -jx --strip-components=1 && \
+        ./configure --prefix="${PREFIX}" --enable-shared --enable-pic --disable-cli && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+### x265 http://x265.org/
+ARG X265_VERSION=3.1.1
+RUN set -xe && \
+        DIR=/tmp/x265 && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sL https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
+        tar -zx && \
+        cd x265_${X265_VERSION}/build/linux && \
+        sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
+        sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh && \
+        ./multilib.sh && \
+        make -C 8bit install && \
         rm -rf ${DIR}
 
 ### ffmpeg https://ffmpeg.org/
