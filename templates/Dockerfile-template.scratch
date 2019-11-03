@@ -13,8 +13,6 @@ ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
 
-ENV         %%ENV%%
-
 RUN set -xe && \
         buildDeps="autoconf \
                    automake \
@@ -29,6 +27,7 @@ RUN set -xe && \
                    file \
                    g++ \
                    gcc \
+                   gnutls-dev \
                    gperf \
                    libtool \
                    make \

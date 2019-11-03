@@ -7,7 +7,7 @@
 FROM        alpine:3.8 AS base
 
 RUN set -xe && \
-        apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat git tzdata
+        apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat git tzdata gnutls
 
 FROM        base AS build
 
@@ -17,8 +17,6 @@ ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
-
-ENV         %%ENV%%
 
 RUN set -xe && \
         buildDeps="autoconf \
@@ -34,6 +32,7 @@ RUN set -xe && \
                    file \
                    g++ \
                    gcc \
+                   gnutls-dev \
                    gperf \
                    libtool \
                    make \

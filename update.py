@@ -55,16 +55,13 @@ for version in keep_version:
             travis.append(' - VERSION=%s VARIANT=%s' % (version[0:3], variant))
             azure.append('      %s_%s:\n        VERSION: %s\n        VARIANT: %s' % (version[0:3].replace('.', '_'), variant, version[0:3], variant))
 
-        with open('templates/Dockerfile-env', 'r') as tmpfile:
-            env_content = tmpfile.read()
         with open('templates/Dockerfile-template.' + variant, 'r') as tmpfile:
             template = tmpfile.read()
         with open('templates/Dockerfile-run', 'r') as tmpfile:
             run_content = tmpfile.read()
         run_content = run_content.replace('%%FFMPEG_VERSION%%', version)
-        docker_content = template.replace('%%ENV%%', env_content)
-        docker_content = docker_content.replace('%%RUN%%', run_content)
-        # OpenJpeg 2.1 is not supported in 2.8
+        docker_content = template.replace('%%RUN%%', run_content)
+        # OpenJpeg 2.3 is not supported in  < 3.3
         if (version[0] < '3' or (version[0] == '3' and version[2] < '4')):
             docker_content = docker_content.replace('--enable-libopenjpeg', '')
             docker_content = docker_content.replace('--enable-libkvazaar', '')
@@ -74,8 +71,8 @@ for version in keep_version:
             docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n        --enable-vaapi')
 
         # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
-        if variant == 'ubuntu' and (version[0] < '3' or (version[0] == '3' and version[2] < '2')):
-            docker_content = docker_content.replace('ubuntu:18.04', 'ubuntu:16.04')
+        # if variant == 'ubuntu' and (version[0] < '3' or (version[0] == '3' and version[2] < '2')):
+        #     docker_content = docker_content.replace('ubuntu:18.04', 'ubuntu:16.04')
         if variant == 'nvidia':
             docker_content = docker_content.replace('--extra-cflags="-I${PREFIX}/include"', '--extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/"')
             docker_content = docker_content.replace('--extra-ldflags="-L${PREFIX}/lib"', '--extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64/ -L/usr/local/cuda/lib32/"')
@@ -85,14 +82,14 @@ for version in keep_version:
             if (version[0] < '4') :
                 docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n      --enable-nvenc')
             # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
-            if (version[0] < '3' or (version[0] == '3' and version[2] < '3')):
-                docker_content = docker_content.replace('-ubuntu18.04', '-ubuntu16.04')
+            # if (version[0] < '3' or (version[0] == '3' and version[2] < '3')):
+                # docker_content = docker_content.replace('-ubuntu18.04', '-ubuntu16.04')
 
         # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
-        if variant == 'vaapi' and (version[0] < '3' or (version[0] == '3' and version[2] < '3')):
-            docker_content = docker_content.replace('ubuntu:18.04', 'ubuntu:16.04')
-            docker_content = docker_content.replace('libva-drm2', 'libva-drm1')
-            docker_content = docker_content.replace('libva2', 'libva1')
+        # if variant == 'vaapi' and (version[0] < '3' or (version[0] == '3' and version[2] < '3')):
+            # docker_content = docker_content.replace('ubuntu:18.04', 'ubuntu:16.04')
+            # docker_content = docker_content.replace('libva-drm2', 'libva-drm1')
+            # docker_content = docker_content.replace('libva2', 'libva1')
 
         d = os.path.dirname(dockerfile)
         if not os.path.exists(d):

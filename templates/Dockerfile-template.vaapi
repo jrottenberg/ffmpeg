@@ -11,7 +11,7 @@ WORKDIR     /tmp/workdir
 
 RUN set -xe && \
         apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 tzdata && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 tzdata gnutls-bin && \
         apt-get autoremove -y && \
         apt-get clean -y
 
@@ -21,8 +21,6 @@ ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
-
-ENV         %%ENV%%
 
 RUN set -xe && \
          buildDeps="autoconf \
@@ -34,6 +32,7 @@ RUN set -xe && \
                     g++ \
                     gcc \
                     git \
+                    gnutls-dev \
                     gperf \
                     libtool \
                     make \
