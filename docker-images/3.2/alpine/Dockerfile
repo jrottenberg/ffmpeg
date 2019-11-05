@@ -303,7 +303,7 @@ RUN set -xe && \
         rm -rf ${DIR}
 
 ### x264 http://www.videolan.org/developers/x264.html
-ARG X264_VERSION=20191009-2245-stable
+ARG X264_VERSION=20170226-2245-stable
 RUN set -xe && \
         DIR=/tmp/x264 && \
         mkdir -p ${DIR} && \
