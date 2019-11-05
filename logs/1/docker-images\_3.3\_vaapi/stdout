@@ -1,0 +1,4663 @@
+Sending build context to Docker daemon  17.92kB
+Step 1/73 : FROM        ubuntu:18.04 AS base
+ ---> cf0f3ca922e0
+Step 2/73 : WORKDIR     /tmp/workdir
+ ---> Using cache
+ ---> d8521871d262
+Step 3/73 : RUN set -xe &&         apt-get -yqq update &&         apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 tzdata gnutls-bin &&         apt-get autoremove -y &&         apt-get clean -y
+ ---> Using cache
+ ---> c3edae8e8da5
+Step 4/73 : FROM base as build
+ ---> c3edae8e8da5
+Step 5/73 : ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
+ ---> Using cache
+ ---> 7549078d6be7
+Step 6/73 : ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
+ ---> Using cache
+ ---> fc399a756f7f
+Step 7/73 : ARG        PREFIX=/opt/ffmpeg
+ ---> Using cache
+ ---> 2a639846e7da
+Step 8/73 : ARG        MAKEFLAGS="-j2"
+ ---> Using cache
+ ---> 6f8fec1ff48b
+Step 9/73 : RUN set -xe &&          buildDeps="autoconf                     automake                     cmake                     curl                     bzip2                     libexpat1-dev                     g++                     gcc                     git                     gnutls-dev                     gperf                     libtool                     make                     perl                     pkg-config                     python                     libssl-dev                     yasm                     libva-dev                     zlib1g-dev" &&         apt-get -yqq update &&         apt-get install -yq --no-install-recommends ${buildDeps}
+ ---> Using cache
+ ---> 24c7ea05ff9d
+Step 10/73 : ENV SRC=/usr/local
+ ---> Using cache
+ ---> 55ee93fb229e
+Step 11/73 : ARG NASM_VERSION=2.14.02
+ ---> Using cache
+ ---> 64becb0f3051
+Step 12/73 : RUN set -xe &&         DIR=/tmp/nasm && mkdir "${DIR}" && cd "${DIR}" &&         curl -sL http://www.nasm.us/pub/nasm/releasebuilds/${NASM_VERSION}/nasm-${NASM_VERSION}.tar.xz |         tar -Jx --strip-components=1 &&         ./configure &&         make "${MAKEFLAGS}" &&         make install
+ ---> Using cache
+ ---> b7e72d48c266
+Step 13/73 : ARG OPENCOREAMR_VERSION=0.1.5
+ ---> Using cache
+ ---> 9662390f74cf
+Step 14/73 : RUN set -xe &&         DIR=/tmp/opencore-amr &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sL https://versaweb.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz |         tar -zx --strip-components=1 &&         ./configure --prefix="${PREFIX}" --enable-shared  &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> 5f2f52f48169
+Step 15/73 : ARG OGG_VERSION=1.3.2
+ ---> Using cache
+ ---> 98153156072d
+Step 16/73 : ARG OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692 libogg-1.3.2.tar.gz"
+ ---> Using cache
+ ---> 387717534834
+Step 17/73 : RUN set -xe &&         DIR=/tmp/ogg &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sLO http://downloads.xiph.org/releases/ogg/libogg-${OGG_VERSION}.tar.gz &&         echo ${OGG_SHA256SUM} | sha256sum --check &&         tar -zx --strip-components=1 -f libogg-${OGG_VERSION}.tar.gz &&         ./configure --prefix="${PREFIX}" --enable-shared  &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> eab0e683fe9b
+Step 18/73 : ARG OPUS_VERSION=1.3.1
+ ---> Using cache
+ ---> a982e45e1720
+Step 19/73 : ARG OPUS_SHA256SUM="65b58e1e25b2a114157014736a3d9dfeaad8d41be1c8179866f144a2fb44ff9d  opus-1.3.1.tar.gz"
+ ---> Using cache
+ ---> 162ff24d30ab
+Step 20/73 : RUN set -xe &&         DIR=/tmp/opus &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sLO https://archive.mozilla.org/pub/opus/opus-${OPUS_VERSION}.tar.gz &&         echo ${OPUS_SHA256SUM} | sha256sum --check &&         tar -zx --strip-components=1 -f opus-${OPUS_VERSION}.tar.gz &&         autoreconf -fiv &&         ./configure --prefix="${PREFIX}" --enable-shared &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> 0a4c81779028
+Step 21/73 : ARG VORBIS_VERSION=1.3.6
+ ---> Using cache
+ ---> 14bff3b06a2f
+Step 22/73 : ARG VORBIS_SHA256SUM="6ed40e0241089a42c48604dc00e362beee00036af2d8b3f46338031c9e0351cb  libvorbis-1.3.6.tar.gz"
+ ---> Using cache
+ ---> 60a1c1faed48
+Step 23/73 : RUN set -xe &&         DIR=/tmp/vorbis &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sLO http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VERSION}.tar.gz &&         echo ${VORBIS_SHA256SUM} | sha256sum --check &&         tar -zx --strip-components=1 -f libvorbis-${VORBIS_VERSION}.tar.gz &&         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> 0ae30f68c334
+Step 24/73 : ARG THEORA_VERSION=1.1.1
+ ---> Using cache
+ ---> ba78b85b14c3
+Step 25/73 : ARG THEORA_SHA256SUM="40952956c47811928d1e7922cda3bc1f427eb75680c3c37249c91e949054916b libtheora-1.1.1.tar.gz"
+ ---> Using cache
+ ---> bb2c4cca29bf
+Step 26/73 : RUN set -xe &&         DIR=/tmp/theora &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz &&         echo ${THEORA_SHA256SUM} | sha256sum --check &&         tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz &&         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> c6077bc0618f
+Step 27/73 : ARG VPX_VERSION=1.8.0
+ ---> Using cache
+ ---> 266c0354a5e8
+Step 28/73 : RUN set -xe &&         DIR=/tmp/vpx &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sL https://codeload.github.com/webmproject/libvpx/tar.gz/v${VPX_VERSION} |         tar -zx --strip-components=1 &&         ./configure --prefix="${PREFIX}" --enable-vp8 --enable-vp9 --enable-vp9-highbitdepth --enable-pic --enable-shared         --disable-debug --disable-examples --disable-docs --disable-install-bins  &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> b8114e594efa
+Step 29/73 : ARG WEBP_VERSION=1.0.2
+ ---> Using cache
+ ---> 6ce8c7b5b6f8
+Step 30/73 : RUN set -xe &&         DIR=/tmp/webp &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${WEBP_VERSION}.tar.gz |         tar -zx --strip-components=1 &&         ./configure --prefix="${PREFIX}" --enable-shared  &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> a2d31b688049
+Step 31/73 : ARG LAME_VERSION=3.100
+ ---> Using cache
+ ---> dc8d26eb8f19
+Step 32/73 : RUN set -xe &&         DIR=/tmp/lame &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sL https://versaweb.dl.sourceforge.net/project/lame/lame/$(echo ${LAME_VERSION} | sed -e 's/[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)/\1.\2/')/lame-${LAME_VERSION}.tar.gz |         tar -zx --strip-components=1 &&         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --enable-shared --enable-nasm --enable-pic --disable-frontend &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> 08b808d52e6c
+Step 33/73 : ARG XVID_VERSION=1.3.4
+ ---> Using cache
+ ---> 5e85c8fbcb8d
+Step 34/73 : ARG XVID_SHA256SUM="4e9fd62728885855bc5007fe1be58df42e5e274497591fec37249e1052ae316f xvidcore-1.3.4.tar.gz"
+ ---> Using cache
+ ---> 426facfb9bf1
+Step 35/73 : RUN set -xe &&         DIR=/tmp/xvid &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sLO http://downloads.xvid.org/downloads/xvidcore-${XVID_VERSION}.tar.gz &&         echo ${XVID_SHA256SUM} | sha256sum --check &&         tar -zx -f xvidcore-${XVID_VERSION}.tar.gz &&         cd xvidcore/build/generic &&         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --datadir="${DIR}" --enable-shared --enable-shared &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> 71a8f089fd1c
+Step 36/73 : ARG FDKAAC_VERSION=0.1.6
+ ---> Using cache
+ ---> 3a91b42520fc
+Step 37/73 : RUN set -xe &&         DIR=/tmp/fdk-aac &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sL https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz |         tar -zx --strip-components=1 &&         autoreconf -fiv &&         ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}" &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> 2493d528cf18
+Step 38/73 : ARG OPENJPEG_VERSION=2.3.1
+ ---> Using cache
+ ---> 476788de607c
+Step 39/73 : RUN set -xe &&         DIR=/tmp/openjpeg &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sL https://github.com/uclouvain/openjpeg/archive/v${OPENJPEG_VERSION}.tar.gz |         tar -zx --strip-components=1 &&         cmake -DBUILD_THIRDPARTY:BOOL=ON -DCMAKE_INSTALL_PREFIX="${PREFIX}" . &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> 5d19d166f756
+Step 40/73 : ARG FREETYPE_VERSION=2.10.1
+ ---> Using cache
+ ---> 8ca2a91a9fb9
+Step 41/73 : ARG FREETYPE_SHA256SUM="3a60d391fd579440561bf0e7f31af2222bc610ad6ce4d9d7bd2165bca8669110  freetype-2.10.1.tar.gz"
+ ---> Using cache
+ ---> 8dded48f21ef
+Step 42/73 : RUN set -xe &&         DIR=/tmp/freetype &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sLO https://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.gz &&         echo ${FREETYPE_SHA256SUM} | sha256sum --check &&         tar -zx --strip-components=1 -f freetype-${FREETYPE_VERSION}.tar.gz &&         ./configure --prefix="${PREFIX}" --disable-static --enable-shared &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> 099fdb5c0034
+Step 43/73 : ARG LIBVIDSTAB_VERSION=1.1.0
+ ---> Using cache
+ ---> 0cbfa8ece154
+Step 44/73 : ARG LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb v1.1.0.tar.gz"
+ ---> Using cache
+ ---> 216a857fedf3
+Step 45/73 : RUN set -xe &&         DIR=/tmp/vid.stab &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sLO https://github.com/georgmartius/vid.stab/archive/v${LIBVIDSTAB_VERSION}.tar.gz &&        echo ${LIBVIDSTAB_SHA256SUM} | sha256sum --check &&         tar -zx --strip-components=1 -f v${LIBVIDSTAB_VERSION}.tar.gz &&         cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> 32e61821d5a3
+Step 46/73 : ARG FRIBIDI_VERSION=0.19.7
+ ---> Using cache
+ ---> 5b1ae03ade50
+Step 47/73 : ARG FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8 0.19.7.tar.gz"
+ ---> Using cache
+ ---> 7b9b550bd1f7
+Step 48/73 : RUN set -xe &&         DIR=/tmp/fribidi &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sLO https://github.com/fribidi/fribidi/archive/${FRIBIDI_VERSION}.tar.gz &&         echo ${FRIBIDI_SHA256SUM} | sha256sum --check &&         tar -zx --strip-components=1 -f ${FRIBIDI_VERSION}.tar.gz &&         sed -i 's/^SUBDIRS =.*/SUBDIRS=gen.tab charset lib/' Makefile.am &&         ./bootstrap --no-config &&         ./configure -prefix="${PREFIX}" --disable-static --enable-shared &&         make -j 1 &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> 6b3874dc5749
+Step 49/73 : ARG FONTCONFIG_VERSION=2.12.6
+ ---> Using cache
+ ---> d590ab08b932
+Step 50/73 : RUN set -xe &&         DIR=/tmp/fontconfig &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sLO https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 &&        tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2 &&         ./configure -prefix="${PREFIX}" --disable-static --enable-shared &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> 5cceec94b29a
+Step 51/73 : ARG LIBASS_VERSION=0.14.0
+ ---> Using cache
+ ---> e9b65b92e30c
+Step 52/73 : ARG LIBASS_SHA256SUM="82e70ee1f9afe2e54ab4bf6510b83bb563fcb2af978f0f9da82e2dbc9ae0fd72  0.14.0.tar.gz"
+ ---> Using cache
+ ---> a51855def331
+Step 53/73 : RUN set -xe &&         DIR=/tmp/libass &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sLO https://github.com/libass/libass/archive/${LIBASS_VERSION}.tar.gz &&        echo ${LIBASS_SHA256SUM} | sha256sum --check &&         tar -zx --strip-components=1 -f ${LIBASS_VERSION}.tar.gz &&         ./autogen.sh &&         ./configure -prefix="${PREFIX}" --disable-static --enable-shared &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> d6ef9920a765
+Step 54/73 : ARG KVAZAAR_VERSION=1.2.0
+ ---> Using cache
+ ---> 80ab38422b26
+Step 55/73 : RUN set -xe &&         DIR=/tmp/kvazaar &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sLO https://github.com/ultravideo/kvazaar/archive/v${KVAZAAR_VERSION}.tar.gz &&        tar -zx --strip-components=1 -f v${KVAZAAR_VERSION}.tar.gz &&         ./autogen.sh &&         ./configure -prefix="${PREFIX}" --disable-static --enable-shared &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> d0ca4e2bdbc6
+Step 56/73 : ARG AOM_VERSION=v1.0.0
+ ---> Using cache
+ ---> 7e65844bc081
+Step 57/73 : RUN set -xe && 	DIR=/tmp/aom &&         git clone --branch ${AOM_VERSION} --depth 1 https://aomedia.googlesource.com/aom ${DIR} ;         cd ${DIR} ;         rm -rf CMakeCache.txt CMakeFiles ;         mkdir -p ./aom_build ;         cd ./aom_build ;         cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 ..;         make ;         make install ;         rm -rf ${DIR}
+ ---> Using cache
+ ---> cca0c26e03f1
+Step 58/73 : ARG X264_VERSION=20170226-2245-stable
+ ---> Using cache
+ ---> 822f0218f8ff
+Step 59/73 : RUN set -xe &&         DIR=/tmp/x264 &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sL https://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 |         tar -jx --strip-components=1 &&         ./configure --prefix="${PREFIX}" --enable-shared --enable-pic --disable-cli &&         make &&         make install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> d01f0ae669ff
+Step 60/73 : ARG X265_VERSION=3.1.1
+ ---> Using cache
+ ---> 03967a72c52d
+Step 61/73 : RUN set -xe &&         DIR=/tmp/x265 &&         mkdir -p ${DIR} &&         cd ${DIR} &&         curl -sL https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  |         tar -zx &&         cd x265_${X265_VERSION}/build/linux &&         sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh &&         sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh &&         ./multilib.sh &&         make -C 8bit install &&         rm -rf ${DIR}
+ ---> Using cache
+ ---> b1642842fdaf
+Step 62/73 : ENV FFMPEG_VERSION=3.3.9
+ ---> Running in a322e578f7a9
+Removing intermediate container a322e578f7a9
+ ---> cdf9cb7e384a
+Step 63/73 : RUN set -xe &&         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} &&         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 &&         tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
+ ---> Running in e6e44a17ece6
+[91m+ DIR=/tmp/ffmpeg
++ mkdir -p /tmp/ffmpeg
+[0m[91m+ cd /tmp/ffmpeg
++ curl -sLO https://ffmpeg.org/releases/ffmpeg-3.3.9.tar.bz2
+[0m[91m+ tar -jx --strip-components=1 -f ffmpeg-3.3.9.tar.bz2
+[0mRemoving intermediate container e6e44a17ece6
+ ---> baf3336d064f
+Step 64/73 : RUN set -xe &&         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} &&         ./configure         --disable-debug         --disable-doc         --disable-ffplay         --enable-vaapi         --enable-shared         --enable-avresample         --enable-libopencore-amrnb         --enable-libopencore-amrwb         --enable-gpl         --enable-libass         --enable-libfreetype         --enable-libvidstab         --enable-libmp3lame                  --enable-libopus         --enable-libtheora         --enable-libvorbis         --enable-libvpx         --enable-libwebp         --enable-libx265         --enable-libxvid         --enable-libx264         --enable-nonfree         --enable-gnutls         --enable-libfdk_aac                          --enable-postproc         --enable-small         --enable-version3         --extra-cflags="-I${PREFIX}/include"         --extra-ldflags="-L${PREFIX}/lib"         --extra-libs=-ldl         --prefix="${PREFIX}" &&         make &&         make install &&         make distclean &&         hash -r &&         cd tools &&         make qt-faststart &&         cp qt-faststart ${PREFIX}/bin
+ ---> Running in 5244cf018fcd
+[91m+ DIR=/tmp/ffmpeg
++ mkdir -p /tmp/ffmpeg
+[0m[91m+ cd /tmp/ffmpeg
++ ./configure --disable-debug --disable-doc --disable-ffplay --enable-vaapi --enable-shared --enable-avresample --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-gpl --enable-libass --enable-libfreetype --enable-libvidstab --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxvid --enable-libx264 --enable-nonfree --enable-gnutls --enable-libfdk_aac --enable-postproc --enable-small --enable-version3 --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib --extra-libs=-ldl --prefix=/opt/ffmpeg
+[0minstall prefix            /opt/ffmpeg
+source path               .
+C compiler                gcc
+C library                 glibc
+ARCH                      x86 (generic)
+big-endian                no
+runtime cpu detection     yes
+yasm                      yes
+MMX enabled               yes
+MMXEXT enabled            yes
+3DNow! enabled            yes
+3DNow! extended enabled   yes
+SSE enabled               yes
+SSSE3 enabled             yes
+AESNI enabled             yes
+AVX enabled               yes
+XOP enabled               yes
+FMA3 enabled              yes
+FMA4 enabled              yes
+i686 features enabled     yes
+CMOV is fast              yes
+EBX available             yes
+EBP available             yes
+debug symbols             no
+strip symbols             yes
+optimize for size         yes
+optimizations             yes
+static                    yes
+shared                    yes
+postprocessing support    yes
+network support           yes
+threading support         pthreads
+safe bitstream reader     yes
+texi2html enabled         no
+perl enabled              yes
+pod2man enabled           yes
+makeinfo enabled          no
+makeinfo supports HTML    no
+
+External libraries:
+gnutls			libopencore_amrwb	libwebp
+iconv			libopus			libx264
+libass			libtheora		libx265
+libfdk_aac		libvidstab		libxvid
+libfreetype		libvorbis		xlib
+libmp3lame		libvpx			zlib
+libopencore_amrnb
+
+External libraries providing hardware acceleration:
+cuda			nvenc			vaapi
+cuvid
+
+Libraries:
+avcodec			avformat		postproc
+avdevice		avresample		swresample
+avfilter		avutil			swscale
+
+Programs:
+ffmpeg			ffprobe			ffserver
+
+Enabled decoders:
+aac			aura			ffv1
+aac_fixed		aura2			ffvhuff
+aac_latm		avrn			ffwavesynth
+aasc			avrp			fic
+ac3			avs			flac
+ac3_fixed		avui			flashsv
+adpcm_4xm		ayuv			flashsv2
+adpcm_adx		bethsoftvid		flic
+adpcm_afc		bfi			flv
+adpcm_aica		bink			fmvc
+adpcm_ct		binkaudio_dct		fourxm
+adpcm_dtk		binkaudio_rdft		fraps
+adpcm_ea		bintext			frwu
+adpcm_ea_maxis_xa	bmp			g2m
+adpcm_ea_r1		bmv_audio		g723_1
+adpcm_ea_r2		bmv_video		g729
+adpcm_ea_r3		brender_pix		gif
+adpcm_ea_xas		c93			gsm
+adpcm_g722		cavs			gsm_ms
+adpcm_g726		ccaption		h261
+adpcm_g726le		cdgraphics		h263
+adpcm_ima_amv		cdxl			h263i
+adpcm_ima_apc		cfhd			h263p
+adpcm_ima_dat4		cinepak			h264
+adpcm_ima_dk3		clearvideo		h264_cuvid
+adpcm_ima_dk4		cljr			hap
+adpcm_ima_ea_eacs	cllc			hevc
+adpcm_ima_ea_sead	comfortnoise		hevc_cuvid
+adpcm_ima_iss		cook			hnm4_video
+adpcm_ima_oki		cpia			hq_hqa
+adpcm_ima_qt		cscd			hqx
+adpcm_ima_rad		cyuv			huffyuv
+adpcm_ima_smjpeg	dca			iac
+adpcm_ima_wav		dds			idcin
+adpcm_ima_ws		dfa			idf
+adpcm_ms		dirac			iff_ilbm
+adpcm_mtaf		dnxhd			imc
+adpcm_psx		dpx			indeo2
+adpcm_sbpro_2		dsd_lsbf		indeo3
+adpcm_sbpro_3		dsd_lsbf_planar		indeo4
+adpcm_sbpro_4		dsd_msbf		indeo5
+adpcm_swf		dsd_msbf_planar		interplay_acm
+adpcm_thp		dsicinaudio		interplay_dpcm
+adpcm_thp_le		dsicinvideo		interplay_video
+adpcm_vima		dss_sp			jacosub
+adpcm_xa		dst			jpeg2000
+adpcm_yamaha		dvaudio			jpegls
+aic			dvbsub			jv
+alac			dvdsub			kgv1
+alias_pix		dvvideo			kmvc
+als			dxa			lagarith
+amrnb			dxtory			libfdk_aac
+amrwb			dxv			libopencore_amrnb
+amv			eac3			libopencore_amrwb
+anm			eacmv			libopus
+ansi			eamad			libvorbis
+ape			eatgq			libvpx_vp8
+apng			eatgv			libvpx_vp9
+ass			eatqi			loco
+asv1			eightbps		m101
+asv2			eightsvx_exp		mace3
+atrac1			eightsvx_fib		mace6
+atrac3			escape124		magicyuv
+atrac3al		escape130		mdec
+atrac3p			evrc			metasound
+atrac3pal		exr			microdvd
+mimic			pcm_s24le		smvjpeg
+mjpeg			pcm_s24le_planar	snow
+mjpeg_cuvid		pcm_s32be		sol_dpcm
+mjpegb			pcm_s32le		sonic
+mlp			pcm_s32le_planar	sp5x
+mmvideo			pcm_s64be		speedhq
+motionpixels		pcm_s64le		srt
+movtext			pcm_s8			ssa
+mp1			pcm_s8_planar		stl
+mp1float		pcm_u16be		subrip
+mp2			pcm_u16le		subviewer
+mp2float		pcm_u24be		subviewer1
+mp3			pcm_u24le		sunrast
+mp3adu			pcm_u32be		svq1
+mp3adufloat		pcm_u32le		svq3
+mp3float		pcm_u8			tak
+mp3on4			pcm_zork		targa
+mp3on4float		pcx			targa_y216
+mpc7			pgm			tdsc
+mpc8			pgmyuv			text
+mpeg1_cuvid		pgssub			theora
+mpeg1video		pictor			thp
+mpeg2_cuvid		pixlet			tiertexseqvideo
+mpeg2video		pjs			tiff
+mpeg4			png			tmv
+mpeg4_cuvid		ppm			truehd
+mpegvideo		prores			truemotion1
+mpl2			prores_lgpl		truemotion2
+msa1			psd			truemotion2rt
+msmpeg4v1		ptx			truespeech
+msmpeg4v2		qcelp			tscc
+msmpeg4v3		qdm2			tscc2
+msrle			qdmc			tta
+mss1			qdraw			twinvq
+mss2			qpeg			txd
+msvideo1		qtrle			ulti
+mszh			r10k			utvideo
+mts2			r210			v210
+mvc1			ra_144			v210x
+mvc2			ra_288			v308
+mxpeg			ralf			v408
+nellymoser		rawvideo		v410
+nuv			realtext		vb
+on2avc			rl2			vble
+opus			roq			vc1
+paf_audio		roq_dpcm		vc1_cuvid
+paf_video		rpza			vc1image
+pam			rscc			vcr1
+pbm			rv10			vmdaudio
+pcm_alaw		rv20			vmdvideo
+pcm_bluray		rv30			vmnc
+pcm_dvd			rv40			vorbis
+pcm_f16le		s302m			vp3
+pcm_f24le		sami			vp5
+pcm_f32be		sanm			vp6
+pcm_f32le		scpr			vp6a
+pcm_f64be		screenpresso		vp6f
+pcm_f64le		sdx2_dpcm		vp7
+pcm_lxf			sgi			vp8
+pcm_mulaw		sgirle			vp8_cuvid
+pcm_s16be		sheervideo		vp9
+pcm_s16be_planar	shorten			vp9_cuvid
+pcm_s16le		sipr			vplayer
+pcm_s16le_planar	smackaud		vqa
+pcm_s24be		smacker			wavpack
+pcm_s24daud		smc			webp
+webvtt			ws_snd1			xsub
+wmalossless		xan_dpcm		xwd
+wmapro			xan_wc3			y41p
+wmav1			xan_wc4			ylc
+wmav2			xbin			yop
+wmavoice		xbm			yuv4
+wmv1			xface			zero12v
+wmv2			xl			zerocodec
+wmv3			xma1			zlib
+wmv3image		xma2			zmbv
+wnv1			xpm
+
+Enabled encoders:
+a64multi		libvorbis		pcm_u8
+a64multi5		libvpx_vp8		pcx
+aac			libvpx_vp9		pgm
+ac3			libwebp			pgmyuv
+ac3_fixed		libx264			png
+adpcm_adx		libx264rgb		ppm
+adpcm_g722		libx265			prores
+adpcm_g726		libxvid			prores_aw
+adpcm_ima_qt		ljpeg			prores_ks
+adpcm_ima_wav		mjpeg			qtrle
+adpcm_ms		mjpeg_vaapi		r10k
+adpcm_swf		mlp			r210
+adpcm_yamaha		movtext			ra_144
+alac			mp2			rawvideo
+alias_pix		mp2fixed		roq
+amv			mpeg1video		roq_dpcm
+apng			mpeg2_vaapi		rv10
+ass			mpeg2video		rv20
+asv1			mpeg4			s302m
+asv2			msmpeg4v2		sgi
+avrp			msmpeg4v3		snow
+avui			msvideo1		sonic
+ayuv			nellymoser		sonic_ls
+bmp			nvenc			srt
+cinepak			nvenc_h264		ssa
+cljr			nvenc_hevc		subrip
+comfortnoise		opus			sunrast
+dca			pam			svq1
+dnxhd			pbm			targa
+dpx			pcm_alaw		text
+dvbsub			pcm_f32be		tiff
+dvdsub			pcm_f32le		truehd
+dvvideo			pcm_f64be		tta
+eac3			pcm_f64le		utvideo
+ffv1			pcm_mulaw		v210
+ffvhuff			pcm_s16be		v308
+flac			pcm_s16be_planar	v408
+flashsv			pcm_s16le		v410
+flashsv2		pcm_s16le_planar	vc2
+flv			pcm_s24be		vorbis
+g723_1			pcm_s24daud		vp8_vaapi
+gif			pcm_s24le		wavpack
+h261			pcm_s24le_planar	webvtt
+h263			pcm_s32be		wmav1
+h263p			pcm_s32le		wmav2
+h264_nvenc		pcm_s32le_planar	wmv1
+h264_vaapi		pcm_s64be		wmv2
+hevc_nvenc		pcm_s64le		wrapped_avframe
+hevc_vaapi		pcm_s8			xbm
+huffyuv			pcm_s8_planar		xface
+jpeg2000		pcm_u16be		xsub
+jpegls			pcm_u16le		xwd
+libfdk_aac		pcm_u24be		y41p
+libmp3lame		pcm_u24le		yuv4
+libopencore_amrnb	pcm_u32be		zlib
+libopus			pcm_u32le		zmbv
+libtheora
+
+Enabled hwaccels:
+h263_vaapi		mpeg1_cuvid		vc1_vaapi
+h264_cuvid		mpeg2_cuvid		vp8_cuvid
+h264_vaapi		mpeg2_vaapi		vp9_cuvid
+hevc_cuvid		mpeg4_cuvid		vp9_vaapi
+hevc_vaapi		mpeg4_vaapi		wmv3_vaapi
+mjpeg_cuvid		vc1_cuvid
+
+Enabled parsers:
+aac			dvdsub			opus
+aac_latm		flac			png
+ac3			g729			pnm
+adx			gsm			rv30
+bmp			h261			rv40
+cavsvideo		h263			sipr
+cook			h264			tak
+dca			hevc			vc1
+dirac			mjpeg			vorbis
+dnxhd			mlp			vp3
+dpx			mpeg4video		vp8
+dvaudio			mpegaudio		vp9
+dvbsub			mpegvideo		xma
+dvd_nav
+
+Enabled demuxers:
+aa			flic			mgsts
+aac			flv			microdvd
+ac3			fourxm			mjpeg
+acm			frm			mjpeg_2000
+act			fsb			mlp
+adf			g722			mlv
+adp			g723_1			mm
+ads			g729			mmf
+adx			genh			mov
+aea			gif			mp3
+afc			gsm			mpc
+aiff			gxf			mpc8
+aix			h261			mpegps
+amr			h263			mpegts
+anm			h264			mpegtsraw
+apc			hevc			mpegvideo
+ape			hls			mpjpeg
+apng			hnm			mpl2
+aqtitle			ico			mpsub
+asf			idcin			msf
+asf_o			idf			msnwc_tcp
+ass			iff			mtaf
+ast			ilbc			mtv
+au			image2			musx
+avi			image2_alias_pix	mv
+avr			image2_brender_pix	mvi
+avs			image2pipe		mxf
+bethsoftvid		image_bmp_pipe		mxg
+bfi			image_dds_pipe		nc
+bfstm			image_dpx_pipe		nistsphere
+bink			image_exr_pipe		nsv
+bintext			image_j2k_pipe		nut
+bit			image_jpeg_pipe		nuv
+bmv			image_jpegls_pipe	ogg
+boa			image_pam_pipe		oma
+brstm			image_pbm_pipe		paf
+c93			image_pcx_pipe		pcm_alaw
+caf			image_pgm_pipe		pcm_f32be
+cavsvideo		image_pgmyuv_pipe	pcm_f32le
+cdg			image_pictor_pipe	pcm_f64be
+cdxl			image_png_pipe		pcm_f64le
+cine			image_ppm_pipe		pcm_mulaw
+concat			image_psd_pipe		pcm_s16be
+data			image_qdraw_pipe	pcm_s16le
+daud			image_sgi_pipe		pcm_s24be
+dcstr			image_sunrast_pipe	pcm_s24le
+dfa			image_tiff_pipe		pcm_s32be
+dirac			image_webp_pipe		pcm_s32le
+dnxhd			image_xpm_pipe		pcm_s8
+dsf			ingenient		pcm_u16be
+dsicin			ipmovie			pcm_u16le
+dss			ircam			pcm_u24be
+dts			iss			pcm_u24le
+dtshd			iv8			pcm_u32be
+dv			ivf			pcm_u32le
+dvbsub			ivr			pcm_u8
+dvbtxt			jacosub			pjs
+dxa			jv			pmp
+ea			live_flv		pva
+ea_cdata		lmlm4			pvf
+eac3			loas			qcp
+epaf			lrc			r3d
+ffm			lvf			rawvideo
+ffmetadata		lxf			realtext
+filmstrip		m4v			redspark
+flac			matroska		rl2
+rm			srt			vmd
+roq			stl			vobsub
+rpl			str			voc
+rsd			subviewer		vpk
+rso			subviewer1		vplayer
+rtp			sup			vqf
+rtsp			svag			w64
+sami			swf			wav
+sap			tak			wc3
+sbg			tedcaptions		webm_dash_manifest
+scc			thp			webvtt
+sdp			threedostr		wsaud
+sdr2			tiertexseq		wsd
+sds			tmv			wsvqa
+sdx			truehd			wtv
+segafilm		tta			wv
+shorten			tty			wve
+siff			txd			xa
+sln			v210			xbin
+smacker			v210x			xmv
+smjpeg			vag			xvag
+smush			vc1			xwma
+sol			vc1t			yop
+sox			vivo			yuv4mpegpipe
+spdif
+
+Enabled muxers:
+a64			image2			pcm_s24le
+ac3			image2pipe		pcm_s32be
+adts			ipod			pcm_s32le
+adx			ircam			pcm_s8
+aiff			ismv			pcm_u16be
+amr			ivf			pcm_u16le
+apng			jacosub			pcm_u24be
+asf			latm			pcm_u24le
+asf_stream		lrc			pcm_u32be
+ass			m4v			pcm_u32le
+ast			matroska		pcm_u8
+au			matroska_audio		psp
+avi			md5			rawvideo
+avm2			microdvd		rm
+bit			mjpeg			roq
+caf			mkvtimestamp_v2		rso
+cavsvideo		mlp			rtp
+crc			mmf			rtp_mpegts
+dash			mov			rtsp
+data			mp2			sap
+daud			mp3			scc
+dirac			mp4			segment
+dnxhd			mpeg1system		singlejpeg
+dts			mpeg1vcd		smjpeg
+dv			mpeg1video		smoothstreaming
+eac3			mpeg2dvd		sox
+f4v			mpeg2svcd		spdif
+ffm			mpeg2video		spx
+ffmetadata		mpeg2vob		srt
+fifo			mpegts			stream_segment
+filmstrip		mpjpeg			swf
+flac			mxf			tee
+flv			mxf_d10			tg2
+framecrc		mxf_opatom		tgp
+framehash		null			truehd
+framemd5		nut			tta
+g722			oga			uncodedframecrc
+g723_1			ogg			vc1
+gif			ogv			vc1t
+gsm			oma			voc
+gxf			opus			w64
+h261			pcm_alaw		wav
+h263			pcm_f32be		webm
+h264			pcm_f32le		webm_chunk
+hash			pcm_f64be		webm_dash_manifest
+hds			pcm_f64le		webp
+hevc			pcm_mulaw		webvtt
+hls			pcm_s16be		wtv
+ico			pcm_s16le		wv
+ilbc			pcm_s24be		yuv4mpegpipe
+
+Enabled protocols:
+async			httpproxy		rtmpts
+cache			https			rtp
+concat			icecast			srtp
+crypto			md5			subfile
+data			mmsh			tcp
+ffrtmphttp		mmst			tee
+file			pipe			tls_gnutls
+ftp			prompeg			udp
+gopher			rtmp			udplite
+hls			rtmps			unix
+http			rtmpt
+
+Enabled filters:
+abench			blackframe		framepack
+abitscope		blend			framerate
+acompressor		boxblur			framestep
+acrossfade		bwdif			fspp
+acrusher		cellauto		gblur
+adelay			channelmap		geq
+adrawgraph		channelsplit		gradfun
+aecho			chorus			haldclut
+aemphasis		chromakey		haldclutsrc
+aeval			ciescope		hdcd
+aevalsrc		codecview		hflip
+afade			color			highpass
+afftfilt		colorbalance		histeq
+aformat			colorchannelmixer	histogram
+agate			colorkey		hqdn3d
+ahistogram		colorlevels		hqx
+ainterleave		colormatrix		hstack
+alimiter		colorspace		hue
+allpass			compand			hwdownload
+allrgb			compensationdelay	hwmap
+allyuv			concat			hwupload
+aloop			convolution		hwupload_cuda
+alphaextract		copy			hysteresis
+alphamerge		cover_rect		idet
+amerge			crop			il
+ametadata		cropdetect		inflate
+amix			crystalizer		interlace
+amovie			curves			interleave
+anequalizer		datascope		join
+anoisesrc		dcshift			kerndeint
+anull			dctdnoiz		lenscorrection
+anullsink		deband			life
+anullsrc		decimate		loop
+apad			deflate			loudnorm
+aperms			deinterlace_vaapi	lowpass
+aphasemeter		dejudder		lut
+aphaser			delogo			lut2
+apulsator		deshake			lut3d
+arealtime		detelecine		lutrgb
+aresample		dilation		lutyuv
+areverse		displace		mandelbrot
+aselect			drawbox			maskedclamp
+asendcmd		drawgraph		maskedmerge
+asetnsamples		drawgrid		mcdeint
+asetpts			drawtext		mergeplanes
+asetrate		dynaudnorm		mestimate
+asettb			earwax			metadata
+ashowinfo		ebur128			midequalizer
+asidedata		edgedetect		minterpolate
+asplit			elbg			movie
+ass			eq			mpdecimate
+astats			equalizer		mptestsrc
+astreamselect		erosion			negate
+atadenoise		extractplanes		nlmeans
+atempo			extrastereo		nnedi
+atrim			fade			noformat
+avectorscope		fftfilt			noise
+avgblur			field			null
+bandpass		fieldhint		nullsink
+bandreject		fieldmatch		nullsrc
+bass			fieldorder		overlay
+bbox			find_rect		owdenoise
+bench			firequalizer		pad
+biquad			flanger			palettegen
+bitplanenoise		format			paletteuse
+blackdetect		fps			pan
+perms			setsar			super2xsai
+perspective		settb			swaprect
+phase			showcqt			swapuv
+pixdesctest		showfreqs		tblend
+pp			showinfo		telecine
+pp7			showpalette		testsrc
+premultiply		showspectrum		testsrc2
+prewitt			showspectrumpic		threshold
+psnr			showvolume		thumbnail
+pullup			showwaves		tile
+qp			showwavespic		tinterlace
+random			shuffleframes		transpose
+readeia608		shuffleplanes		treble
+readvitc		sidechaincompress	tremolo
+realtime		sidechaingate		trim
+remap			sidedata		unsharp
+removegrain		signalstats		uspp
+removelogo		signature		vaguedenoiser
+repeatfields		silencedetect		vectorscope
+replaygain		silenceremove		vflip
+resample		sine			vibrato
+reverse			smartblur		vidstabdetect
+rgbtestsrc		smptebars		vidstabtransform
+rotate			smptehdbars		vignette
+sab			sobel			volume
+scale			spectrumsynth		volumedetect
+scale2ref		split			vstack
+scale_vaapi		spp			w3fdif
+select			ssim			waveform
+selectivecolor		stereo3d		weave
+sendcmd			stereotools		xbr
+separatefields		stereowiden		yadif
+setdar			streamselect		yuvtestsrc
+setfield		subtitles		zoompan
+setpts
+
+Enabled bsfs:
+aac_adtstoasc		hevc_mp4toannexb	mpeg4_unpack_bframes
+chomp			imx_dump_header		noise
+dca_core		mjpeg2jpeg		remove_extradata
+dump_extradata		mjpega_dump_header	text2movsub
+extract_extradata	mov2textsub		vp9_superframe
+h264_mp4toannexb	mp3_header_decompress
+
+Enabled indevs:
+dv1394			lavfi			v4l2
+fbdev			oss
+
+Enabled outdevs:
+fbdev			oss			v4l2
+
+License: nonfree and unredistributable
+Creating configuration files ...
+[91m+ make
+[0mCC	libavdevice/alldevices.o
+CC	libavdevice/avdevice.o
+CC	libavdevice/fbdev_common.o
+CC	libavdevice/dv1394.o
+CC	libavdevice/fbdev_dec.o
+CC	libavdevice/fbdev_enc.o
+CC	libavdevice/lavfi.o
+CC	libavdevice/oss.o
+CC	libavdevice/oss_dec.o
+CC	libavdevice/oss_enc.o
+CC	libavdevice/timefilter.o
+CC	libavdevice/utils.o
+CC	libavdevice/v4l2-common.o
+CC	libavdevice/v4l2.o
+CC	libavdevice/v4l2enc.o
+CC	libavfilter/aeval.o
+CC	libavfilter/af_acrusher.o
+CC	libavfilter/af_adelay.o
+CC	libavfilter/af_aecho.o
+CC	libavfilter/af_aemphasis.o
+CC	libavfilter/af_afade.o
+CC	libavfilter/af_afftfilt.o
+CC	libavfilter/af_aformat.o
+CC	libavfilter/af_agate.o
+CC	libavfilter/af_alimiter.o
+CC	libavfilter/af_amerge.o
+CC	libavfilter/af_amix.o
+CC	libavfilter/af_anequalizer.o
+CC	libavfilter/af_anull.o
+CC	libavfilter/af_apad.o
+CC	libavfilter/af_aphaser.o
+CC	libavfilter/af_apulsator.o
+CC	libavfilter/af_aresample.o
+CC	libavfilter/af_asetrate.o
+CC	libavfilter/af_asetnsamples.o
+CC	libavfilter/af_ashowinfo.o
+CC	libavfilter/af_astats.o
+CC	libavfilter/af_atempo.o
+CC	libavfilter/af_biquads.o
+CC	libavfilter/af_channelmap.o
+CC	libavfilter/af_channelsplit.o
+CC	libavfilter/af_chorus.o
+CC	libavfilter/af_compand.o
+CC	libavfilter/af_compensationdelay.o
+CC	libavfilter/af_crystalizer.o
+CC	libavfilter/af_dcshift.o
+CC	libavfilter/af_dynaudnorm.o
+CC	libavfilter/af_earwax.o
+CC	libavfilter/af_extrastereo.o
+CC	libavfilter/af_firequalizer.o
+CC	libavfilter/af_flanger.o
+CC	libavfilter/af_hdcd.o
+CC	libavfilter/af_join.o
+CC	libavfilter/af_loudnorm.o
+CC	libavfilter/af_pan.o
+CC	libavfilter/af_replaygain.o
+CC	libavfilter/af_resample.o
+CC	libavfilter/af_silencedetect.o
+CC	libavfilter/af_sidechaincompress.o
+CC	libavfilter/af_silenceremove.o
+CC	libavfilter/af_stereotools.o
+CC	libavfilter/af_stereowiden.o
+CC	libavfilter/af_tremolo.o
+CC	libavfilter/af_vibrato.o
+CC	libavfilter/af_volume.o
+CC	libavfilter/af_volumedetect.o
+CC	libavfilter/allfilters.o
+CC	libavfilter/asink_anullsink.o
+CC	libavfilter/asrc_anoisesrc.o
+CC	libavfilter/asrc_anullsrc.o
+CC	libavfilter/asrc_sine.o
+CC	libavfilter/audio.o
+CC	libavfilter/avf_abitscope.o
+CC	libavfilter/avf_ahistogram.o
+CC	libavfilter/avf_aphasemeter.o
+CC	libavfilter/avf_avectorscope.o
+CC	libavfilter/avf_concat.o
+CC	libavfilter/avf_showcqt.o
+CC	libavfilter/avf_showfreqs.o
+CC	libavfilter/avf_showspectrum.o
+CC	libavfilter/avf_showvolume.o
+CC	libavfilter/avf_showwaves.o
+CC	libavfilter/avfilter.o
+CC	libavfilter/avfiltergraph.o
+CC	libavfilter/bbox.o
+CC	libavfilter/buffersink.o
+[91mlibavfilter/avfiltergraph.c: In function 'avfilter_graph_free':
+libavfilter/avfiltergraph.c:132:5: warning: 'resample_lavr_opts' is deprecated [-Wdeprecated-declarations]
+     av_freep(&(*graph)->resample_lavr_opts);
+     ^~~~~~~~
+[0m[91mIn file included from libavfilter/avfiltergraph.c:38:0:
+libavfilter/avfilter.h:847:32: note: declared here
+     attribute_deprecated char *resample_lavr_opts;   ///< libavresample options to use for the auto-inserted resample filters
+                                ^~~~~~~~~~~~~~~~~~
+[0mCC	libavfilter/buffersrc.o
+CC	libavfilter/colorspacedsp.o
+CC	libavfilter/drawutils.o
+CC	libavfilter/dualinput.o
+CC	libavfilter/ebur128.o
+CC	libavfilter/f_bench.o
+CC	libavfilter/f_drawgraph.o
+CC	libavfilter/f_ebur128.o
+CC	libavfilter/f_interleave.o
+CC	libavfilter/f_loop.o
+CC	libavfilter/f_metadata.o
+CC	libavfilter/f_perms.o
+CC	libavfilter/f_realtime.o
+CC	libavfilter/f_reverse.o
+CC	libavfilter/f_select.o
+CC	libavfilter/f_sendcmd.o
+CC	libavfilter/f_sidedata.o
+CC	libavfilter/fifo.o
+CC	libavfilter/f_streamselect.o
+CC	libavfilter/formats.o
+CC	libavfilter/framequeue.o
+CC	libavfilter/framepool.o
+CC	libavfilter/framesync.o
+CC	libavfilter/generate_wave_table.o
+CC	libavfilter/graphdump.o
+CC	libavfilter/graphparser.o
+CC	libavfilter/lavfutils.o
+CC	libavfilter/log2_tab.o
+[91mlibavfilter/lavfutils.c: In function 'ff_load_image':
+libavfilter/lavfutils.c:53:5: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     codec_ctx = format_ctx->streams[0]->codec;
+     ^~~~~~~~~
+[0m[91mIn file included from libavfilter/lavfutils.h:27:0,
+                 from libavfilter/lavfutils.c:22:
+./libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mlibavfilter/lavfutils.c:79:5: warning: 'avcodec_decode_video2' is deprecated [-Wdeprecated-declarations]
+     ret = avcodec_decode_video2(codec_ctx, frame, &frame_decoded, &pkt);
+     ^~~
+[0mCC	libavfilter/lswsutils.o
+[91mIn file included from ./libavformat/avformat.h:319:0,
+                 from libavfilter/lavfutils.h:27,
+                 from libavfilter/lavfutils.c:22:
+./libavcodec/avcodec.h:4901:5: note: declared here
+ int avcodec_decode_video2(AVCodecContext *avctx, AVFrame *picture,
+     ^~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavfilter/motion_estimation.o
+CC	libavfilter/opencl_allkernels.o
+CC	libavfilter/pthread.o
+CC	libavfilter/scale.o
+CC	libavfilter/setpts.o
+CC	libavfilter/settb.o
+CC	libavfilter/split.o
+CC	libavfilter/src_movie.o
+CC	libavfilter/transform.o
+CC	libavfilter/trim.o
+CC	libavfilter/vaf_spectrumsynth.o
+[91mlibavfilter/src_movie.c: In function 'movie_push_frame':
+libavfilter/src_movie.c:524:9: warning: 'avcodec_decode_video2' is deprecated [-Wdeprecated-declarations]
+         ret = avcodec_decode_video2(st->codec_ctx, frame, &got_frame, pkt);
+         ^~~
+[0m[91mIn file included from ./libavformat/avformat.h:319:0,
+                 from libavfilter/src_movie.c:40:
+./libavcodec/avcodec.h:4901:5: note: declared here
+ int avcodec_decode_video2(AVCodecContext *avctx, AVFrame *picture,
+     ^~~~~~~~~~~~~~~~~~~~~
+libavfilter/src_movie.c:527:9: warning: 'avcodec_decode_audio4' is deprecated [-Wdeprecated-declarations]
+         ret = avcodec_decode_audio4(st->codec_ctx, frame, &got_frame, pkt);
+         ^~~
+In file included from ./libavformat/avformat.h:319:0,
+                 from libavfilter/src_movie.c:40:
+./libavcodec/avcodec.h:4852:5: note: declared here
+ int avcodec_decode_audio4(AVCodecContext *avctx, AVFrame *frame,
+     ^~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavfilter/vf_alphamerge.o
+CC	libavfilter/vf_aspect.o
+CC	libavfilter/vf_atadenoise.o
+CC	libavfilter/vf_avgblur.o
+CC	libavfilter/vf_bbox.o
+CC	libavfilter/vf_bitplanenoise.o
+CC	libavfilter/vf_blackdetect.o
+CC	libavfilter/vf_blackframe.o
+CC	libavfilter/vf_blend.o
+CC	libavfilter/vf_boxblur.o
+CC	libavfilter/vf_bwdif.o
+CC	libavfilter/vf_chromakey.o
+CC	libavfilter/vf_ciescope.o
+CC	libavfilter/vf_codecview.o
+CC	libavfilter/vf_colorbalance.o
+CC	libavfilter/vf_colorchannelmixer.o
+CC	libavfilter/vf_colorkey.o
+CC	libavfilter/vf_colorlevels.o
+CC	libavfilter/vf_colormatrix.o
+CC	libavfilter/vf_colorspace.o
+CC	libavfilter/vf_convolution.o
+CC	libavfilter/vf_copy.o
+CC	libavfilter/vf_cover_rect.o
+CC	libavfilter/vf_crop.o
+CC	libavfilter/vf_cropdetect.o
+CC	libavfilter/vf_curves.o
+CC	libavfilter/vf_datascope.o
+CC	libavfilter/vf_dctdnoiz.o
+CC	libavfilter/vf_deband.o
+CC	libavfilter/vf_decimate.o
+CC	libavfilter/vf_deinterlace_vaapi.o
+CC	libavfilter/vf_dejudder.o
+CC	libavfilter/vf_delogo.o
+CC	libavfilter/vf_deshake.o
+CC	libavfilter/vf_detelecine.o
+CC	libavfilter/vf_displace.o
+CC	libavfilter/vf_drawbox.o
+CC	libavfilter/vf_drawtext.o
+CC	libavfilter/vf_edgedetect.o
+CC	libavfilter/vf_elbg.o
+CC	libavfilter/vf_eq.o
+CC	libavfilter/vf_extractplanes.o
+CC	libavfilter/vf_fade.o
+CC	libavfilter/vf_fftfilt.o
+CC	libavfilter/vf_field.o
+CC	libavfilter/vf_fieldhint.o
+CC	libavfilter/vf_fieldmatch.o
+CC	libavfilter/vf_fieldorder.o
+CC	libavfilter/vf_find_rect.o
+CC	libavfilter/vf_format.o
+CC	libavfilter/vf_fps.o
+CC	libavfilter/vf_framepack.o
+CC	libavfilter/vf_framerate.o
+CC	libavfilter/vf_framestep.o
+CC	libavfilter/vf_gblur.o
+CC	libavfilter/vf_fspp.o
+CC	libavfilter/vf_geq.o
+CC	libavfilter/vf_gradfun.o
+CC	libavfilter/vf_histeq.o
+CC	libavfilter/vf_hflip.o
+CC	libavfilter/vf_histogram.o
+CC	libavfilter/vf_hqdn3d.o
+CC	libavfilter/vf_hqx.o
+CC	libavfilter/vf_hue.o
+CC	libavfilter/vf_hwdownload.o
+CC	libavfilter/vf_hwmap.o
+CC	libavfilter/vf_hwupload.o
+CC	libavfilter/vf_hwupload_cuda.o
+CC	libavfilter/vf_hysteresis.o
+CC	libavfilter/vf_idet.o
+CC	libavfilter/vf_il.o
+CC	libavfilter/vf_interlace.o
+CC	libavfilter/vf_kerndeint.o
+CC	libavfilter/vf_lenscorrection.o
+CC	libavfilter/vf_lut.o
+CC	libavfilter/vf_lut2.o
+CC	libavfilter/vf_lut3d.o
+CC	libavfilter/vf_maskedclamp.o
+CC	libavfilter/vf_maskedmerge.o
+CC	libavfilter/vf_mcdeint.o
+[91mlibavfilter/vf_mcdeint.c: In function 'config_props':
+libavfilter/vf_mcdeint.c:137:9: warning: 'me_method' is deprecated [-Wdeprecated-declarations]
+         enc_ctx->me_method = ME_ITER;
+         ^~~~~~~
+[0m[91mIn file included from libavfilter/vf_mcdeint.c:54:0:
+./libavcodec/avcodec.h:1967:30: note: declared here
+     attribute_deprecated int me_method;
+                              ^~~~~~~~~
+[0m[91mlibavfilter/vf_mcdeint.c: In function 'filter_frame':
+libavfilter/vf_mcdeint.c:192:5: warning: 'avcodec_encode_video2' is deprecated [-Wdeprecated-declarations]
+     ret = avcodec_encode_video2(mcdeint->enc_ctx, &pkt, inpic, &got_frame);
+     ^~~
+[0m[91mIn file included from libavfilter/vf_mcdeint.c:54:0:
+./libavcodec/avcodec.h:5416:5: note: declared here
+ int avcodec_encode_video2(AVCodecContext *avctx, AVPacket *avpkt,
+     ^~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavfilter/vf_mcdeint.c:196:5: warning: 'coded_frame' is deprecated [-Wdeprecated-declarations]
+     frame_dec = mcdeint->enc_ctx->coded_frame;
+     ^~~~~~~~~
+[0m[91mIn file included from libavfilter/vf_mcdeint.c:54:0:
+./libavcodec/avcodec.h:3152:35: note: declared here
+     attribute_deprecated AVFrame *coded_frame;
+                                   ^~~~~~~~~~~
+[0mCC	libavfilter/vf_mergeplanes.o
+CC	libavfilter/vf_mestimate.o
+CC	libavfilter/vf_midequalizer.o
+CC	libavfilter/vf_minterpolate.o
+CC	libavfilter/vf_mpdecimate.o
+CC	libavfilter/vf_neighbor.o
+CC	libavfilter/vf_nlmeans.o
+CC	libavfilter/vf_nnedi.o
+CC	libavfilter/vf_noise.o
+CC	libavfilter/vf_null.o
+CC	libavfilter/vf_overlay.o
+CC	libavfilter/vf_owdenoise.o
+CC	libavfilter/vf_pad.o
+CC	libavfilter/vf_palettegen.o
+CC	libavfilter/vf_paletteuse.o
+[91mlibavfilter/vf_paletteuse.c: In function 'set_frame':
+[0m[91mlibavfilter/vf_paletteuse.c:446:21: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+                     if (left)       src[  src_linesize + x - 1] = dither_color(src[  src_linesize + x - 1], er, eg, eb, 2, 4);
+                     ^~
+[0m[91mlibavfilter/vf_paletteuse.c:447:37: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+                                     src[  src_linesize + x    ] = dither_color(src[  src_linesize + x    ], er, eg, eb, 3, 4);
+                                     ^~~
+[0mCC	libavfilter/vf_perspective.o
+CC	libavfilter/vf_phase.o
+CC	libavfilter/vf_pixdesctest.o
+CC	libavfilter/vf_pp.o
+CC	libavfilter/vf_pp7.o
+CC	libavfilter/vf_premultiply.o
+CC	libavfilter/vf_psnr.o
+CC	libavfilter/vf_pullup.o
+CC	libavfilter/vf_qp.o
+CC	libavfilter/vf_random.o
+CC	libavfilter/vf_readeia608.o
+CC	libavfilter/vf_readvitc.o
+CC	libavfilter/vf_remap.o
+CC	libavfilter/vf_removegrain.o
+CC	libavfilter/vf_removelogo.o
+CC	libavfilter/vf_repeatfields.o
+CC	libavfilter/vf_rotate.o
+CC	libavfilter/vf_sab.o
+CC	libavfilter/vf_scale.o
+CC	libavfilter/vf_scale_vaapi.o
+CC	libavfilter/vf_selectivecolor.o
+CC	libavfilter/vf_separatefields.o
+CC	libavfilter/vf_setfield.o
+CC	libavfilter/vf_showinfo.o
+CC	libavfilter/vf_showpalette.o
+CC	libavfilter/vf_shuffleframes.o
+CC	libavfilter/vf_shuffleplanes.o
+CC	libavfilter/vf_signalstats.o
+CC	libavfilter/vf_signature.o
+CC	libavfilter/vf_smartblur.o
+CC	libavfilter/vf_spp.o
+CC	libavfilter/vf_ssim.o
+CC	libavfilter/vf_stack.o
+CC	libavfilter/vf_stereo3d.o
+CC	libavfilter/vf_super2xsai.o
+CC	libavfilter/vf_subtitles.o
+CC	libavfilter/vf_swaprect.o
+CC	libavfilter/vf_swapuv.o
+CC	libavfilter/vf_telecine.o
+CC	libavfilter/vf_threshold.o
+CC	libavfilter/vf_thumbnail.o
+CC	libavfilter/vf_tile.o
+CC	libavfilter/vf_tinterlace.o
+CC	libavfilter/vf_transpose.o
+CC	libavfilter/vf_uspp.o
+CC	libavfilter/vf_unsharp.o
+[91mlibavfilter/vf_uspp.c: In function 'filter':
+libavfilter/vf_uspp.c:253:9: warning: 'avcodec_encode_video2' is deprecated [-Wdeprecated-declarations]
+         ret = avcodec_encode_video2(p->avctx_enc[i], &pkt, p->frame, &got_pkt_ptr);
+         ^~~
+[0m[91mIn file included from libavfilter/internal.h:36:0,
+                 from libavfilter/vf_uspp.c:34:
+./libavcodec/avcodec.h:5416:5: note: declared here
+ int avcodec_encode_video2(AVCodecContext *avctx, AVPacket *avpkt,
+     ^~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavfilter/vf_uspp.c:259:9: warning: 'coded_frame' is deprecated [-Wdeprecated-declarations]
+         p->frame_dec = p->avctx_enc[i]->coded_frame;
+         ^
+In file included from libavfilter/internal.h:36:0,
+                 from libavfilter/vf_uspp.c:34:
+./libavcodec/avcodec.h:3152:35: note: declared here
+     attribute_deprecated AVFrame *coded_frame;
+                                   ^~~~~~~~~~~
+[0mCC	libavfilter/vf_vaguedenoiser.o
+CC	libavfilter/vf_vectorscope.o
+CC	libavfilter/vf_vflip.o
+CC	libavfilter/vf_vidstabdetect.o
+CC	libavfilter/vf_vidstabtransform.o
+CC	libavfilter/vf_vignette.o
+CC	libavfilter/vf_w3fdif.o
+CC	libavfilter/vf_waveform.o
+CC	libavfilter/vf_weave.o
+CC	libavfilter/vf_xbr.o
+CC	libavfilter/vf_yadif.o
+CC	libavfilter/vf_zoompan.o
+CC	libavfilter/video.o
+CC	libavfilter/vidstabutils.o
+CC	libavfilter/vsink_nullsink.o
+CC	libavfilter/vsrc_cellauto.o
+CC	libavfilter/vsrc_life.o
+CC	libavfilter/vsrc_mandelbrot.o
+CC	libavfilter/vsrc_mptestsrc.o
+CC	libavfilter/vsrc_testsrc.o
+CC	libavfilter/window_func.o
+YASM	libavfilter/x86/af_volume.o
+CC	libavfilter/x86/af_volume_init.o
+STRIP	libavfilter/x86/af_volume.o
+CC	libavfilter/x86/avf_showcqt_init.o
+YASM	libavfilter/x86/avf_showcqt.o
+CC	libavfilter/x86/colorspacedsp_init.o
+STRIP	libavfilter/x86/avf_showcqt.o
+CC	libavfilter/x86/vf_blend_init.o
+YASM	libavfilter/x86/vf_blend.o
+STRIP	libavfilter/x86/vf_blend.o
+CC	libavfilter/x86/vf_bwdif_init.o
+CC	libavfilter/x86/vf_eq.o
+CC	libavfilter/x86/vf_fspp_init.o
+YASM	libavfilter/x86/vf_fspp.o
+YASM	libavfilter/x86/vf_bwdif.o
+YASM	libavfilter/x86/vf_gradfun.o
+STRIP	libavfilter/x86/vf_gradfun.o
+CC	libavfilter/x86/vf_gradfun_init.o
+STRIP	libavfilter/x86/vf_fspp.o
+YASM	libavfilter/x86/vf_hqdn3d.o
+CC	libavfilter/x86/vf_hqdn3d_init.o
+STRIP	libavfilter/x86/vf_hqdn3d.o
+STRIP	libavfilter/x86/vf_bwdif.o
+CC	libavfilter/x86/vf_idet_init.o
+YASM	libavfilter/x86/vf_idet.o
+STRIP	libavfilter/x86/vf_idet.o
+CC	libavfilter/x86/vf_interlace_init.o
+YASM	libavfilter/x86/vf_interlace.o
+CC	libavfilter/x86/vf_maskedmerge_init.o
+STRIP	libavfilter/x86/vf_interlace.o
+YASM	libavfilter/x86/colorspacedsp.o
+YASM	libavfilter/x86/vf_maskedmerge.o
+CC	libavfilter/x86/vf_noise.o
+STRIP	libavfilter/x86/vf_maskedmerge.o
+CC	libavfilter/x86/vf_pp7_init.o
+YASM	libavfilter/x86/vf_pp7.o
+STRIP	libavfilter/x86/vf_pp7.o
+CC	libavfilter/x86/vf_psnr_init.o
+YASM	libavfilter/x86/vf_psnr.o
+YASM	libavfilter/x86/vf_pullup.o
+CC	libavfilter/x86/vf_pullup_init.o
+STRIP	libavfilter/x86/vf_psnr.o
+STRIP	libavfilter/x86/vf_pullup.o
+CC	libavfilter/x86/vf_removegrain_init.o
+CC	libavfilter/x86/vf_spp.o
+YASM	libavfilter/x86/vf_ssim.o
+CC	libavfilter/x86/vf_ssim_init.o
+STRIP	libavfilter/x86/vf_ssim.o
+CC	libavfilter/x86/vf_stereo3d_init.o
+YASM	libavfilter/x86/vf_removegrain.o
+YASM	libavfilter/x86/vf_stereo3d.o
+CC	libavfilter/x86/vf_tinterlace_init.o
+STRIP	libavfilter/x86/vf_stereo3d.o
+CC	libavfilter/x86/vf_w3fdif_init.o
+YASM	libavfilter/x86/vf_w3fdif.o
+STRIP	libavfilter/x86/vf_removegrain.o
+CC	libavfilter/x86/vf_yadif_init.o
+STRIP	libavfilter/x86/vf_w3fdif.o
+STRIP	libavfilter/x86/colorspacedsp.o
+YASM	libavfilter/x86/vf_yadif.o
+CC	libavresample/audio_convert.o
+YASM	libavfilter/x86/yadif-10.o
+STRIP	libavfilter/x86/vf_yadif.o
+CC	libavresample/audio_data.o
+YASM	libavfilter/x86/yadif-16.o
+STRIP	libavfilter/x86/yadif-10.o
+CC	libavresample/audio_mix.o
+STRIP	libavfilter/x86/yadif-16.o
+CC	libavresample/dither.o
+CC	libavresample/audio_mix_matrix.o
+CC	libavresample/options.o
+CC	libavresample/resample.o
+CC	libavresample/utils.o
+CC	libavresample/x86/audio_convert_init.o
+CC	libavresample/x86/audio_mix_init.o
+YASM	libavresample/x86/audio_convert.o
+YASM	libavresample/x86/dither.o
+CC	libavresample/x86/dither_init.o
+STRIP	libavresample/x86/dither.o
+CC	libavutil/adler32.o
+STRIP	libavresample/x86/audio_convert.o
+CC	libavutil/aes.o
+CC	libavutil/aes_ctr.o
+CC	libavutil/audio_fifo.o
+CC	libavutil/avstring.o
+CC	libavutil/base64.o
+CC	libavutil/blowfish.o
+CC	libavutil/bprint.o
+CC	libavutil/buffer.o
+CC	libavutil/camellia.o
+CC	libavutil/cast5.o
+CC	libavutil/channel_layout.o
+YASM	libavresample/x86/audio_mix.o
+CC	libavutil/color_utils.o
+CC	libavutil/cpu.o
+CC	libavutil/crc.o
+CC	libavutil/des.o
+CC	libavutil/dict.o
+CC	libavutil/display.o
+CC	libavutil/downmix_info.o
+CC	libavutil/error.o
+CC	libavutil/eval.o
+CC	libavutil/file.o
+CC	libavutil/fifo.o
+CC	libavutil/file_open.o
+CC	libavutil/fixed_dsp.o
+CC	libavutil/float_dsp.o
+CC	libavutil/frame.o
+CC	libavutil/hash.o
+CC	libavutil/hmac.o
+CC	libavutil/hwcontext.o
+STRIP	libavresample/x86/audio_mix.o
+CC	libavutil/hwcontext_cuda.o
+CC	libavutil/hwcontext_vaapi.o
+CC	libavutil/imgutils.o
+CC	libavutil/integer.o
+CC	libavutil/intmath.o
+CC	libavutil/lfg.o
+CC	libavutil/log.o
+CC	libavutil/lls.o
+CC	libavutil/log2_tab.o
+CC	libavutil/lzo.o
+CC	libavutil/mastering_display_metadata.o
+CC	libavutil/mathematics.o
+CC	libavutil/md5.o
+CC	libavutil/mem.o
+CC	libavutil/murmur3.o
+CC	libavutil/opt.o
+CC	libavutil/parseutils.o
+CC	libavutil/pixdesc.o
+CC	libavutil/pixelutils.o
+[91mlibavutil/opt.c: In function 'write_number':
+libavutil/opt.c:101:47: warning: '*' in boolean context, suggest '&&' instead [-Wint-in-bool-context]
+         num = den ? num * intnum / den : (num * intnum ? INFINITY : NAN);
+                                           ~~~~^~~~~~~~
+[0mCC	libavutil/random_seed.o
+CC	libavutil/rational.o
+CC	libavutil/rc4.o
+CC	libavutil/reverse.o
+CC	libavutil/ripemd.o
+CC	libavutil/samplefmt.o
+CC	libavutil/sha.o
+CC	libavutil/sha512.o
+CC	libavutil/spherical.o
+CC	libavutil/stereo3d.o
+CC	libavutil/tea.o
+CC	libavutil/threadmessage.o
+CC	libavutil/time.o
+CC	libavutil/timecode.o
+CC	libavutil/tree.o
+CC	libavutil/twofish.o
+[91mlibavutil/timecode.c: In function 'av_timecode_make_string':
+libavutil/timecode.c:103:60: warning: '%02d' directive output may be truncated writing between 2 and 10 bytes into a region of size between 0 and 7 [-Wformat-truncation=]
+     snprintf(buf, AV_TIMECODE_STR_SIZE, "%s%02d:%02d:%02d%c%02d",
+                                                            ^~~~
+libavutil/timecode.c:103:41: note: directive argument in the range [0, 2147483647]
+     snprintf(buf, AV_TIMECODE_STR_SIZE, "%s%02d:%02d:%02d%c%02d",
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from libavutil/timecode.c:29:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 12 and 32 bytes into a destination of size 16
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavutil/utils.o
+CC	libavutil/x86/cpu.o
+YASM	libavutil/x86/cpuid.o
+CC	libavutil/x86/fixed_dsp_init.o
+STRIP	libavutil/x86/cpuid.o
+CC	libavutil/x86/float_dsp_init.o
+YASM	libavutil/x86/fixed_dsp.o
+STRIP	libavutil/x86/fixed_dsp.o
+CC	libavutil/x86/imgutils_init.o
+YASM	libavutil/x86/imgutils.o
+YASM	libavutil/x86/float_dsp.o
+STRIP	libavutil/x86/imgutils.o
+CC	libavutil/x86/lls_init.o
+YASM	libavutil/x86/lls.o
+STRIP	libavutil/x86/float_dsp.o
+STRIP	libavutil/x86/lls.o
+CC	libavutil/x86/pixelutils_init.o
+CC	libavutil/xga_font_data.o
+CC	libavutil/xtea.o
+YASM	libavutil/x86/pixelutils.o
+CC	libswscale/alphablend.o
+CC	libswscale/gamma.o
+STRIP	libavutil/x86/pixelutils.o
+CC	libswscale/hscale.o
+CC	libswscale/hscale_fast_bilinear.o
+CC	libswscale/input.o
+CC	libswscale/log2_tab.o
+CC	libswscale/options.o
+CC	libswscale/output.o
+CC	libswscale/rgb2rgb.o
+CC	libswscale/slice.o
+CC	libswscale/swscale.o
+CC	libswscale/swscale_unscaled.o
+CC	libswscale/utils.o
+CC	libswscale/vscale.o
+CC	libswscale/x86/hscale_fast_bilinear_simd.o
+YASM	libswscale/x86/input.o
+YASM	libswscale/x86/output.o
+STRIP	libswscale/x86/input.o
+STRIP	libswscale/x86/output.o
+CC	libswscale/x86/rgb2rgb.o
+CC	libswscale/x86/swscale.o
+YASM	libswscale/x86/scale.o
+CC	libswscale/x86/yuv2rgb.o
+CC	libswscale/yuv2rgb.o
+STRIP	libswscale/x86/scale.o
+CC	libpostproc/postprocess.o
+CC	libavformat/3dostr.o
+CC	libavformat/4xm.o
+CC	libavformat/a64.o
+CC	libavformat/aacdec.o
+CC	libavformat/aadec.o
+CC	libavformat/ac3dec.o
+CC	libavformat/acm.o
+CC	libavformat/act.o
+CC	libavformat/adp.o
+CC	libavformat/ads.o
+CC	libavformat/adtsenc.o
+CC	libavformat/adxdec.o
+CC	libavformat/aea.o
+CC	libavformat/afc.o
+CC	libavformat/aiffdec.o
+CC	libavformat/aiffenc.o
+CC	libavformat/aixdec.o
+CC	libavformat/allformats.o
+CC	libavformat/amr.o
+CC	libavformat/anm.o
+CC	libavformat/apc.o
+CC	libavformat/ape.o
+CC	libavformat/apetag.o
+CC	libavformat/apngdec.o
+CC	libavformat/apngenc.o
+CC	libavformat/aqtitledec.o
+CC	libavformat/asf.o
+CC	libavformat/asfcrypt.o
+CC	libavformat/asfdec_o.o
+CC	libavformat/asfdec_f.o
+CC	libavformat/assdec.o
+CC	libavformat/asfenc.o
+CC	libavformat/assenc.o
+CC	libavformat/ast.o
+CC	libavformat/astdec.o
+CC	libavformat/astenc.o
+CC	libavformat/async.o
+CC	libavformat/au.o
+CC	libavformat/audiointerleave.o
+CC	libavformat/avc.o
+CC	libavformat/avidec.o
+CC	libavformat/avio.o
+CC	libavformat/avienc.o
+CC	libavformat/aviobuf.o
+CC	libavformat/avlanguage.o
+CC	libavformat/avr.o
+CC	libavformat/avs.o
+CC	libavformat/bethsoftvid.o
+CC	libavformat/bfi.o
+CC	libavformat/bink.o
+CC	libavformat/bintext.o
+CC	libavformat/bmv.o
+CC	libavformat/bit.o
+CC	libavformat/brstm.o
+CC	libavformat/boadec.o
+CC	libavformat/c93.o
+CC	libavformat/cache.o
+CC	libavformat/caf.o
+CC	libavformat/cafdec.o
+CC	libavformat/cafenc.o
+CC	libavformat/cavsvideodec.o
+CC	libavformat/cdg.o
+CC	libavformat/cinedec.o
+CC	libavformat/cdxl.o
+CC	libavformat/concat.o
+CC	libavformat/concatdec.o
+CC	libavformat/crcenc.o
+CC	libavformat/crypto.o
+[91mlibavformat/concatdec.c: In function 'detect_stream_specific':
+libavformat/concatdec.c:209:9: warning: 'av_bitstream_filter_init' is deprecated [-Wdeprecated-declarations]
+         if (!(bsf = av_bitstream_filter_init("h264_mp4toannexb"))) {
+         ^~
+[0m[91mIn file included from libavformat/avformat.h:319:0,
+                 from libavformat/concatdec.c:27:
+./libavcodec/avcodec.h:5938:27: note: declared here
+ AVBitStreamFilterContext *av_bitstream_filter_init(const char *name);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavformat/concatdec.c: In function 'concat_read_close':
+libavformat/concatdec.c:376:17: warning: 'av_bitstream_filter_close' is deprecated [-Wdeprecated-declarations]
+                 av_bitstream_filter_close(cat->files[i].streams[j].bsf);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from libavformat/avformat.h:319:0,
+                 from libavformat/concatdec.c:27:
+./libavcodec/avcodec.h:5982:6: note: declared here
+ void av_bitstream_filter_close(AVBitStreamFilterContext *bsf);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavformat/concatdec.c: In function 'filter_packet':
+libavformat/concatdec.c:536:9: warning: 'av_bitstream_filter_filter' is deprecated [-Wdeprecated-declarations]
+         ret = av_bitstream_filter_filter(bsf, cs->avctx, NULL,
+         ^~~
+In file included from libavformat/avformat.h:319:0,
+                 from libavformat/concatdec.c:27:
+./libavcodec/avcodec.h:5970:5: note: declared here
+ int av_bitstream_filter_filter(AVBitStreamFilterContext *bsfc,
+     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavformat/cutils.o
+CC	libavformat/dashenc.o
+CC	libavformat/data_uri.o
+CC	libavformat/dauddec.o
+CC	libavformat/daudenc.o
+CC	libavformat/dcstr.o
+[91mlibavformat/dashenc.c: In function 'dash_init':
+[0m[91mlibavformat/dashenc.c:665:49: warning: '%s' directive output may be truncated writing up to 1023 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+         snprintf(filename, sizeof(filename), "%s%s", c->dirname, os->initfile);
+                                                 ^~
+[0m[91mIn file included from /usr/include/stdio.h:862:0,
+                 from ./libavutil/common.h:38,
+                 from ./libavutil/avutil.h:296,
+                 from ./libavutil/avassert.h:31,
+                 from libavformat/dashenc.c:27:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 1 and 2047 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavformat/dfa.o
+CC	libavformat/diracdec.o
+[91mlibavformat/dashenc.c: In function 'dash_flush':
+[0m[91mlibavformat/dashenc.c:872:55: warning: '%s' directive output may be truncated writing up to 1023 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+             snprintf(full_path, sizeof(full_path), "%s%s", c->dirname, os->initfile);
+                                                       ^~
+[0m[91mIn file included from /usr/include/stdio.h:862:0,
+                 from ./libavutil/common.h:38,
+                 from ./libavutil/avutil.h:296,
+                 from ./libavutil/avassert.h:31,
+                 from libavformat/dashenc.c:27:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 1 and 2047 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavformat/dashenc.c:905:61: warning: '%s' directive output may be truncated writing up to 1023 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+                     snprintf(filename, sizeof(filename), "%s%s", c->dirname, os->segments[j]->file);
+                                                             ^~
+[0m[91mIn file included from /usr/include/stdio.h:862:0,
+                 from ./libavutil/common.h:38,
+                 from ./libavutil/avutil.h:296,
+                 from ./libavutil/avassert.h:31,
+                 from libavformat/dashenc.c:27:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 1 and 2047 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavformat/dnxhddec.o
+[91mlibavformat/dashenc.c: In function 'dash_write_trailer':
+libavformat/dashenc.c:1021:53: warning: '%s' directive output may be truncated writing up to 1023 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+             snprintf(filename, sizeof(filename), "%s%s", c->dirname, os->initfile);
+                                                     ^~
+[0m[91mIn file included from /usr/include/stdio.h:862:0,
+                 from ./libavutil/common.h:38,
+                 from ./libavutil/avutil.h:296,
+                 from ./libavutil/avassert.h:31,
+                 from libavformat/dashenc.c:27:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 1 and 2047 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavformat/dsfdec.o
+CC	libavformat/dsicin.o
+CC	libavformat/dss.o
+CC	libavformat/dtsdec.o
+CC	libavformat/dtshddec.o
+CC	libavformat/dump.o
+[91mlibavformat/dump.c: In function 'dump_stream_format':
+libavformat/dump.c:462:5: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     avctx->properties = st->codec->properties;
+     ^~~~~
+[0m[91mIn file included from libavformat/dump.c:37:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mlibavformat/dump.c:463:5: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     avctx->codec      = st->codec->codec;
+     ^~~~~
+[0m[91mIn file included from libavformat/dump.c:37:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mlibavformat/dump.c:464:5: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     avctx->qmin       = st->codec->qmin;
+     ^~~~~
+[0m[91mIn file included from libavformat/dump.c:37:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mlibavformat/dump.c:465:5: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     avctx->qmax       = st->codec->qmax;
+     ^~~~~
+[0m[91mIn file included from libavformat/dump.c:37:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mlibavformat/dump.c:466:5: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     avctx->coded_width  = st->codec->coded_width;
+     ^~~~~
+[0m[91mIn file included from libavformat/dump.c:37:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mlibavformat/dump.c:467:5: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     avctx->coded_height = st->codec->coded_height;
+     ^~~~~
+[0m[91mIn file included from libavformat/dump.c:37:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mlibavformat/dump.c:502:9: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+         int tbc = st->codec->time_base.den && st->codec->time_base.num;
+         ^~~
+[0m[91mIn file included from libavformat/dump.c:37:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mlibavformat/dump.c:502:9: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+         int tbc = st->codec->time_base.den && st->codec->time_base.num;
+         ^~~
+[0m[91mIn file included from libavformat/dump.c:37:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mlibavformat/dump.c:514:13: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+             print_fps(1 / av_q2d(st->codec->time_base), "tbc");
+             ^~~~~~~~~
+[0m[91mIn file included from libavformat/dump.c:37:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0mCC	libavformat/dv.o
+CC	libavformat/dvbsub.o
+CC	libavformat/dvbtxt.o
+CC	libavformat/dvenc.o
+CC	libavformat/dxa.o
+CC	libavformat/eacdata.o
+CC	libavformat/electronicarts.o
+CC	libavformat/epafdec.o
+CC	libavformat/ffmdec.o
+CC	libavformat/ffmenc.o
+CC	libavformat/ffmetadec.o
+CC	libavformat/ffmetaenc.o
+CC	libavformat/fifo.o
+CC	libavformat/file.o
+CC	libavformat/filmstripenc.o
+CC	libavformat/filmstripdec.o
+CC	libavformat/flac_picture.o
+CC	libavformat/flacdec.o
+CC	libavformat/flacenc.o
+CC	libavformat/flacenc_header.o
+CC	libavformat/flic.o
+CC	libavformat/flvdec.o
+CC	libavformat/flvenc.o
+CC	libavformat/format.o
+CC	libavformat/framecrcenc.o
+CC	libavformat/framehash.o
+CC	libavformat/frmdec.o
+CC	libavformat/fsb.o
+CC	libavformat/ftp.o
+CC	libavformat/g722.o
+CC	libavformat/g723_1.o
+CC	libavformat/g729dec.o
+CC	libavformat/genh.o
+CC	libavformat/gif.o
+CC	libavformat/gifdec.o
+CC	libavformat/golomb_tab.o
+CC	libavformat/gopher.o
+CC	libavformat/gsmdec.o
+CC	libavformat/gxf.o
+CC	libavformat/gxfenc.o
+CC	libavformat/h261dec.o
+CC	libavformat/h263dec.o
+CC	libavformat/h264dec.o
+CC	libavformat/hashenc.o
+CC	libavformat/hdsenc.o
+CC	libavformat/hevc.o
+CC	libavformat/hevcdec.o
+CC	libavformat/hls.o
+CC	libavformat/hlsenc.o
+[91mlibavformat/hdsenc.c: In function 'write_abst':
+libavformat/hdsenc.c:239:17: warning: '/stream' directive output may be truncated writing 7 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+              "%s/stream%d.abst", s->filename, index);
+                 ^~~~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/hdsenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 14 and 1047 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+libavformat/hdsenc.c:241:17: warning: '/stream' directive output may be truncated writing 7 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+              "%s/stream%d.abst.tmp", s->filename, index);
+                 ^~~~~~~
+[0m[91mIn file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/hdsenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 18 and 1051 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavformat/hdsenc.c: In function 'write_manifest':
+libavformat/hdsenc.c:172:45: warning: '/index.f4m' directive output may be truncated writing 10 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+     snprintf(filename, sizeof(filename), "%s/index.f4m", s->filename);
+                                             ^~~~~~~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/hdsenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 11 and 1034 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+libavformat/hdsenc.c:173:55: warning: '/index.f4m.tmp' directive output may be truncated writing 14 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+     snprintf(temp_filename, sizeof(temp_filename), "%s/index.f4m.tmp", s->filename);
+                                                       ^~~~~~~~~~~~~~
+[0m[91mIn file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/hdsenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 15 and 1038 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavformat/hdsenc.c: In function 'hds_flush':
+libavformat/hdsenc.c:480:17: warning: '/stream' directive output may be truncated writing 7 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+              "%s/stream%dSeg1-Frag%d", s->filename, index, os->fragment_index);
+                 ^~~~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/hdsenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 19 and 1062 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavformat/hdsenc.c: In function 'hds_write_trailer':
+libavformat/hdsenc.c:553:49: warning: '/index.f4m' directive output may be truncated writing 10 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+         snprintf(filename, sizeof(filename), "%s/index.f4m", s->filename);
+                                                 ^~~~~~~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/hdsenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 11 and 1034 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavformat/hdsenc.c:556:53: warning: '/stream' directive output may be truncated writing 7 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+             snprintf(filename, sizeof(filename), "%s/stream%d.abst", s->filename, i);
+                                                     ^~~~~~~
+libavformat/hdsenc.c:556:50: note: directive argument in the range [0, 2147483647]
+             snprintf(filename, sizeof(filename), "%s/stream%d.abst", s->filename, i);
+                                                  ^~~~~~~~~~~~~~~~~~
+[0m[91mIn file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/hdsenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 14 and 1046 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavformat/hdsenc.c: In function 'hds_write_header':
+libavformat/hdsenc.c:415:21: warning: '/stream' directive output may be truncated writing 7 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+                  "%s/stream%d_temp", s->filename, i);
+                     ^~~~~~~
+libavformat/hdsenc.c:415:18: note: directive argument in the range [0, 2147483647]
+                  "%s/stream%d_temp", s->filename, i);
+                  ^~~~~~~~~~~~~~~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/hdsenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 14 and 1046 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavformat/hlsproto.o
+CC	libavformat/hnm.o
+CC	libavformat/http.o
+CC	libavformat/httpauth.o
+CC	libavformat/icecast.o
+CC	libavformat/icodec.o
+CC	libavformat/icoenc.o
+CC	libavformat/id3v1.o
+CC	libavformat/id3v2.o
+CC	libavformat/id3v2enc.o
+CC	libavformat/idcin.o
+CC	libavformat/idroqdec.o
+CC	libavformat/idroqenc.o
+CC	libavformat/iff.o
+CC	libavformat/ilbc.o
+CC	libavformat/img2.o
+CC	libavformat/img2_alias_pix.o
+CC	libavformat/img2_brender_pix.o
+CC	libavformat/img2dec.o
+CC	libavformat/img2enc.o
+[91mlibavformat/img2enc.c: In function 'write_packet':
+libavformat/img2enc.c:163:13: warning: 'av_dup_packet' is deprecated [-Wdeprecated-declarations]
+             (ret = av_dup_packet(&pkt2))                                  < 0 ||
+             ^
+[0m[91mIn file included from libavformat/avformat.h:319:0,
+                 from libavformat/img2enc.c:30:
+./libavcodec/avcodec.h:4535:5: note: declared here
+ int av_dup_packet(AVPacket *pkt);
+     ^~~~~~~~~~~~~
+[0mCC	libavformat/ingenientdec.o
+CC	libavformat/ipmovie.o
+CC	libavformat/ircam.o
+CC	libavformat/ircamdec.o
+CC	libavformat/ircamenc.o
+CC	libavformat/iss.o
+CC	libavformat/isom.o
+CC	libavformat/ivfdec.o
+CC	libavformat/iv8.o
+CC	libavformat/jacosubdec.o
+CC	libavformat/ivfenc.o
+CC	libavformat/jacosubenc.o
+CC	libavformat/jvdec.o
+CC	libavformat/latmenc.o
+CC	libavformat/lmlm4.o
+CC	libavformat/loasdec.o
+CC	libavformat/log2_tab.o
+CC	libavformat/lrc.o
+CC	libavformat/lrcdec.o
+CC	libavformat/lrcenc.o
+CC	libavformat/lvfdec.o
+CC	libavformat/lxfdec.o
+CC	libavformat/m4vdec.o
+CC	libavformat/matroska.o
+CC	libavformat/matroskaenc.o
+CC	libavformat/matroskadec.o
+CC	libavformat/md5proto.o
+CC	libavformat/metadata.o
+CC	libavformat/mgsts.o
+CC	libavformat/microdvddec.o
+CC	libavformat/microdvdenc.o
+CC	libavformat/mj2kdec.o
+CC	libavformat/mkvtimestamp_v2.o
+CC	libavformat/mlpdec.o
+CC	libavformat/mlvdec.o
+CC	libavformat/mm.o
+[91mlibavformat/mlvdec.c: In function 'read_header':
+libavformat/mlvdec.c:353:63: warning: '__builtin___snprintf_chk' output may be truncated before the last format character [-Wformat-truncation=]
+             snprintf(filename + strlen(filename) - 2, 3, "%02d", i);
+                                                               ^
+In file included from /usr/include/stdio.h:862:0,
+                 from ./libavutil/common.h:38,
+                 from ./libavutil/avutil.h:296,
+                 from ./libavutil/eval.h:29,
+                 from libavformat/mlvdec.c:27:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 3 and 4 bytes into a destination of size 3
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavformat/matroskaenc.c: In function 'mkv_write_trailer':
+libavformat/matroskaenc.c:2528:62: warning: '%012.9f' directive output may be truncated writing between 12 and 320 bytes into a region of size between 8 and 14 [-Wformat-truncation=]
+                     snprintf(duration_string, 20, "%02d:%02d:%012.9f",
+                                                              ^~~~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from ./libavutil/common.h:38,
+                 from libavformat/avio.h:31,
+                 from libavformat/avc.h:26,
+                 from libavformat/matroskaenc.c:24:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 19 and 333 bytes into a destination of size 20
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavformat/mmf.o
+CC	libavformat/mms.o
+CC	libavformat/mmsh.o
+CC	libavformat/mmst.o
+CC	libavformat/mov.o
+CC	libavformat/mov_chan.o
+CC	libavformat/movenc.o
+CC	libavformat/movenccenc.o
+CC	libavformat/movenchint.o
+CC	libavformat/mp3dec.o
+CC	libavformat/mp3enc.o
+CC	libavformat/mpc.o
+CC	libavformat/mpc8.o
+CC	libavformat/mpeg.o
+CC	libavformat/mpegenc.o
+CC	libavformat/mpegts.o
+CC	libavformat/mpegtsenc.o
+CC	libavformat/mpegvideodec.o
+CC	libavformat/mpjpeg.o
+CC	libavformat/mpjpegdec.o
+CC	libavformat/mpl2dec.o
+CC	libavformat/mpsubdec.o
+CC	libavformat/msf.o
+CC	libavformat/msnwc_tcp.o
+CC	libavformat/mtaf.o
+CC	libavformat/mtv.o
+CC	libavformat/musx.o
+CC	libavformat/mux.o
+CC	libavformat/mvdec.o
+CC	libavformat/mvi.o
+CC	libavformat/mxf.o
+CC	libavformat/mxfdec.o
+CC	libavformat/mxfenc.o
+CC	libavformat/mxg.o
+CC	libavformat/ncdec.o
+CC	libavformat/network.o
+CC	libavformat/nistspheredec.o
+CC	libavformat/nsvdec.o
+CC	libavformat/nullenc.o
+CC	libavformat/nut.o
+CC	libavformat/nutdec.o
+CC	libavformat/nutenc.o
+CC	libavformat/nuv.o
+CC	libavformat/oggdec.o
+CC	libavformat/oggenc.o
+CC	libavformat/oggparsecelt.o
+CC	libavformat/oggparsedaala.o
+CC	libavformat/oggparsedirac.o
+CC	libavformat/oggparseflac.o
+CC	libavformat/oggparseogm.o
+CC	libavformat/oggparseopus.o
+CC	libavformat/oggparseskeleton.o
+CC	libavformat/oggparsespeex.o
+CC	libavformat/oggparsetheora.o
+CC	libavformat/oggparsevorbis.o
+CC	libavformat/oggparsevp8.o
+CC	libavformat/oma.o
+CC	libavformat/omadec.o
+CC	libavformat/omaenc.o
+CC	libavformat/options.o
+CC	libavformat/os_support.o
+CC	libavformat/paf.o
+CC	libavformat/pcm.o
+CC	libavformat/pcmenc.o
+CC	libavformat/pcmdec.o
+CC	libavformat/pjsdec.o
+CC	libavformat/pmpdec.o
+CC	libavformat/prompeg.o
+CC	libavformat/protocols.o
+CC	libavformat/psxstr.o
+CC	libavformat/pva.o
+CC	libavformat/pvfdec.o
+CC	libavformat/qtpalette.o
+CC	libavformat/qcp.o
+CC	libavformat/r3d.o
+CC	libavformat/rawdec.o
+CC	libavformat/rawutils.o
+CC	libavformat/rawenc.o
+CC	libavformat/rawvideodec.o
+CC	libavformat/rdt.o
+CC	libavformat/realtextdec.o
+CC	libavformat/redspark.o
+CC	libavformat/replaygain.o
+CC	libavformat/riff.o
+CC	libavformat/riffdec.o
+CC	libavformat/riffenc.o
+CC	libavformat/rl2.o
+CC	libavformat/rm.o
+CC	libavformat/rmdec.o
+CC	libavformat/rmenc.o
+CC	libavformat/rmsipr.o
+CC	libavformat/rpl.o
+CC	libavformat/rsd.o
+CC	libavformat/rso.o
+CC	libavformat/rsodec.o
+CC	libavformat/rsoenc.o
+CC	libavformat/rtmphttp.o
+CC	libavformat/rtmppkt.o
+CC	libavformat/rtmpproto.o
+CC	libavformat/rtp.o
+CC	libavformat/rtpdec.o
+CC	libavformat/rtpdec_ac3.o
+CC	libavformat/rtpdec_amr.o
+CC	libavformat/rtpdec_asf.o
+CC	libavformat/rtpdec_dv.o
+CC	libavformat/rtpdec_g726.o
+CC	libavformat/rtpdec_h261.o
+CC	libavformat/rtpdec_h263.o
+CC	libavformat/rtpdec_h263_rfc2190.o
+CC	libavformat/rtpdec_h264.o
+CC	libavformat/rtpdec_ilbc.o
+CC	libavformat/rtpdec_hevc.o
+CC	libavformat/rtpdec_jpeg.o
+CC	libavformat/rtpdec_latm.o
+CC	libavformat/rtpdec_mpa_robust.o
+CC	libavformat/rtpdec_mpeg12.o
+CC	libavformat/rtpdec_mpeg4.o
+CC	libavformat/rtpdec_mpegts.o
+CC	libavformat/rtpdec_qcelp.o
+CC	libavformat/rtpdec_qdm2.o
+CC	libavformat/rtpdec_qt.o
+CC	libavformat/rtpdec_svq3.o
+CC	libavformat/rtpdec_vc2hq.o
+CC	libavformat/rtpdec_vp8.o
+CC	libavformat/rtpdec_vp9.o
+CC	libavformat/rtpdec_xiph.o
+CC	libavformat/rtpenc.o
+CC	libavformat/rtpenc_aac.o
+CC	libavformat/rtpenc_amr.o
+CC	libavformat/rtpenc_chain.o
+CC	libavformat/rtpenc_h261.o
+CC	libavformat/rtpenc_h263.o
+CC	libavformat/rtpenc_h263_rfc2190.o
+CC	libavformat/rtpenc_h264_hevc.o
+CC	libavformat/rtpenc_jpeg.o
+CC	libavformat/rtpenc_latm.o
+CC	libavformat/rtpenc_mpegts.o
+CC	libavformat/rtpenc_mpv.o
+CC	libavformat/rtpenc_vc2hq.o
+CC	libavformat/rtpenc_vp8.o
+CC	libavformat/rtpenc_vp9.o
+CC	libavformat/rtpenc_xiph.o
+CC	libavformat/rtpproto.o
+CC	libavformat/rtsp.o
+CC	libavformat/rtspdec.o
+CC	libavformat/rtspenc.o
+CC	libavformat/samidec.o
+[91mlibavformat/rtspdec.c: In function 'rtsp_read_packet':
+libavformat/rtspdec.c:832:40: warning: '%s' directive output may be truncated writing up to 1023 bytes into a region of size 1011 [-Wformat-truncation=]
+                          "Unsubscribe: %s\r\n",
+                                        ^~
+[0m[91mIn file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/rtspdec.c:27:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 16 and 1039 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavformat/sapdec.o
+CC	libavformat/sapenc.o
+CC	libavformat/sauce.o
+CC	libavformat/sbgdec.o
+CC	libavformat/sccdec.o
+CC	libavformat/sccenc.o
+CC	libavformat/sdp.o
+CC	libavformat/sdr2.o
+CC	libavformat/sdsdec.o
+[91mlibavformat/sdp.c: In function 'sdp_write_media_attributes':
+libavformat/sdp.c:692:13: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+             if (st->codec) {
+             ^~
+[0m[91mIn file included from libavformat/sdp.c:29:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+libavformat/sdp.c:696:17: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+                 if (st->codec->flags & AV_CODEC_FLAG_QSCALE)
+                 ^~
+In file included from libavformat/sdp.c:29:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+libavformat/sdp.c:698:17: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+                 else if (!av_opt_get_int(st->codec, "vad", AV_OPT_FLAG_ENCODING_PARAM, &vad_option) && vad_option)
+                 ^~~~
+In file included from libavformat/sdp.c:29:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0mCC	libavformat/sdxdec.o
+CC	libavformat/segafilm.o
+CC	libavformat/segment.o
+CC	libavformat/shortendec.o
+CC	libavformat/sierravmd.o
+CC	libavformat/siff.o
+CC	libavformat/smacker.o
+CC	libavformat/smjpeg.o
+CC	libavformat/smjpegdec.o
+CC	libavformat/smjpegenc.o
+CC	libavformat/smoothstreamingenc.o
+CC	libavformat/smush.o
+CC	libavformat/sol.o
+[91mlibavformat/smoothstreamingenc.c: In function 'write_manifest':
+libavformat/smoothstreamingenc.c:224:45: warning: '/Manifest' directive output may be truncated writing 9 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+     snprintf(filename, sizeof(filename), "%s/Manifest", s->filename);
+                                             ^~~~~~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/smoothstreamingenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 10 and 1033 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+libavformat/smoothstreamingenc.c:225:55: warning: '/Manifest.tmp' directive output may be truncated writing 13 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+     snprintf(temp_filename, sizeof(temp_filename), "%s/Manifest.tmp", s->filename);
+                                                       ^~~~~~~~~~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/smoothstreamingenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 14 and 1037 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavformat/soxdec.o
+CC	libavformat/soxenc.o
+CC	libavformat/spdif.o
+[91mlibavformat/smoothstreamingenc.c: In function 'ism_flush':
+[0m[91mlibavformat/smoothstreamingenc.c:528:49: warning: '/temp' directive output may be truncated writing 5 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+         snprintf(filename, sizeof(filename), "%s/temp", os->dirname);
+                                                 ^~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/smoothstreamingenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 6 and 1029 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+libavformat/smoothstreamingenc.c:544:63: warning: '/FragmentInfo(' directive output may be truncated writing 14 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+         snprintf(header_filename, sizeof(header_filename), "%s/FragmentInfo(%s=%"PRIu64")", os->dirname, os->stream_type_tag, start_ts);
+                                                               ^~~~~~~~~~~~~~
+libavformat/smoothstreamingenc.c:544:60: note: using the range [0, 18446744073709551615] for directive argument
+         snprintf(header_filename, sizeof(header_filename), "%s/FragmentInfo(%s=%"PRIu64")", os->dirname, os->stream_type_tag, start_ts);
+                                                            ^~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/smoothstreamingenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output 18 or more bytes (assuming 1041) into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+libavformat/smoothstreamingenc.c:545:63: warning: '/Fragments(' directive output may be truncated writing 11 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+         snprintf(target_filename, sizeof(target_filename), "%s/Fragments(%s=%"PRIu64")", os->dirname, os->stream_type_tag, start_ts);
+                                                               ^~~~~~~~~~~
+libavformat/smoothstreamingenc.c:545:60: note: using the range [0, 18446744073709551615] for directive argument
+         snprintf(target_filename, sizeof(target_filename), "%s/Fragments(%s=%"PRIu64")", os->dirname, os->stream_type_tag, start_ts);
+                                                            ^~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/smoothstreamingenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output 15 or more bytes (assuming 1038) into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavformat/smoothstreamingenc.c: In function 'ism_write_trailer':
+[0m[91mlibavformat/smoothstreamingenc.c:612:49: warning: '/Manifest' directive output may be truncated writing 9 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+         snprintf(filename, sizeof(filename), "%s/Manifest", s->filename);
+                                                 ^~~~~~~~~
+[0m[91mIn file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/smoothstreamingenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 10 and 1033 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavformat/smoothstreamingenc.c: In function 'ism_write_header':
+[0m[91mlibavformat/smoothstreamingenc.c:327:55: warning: '/QualityLevels(' directive output may be truncated writing 15 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+         snprintf(os->dirname, sizeof(os->dirname), "%s/QualityLevels(%"PRId64")", s->filename, (int64_t)s->streams[i]->codecpar->bit_rate);
+                                                       ^~~~~~~~~~~~~~~
+[0m[91mIn file included from /usr/include/stdio.h:862:0,
+                 from libavformat/avformat.h:318,
+                 from libavformat/smoothstreamingenc.c:28:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 18 and 1060 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavformat/spdifdec.o
+CC	libavformat/spdifenc.o
+CC	libavformat/srtdec.o
+CC	libavformat/srtenc.o
+CC	libavformat/srtp.o
+CC	libavformat/srtpproto.o
+CC	libavformat/stldec.o
+CC	libavformat/subfile.o
+CC	libavformat/subtitles.o
+CC	libavformat/subviewer1dec.o
+CC	libavformat/subviewerdec.o
+CC	libavformat/supdec.o
+CC	libavformat/svag.o
+CC	libavformat/swf.o
+CC	libavformat/swfenc.o
+CC	libavformat/swfdec.o
+CC	libavformat/takdec.o
+CC	libavformat/tcp.o
+CC	libavformat/tedcaptionsdec.o
+CC	libavformat/tee.o
+CC	libavformat/tee_common.o
+CC	libavformat/teeproto.o
+CC	libavformat/thp.o
+CC	libavformat/tls.o
+CC	libavformat/tiertexseq.o
+CC	libavformat/tls_gnutls.o
+CC	libavformat/tmv.o
+CC	libavformat/tta.o
+CC	libavformat/ttaenc.o
+CC	libavformat/tty.o
+CC	libavformat/txd.o
+CC	libavformat/udp.o
+CC	libavformat/uncodedframecrcenc.o
+CC	libavformat/unix.o
+CC	libavformat/url.o
+CC	libavformat/urldecode.o
+CC	libavformat/utils.o
+CC	libavformat/v210.o
+[91mlibavformat/utils.c: In function 'avformat_transfer_internal_stream_timing_info':
+libavformat/utils.c:5401:5: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     const AVCodecContext *dec_ctx = ist->codec;
+     ^~~~~
+In file included from libavformat/audiointerleave.h:27:0,
+                 from libavformat/utils.c:43:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mlibavformat/utils.c:5402:5: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     AVCodecContext       *enc_ctx = ost->codec;
+     ^~~~~~~~~~~~~~
+In file included from libavformat/audiointerleave.h:27:0,
+                 from libavformat/utils.c:43:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0mCC	libavformat/vag.o
+CC	libavformat/vc1dec.o
+CC	libavformat/vc1test.o
+CC	libavformat/vc1testenc.o
+CC	libavformat/vivo.o
+CC	libavformat/voc.o
+CC	libavformat/voc_packet.o
+CC	libavformat/vocdec.o
+CC	libavformat/vocenc.o
+CC	libavformat/vorbiscomment.o
+CC	libavformat/vpcc.o
+CC	libavformat/vpk.o
+CC	libavformat/vplayerdec.o
+CC	libavformat/w64.o
+CC	libavformat/vqf.o
+CC	libavformat/wavenc.o
+CC	libavformat/wavdec.o
+CC	libavformat/wc3movie.o
+CC	libavformat/webm_chunk.o
+CC	libavformat/webmdashenc.o
+CC	libavformat/webpenc.o
+CC	libavformat/webvttdec.o
+CC	libavformat/webvttenc.o
+CC	libavformat/westwood_aud.o
+CC	libavformat/westwood_vqa.o
+CC	libavformat/wsddec.o
+CC	libavformat/wtv_common.o
+CC	libavformat/wtvdec.o
+CC	libavformat/wtvenc.o
+CC	libavformat/wv.o
+CC	libavformat/wvdec.o
+CC	libavformat/wvedec.o
+CC	libavformat/xa.o
+CC	libavformat/wvenc.o
+CC	libavformat/xmv.o
+CC	libavformat/xvag.o
+CC	libavformat/xwma.o
+CC	libavformat/yop.o
+CC	libavformat/yuv4mpegdec.o
+CC	libavformat/yuv4mpegenc.o
+CC	libavcodec/012v.o
+CC	libavcodec/4xm.o
+CC	libavcodec/8bps.o
+CC	libavcodec/8svx.o
+CC	libavcodec/a64multienc.o
+CC	libavcodec/aac_ac3_parser.o
+CC	libavcodec/aac_adtstoasc_bsf.o
+CC	libavcodec/aac_parser.o
+CC	libavcodec/aacadtsdec.o
+CC	libavcodec/aaccoder.o
+CC	libavcodec/aacdec.o
+CC	libavcodec/aacdec_fixed.o
+CC	libavcodec/aacenc.o
+CC	libavcodec/aacenc_is.o
+CC	libavcodec/aacenc_ltp.o
+CC	libavcodec/aacenc_pred.o
+CC	libavcodec/aacenc_tns.o
+CC	libavcodec/aacenctab.o
+CC	libavcodec/aacps_fixed.o
+CC	libavcodec/aacps_float.o
+CC	libavcodec/aacpsdsp_fixed.o
+CC	libavcodec/aacpsdsp_float.o
+CC	libavcodec/aacpsy.o
+CC	libavcodec/aacsbr.o
+CC	libavcodec/aacsbr_fixed.o
+CC	libavcodec/aactab.o
+CC	libavcodec/aandcttab.o
+CC	libavcodec/aasc.o
+CC	libavcodec/ac3.o
+CC	libavcodec/ac3_parser.o
+CC	libavcodec/ac3dec_data.o
+CC	libavcodec/ac3dec_fixed.o
+CC	libavcodec/ac3dec_float.o
+CC	libavcodec/ac3dsp.o
+CC	libavcodec/ac3enc.o
+CC	libavcodec/ac3enc_fixed.o
+CC	libavcodec/ac3enc_float.o
+CC	libavcodec/ac3tab.o
+CC	libavcodec/acelp_filters.o
+CC	libavcodec/acelp_pitch_delay.o
+CC	libavcodec/acelp_vectors.o
+CC	libavcodec/adpcm.o
+CC	libavcodec/adpcm_data.o
+CC	libavcodec/adpcmenc.o
+CC	libavcodec/adx.o
+CC	libavcodec/adx_parser.o
+CC	libavcodec/adxdec.o
+CC	libavcodec/adxenc.o
+CC	libavcodec/aic.o
+CC	libavcodec/alac.o
+CC	libavcodec/alac_data.o
+CC	libavcodec/alacdsp.o
+CC	libavcodec/alacenc.o
+CC	libavcodec/aliaspixdec.o
+CC	libavcodec/aliaspixenc.o
+CC	libavcodec/allcodecs.o
+CC	libavcodec/alsdec.o
+CC	libavcodec/amrnbdec.o
+CC	libavcodec/amrwbdec.o
+CC	libavcodec/anm.o
+CC	libavcodec/ansi.o
+CC	libavcodec/apedec.o
+CC	libavcodec/ass.o
+CC	libavcodec/ass_split.o
+CC	libavcodec/assdec.o
+CC	libavcodec/assenc.o
+CC	libavcodec/asv.o
+CC	libavcodec/asvdec.o
+CC	libavcodec/asvenc.o
+CC	libavcodec/atrac.o
+CC	libavcodec/atrac1.o
+CC	libavcodec/atrac3.o
+CC	libavcodec/atrac3plus.o
+CC	libavcodec/atrac3plusdec.o
+CC	libavcodec/atrac3plusdsp.o
+CC	libavcodec/audio_frame_queue.o
+CC	libavcodec/audioconvert.o
+CC	libavcodec/audiodsp.o
+CC	libavcodec/aura.o
+CC	libavcodec/avdct.o
+CC	libavcodec/avfft.o
+CC	libavcodec/avpicture.o
+CC	libavcodec/avpacket.o
+CC	libavcodec/avrndec.o
+[91mlibavcodec/avrndec.c: In function 'decode_frame':
+[0m[91mlibavcodec/avrndec.c:110:9: warning: 'avcodec_decode_video2' is deprecated [-Wdeprecated-declarations]
+         ret = avcodec_decode_video2(a->mjpeg_avctx, data, got_frame, avpkt);
+         ^~~
+[0m[91mIn file included from libavcodec/avrndec.c:22:0:
+libavcodec/avcodec.h:4901:5: note: declared here
+ int avcodec_decode_video2(AVCodecContext *avctx, AVFrame *picture,
+     ^~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavcodec/avs.o
+CC	libavcodec/avuidec.o
+CC	libavcodec/bethsoftvideo.o
+CC	libavcodec/avuienc.o
+CC	libavcodec/bfi.o
+CC	libavcodec/bgmc.o
+CC	libavcodec/bink.o
+CC	libavcodec/binkaudio.o
+CC	libavcodec/binkdsp.o
+CC	libavcodec/bintext.o
+CC	libavcodec/bitstream.o
+CC	libavcodec/bitstream_filter.o
+CC	libavcodec/bitstream_filters.o
+[91mlibavcodec/bitstream_filter.c: In function 'av_bitstream_filter_next':
+libavcodec/bitstream_filter.c:39:12: warning: return discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     return av_bsf_next(&opaque);
+            ^~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavcodec/bitstream_filter.c: In function 'av_bitstream_filter_filter':
+libavcodec/bitstream_filter.c:132:14: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     pkt.data = buf;
+              ^
+[0mCC	libavcodec/blockdsp.o
+CC	libavcodec/bmp.o
+CC	libavcodec/bmpenc.o
+CC	libavcodec/bmp_parser.o
+CC	libavcodec/bmvaudio.o
+CC	libavcodec/bmvvideo.o
+CC	libavcodec/brenderpix.o
+CC	libavcodec/bsf.o
+CC	libavcodec/bswapdsp.o
+CC	libavcodec/c93.o
+CC	libavcodec/cabac.o
+CC	libavcodec/canopus.o
+CC	libavcodec/cavs.o
+CC	libavcodec/cavs_parser.o
+CC	libavcodec/cavsdata.o
+CC	libavcodec/cavsdec.o
+CC	libavcodec/cavsdsp.o
+CC	libavcodec/cbrt_data.o
+CC	libavcodec/cbrt_data_fixed.o
+CC	libavcodec/ccaption_dec.o
+CC	libavcodec/cdgraphics.o
+CC	libavcodec/cdxl.o
+CC	libavcodec/celp_filters.o
+CC	libavcodec/celp_math.o
+CC	libavcodec/cfhd.o
+CC	libavcodec/cfhddata.o
+CC	libavcodec/cga_data.o
+CC	libavcodec/chomp_bsf.o
+CC	libavcodec/cinepak.o
+CC	libavcodec/cinepakenc.o
+CC	libavcodec/clearvideo.o
+CC	libavcodec/cljrdec.o
+CC	libavcodec/cljrenc.o
+CC	libavcodec/cllc.o
+CC	libavcodec/cngdec.o
+CC	libavcodec/cngenc.o
+CC	libavcodec/codec_desc.o
+CC	libavcodec/cook_parser.o
+CC	libavcodec/cook.o
+CC	libavcodec/cpia.o
+CC	libavcodec/cscd.o
+CC	libavcodec/cuvid.o
+CC	libavcodec/cyuv.o
+CC	libavcodec/d3d11va.o
+CC	libavcodec/dca.o
+CC	libavcodec/dca_core.o
+CC	libavcodec/dca_core_bsf.o
+CC	libavcodec/dca_exss.o
+CC	libavcodec/dca_lbr.o
+CC	libavcodec/dca_parser.o
+CC	libavcodec/dca_xll.o
+CC	libavcodec/dcadata.o
+CC	libavcodec/dcadct.o
+CC	libavcodec/dcadec.o
+CC	libavcodec/dcadsp.o
+CC	libavcodec/dcaenc.o
+CC	libavcodec/dcahuff.o
+CC	libavcodec/dct.o
+CC	libavcodec/dct32_fixed.o
+CC	libavcodec/dct32_float.o
+CC	libavcodec/dds.o
+CC	libavcodec/dfa.o
+CC	libavcodec/dirac.o
+CC	libavcodec/dirac_arith.o
+CC	libavcodec/dirac_parser.o
+CC	libavcodec/dirac_dwt.o
+CC	libavcodec/dirac_vlc.o
+CC	libavcodec/diracdec.o
+CC	libavcodec/diracdsp.o
+CC	libavcodec/diractab.o
+CC	libavcodec/dnxhd_parser.o
+CC	libavcodec/dnxhddata.o
+CC	libavcodec/dnxhddec.o
+CC	libavcodec/dnxhdenc.o
+CC	libavcodec/dpcm.o
+CC	libavcodec/dpx.o
+CC	libavcodec/dpx_parser.o
+CC	libavcodec/dpxenc.o
+CC	libavcodec/dsd.o
+CC	libavcodec/dsddec.o
+CC	libavcodec/dsicinaudio.o
+CC	libavcodec/dsicinvideo.o
+CC	libavcodec/dss_sp.o
+CC	libavcodec/dump_extradata_bsf.o
+CC	libavcodec/dstdec.o
+CC	libavcodec/dv.o
+CC	libavcodec/dv_profile.o
+CC	libavcodec/dvaudio_parser.o
+CC	libavcodec/dvaudiodec.o
+CC	libavcodec/dvbsub.o
+CC	libavcodec/dvbsub_parser.o
+CC	libavcodec/dvbsubdec.o
+CC	libavcodec/dvd_nav_parser.o
+CC	libavcodec/dvdata.o
+CC	libavcodec/dvdsub_parser.o
+CC	libavcodec/dvdec.o
+CC	libavcodec/dvdsubdec.o
+CC	libavcodec/dvdsubenc.o
+CC	libavcodec/dvenc.o
+CC	libavcodec/dxa.o
+CC	libavcodec/dxtory.o
+CC	libavcodec/dxv.o
+CC	libavcodec/eac3_data.o
+CC	libavcodec/eac3enc.o
+CC	libavcodec/eacmv.o
+CC	libavcodec/eaidct.o
+CC	libavcodec/eatgq.o
+CC	libavcodec/eamad.o
+CC	libavcodec/eatgv.o
+CC	libavcodec/eatqi.o
+CC	libavcodec/elbg.o
+CC	libavcodec/elsdec.o
+CC	libavcodec/error_resilience.o
+CC	libavcodec/escape124.o
+CC	libavcodec/escape130.o
+CC	libavcodec/evrcdec.o
+CC	libavcodec/exif.o
+CC	libavcodec/exr.o
+CC	libavcodec/extract_extradata_bsf.o
+CC	libavcodec/faandct.o
+CC	libavcodec/faanidct.o
+CC	libavcodec/faxcompr.o
+CC	libavcodec/fdctdsp.o
+CC	libavcodec/fft_fixed.o
+CC	libavcodec/fft_fixed_32.o
+[91mIn file included from libavcodec/fft_fixed.c:21:0:
+libavcodec/fft_template.c:467:6: warning: 'pass_big' defined but not used [-Wunused-function]
+ PASS(pass_big)
+      ^
+libavcodec/fft_template.c:444:13: note: in definition of macro 'PASS'
+ static void name(FFTComplex *z, const FFTSample *wre, unsigned int n)\
+             ^~~~
+[0mCC	libavcodec/fft_float.o
+[91mIn file included from libavcodec/fft_float.c:21:0:
+libavcodec/fft_template.c:467:6: warning: 'pass_big' defined but not used [-Wunused-function]
+ PASS(pass_big)
+      ^
+libavcodec/fft_template.c:444:13: note: in definition of macro 'PASS'
+ static void name(FFTComplex *z, const FFTSample *wre, unsigned int n)\
+             ^~~~
+[0mCC	libavcodec/fft_init_table.o
+CC	libavcodec/ffv1.o
+CC	libavcodec/ffv1dec.o
+CC	libavcodec/ffv1enc.o
+CC	libavcodec/ffwavesynth.o
+CC	libavcodec/fic.o
+CC	libavcodec/flac.o
+CC	libavcodec/flac_parser.o
+CC	libavcodec/flacdata.o
+CC	libavcodec/flacdec.o
+CC	libavcodec/flacdsp.o
+CC	libavcodec/flacenc.o
+CC	libavcodec/flashsv.o
+CC	libavcodec/flashsv2enc.o
+CC	libavcodec/flashsvenc.o
+CC	libavcodec/flicvideo.o
+CC	libavcodec/flvdec.o
+CC	libavcodec/flvenc.o
+CC	libavcodec/fmtconvert.o
+CC	libavcodec/fmvc.o
+CC	libavcodec/frame_thread_encoder.o
+[91mlibavcodec/frame_thread_encoder.c: In function 'worker':
+libavcodec/frame_thread_encoder.c:86:9: warning: 'avcodec_encode_video2' is deprecated [-Wdeprecated-declarations]
+         ret = avcodec_encode_video2(avctx, pkt, frame, &got_packet);
+         ^~~
+[0m[91mIn file included from libavcodec/frame_thread_encoder.h:24:0,
+                 from libavcodec/frame_thread_encoder.c:21:
+libavcodec/avcodec.h:5416:5: note: declared here
+ int avcodec_encode_video2(AVCodecContext *avctx, AVPacket *avpkt,
+     ^~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavcodec/frame_thread_encoder.c:92:13: warning: 'av_dup_packet' is deprecated [-Wdeprecated-declarations]
+             int ret2 = av_dup_packet(pkt);
+             ^~~
+In file included from libavcodec/frame_thread_encoder.h:24:0,
+                 from libavcodec/frame_thread_encoder.c:21:
+libavcodec/avcodec.h:4535:5: note: declared here
+ int av_dup_packet(AVPacket *pkt);
+     ^~~~~~~~~~~~~
+[0mCC	libavcodec/fraps.o
+CC	libavcodec/frwu.o
+CC	libavcodec/g2meet.o
+CC	libavcodec/g722.o
+CC	libavcodec/g722dec.o
+CC	libavcodec/g722dsp.o
+CC	libavcodec/g722enc.o
+CC	libavcodec/g723_1.o
+CC	libavcodec/g723_1dec.o
+CC	libavcodec/g723_1enc.o
+CC	libavcodec/g726.o
+CC	libavcodec/g729_parser.o
+CC	libavcodec/g729dec.o
+CC	libavcodec/g729postfilter.o
+CC	libavcodec/gif.o
+CC	libavcodec/gifdec.o
+CC	libavcodec/golomb.o
+CC	libavcodec/gsm_parser.o
+CC	libavcodec/gsmdec.o
+CC	libavcodec/gsmdec_data.o
+CC	libavcodec/h261.o
+CC	libavcodec/h261_parser.o
+CC	libavcodec/h261data.o
+CC	libavcodec/h261dec.o
+CC	libavcodec/h261enc.o
+CC	libavcodec/h263.o
+CC	libavcodec/h263_parser.o
+CC	libavcodec/h263data.o
+CC	libavcodec/h263dec.o
+CC	libavcodec/h263dsp.o
+CC	libavcodec/h2645_parse.o
+CC	libavcodec/h264_cabac.o
+CC	libavcodec/h264_cavlc.o
+CC	libavcodec/h264_direct.o
+CC	libavcodec/h264_loopfilter.o
+CC	libavcodec/h264_mb.o
+CC	libavcodec/h264_mp4toannexb_bsf.o
+CC	libavcodec/h264_parse.o
+CC	libavcodec/h264_parser.o
+CC	libavcodec/h264_picture.o
+CC	libavcodec/h264_ps.o
+CC	libavcodec/h264_refs.o
+CC	libavcodec/h264_sei.o
+CC	libavcodec/h264_slice.o
+CC	libavcodec/h264chroma.o
+CC	libavcodec/h264data.o
+CC	libavcodec/h264dec.o
+CC	libavcodec/h264dsp.o
+CC	libavcodec/h264idct.o
+CC	libavcodec/h264pred.o
+CC	libavcodec/h264qpel.o
+CC	libavcodec/hap.o
+CC	libavcodec/hapdec.o
+CC	libavcodec/hevc_cabac.o
+CC	libavcodec/hevc_data.o
+CC	libavcodec/hevc_filter.o
+CC	libavcodec/hevc_mp4toannexb_bsf.o
+CC	libavcodec/hevc_mvs.o
+CC	libavcodec/hevc_parser.o
+CC	libavcodec/hevc_ps.o
+CC	libavcodec/hevc_refs.o
+CC	libavcodec/hevc_sei.o
+CC	libavcodec/hevcdec.o
+CC	libavcodec/hevcdsp.o
+CC	libavcodec/hevcpred.o
+CC	libavcodec/hnm4video.o
+CC	libavcodec/hpeldsp.o
+CC	libavcodec/hq_hqa.o
+CC	libavcodec/hq_hqadata.o
+CC	libavcodec/hq_hqadsp.o
+CC	libavcodec/hqx.o
+CC	libavcodec/hqxdsp.o
+CC	libavcodec/hqxvlc.o
+CC	libavcodec/htmlsubtitles.o
+CC	libavcodec/huffman.o
+CC	libavcodec/huffyuv.o
+CC	libavcodec/huffyuvdec.o
+CC	libavcodec/huffyuvdsp.o
+CC	libavcodec/huffyuvenc.o
+CC	libavcodec/huffyuvencdsp.o
+CC	libavcodec/idcinvideo.o
+CC	libavcodec/idctdsp.o
+CC	libavcodec/iff.o
+CC	libavcodec/iirfilter.o
+CC	libavcodec/imc.o
+CC	libavcodec/imgconvert.o
+CC	libavcodec/imx_dump_header_bsf.o
+CC	libavcodec/indeo2.o
+CC	libavcodec/indeo3.o
+CC	libavcodec/indeo4.o
+CC	libavcodec/indeo5.o
+CC	libavcodec/intelh263dec.o
+CC	libavcodec/interplayacm.o
+CC	libavcodec/interplayvideo.o
+CC	libavcodec/intrax8.o
+CC	libavcodec/intrax8dsp.o
+CC	libavcodec/ituh263dec.o
+CC	libavcodec/ituh263enc.o
+CC	libavcodec/ivi.o
+CC	libavcodec/ivi_dsp.o
+CC	libavcodec/j2kenc.o
+CC	libavcodec/jacosubdec.o
+CC	libavcodec/jfdctfst.o
+CC	libavcodec/jfdctint.o
+CC	libavcodec/jni.o
+CC	libavcodec/jpeg2000.o
+CC	libavcodec/jpeg2000dec.o
+CC	libavcodec/jpeg2000dsp.o
+CC	libavcodec/jpeg2000dwt.o
+CC	libavcodec/jpegls.o
+CC	libavcodec/jpeglsdec.o
+CC	libavcodec/jpeglsenc.o
+CC	libavcodec/jpegtables.o
+CC	libavcodec/jrevdct.o
+CC	libavcodec/jvdec.o
+CC	libavcodec/kbdwin.o
+CC	libavcodec/kgv1dec.o
+CC	libavcodec/kmvc.o
+CC	libavcodec/lagarith.o
+CC	libavcodec/lagarithrac.o
+CC	libavcodec/latm_parser.o
+CC	libavcodec/lcldec.o
+CC	libavcodec/lclenc.o
+CC	libavcodec/libfdk-aacdec.o
+CC	libavcodec/libfdk-aacenc.o
+[91mIn file included from /opt/ffmpeg/include/fdk-aac/FDK_audio.h:98:0,
+                 from /opt/ffmpeg/include/fdk-aac/aacenc_lib.h:706,
+                 from libavcodec/libfdk-aacenc.c:20:
+/opt/ffmpeg/include/fdk-aac/genericStds.h:402:5: warning: 'IS_LITTLE_ENDIAN' defined but not used [-Wunused-function]
+ int IS_LITTLE_ENDIAN(void) {
+     ^~~~~~~~~~~~~~~~
+[0m[91mIn file included from /opt/ffmpeg/include/fdk-aac/FDK_audio.h:98:0,
+                 from /opt/ffmpeg/include/fdk-aac/aacdecoder_lib.h:347,
+                 from libavcodec/libfdk-aacdec.c:20:
+/opt/ffmpeg/include/fdk-aac/genericStds.h:402:5: warning: 'IS_LITTLE_ENDIAN' defined but not used [-Wunused-function]
+ int IS_LITTLE_ENDIAN(void) {
+     ^~~~~~~~~~~~~~~~
+[0mCC	libavcodec/libmp3lame.o
+CC	libavcodec/libopencore-amr.o
+CC	libavcodec/libopus.o
+CC	libavcodec/libopusdec.o
+CC	libavcodec/libtheoraenc.o
+CC	libavcodec/libopusenc.o
+CC	libavcodec/libvorbisdec.o
+CC	libavcodec/libvorbisenc.o
+CC	libavcodec/libvpx.o
+CC	libavcodec/libvpxdec.o
+CC	libavcodec/libvpxenc.o
+CC	libavcodec/libwebpenc.o
+CC	libavcodec/libwebpenc_common.o
+CC	libavcodec/libx264.o
+CC	libavcodec/libx265.o
+[91mIn file included from libavcodec/libx265.c:27:0:
+/opt/ffmpeg/include/x265.h:34:5: warning: "_MSC_VER" is not defined, evaluates to 0 [-Wundef]
+ #if _MSC_VER
+     ^~~~~~~~
+/opt/ffmpeg/include/x265.h:180:5: warning: "X265_DEPTH" is not defined, evaluates to 0 [-Wundef]
+ #if X265_DEPTH < 10
+     ^~~~~~~~~~
+[0m[91mIn file included from libavcodec/libx265.c:27:0:
+/opt/ffmpeg/include/x265.h:2038:5: warning: "ENABLE_LIBVMAF" is not defined, evaluates to 0 [-Wundef]
+ #if ENABLE_LIBVMAF
+     ^~~~~~~~~~~~~~
+[0m[91m/opt/ffmpeg/include/x265.h:2107:5: warning: "ENABLE_LIBVMAF" is not defined, evaluates to 0 [-Wundef]
+ #if ENABLE_LIBVMAF
+     ^~~~~~~~~~~~~~
+[0mCC	libavcodec/libxvid.o
+[91mlibavcodec/libx265.c: In function 'libx265_encode_frame':
+[0m[91mlibavcodec/libx265.c:297:5: warning: 'ff_alloc_packet' is deprecated [-Wdeprecated-declarations]
+     ret = ff_alloc_packet(pkt, payload);
+     ^~~
+[0m[91mIn file included from libavcodec/libx265.c:35:0:
+libavcodec/internal.h:246:26: note: declared here
+ attribute_deprecated int ff_alloc_packet(AVPacket *avpkt, int size);
+                          ^~~~~~~~~~~~~~~
+[0mCC	libavcodec/libxvid_rc.o
+CC	libavcodec/ljpegenc.o
+CC	libavcodec/loco.o
+CC	libavcodec/log2_tab.o
+CC	libavcodec/lossless_audiodsp.o
+CC	libavcodec/lossless_videodsp.o
+CC	libavcodec/lossless_videoencdsp.o
+CC	libavcodec/lpc.o
+CC	libavcodec/lzf.o
+CC	libavcodec/lzw.o
+CC	libavcodec/lsp.o
+CC	libavcodec/lzwenc.o
+CC	libavcodec/m101.o
+CC	libavcodec/mace.o
+CC	libavcodec/magicyuv.o
+CC	libavcodec/mathtables.o
+CC	libavcodec/mdct15.o
+CC	libavcodec/mdct_fixed.o
+CC	libavcodec/mdct_fixed_32.o
+CC	libavcodec/mdct_float.o
+CC	libavcodec/mdec.o
+CC	libavcodec/me_cmp.o
+CC	libavcodec/mediacodec.o
+CC	libavcodec/metasound.o
+CC	libavcodec/metasound_data.o
+CC	libavcodec/microdvddec.o
+CC	libavcodec/mimic.o
+CC	libavcodec/mjpeg2jpeg_bsf.o
+CC	libavcodec/mjpeg_parser.o
+CC	libavcodec/mjpega_dump_header_bsf.o
+CC	libavcodec/mjpegbdec.o
+CC	libavcodec/mjpegdec.o
+CC	libavcodec/mjpegenc_common.o
+CC	libavcodec/mjpegenc.o
+CC	libavcodec/mjpegenc_huffman.o
+CC	libavcodec/mlp.o
+CC	libavcodec/mlp_parser.o
+CC	libavcodec/mlpdec.o
+CC	libavcodec/mlpdsp.o
+CC	libavcodec/mlz.o
+CC	libavcodec/mlpenc.o
+CC	libavcodec/mmvideo.o
+CC	libavcodec/motion_est.o
+CC	libavcodec/motionpixels.o
+CC	libavcodec/movsub_bsf.o
+CC	libavcodec/movtextdec.o
+CC	libavcodec/movtextenc.o
+CC	libavcodec/mp3_header_decompress_bsf.o
+CC	libavcodec/mpc.o
+CC	libavcodec/mpc7.o
+CC	libavcodec/mpc8.o
+CC	libavcodec/mpeg12.o
+CC	libavcodec/mpeg12data.o
+CC	libavcodec/mpeg12dec.o
+CC	libavcodec/mpeg12enc.o
+CC	libavcodec/mpeg12framerate.o
+CC	libavcodec/mpeg4_unpack_bframes_bsf.o
+CC	libavcodec/mpeg4audio.o
+CC	libavcodec/mpeg4video.o
+CC	libavcodec/mpeg4video_parser.o
+CC	libavcodec/mpeg4videodec.o
+CC	libavcodec/mpeg4videoenc.o
+CC	libavcodec/mpeg_er.o
+CC	libavcodec/mpegaudio.o
+CC	libavcodec/mpegaudio_parser.o
+CC	libavcodec/mpegaudiodata.o
+CC	libavcodec/mpegaudiodec_fixed.o
+CC	libavcodec/mpegaudiodec_float.o
+CC	libavcodec/mpegaudiodecheader.o
+CC	libavcodec/mpegaudiodsp.o
+CC	libavcodec/mpegaudiodsp_data.o
+CC	libavcodec/mpegaudiodsp_fixed.o
+CC	libavcodec/mpegaudiodsp_float.o
+CC	libavcodec/mpegaudioenc_fixed.o
+CC	libavcodec/mpegaudioenc_float.o
+CC	libavcodec/mpegpicture.o
+CC	libavcodec/mpegutils.o
+CC	libavcodec/mpegvideo.o
+CC	libavcodec/mpegvideo_enc.o
+CC	libavcodec/mpegvideo_motion.o
+CC	libavcodec/mpegvideo_parser.o
+CC	libavcodec/mpegvideodata.o
+CC	libavcodec/mpegvideodsp.o
+CC	libavcodec/mpegvideoencdsp.o
+CC	libavcodec/mpl2dec.o
+CC	libavcodec/mqc.o
+CC	libavcodec/mqcdec.o
+CC	libavcodec/mqcenc.o
+CC	libavcodec/msgsmdec.o
+CC	libavcodec/msmpeg4.o
+CC	libavcodec/msmpeg4data.o
+CC	libavcodec/msmpeg4dec.o
+CC	libavcodec/msmpeg4enc.o
+CC	libavcodec/msrle.o
+CC	libavcodec/msrledec.o
+CC	libavcodec/mss1.o
+CC	libavcodec/mss12.o
+CC	libavcodec/mss2.o
+CC	libavcodec/mss2dsp.o
+CC	libavcodec/mss3.o
+CC	libavcodec/mss34dsp.o
+CC	libavcodec/mss4.o
+CC	libavcodec/msvideo1.o
+CC	libavcodec/msvideo1enc.o
+CC	libavcodec/mvcdec.o
+CC	libavcodec/mxpegdec.o
+CC	libavcodec/nellymoser.o
+CC	libavcodec/nellymoserdec.o
+CC	libavcodec/nellymoserenc.o
+CC	libavcodec/nuv.o
+CC	libavcodec/noise_bsf.o
+CC	libavcodec/nvenc.o
+CC	libavcodec/nvenc_h264.o
+CC	libavcodec/nvenc_hevc.o
+CC	libavcodec/on2avc.o
+CC	libavcodec/on2avcdata.o
+CC	libavcodec/options.o
+CC	libavcodec/opus.o
+CC	libavcodec/opus_celt.o
+CC	libavcodec/opus_parser.o
+CC	libavcodec/opus_pvq.o
+CC	libavcodec/opus_rc.o
+CC	libavcodec/opus_silk.o
+CC	libavcodec/opusdec.o
+CC	libavcodec/opusenc.o
+CC	libavcodec/opustab.o
+CC	libavcodec/pafaudio.o
+CC	libavcodec/pafvideo.o
+CC	libavcodec/pamenc.o
+CC	libavcodec/parser.o
+CC	libavcodec/pcm-bluray.o
+CC	libavcodec/pcm-dvd.o
+CC	libavcodec/pcm.o
+CC	libavcodec/pcx.o
+CC	libavcodec/pcxenc.o
+CC	libavcodec/pgssubdec.o
+CC	libavcodec/pictordec.o
+CC	libavcodec/pixblockdsp.o
+CC	libavcodec/pixlet.o
+CC	libavcodec/png.o
+CC	libavcodec/png_parser.o
+CC	libavcodec/pngdec.o
+CC	libavcodec/pngdsp.o
+CC	libavcodec/pngenc.o
+CC	libavcodec/pnm.o
+CC	libavcodec/pnm_parser.o
+CC	libavcodec/pnmdec.o
+CC	libavcodec/pnmenc.o
+CC	libavcodec/profiles.o
+CC	libavcodec/proresdata.o
+CC	libavcodec/proresdec2.o
+CC	libavcodec/proresdec_lgpl.o
+CC	libavcodec/proresdsp.o
+CC	libavcodec/proresenc_anatoliy.o
+CC	libavcodec/proresenc_kostya.o
+CC	libavcodec/psd.o
+CC	libavcodec/psymodel.o
+CC	libavcodec/pthread.o
+CC	libavcodec/pthread_frame.o
+CC	libavcodec/pthread_slice.o
+CC	libavcodec/ptx.o
+CC	libavcodec/qcelpdec.o
+CC	libavcodec/qdm2.o
+CC	libavcodec/qdmc.o
+CC	libavcodec/qdrw.o
+CC	libavcodec/qpeg.o
+CC	libavcodec/qpeldsp.o
+CC	libavcodec/qsv_api.o
+CC	libavcodec/qtrle.o
+CC	libavcodec/qtrleenc.o
+CC	libavcodec/r210dec.o
+CC	libavcodec/r210enc.o
+CC	libavcodec/ra144.o
+CC	libavcodec/ra144dec.o
+CC	libavcodec/ra144enc.o
+CC	libavcodec/ra288.o
+CC	libavcodec/ralf.o
+CC	libavcodec/rangecoder.o
+CC	libavcodec/ratecontrol.o
+CC	libavcodec/raw.o
+CC	libavcodec/rawdec.o
+CC	libavcodec/rawenc.o
+CC	libavcodec/rdft.o
+CC	libavcodec/realtextdec.o
+CC	libavcodec/remove_extradata_bsf.o
+CC	libavcodec/resample.o
+CC	libavcodec/resample2.o
+CC	libavcodec/reverse.o
+CC	libavcodec/rl.o
+CC	libavcodec/rl2.o
+CC	libavcodec/rle.o
+CC	libavcodec/roqaudioenc.o
+CC	libavcodec/roqvideo.o
+CC	libavcodec/roqvideodec.o
+CC	libavcodec/roqvideoenc.o
+CC	libavcodec/rpza.o
+CC	libavcodec/rscc.o
+CC	libavcodec/rtjpeg.o
+CC	libavcodec/rv10.o
+CC	libavcodec/rv10enc.o
+CC	libavcodec/rv20enc.o
+CC	libavcodec/rv30.o
+CC	libavcodec/rv30dsp.o
+CC	libavcodec/rv34.o
+CC	libavcodec/rv34_parser.o
+CC	libavcodec/rv34dsp.o
+CC	libavcodec/rv40.o
+CC	libavcodec/rv40dsp.o
+CC	libavcodec/s302m.o
+CC	libavcodec/s302menc.o
+CC	libavcodec/samidec.o
+CC	libavcodec/sanm.o
+CC	libavcodec/sbrdsp.o
+CC	libavcodec/sbrdsp_fixed.o
+CC	libavcodec/scpr.o
+CC	libavcodec/screenpresso.o
+CC	libavcodec/sgidec.o
+CC	libavcodec/sgienc.o
+CC	libavcodec/sgirledec.o
+CC	libavcodec/sheervideo.o
+CC	libavcodec/shorten.o
+CC	libavcodec/simple_idct.o
+CC	libavcodec/sinewin.o
+CC	libavcodec/sinewin_fixed.o
+CC	libavcodec/sipr.o
+CC	libavcodec/sipr16k.o
+CC	libavcodec/sipr_parser.o
+CC	libavcodec/smacker.o
+CC	libavcodec/smc.o
+CC	libavcodec/smvjpegdec.o
+[91mlibavcodec/smvjpegdec.c: In function 'smvjpeg_decode_frame':
+libavcodec/smvjpegdec.c:162:9: warning: 'avcodec_decode_video2' is deprecated [-Wdeprecated-declarations]
+         ret = avcodec_decode_video2(s->avctx, mjpeg_data, &s->mjpeg_data_size, avpkt);
+         ^~~
+[0m[91mIn file included from libavcodec/smvjpegdec.c:28:0:
+libavcodec/avcodec.h:4901:5: note: declared here
+ int avcodec_decode_video2(AVCodecContext *avctx, AVFrame *picture,
+     ^~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavcodec/snappy.o
+CC	libavcodec/snow.o
+CC	libavcodec/snow_dwt.o
+CC	libavcodec/snowdec.o
+CC	libavcodec/snowenc.o
+[91mlibavcodec/snowenc.c: In function 'encode_frame':
+libavcodec/snowenc.c:1647:5: warning: 'coded_frame' is deprecated [-Wdeprecated-declarations]
+     av_frame_unref(avctx->coded_frame);
+     ^~~~~~~~~~~~~~
+[0m[91mIn file included from libavcodec/snowenc.c:25:0:
+libavcodec/avcodec.h:3152:35: note: declared here
+     attribute_deprecated AVFrame *coded_frame;
+                                   ^~~~~~~~~~~
+[0m[91mlibavcodec/snowenc.c:1648:5: warning: 'coded_frame' is deprecated [-Wdeprecated-declarations]
+     ret = av_frame_ref(avctx->coded_frame, s->current_picture);
+     ^~~
+[0m[91mIn file included from libavcodec/snowenc.c:25:0:
+libavcodec/avcodec.h:3152:35: note: declared here
+     attribute_deprecated AVFrame *coded_frame;
+                                   ^~~~~~~~~~~
+[0m[91mlibavcodec/snowenc.c:1678:9: warning: 'me_method' is deprecated [-Wdeprecated-declarations]
+         s->m.me_method= s->avctx->me_method;
+         ^
+[0m[91mIn file included from libavcodec/snowenc.c:25:0:
+libavcodec/avcodec.h:1967:30: note: declared here
+     attribute_deprecated int me_method;
+                              ^~~~~~~~~
+[0m[91mlibavcodec/snowenc.c:1881:5: warning: 'frame_bits' is deprecated [-Wdeprecated-declarations]
+     avctx->frame_bits = s->m.frame_bits;
+     ^~~~~
+[0m[91mIn file included from libavcodec/snowenc.c:25:0:
+libavcodec/avcodec.h:2893:9: note: declared here
+     int frame_bits;
+         ^~~~~~~~~~
+[0m[91mlibavcodec/snowenc.c:1882:5: warning: 'mv_bits' is deprecated [-Wdeprecated-declarations]
+     avctx->mv_bits = s->m.mv_bits;
+     ^~~~~
+In file included from libavcodec/snowenc.c:25:0:
+libavcodec/avcodec.h:2875:9: note: declared here
+     int mv_bits;
+         ^~~~~~~
+[0m[91mlibavcodec/snowenc.c:1883:5: warning: 'misc_bits' is deprecated [-Wdeprecated-declarations]
+     avctx->misc_bits = s->m.misc_bits;
+     ^~~~~
+In file included from libavcodec/snowenc.c:25:0:
+libavcodec/avcodec.h:2889:9: note: declared here
+     int misc_bits;
+         ^~~~~~~~~
+[0m[91mlibavcodec/snowenc.c:1884:5: warning: 'p_tex_bits' is deprecated [-Wdeprecated-declarations]
+     avctx->p_tex_bits = s->m.p_tex_bits;
+     ^~~~~
+In file included from libavcodec/snowenc.c:25:0:
+libavcodec/avcodec.h:2881:9: note: declared here
+     int p_tex_bits;
+         ^~~~~~~~~~
+[0mCC	libavcodec/sonic.o
+CC	libavcodec/sp5xdec.o
+CC	libavcodec/speedhq.o
+CC	libavcodec/srtdec.o
+CC	libavcodec/srtenc.o
+CC	libavcodec/startcode.o
+CC	libavcodec/subviewerdec.o
+CC	libavcodec/sunrast.o
+CC	libavcodec/sunrastenc.o
+CC	libavcodec/svq1.o
+CC	libavcodec/svq13.o
+CC	libavcodec/svq1dec.o
+CC	libavcodec/svq1enc.o
+CC	libavcodec/svq3.o
+CC	libavcodec/synth_filter.o
+CC	libavcodec/tak.o
+CC	libavcodec/tak_parser.o
+CC	libavcodec/takdec.o
+CC	libavcodec/takdsp.o
+CC	libavcodec/targa.o
+CC	libavcodec/targa_y216dec.o
+CC	libavcodec/targaenc.o
+CC	libavcodec/tdsc.o
+CC	libavcodec/textdec.o
+CC	libavcodec/tiertexseqv.o
+CC	libavcodec/texturedsp.o
+CC	libavcodec/tiff.o
+CC	libavcodec/tiff_common.o
+CC	libavcodec/tiff_data.o
+CC	libavcodec/tmv.o
+CC	libavcodec/tiffenc.o
+CC	libavcodec/tpeldsp.o
+CC	libavcodec/truemotion1.o
+CC	libavcodec/truemotion2.o
+CC	libavcodec/truemotion2rt.o
+CC	libavcodec/truespeech.o
+CC	libavcodec/tscc.o
+CC	libavcodec/tscc2.o
+CC	libavcodec/tta.o
+CC	libavcodec/ttadata.o
+CC	libavcodec/ttadsp.o
+CC	libavcodec/ttaenc.o
+CC	libavcodec/ttaencdsp.o
+CC	libavcodec/twinvq.o
+CC	libavcodec/twinvqdec.o
+CC	libavcodec/txd.o
+CC	libavcodec/ulti.o
+CC	libavcodec/utils.o
+[91mlibavcodec/utils.c: In function 'avcodec_encode_audio2':
+libavcodec/utils.c:1933:13: warning: 'av_dup_packet' is deprecated [-Wdeprecated-declarations]
+             if (av_dup_packet(avpkt) < 0) {
+             ^~
+[0m[91mIn file included from libavcodec/utils.c:46:0:
+libavcodec/avcodec.h:4535:5: note: declared here
+ int av_dup_packet(AVPacket *pkt);
+     ^~~~~~~~~~~~~
+[0m[91mlibavcodec/utils.c: In function 'avcodec_encode_video2':
+libavcodec/utils.c:2029:13: warning: 'av_dup_packet' is deprecated [-Wdeprecated-declarations]
+             if (av_dup_packet(avpkt) < 0) {
+             ^~
+In file included from libavcodec/utils.c:46:0:
+libavcodec/avcodec.h:4535:5: note: declared here
+ int av_dup_packet(AVPacket *pkt);
+     ^~~~~~~~~~~~~
+[0m[91mlibavcodec/utils.c: In function 'do_decode':
+[0m[91mlibavcodec/utils.c:2825:9: warning: 'avcodec_decode_video2' is deprecated [-Wdeprecated-declarations]
+         ret = avcodec_decode_video2(avctx, avctx->internal->buffer_frame,
+         ^~~
+[0m[91mlibavcodec/utils.c:2230:25: note: declared here
+ int attribute_align_arg avcodec_decode_video2(AVCodecContext *avctx, AVFrame *picture,
+                         ^~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavcodec/utils.c:2830:9: warning: 'avcodec_decode_audio4' is deprecated [-Wdeprecated-declarations]
+         ret = avcodec_decode_audio4(avctx, avctx->internal->buffer_frame,
+         ^~~
+[0m[91mlibavcodec/utils.c:2339:25: note: declared here
+ int attribute_align_arg avcodec_decode_audio4(AVCodecContext *avctx,
+                         ^~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavcodec/utils.c: In function 'do_encode':
+[0m[91mlibavcodec/utils.c:2982:9: warning: 'avcodec_encode_video2' is deprecated [-Wdeprecated-declarations]
+         ret = avcodec_encode_video2(avctx, avctx->internal->buffer_pkt,
+         ^~~
+libavcodec/utils.c:1971:25: note: declared here
+ int attribute_align_arg avcodec_encode_video2(AVCodecContext *avctx,
+                         ^~~~~~~~~~~~~~~~~~~~~
+libavcodec/utils.c:2985:9: warning: 'avcodec_encode_audio2' is deprecated [-Wdeprecated-declarations]
+         ret = avcodec_encode_audio2(avctx, avctx->internal->buffer_pkt,
+         ^~~
+libavcodec/utils.c:1825:25: note: declared here
+ int attribute_align_arg avcodec_encode_audio2(AVCodecContext *avctx,
+                         ^~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavcodec/utvideo.o
+CC	libavcodec/utvideodec.o
+[91mlibavcodec/utvideodec.c: In function 'decode_plane':
+libavcodec/utvideodec.c:242:23: warning: '~' on a boolean expression [-Wbool-operation]
+     const int cmask = ~(!plane_no && c->avctx->pix_fmt == AV_PIX_FMT_YUV420P);
+                       ^
+libavcodec/utvideodec.c:242:23: note: did you mean to use logical not?
+     const int cmask = ~(!plane_no && c->avctx->pix_fmt == AV_PIX_FMT_YUV420P);
+                       ^
+                       !
+[0mCC	libavcodec/utvideoenc.o
+CC	libavcodec/v210dec.o
+[91mlibavcodec/utvideoenc.c: In function 'encode_plane':
+libavcodec/utvideoenc.c:412:23: warning: '~' on a boolean expression [-Wbool-operation]
+     const int cmask = ~(!plane_no && avctx->pix_fmt == AV_PIX_FMT_YUV420P);
+                       ^
+libavcodec/utvideoenc.c:412:23: note: did you mean to use logical not?
+     const int cmask = ~(!plane_no && avctx->pix_fmt == AV_PIX_FMT_YUV420P);
+                       ^
+                       !
+[0mCC	libavcodec/v210enc.o
+CC	libavcodec/v210x.o
+CC	libavcodec/v308dec.o
+CC	libavcodec/v308enc.o
+CC	libavcodec/v408dec.o
+CC	libavcodec/v408enc.o
+CC	libavcodec/v410dec.o
+CC	libavcodec/v410enc.o
+CC	libavcodec/vaapi_decode.o
+CC	libavcodec/vaapi_encode.o
+[91mIn file included from libavcodec/vaapi_decode.c:25:0:
+libavcodec/vaapi_decode.h:63:12: warning: 'vaapi_context' is deprecated [-Wdeprecated-declarations]
+     struct vaapi_context *old_context;
+            ^~~~~~~~~~~~~
+[0m[91mIn file included from libavcodec/vaapi_decode.h:32:0,
+                 from libavcodec/vaapi_decode.c:25:
+libavcodec/vaapi.h:56:29: note: declared here
+ struct attribute_deprecated vaapi_context {
+                             ^~~~~~~~~~~~~
+[0m[91mlibavcodec/vaapi_decode.c:249:5: warning: 'VAProfileH264Baseline' is deprecated [-Wdeprecated-declarations]
+     MAP(H264,        H264_BASELINE,   H264Baseline),
+     ^~~
+[0m[91mIn file included from libavcodec/vaapi_decode.h:22:0,
+                 from libavcodec/vaapi_decode.c:25:
+/usr/include/va/va.h:359:5: note: declared here
+     VAProfileH264Baseline va_deprecated_enum = 5,
+     ^~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavcodec/vaapi_encode_h264.o
+CC	libavcodec/vaapi_encode_h265.o
+CC	libavcodec/vaapi_encode_h26x.o
+[91mlibavcodec/vaapi_encode_h264.c: In function 'vaapi_encode_h264_write_extra_header':
+[0m[91mlibavcodec/vaapi_encode_h264.c:764:9: warning: 'VAEncPackedHeaderH264_SEI' is deprecated [-Wdeprecated-declarations]
+         *type = VAEncPackedHeaderH264_SEI;
+         ^
+[0m[91mIn file included from /usr/include/va/va.h:4181:0,
+                 from libavcodec/vaapi_encode_h264.c:19:
+/usr/include/va/va_enc_h264.h:125:5: note: declared here
+     VAEncPackedHeaderH264_SEI va_deprecated_enum  = (0x80000000 | 1),
+     ^~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mlibavcodec/vaapi_encode_h264.c: In function 'vaapi_encode_h264_init':
+[0m[91mlibavcodec/vaapi_encode_h264.c:1204:9: warning: 'VAProfileH264Baseline' is deprecated [-Wdeprecated-declarations]
+         ctx->va_profile = VAProfileH264Baseline;
+         ^~~
+[0m[91mIn file included from libavcodec/vaapi_encode_h264.c:19:0:
+/usr/include/va/va.h:359:5: note: declared here
+     VAProfileH264Baseline va_deprecated_enum = 5,
+     ^~~~~~~~~~~~~~~~~~~~~
+[0mCC	libavcodec/vaapi_encode_mjpeg.o
+CC	libavcodec/vaapi_encode_mpeg2.o
+[91mIn file included from libavcodec/vaapi_encode_h265.c:32:0:
+libavcodec/vaapi_encode_h265.c: In function 'vaapi_encode_h265_write_sequence_header':
+[0m[91mlibavcodec/vaapi_encode_h265.c:305:49: warning: array subscript is above array bounds [-Warray-bounds]
+ #define mseq_var(name)     mseq->name, name
+                            ~~~~~~~~~~~~~~~~      
+ #define mslice_var(name)   mslice->name, name
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+ #define mstrps_var(name)   mstrps->name, name
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+ 
+                                                  
+ static void vaapi_encode_h265_write_nal_unit_header(PutBitContext *pbc,
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                     int nal_unit_type)
+                                                     ~~~~~~~~~~~~~~~~~~
+ {
+ ~                                                
+     u(1, 0, forbidden_zero_bit);
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 
+     u(6, nal_unit_type, nal_unit_type);
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~          
+     u(6, 0, nuh_layer_id);
+     ~~~~~~~~~~~~~~~~~~~~~~                       
+     u(3, 1, nuh_temporal_id_plus1);
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~              
+ }
+ ~                                                
+ 
+                                                  
+ static void vaapi_encode_h265_write_rbsp_trailing_bits(PutBitContext *pbc)
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ {
+ ~                                                
+     u(1, 1, rbsp_stop_one_bit);
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~                  
+     while (put_bits_count(pbc) & 7)
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~              
+         u(1, 0, rbsp_alignment_zero_bit);
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
+ }
+ ~                                                
+ 
+                                                  
+ static void vaapi_encode_h265_write_profile_tier_level(PutBitContext *pbc,
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                        VAAPIEncodeContext *ctx)
+                                                        ~~~~~~~~~~~~~~~~~~~~~~~~
+ {
+ ~                                                
+     VAEncSequenceParameterBufferHEVC  *vseq = ctx->codec_sequence_params;
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     VAAPIEncodeH265Context            *priv = ctx->priv_data;
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     VAAPIEncodeH265MiscSequenceParams *mseq = &priv->misc_sequence_params;
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     int j;
+     ~~~~~~                                       
+ 
+                                                  
+     if (1) {
+     ~~~~~~~~                                     
+         u(2, 0, general_profile_space);
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~          
+         u(1, vseq_var(general_tier_flag));
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       
+         u(5, vseq_var(general_profile_idc));
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
+ 
+                                                  
+         for (j = 0; j < 32; j++) {
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~               
+             u(1, mseq_var(general_profile_compatibility_flag[j]));
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         }
+         ~                                        
+ 
+                                                  
+         u(1, mseq_var(general_progressive_source_flag));
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         u(1, mseq_var(general_interlaced_source_flag));
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         u(1, mseq_var(general_non_packed_constraint_flag));
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         u(1, mseq_var(general_frame_only_constraint_flag));
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+                                                  
+         if (0) {
+         ~~~~~~~~                                 
+             // Not main profile.
+             ~~~~~~~~~~~~~~~~~~~~                 
+             // Lots of extra constraint flags.
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+         } else {
+         ~~~~~~~~                                 
+             // put_bits only handles up to 31 bits.
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             u(23, 0, general_reserved_zero_43bits);
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             u(20, 0, general_reserved_zero_43bits);
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         }
+         ~                                        
+ 
+                                                  
+         if (vseq->general_profile_idc >= 1 && vseq->general_profile_idc <= 5) {
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             u(1, mseq_var(general_inbld_flag));
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+         } else {
+         ~~~~~~~~                                 
+             u(1, 0, general_reserved_zero_bit);
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+         }
+         ~                                        
+     }
+     ~                                            
+ 
+                                                  
+     u(8, vseq_var(general_level_idc));
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~           
+ 
+                                                  
+     // No sublayers.
+     ~~~~~~~~~~~~~~~~                             
+ }
+ ~                                                
+ 
+                                                  
+ static void vaapi_encode_h265_write_vps(PutBitContext *pbc,
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                         VAAPIEncodeContext *ctx)
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~
+ {
+ ~                                                
+     VAAPIEncodeH265Context            *priv = ctx->priv_data;
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     VAAPIEncodeH265MiscSequenceParams *mseq = &priv->misc_sequence_params;
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     int i, j;
+     ~~~~~~~~~                                    
+ 
+                                                  
+     vaapi_encode_h265_write_nal_unit_header(pbc, HEVC_NAL_VPS);
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+                                                  
+     u(4, mseq->video_parameter_set_id, vps_video_parameter_set_id);
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+                                                  
+     u(1, 1, vps_base_layer_internal_flag);
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       
+     u(1, 1, vps_base_layer_available_flag);
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      
+     u(6, mseq_var(vps_max_layers_minus1));
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       
+     u(3, mseq_var(vps_max_sub_layers_minus1));
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+     u(1, mseq_var(vps_temporal_id_nesting_flag));
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+                                                  
+     u(16, 0xffff, vps_reserved_0xffff_16bits);
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+ 
+                                                  
+     vaapi_encode_h265_write_profile_tier_level(pbc, ctx);
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+                                                  
+     u(1, mseq_var(vps_sub_layer_ordering_info_present_flag));
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     for (i = (mseq->vps_sub_layer_ordering_info_present_flag ?
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               0 : mseq->vps_max_sub_layers_minus1);
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          i <= mseq->vps_max_sub_layers_minus1; i++) {
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         ue(mseq_var(vps_max_dec_pic_buffering_minus1[i]));
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         ue(mseq_var(vps_max_num_reorder_pics[i]));
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         ue(mseq_var(vps_max_latency_increase_plus1[i]));
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     }
+     ~                                            
+ 
+                                                  
+     u(6, mseq_var(vps_max_layer_id));
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~            
+     ue(mseq_var(vps_num_layer_sets_minus1));
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
+     for (i = 1; i <= mseq->vps_num_layer_sets_minus1; i++) {
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         for (j = 0; j < mseq->vps_max_layer_id; j++)
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             u(1, mseq_var(layer_id_included_flag[i][j]));
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+libavcodec/vaapi_encode_h26x.h:32:63: note: in definition of macro 'write_u'
+ #define write_u(pbc, width, value, name) put_bits(pbc, width, value)
+                                                               ^~~~~
+libavcodec/vaapi_encode_h265.c:305:13: note: in expansion of macro 'u'
+             u(1, mseq_var(layer_id_included_flag[i][j]));
+             ^
+libavcodec/vaapi_encode_h265.c:305:18: note: in expansion of macro 'mseq_var'
+             u(1, mseq_var(layer_id_included_flag[i][j]));
+                  ^~~~~~~~
+[0mCC	libavcodec/vaapi_encode_vp8.o
+CC	libavcodec/vaapi_h264.o
+CC	libavcodec/vaapi_hevc.o
+CC	libavcodec/vaapi_mpeg2.o
+[91mIn file included from libavcodec/vaapi_hevc.c:29:0:
+libavcodec/vaapi_decode.h:63:12: warning: 'vaapi_context' is deprecated [-Wdeprecated-declarations]
+     struct vaapi_context *old_context;
+            ^~~~~~~~~~~~~
+In file included from libavcodec/vaapi_decode.h:32:0,
+                 from libavcodec/vaapi_hevc.c:29:
+libavcodec/vaapi.h:56:29: note: declared here
+ struct attribute_deprecated vaapi_context {
+                             ^~~~~~~~~~~~~
+[0m[91mIn file included from libavcodec/vaapi_h264.c:26:0:
+libavcodec/vaapi_decode.h:63:12: warning: 'vaapi_context' is deprecated [-Wdeprecated-declarations]
+     struct vaapi_context *old_context;
+            ^~~~~~~~~~~~~
+[0m[91mIn file included from libavcodec/vaapi_decode.h:32:0,
+                 from libavcodec/vaapi_h264.c:26:
+libavcodec/vaapi.h:56:29: note: declared here
+ struct attribute_deprecated vaapi_context {
+                             ^~~~~~~~~~~~~
+[0mCC	libavcodec/vaapi_mpeg4.o
+[91mIn file included from libavcodec/vaapi_mpeg2.c:27:0:
+libavcodec/vaapi_decode.h:63:12: warning: 'vaapi_context' is deprecated [-Wdeprecated-declarations]
+     struct vaapi_context *old_context;
+            ^~~~~~~~~~~~~
+In file included from libavcodec/vaapi_decode.h:32:0,
+                 from libavcodec/vaapi_mpeg2.c:27:
+libavcodec/vaapi.h:56:29: note: declared here
+ struct attribute_deprecated vaapi_context {
+                             ^~~~~~~~~~~~~
+[0mCC	libavcodec/vaapi_vc1.o
+CC	libavcodec/vaapi_vp9.o
+[91mIn file included from libavcodec/vaapi_mpeg4.c:28:0:
+libavcodec/vaapi_decode.h:63:12: warning: 'vaapi_context' is deprecated [-Wdeprecated-declarations]
+     struct vaapi_context *old_context;
+            ^~~~~~~~~~~~~
+In file included from libavcodec/vaapi_decode.h:32:0,
+                 from libavcodec/vaapi_mpeg4.c:28:
+libavcodec/vaapi.h:56:29: note: declared here
+ struct attribute_deprecated vaapi_context {
+                             ^~~~~~~~~~~~~
+[0mCC	libavcodec/vble.o
+CC	libavcodec/vb.o
+[91mIn file included from libavcodec/vaapi_vp9.c:26:0:
+libavcodec/vaapi_decode.h:63:12: warning: 'vaapi_context' is deprecated [-Wdeprecated-declarations]
+     struct vaapi_context *old_context;
+            ^~~~~~~~~~~~~
+In file included from libavcodec/vaapi_decode.h:32:0,
+                 from libavcodec/vaapi_vp9.c:26:
+libavcodec/vaapi.h:56:29: note: declared here
+ struct attribute_deprecated vaapi_context {
+                             ^~~~~~~~~~~~~
+[0m[91mIn file included from libavcodec/vaapi_vc1.c:25:0:
+libavcodec/vaapi_decode.h:63:12: warning: 'vaapi_context' is deprecated [-Wdeprecated-declarations]
+     struct vaapi_context *old_context;
+            ^~~~~~~~~~~~~
+In file included from libavcodec/vaapi_decode.h:32:0,
+                 from libavcodec/vaapi_vc1.c:25:
+libavcodec/vaapi.h:56:29: note: declared here
+ struct attribute_deprecated vaapi_context {
+                             ^~~~~~~~~~~~~
+[0mCC	libavcodec/vc1.o
+CC	libavcodec/vc1_block.o
+CC	libavcodec/vc1_loopfilter.o
+CC	libavcodec/vc1_mc.o
+CC	libavcodec/vc1_parser.o
+CC	libavcodec/vc1_pred.o
+CC	libavcodec/vc1data.o
+CC	libavcodec/vc1dec.o
+CC	libavcodec/vc1dsp.o
+CC	libavcodec/vc2enc.o
+CC	libavcodec/vc2enc_dwt.o
+CC	libavcodec/vcr1.o
+CC	libavcodec/videodsp.o
+CC	libavcodec/vima.o
+CC	libavcodec/vmdaudio.o
+CC	libavcodec/vmdvideo.o
+CC	libavcodec/vmnc.o
+CC	libavcodec/vorbis.o
+CC	libavcodec/vorbis_data.o
+CC	libavcodec/vorbis_parser.o
+CC	libavcodec/vorbisdec.o
+CC	libavcodec/vorbisdsp.o
+CC	libavcodec/vorbisenc.o
+CC	libavcodec/vp3.o
+CC	libavcodec/vp3_parser.o
+CC	libavcodec/vp3dsp.o
+CC	libavcodec/vp5.o
+CC	libavcodec/vp56.o
+CC	libavcodec/vp56data.o
+CC	libavcodec/vp56dsp.o
+CC	libavcodec/vp56rac.o
+CC	libavcodec/vp6.o
+CC	libavcodec/vp6dsp.o
+CC	libavcodec/vp8.o
+CC	libavcodec/vp8_parser.o
+CC	libavcodec/vp8dsp.o
+CC	libavcodec/vp9.o
+CC	libavcodec/vp9_parser.o
+CC	libavcodec/vp9_superframe_bsf.o
+CC	libavcodec/vp9block.o
+CC	libavcodec/vp9data.o
+CC	libavcodec/vp9dsp.o
+CC	libavcodec/vp9dsp_10bpp.o
+CC	libavcodec/vp9dsp_12bpp.o
+CC	libavcodec/vp9dsp_8bpp.o
+CC	libavcodec/vp9lpf.o
+CC	libavcodec/vp9mvs.o
+CC	libavcodec/vp9prob.o
+CC	libavcodec/vp9recon.o
+CC	libavcodec/vqavideo.o
+CC	libavcodec/wavpack.o
+CC	libavcodec/wavpackenc.o
+CC	libavcodec/webp.o
+CC	libavcodec/webvttdec.o
+CC	libavcodec/webvttenc.o
+CC	libavcodec/wma.o
+CC	libavcodec/wma_common.o
+CC	libavcodec/wma_freqs.o
+CC	libavcodec/wmadec.o
+CC	libavcodec/wmaenc.o
+CC	libavcodec/wmalosslessdec.o
+CC	libavcodec/wmaprodec.o
+CC	libavcodec/wmavoice.o
+CC	libavcodec/wmv2.o
+CC	libavcodec/wmv2dec.o
+CC	libavcodec/wmv2data.o
+CC	libavcodec/wmv2dsp.o
+CC	libavcodec/wmv2enc.o
+CC	libavcodec/wnv1.o
+CC	libavcodec/wrapped_avframe.o
+CC	libavcodec/ws-snd1.o
+YASM	libavcodec/x86/aacencdsp.o
+CC	libavcodec/x86/aacencdsp_init.o
+STRIP	libavcodec/x86/aacencdsp.o
+CC	libavcodec/x86/aacpsdsp_init.o
+YASM	libavcodec/x86/aacpsdsp.o
+STRIP	libavcodec/x86/aacpsdsp.o
+CC	libavcodec/x86/ac3dsp_init.o
+YASM	libavcodec/x86/ac3dsp.o
+STRIP	libavcodec/x86/ac3dsp.o
+CC	libavcodec/x86/alacdsp_init.o
+YASM	libavcodec/x86/ac3dsp_downmix.o
+YASM	libavcodec/x86/alacdsp.o
+STRIP	libavcodec/x86/alacdsp.o
+YASM	libavcodec/x86/audiodsp.o
+CC	libavcodec/x86/audiodsp_init.o
+STRIP	libavcodec/x86/audiodsp.o
+STRIP	libavcodec/x86/ac3dsp_downmix.o
+CC	libavcodec/x86/blockdsp_init.o
+YASM	libavcodec/x86/blockdsp.o
+YASM	libavcodec/x86/bswapdsp.o
+STRIP	libavcodec/x86/bswapdsp.o
+STRIP	libavcodec/x86/blockdsp.o
+CC	libavcodec/x86/bswapdsp_init.o
+CC	libavcodec/x86/cavsdsp.o
+CC	libavcodec/x86/constants.o
+YASM	libavcodec/x86/dcadsp.o
+CC	libavcodec/x86/dcadsp_init.o
+STRIP	libavcodec/x86/dcadsp.o
+YASM	libavcodec/x86/dct32.o
+CC	libavcodec/x86/dct_init.o
+STRIP	libavcodec/x86/dct32.o
+CC	libavcodec/x86/dirac_dwt_init.o
+YASM	libavcodec/x86/diracdsp.o
+YASM	libavcodec/x86/dirac_dwt.o
+STRIP	libavcodec/x86/diracdsp.o
+CC	libavcodec/x86/diracdsp_init.o
+STRIP	libavcodec/x86/dirac_dwt.o
+CC	libavcodec/x86/dnxhdenc_init.o
+YASM	libavcodec/x86/dnxhdenc.o
+STRIP	libavcodec/x86/dnxhdenc.o
+CC	libavcodec/x86/fdct.o
+CC	libavcodec/x86/fdctdsp_init.o
+CC	libavcodec/x86/fft_init.o
+YASM	libavcodec/x86/fft.o
+YASM	libavcodec/x86/flac_dsp_gpl.o
+STRIP	libavcodec/x86/flac_dsp_gpl.o
+STRIP	libavcodec/x86/fft.o
+CC	libavcodec/x86/flacdsp_init.o
+YASM	libavcodec/x86/fmtconvert.o
+YASM	libavcodec/x86/flacdsp.o
+STRIP	libavcodec/x86/fmtconvert.o
+CC	libavcodec/x86/fmtconvert_init.o
+STRIP	libavcodec/x86/flacdsp.o
+CC	libavcodec/x86/g722dsp_init.o
+YASM	libavcodec/x86/fpel.o
+YASM	libavcodec/x86/g722dsp.o
+YASM	libavcodec/x86/h263_loopfilter.o
+STRIP	libavcodec/x86/g722dsp.o
+CC	libavcodec/x86/h263dsp_init.o
+STRIP	libavcodec/x86/h263_loopfilter.o
+STRIP	libavcodec/x86/fpel.o
+YASM	libavcodec/x86/h264_chromamc_10bit.o
+YASM	libavcodec/x86/h264_chromamc.o
+STRIP	libavcodec/x86/h264_chromamc_10bit.o
+STRIP	libavcodec/x86/h264_chromamc.o
+YASM	libavcodec/x86/h264_deblock_10bit.o
+YASM	libavcodec/x86/h264_deblock.o
+STRIP	libavcodec/x86/h264_deblock_10bit.o
+YASM	libavcodec/x86/h264_idct.o
+YASM	libavcodec/x86/h264_idct_10bit.o
+STRIP	libavcodec/x86/h264_deblock.o
+STRIP	libavcodec/x86/h264_idct_10bit.o
+CC	libavcodec/x86/h264_intrapred_init.o
+STRIP	libavcodec/x86/h264_idct.o
+CC	libavcodec/x86/h264_qpel.o
+YASM	libavcodec/x86/h264_intrapred_10bit.o
+YASM	libavcodec/x86/h264_intrapred.o
+STRIP	libavcodec/x86/h264_intrapred_10bit.o
+YASM	libavcodec/x86/h264_qpel_10bit.o
+YASM	libavcodec/x86/h264_qpel_8bit.o
+STRIP	libavcodec/x86/h264_qpel_10bit.o
+STRIP	libavcodec/x86/h264_intrapred.o
+YASM	libavcodec/x86/h264_weight.o
+YASM	libavcodec/x86/h264_weight_10bit.o
+STRIP	libavcodec/x86/h264_weight_10bit.o
+CC	libavcodec/x86/h264chroma_init.o
+STRIP	libavcodec/x86/h264_weight.o
+CC	libavcodec/x86/h264dsp_init.o
+STRIP	libavcodec/x86/h264_qpel_8bit.o
+YASM	libavcodec/x86/hevc_add_res.o
+STRIP	libavcodec/x86/hevc_add_res.o
+YASM	libavcodec/x86/hevc_sao.o
+YASM	libavcodec/x86/hevc_idct.o
+YASM	libavcodec/x86/hevc_deblock.o
+STRIP	libavcodec/x86/hevc_sao.o
+STRIP	libavcodec/x86/hevc_idct.o
+CC	libavcodec/x86/hevcdsp_init.o
+STRIP	libavcodec/x86/hevc_deblock.o
+YASM	libavcodec/x86/hevc_sao_10bit.o
+YASM	libavcodec/x86/hpeldsp.o
+STRIP	libavcodec/x86/hpeldsp.o
+CC	libavcodec/x86/hpeldsp_init.o
+YASM	libavcodec/x86/hpeldsp_vp3.o
+STRIP	libavcodec/x86/hpeldsp_vp3.o
+STRIP	libavcodec/x86/hevc_sao_10bit.o
+CC	libavcodec/x86/hpeldsp_vp3_init.o
+YASM	libavcodec/x86/huffyuvdsp.o
+STRIP	libavcodec/x86/huffyuvdsp.o
+CC	libavcodec/x86/huffyuvdsp_init.o
+YASM	libavcodec/x86/hevc_mc.o
+CC	libavcodec/x86/huffyuvencdsp_init.o
+YASM	libavcodec/x86/huffyuvencdsp.o
+STRIP	libavcodec/x86/huffyuvencdsp.o
+YASM	libavcodec/x86/idctdsp.o
+CC	libavcodec/x86/idctdsp_init.o
+STRIP	libavcodec/x86/idctdsp.o
+YASM	libavcodec/x86/imdct36.o
+YASM	libavcodec/x86/jpeg2000dsp.o
+STRIP	libavcodec/x86/jpeg2000dsp.o
+CC	libavcodec/x86/jpeg2000dsp_init.o
+YASM	libavcodec/x86/lossless_audiodsp.o
+STRIP	libavcodec/x86/lossless_audiodsp.o
+STRIP	libavcodec/x86/imdct36.o
+CC	libavcodec/x86/lossless_audiodsp_init.o
+CC	libavcodec/x86/lossless_videodsp_init.o
+YASM	libavcodec/x86/lossless_videodsp.o
+STRIP	libavcodec/x86/lossless_videodsp.o
+YASM	libavcodec/x86/lossless_videoencdsp.o
+CC	libavcodec/x86/lossless_videoencdsp_init.o
+STRIP	libavcodec/x86/lossless_videoencdsp.o
+CC	libavcodec/x86/lpc.o
+CC	libavcodec/x86/me_cmp_init.o
+YASM	libavcodec/x86/me_cmp.o
+YASM	libavcodec/x86/mlpdsp.o
+STRIP	libavcodec/x86/mlpdsp.o
+CC	libavcodec/x86/mlpdsp_init.o
+STRIP	libavcodec/x86/me_cmp.o
+CC	libavcodec/x86/mpegaudiodsp.o
+CC	libavcodec/x86/mpegvideo.o
+CC	libavcodec/x86/mpegvideodsp.o
+CC	libavcodec/x86/mpegvideoenc.o
+YASM	libavcodec/x86/mpegvideoencdsp.o
+CC	libavcodec/x86/mpegvideoencdsp_init.o
+STRIP	libavcodec/x86/mpegvideoencdsp.o
+YASM	libavcodec/x86/pixblockdsp.o
+CC	libavcodec/x86/pixblockdsp_init.o
+STRIP	libavcodec/x86/pixblockdsp.o
+CC	libavcodec/x86/pngdsp_init.o
+YASM	libavcodec/x86/pngdsp.o
+STRIP	libavcodec/x86/pngdsp.o
+CC	libavcodec/x86/proresdsp_init.o
+YASM	libavcodec/x86/proresdsp.o
+YASM	libavcodec/x86/qpel.o
+STRIP	libavcodec/x86/qpel.o
+CC	libavcodec/x86/qpeldsp_init.o
+STRIP	libavcodec/x86/proresdsp.o
+YASM	libavcodec/x86/rv34dsp.o
+STRIP	libavcodec/x86/rv34dsp.o
+CC	libavcodec/x86/rv34dsp_init.o
+STRIP	libavcodec/x86/hevc_mc.o
+CC	libavcodec/x86/rv40dsp_init.o
+YASM	libavcodec/x86/qpeldsp.o
+YASM	libavcodec/x86/rv40dsp.o
+STRIP	libavcodec/x86/rv40dsp.o
+CC	libavcodec/x86/sbrdsp_init.o
+YASM	libavcodec/x86/sbrdsp.o
+STRIP	libavcodec/x86/qpeldsp.o
+CC	libavcodec/x86/simple_idct.o
+STRIP	libavcodec/x86/sbrdsp.o
+CC	libavcodec/x86/snowdsp.o
+CC	libavcodec/x86/svq1enc_init.o
+YASM	libavcodec/x86/svq1enc.o
+STRIP	libavcodec/x86/svq1enc.o
+YASM	libavcodec/x86/synth_filter.o
+STRIP	libavcodec/x86/synth_filter.o
+YASM	libavcodec/x86/simple_idct10.o
+CC	libavcodec/x86/synth_filter_init.o
+CC	libavcodec/x86/takdsp_init.o
+YASM	libavcodec/x86/takdsp.o
+STRIP	libavcodec/x86/takdsp.o
+YASM	libavcodec/x86/ttadsp.o
+STRIP	libavcodec/x86/ttadsp.o
+STRIP	libavcodec/x86/simple_idct10.o
+CC	libavcodec/x86/ttadsp_init.o
+CC	libavcodec/x86/ttaencdsp_init.o
+CC	libavcodec/x86/v210-init.o
+YASM	libavcodec/x86/ttaencdsp.o
+CC	libavcodec/x86/v210enc_init.o
+YASM	libavcodec/x86/v210enc.o
+YASM	libavcodec/x86/v210.o
+STRIP	libavcodec/x86/ttaencdsp.o
+CC	libavcodec/x86/vc1dsp_init.o
+STRIP	libavcodec/x86/v210.o
+STRIP	libavcodec/x86/v210enc.o
+CC	libavcodec/x86/vc1dsp_mmx.o
+YASM	libavcodec/x86/vc1dsp_mc.o
+STRIP	libavcodec/x86/vc1dsp_mc.o
+CC	libavcodec/x86/videodsp_init.o
+YASM	libavcodec/x86/vc1dsp_loopfilter.o
+YASM	libavcodec/x86/videodsp.o
+YASM	libavcodec/x86/vorbisdsp.o
+CC	libavcodec/x86/vorbisdsp_init.o
+STRIP	libavcodec/x86/vorbisdsp.o
+CC	libavcodec/x86/vp3dsp_init.o
+STRIP	libavcodec/x86/videodsp.o
+STRIP	libavcodec/x86/vc1dsp_loopfilter.o
+CC	libavcodec/x86/vp6dsp_init.o
+YASM	libavcodec/x86/vp6dsp.o
+YASM	libavcodec/x86/vp3dsp.o
+STRIP	libavcodec/x86/vp6dsp.o
+CC	libavcodec/x86/vp8dsp_init.o
+STRIP	libavcodec/x86/vp3dsp.o
+CC	libavcodec/x86/vp9dsp_init.o
+YASM	libavcodec/x86/vp8dsp.o
+CC	libavcodec/x86/vp9dsp_init_10bpp.o
+STRIP	libavcodec/x86/vp8dsp.o
+CC	libavcodec/x86/vp9dsp_init_12bpp.o
+YASM	libavcodec/x86/vp8dsp_loopfilter.o
+CC	libavcodec/x86/vp9dsp_init_16bpp.o
+STRIP	libavcodec/x86/vp8dsp_loopfilter.o
+YASM	libavcodec/x86/vp9intrapred.o
+YASM	libavcodec/x86/vp9intrapred_16bpp.o
+STRIP	libavcodec/x86/vp9intrapred.o
+STRIP	libavcodec/x86/vp9intrapred_16bpp.o
+YASM	libavcodec/x86/vp9itxfm_16bpp.o
+STRIP	libavcodec/x86/vp9itxfm_16bpp.o
+YASM	libavcodec/x86/vp9lpf_16bpp.o
+YASM	libavcodec/x86/vp9mc.o
+STRIP	libavcodec/x86/vp9mc.o
+YASM	libavcodec/x86/vp9mc_16bpp.o
+YASM	libavcodec/x86/vp9lpf.o
+STRIP	libavcodec/x86/vp9mc_16bpp.o
+YASM	libavcodec/x86/xvididct.o
+STRIP	libavcodec/x86/xvididct.o
+CC	libavcodec/x86/xvididct_init.o
+STRIP	libavcodec/x86/vp9lpf_16bpp.o
+CC	libavcodec/xan.o
+CC	libavcodec/xbmdec.o
+CC	libavcodec/xbmenc.o
+CC	libavcodec/xface.o
+CC	libavcodec/xfacedec.o
+CC	libavcodec/xiph.o
+CC	libavcodec/xfaceenc.o
+CC	libavcodec/xl.o
+CC	libavcodec/xma_parser.o
+CC	libavcodec/xpmdec.o
+CC	libavcodec/xsubdec.o
+YASM	libavcodec/x86/vp9itxfm.o
+CC	libavcodec/xsubenc.o
+CC	libavcodec/xvididct.o
+CC	libavcodec/xwddec.o
+CC	libavcodec/xwdenc.o
+CC	libavcodec/xxan.o
+CC	libavcodec/y41pdec.o
+CC	libavcodec/y41penc.o
+STRIP	libavcodec/x86/vp9lpf.o
+CC	libavcodec/ylc.o
+CC	libavcodec/yop.o
+CC	libavcodec/yuv4dec.o
+CC	libavcodec/zerocodec.o
+CC	libavcodec/yuv4enc.o
+CC	libavcodec/zmbv.o
+CC	libswresample/audioconvert.o
+CC	libavcodec/zmbvenc.o
+CC	libswresample/dither.o
+CC	libswresample/log2_tab.o
+CC	libswresample/options.o
+CC	libswresample/rematrix.o
+CC	libswresample/resample.o
+CC	libswresample/resample_dsp.o
+CC	libswresample/swresample.o
+CC	libswresample/swresample_frame.o
+CC	libswresample/x86/audio_convert_init.o
+CC	libswresample/x86/rematrix_init.o
+YASM	libswresample/x86/rematrix.o
+STRIP	libswresample/x86/rematrix.o
+CC	libswresample/x86/resample_init.o
+AR	libavfilter/libavfilter.a
+YASM	libswresample/x86/resample.o
+YASM	libswresample/x86/audio_convert.o
+STRIP	libswresample/x86/resample.o
+STRIP	libswresample/x86/audio_convert.o
+STRIP	libavcodec/x86/vp9itxfm.o
+AR	libavformat/libavformat.a
+AR	libavresample/libavresample.a
+AR	libpostproc/libpostproc.a
+AR	libswresample/libswresample.a
+AR	libswscale/libswscale.a
+AR	libavutil/libavutil.a
+CC	ffmpeg.o
+[91mffmpeg.c: In function 'do_streamcopy':
+ffmpeg.c:2087:9: warning: 'avpicture_fill' is deprecated [-Wdeprecated-declarations]
+         int ret = avpicture_fill(&pict, opkt.data, ost->st->codecpar->format, ost->st->codecpar->width, ost->st->codecpar->height);
+         ^~~
+[0m[91mIn file included from libavformat/avformat.h:319:0,
+                 from ffmpeg.c:43:
+./libavcodec/avcodec.h:5546:5: note: declared here
+ int avpicture_fill(AVPicture *picture, const uint8_t *ptr,
+     ^~~~~~~~~~~~~~
+[0m[91mffmpeg.c: In function 'init_output_stream':
+ffmpeg.c:3481:9: warning: 'avcodec_copy_context' is deprecated [-Wdeprecated-declarations]
+         ret = avcodec_copy_context(ost->st->codec, ost->enc_ctx);
+         ^~~
+In file included from libavformat/avformat.h:319:0,
+                 from ffmpeg.c:43:
+./libavcodec/avcodec.h:4326:5: note: declared here
+ int avcodec_copy_context(AVCodecContext *dest, const AVCodecContext *src);
+     ^~~~~~~~~~~~~~~~~~~~
+[0m[91mffmpeg.c:3481:9: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+         ret = avcodec_copy_context(ost->st->codec, ost->enc_ctx);
+         ^~~
+[0m[91mIn file included from ffmpeg.c:43:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffmpeg.c:3535:9: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+         ost->st->codec->codec= ost->enc_ctx->codec;
+         ^~~
+In file included from ffmpeg.c:43:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffmpeg.c: In function 'check_keyboard_interaction':
+[0m[91mffmpeg.c:3922:13: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+             debug = input_streams[0]->st->codec->debug<<1;
+             ^~~~~
+In file included from ffmpeg.c:43:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffmpeg.c:3941:13: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+             input_streams[i]->st->codec->debug = debug;
+             ^~~~~~~~~~~~~
+In file included from ffmpeg.c:43:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffmpeg.c: In function 'sub2video_push_ref':
+ffmpeg.c:227:9: warning: ignoring return value of 'av_buffersrc_add_frame_flags', declared with attribute warn_unused_result [-Wunused-result]
+         av_buffersrc_add_frame_flags(ist->filters[i]->filter, frame,
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                      AV_BUFFERSRC_FLAG_KEEP_REF |
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                      AV_BUFFERSRC_FLAG_PUSH);
+                                      ~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mffmpeg.c: In function 'sigterm_handler':
+ffmpeg.c:334:9: warning: ignoring return value of 'write', declared with attribute warn_unused_result [-Wunused-result]
+         write(2/*STDERR_FILENO*/, "Received > 3 system signals, hard exiting\n",
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            strlen("Received > 3 system signals, hard exiting\n"));
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mffmpeg.c: In function 'sub2video_flush':
+ffmpeg.c:302:9: warning: ignoring return value of 'av_buffersrc_add_frame', declared with attribute warn_unused_result [-Wunused-result]
+         av_buffersrc_add_frame(ist->filters[i]->filter, NULL);
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mCC	cmdutils.o
+CC	ffmpeg_opt.o
+[91mffmpeg_opt.c: In function 'add_input_streams':
+ffmpeg_opt.c:726:13: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+             if (av_codec_get_lowres(st->codec)) {
+             ^~
+[0m[91mIn file included from cmdutils.h:30:0,
+                 from ffmpeg.h:32,
+                 from ffmpeg_opt.c:23:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+ffmpeg_opt.c:727:17: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+                 av_codec_set_lowres(ist->dec_ctx, av_codec_get_lowres(st->codec));
+                 ^~~~~~~~~~~~~~~~~~~
+In file included from cmdutils.h:30:0,
+                 from ffmpeg.h:32,
+                 from ffmpeg_opt.c:23:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+ffmpeg_opt.c:728:17: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+                 ist->dec_ctx->width  = st->codec->width;
+                 ^~~
+In file included from cmdutils.h:30:0,
+                 from ffmpeg.h:32,
+                 from ffmpeg_opt.c:23:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+ffmpeg_opt.c:729:17: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+                 ist->dec_ctx->height = st->codec->height;
+                 ^~~
+In file included from cmdutils.h:30:0,
+                 from ffmpeg.h:32,
+                 from ffmpeg_opt.c:23:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffmpeg_opt.c:730:17: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+                 ist->dec_ctx->coded_width  = st->codec->coded_width;
+                 ^~~
+In file included from cmdutils.h:30:0,
+                 from ffmpeg.h:32,
+                 from ffmpeg_opt.c:23:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffmpeg_opt.c:731:17: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+                 ist->dec_ctx->coded_height = st->codec->coded_height;
+                 ^~~
+[0m[91mIn file included from cmdutils.h:30:0,
+                 from ffmpeg.h:32,
+                 from ffmpeg_opt.c:23:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffmpeg_opt.c: In function 'read_ffserver_streams':
+ffmpeg_opt.c:1940:9: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+         avcodec_get_context_defaults3(st->codec, codec);
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from cmdutils.h:30:0,
+                 from ffmpeg.h:32,
+                 from ffmpeg_opt.c:23:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffmpeg_opt.c:1945:13: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+             av_opt_set_dict2(st->codec, &opts, AV_OPT_SEARCH_CHILDREN);
+             ^~~~~~~~~~~~~~~~
+In file included from cmdutils.h:30:0,
+                 from ffmpeg.h:32,
+                 from ffmpeg_opt.c:23:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffmpeg_opt.c:1952:13: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+             choose_pixel_fmt(st, st->codec, codec, st->codecpar->format);
+             ^~~~~~~~~~~~~~~~
+In file included from cmdutils.h:30:0,
+                 from ffmpeg.h:32,
+                 from ffmpeg_opt.c:23:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffmpeg_opt.c:1953:9: warning: 'avcodec_copy_context' is deprecated [-Wdeprecated-declarations]
+         avcodec_copy_context(ost->enc_ctx, st->codec);
+         ^~~~~~~~~~~~~~~~~~~~
+[0m[91mIn file included from cmdutils.h:28:0,
+                 from ffmpeg.h:32,
+                 from ffmpeg_opt.c:23:
+libavcodec/avcodec.h:4326:5: note: declared here
+ int avcodec_copy_context(AVCodecContext *dest, const AVCodecContext *src);
+     ^~~~~~~~~~~~~~~~~~~~
+[0m[91mffmpeg_opt.c:1953:9: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+         avcodec_copy_context(ost->enc_ctx, st->codec);
+         ^~~~~~~~~~~~~~~~~~~~
+In file included from cmdutils.h:30:0,
+                 from ffmpeg.h:32,
+                 from ffmpeg_opt.c:23:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffmpeg_opt.c: In function 'open_output_file':
+ffmpeg_opt.c:2332:13: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+             if (av_opt_set(ost->st->codec, "flags", e->value, 0) < 0)
+             ^~
+In file included from cmdutils.h:30:0,
+                 from ffmpeg.h:32,
+                 from ffmpeg_opt.c:23:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0mCC	ffmpeg_filter.o
+CC	ffmpeg_vaapi.o
+CC	ffmpeg_cuvid.o
+CC	ffprobe.o
+[91mffprobe.c: In function 'show_packet':
+ffprobe.c:2025:5: warning: 'convergence_duration' is deprecated [-Wdeprecated-declarations]
+     print_duration_ts("convergence_duration", pkt->convergence_duration);
+     ^~~~~~~~~~~~~~~~~
+[0m[91mIn file included from libavformat/avformat.h:319:0,
+                 from ffprobe.c:31:
+./libavcodec/avcodec.h:1686:13: note: declared here
+     int64_t convergence_duration;
+             ^~~~~~~~~~~~~~~~~~~~
+[0m[91mffprobe.c:2026:5: warning: 'convergence_duration' is deprecated [-Wdeprecated-declarations]
+     print_duration_time("convergence_duration_time", pkt->convergence_duration, &st->time_base);
+     ^~~~~~~~~~~~~~~~~~~
+In file included from libavformat/avformat.h:319:0,
+                 from ffprobe.c:31:
+./libavcodec/avcodec.h:1686:13: note: declared here
+     int64_t convergence_duration;
+             ^~~~~~~~~~~~~~~~~~~~
+[0m[91mffprobe.c: In function 'process_frame':
+[0m[91mffprobe.c:2196:13: warning: 'avcodec_decode_video2' is deprecated [-Wdeprecated-declarations]
+             ret = avcodec_decode_video2(dec_ctx, frame, &got_frame, pkt);
+             ^~~
+[0m[91mIn file included from libavformat/avformat.h:319:0,
+                 from ffprobe.c:31:
+./libavcodec/avcodec.h:4901:5: note: declared here
+ int avcodec_decode_video2(AVCodecContext *avctx, AVFrame *picture,
+     ^~~~~~~~~~~~~~~~~~~~~
+ffprobe.c:2200:13: warning: 'avcodec_decode_audio4' is deprecated [-Wdeprecated-declarations]
+             ret = avcodec_decode_audio4(dec_ctx, frame, &got_frame, pkt);
+             ^~~
+In file included from libavformat/avformat.h:319:0,
+                 from ffprobe.c:31:
+./libavcodec/avcodec.h:4852:5: note: declared here
+ int avcodec_decode_audio4(AVCodecContext *avctx, AVFrame *frame,
+     ^~~~~~~~~~~~~~~~~~~~~
+[0m[91mffprobe.c: In function 'show_stream':
+[0m[91mffprobe.c:2481:9: warning: 'timecode_frame_start' is deprecated [-Wdeprecated-declarations]
+         if (dec_ctx && dec_ctx->timecode_frame_start >= 0) {
+         ^~
+In file included from libavformat/avformat.h:319:0,
+                 from ffprobe.c:31:
+./libavcodec/avcodec.h:2844:13: note: declared here
+     int64_t timecode_frame_start;
+             ^~~~~~~~~~~~~~~~~~~~
+[0m[91mffprobe.c:2483:13: warning: 'timecode_frame_start' is deprecated [-Wdeprecated-declarations]
+             av_timecode_make_mpeg_tc_string(tcbuf, dec_ctx->timecode_frame_start);
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from libavformat/avformat.h:319:0,
+                 from ffprobe.c:31:
+./libavcodec/avcodec.h:2844:13: note: declared here
+     int64_t timecode_frame_start;
+             ^~~~~~~~~~~~~~~~~~~~
+[0m[91mffprobe.c:2547:5: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     if (stream->codec->rc_max_rate > 0) print_val ("max_bit_rate", stream->codec->rc_max_rate, unit_bit_per_second_str);
+     ^~
+[0m[91mIn file included from ffprobe.c:31:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffprobe.c:1815:12: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     struct unit_value uv;                                           \
+            ^
+ffprobe.c:2547:41: note: in expansion of macro 'print_val'
+     if (stream->codec->rc_max_rate > 0) print_val ("max_bit_rate", stream->codec->rc_max_rate, unit_bit_per_second_str);
+                                         ^~~~~~~~~
+In file included from ffprobe.c:31:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0mCC	ffserver.o
+CC	ffserver_config.o
+[91mffserver.c: In function 'unlayer_stream':
+ffserver.c:260:5: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     avcodec_free_context(&st->codec);
+     ^~~~~~~~~~~~~~~~~~~~
+[0m[91mIn file included from ffserver.c:33:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+ffserver.c:265:5: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+     COPY(codec)
+     ^~~~
+In file included from ffserver.c:33:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffserver.c: In function 'start_children':
+ffserver.c:501:17: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+         dirname = av_dirname(prog);
+                 ^
+[0mAR	libavdevice/libavdevice.a
+[91mffserver.c: In function 'close_connection':
+ffserver.c:920:13: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+             if (st->codec->codec)
+             ^~
+In file included from ffserver.c:33:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffserver.c:921:17: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+                 avcodec_close(st->codec);
+                 ^~~~~~~~~~~~~
+In file included from ffserver.c:33:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffserver_config.c: In function 'add_codec':
+ffserver_config.c:294:13: warning: 'rc_eq' is deprecated [-Wdeprecated-declarations]
+             av->rc_eq = av_strdup("tex^qComp");
+             ^~
+[0m[91mIn file included from cmdutils.h:28:0,
+                 from ffserver_config.c:28:
+libavcodec/avcodec.h:2724:17: note: declared here
+     const char *rc_eq;
+                 ^~~~~
+[0m[91mffserver_config.c:296:13: warning: 'rc_eq' is deprecated [-Wdeprecated-declarations]
+             WARNING("Setting default value for video rate control equation = "
+             ^~~~~~~
+In file included from cmdutils.h:28:0,
+                 from ffserver_config.c:28:
+libavcodec/avcodec.h:2724:17: note: declared here
+     const char *rc_eq;
+                 ^~~~~
+[0m[91mffserver.c: In function 'add_av_stream1':
+ffserver.c:3558:9: warning: 'avcodec_copy_context' is deprecated [-Wdeprecated-declarations]
+         avcodec_copy_context(fst->codec, codec);
+         ^~~~~~~~~~~~~~~~~~~~
+[0m[91mIn file included from libavformat/avformat.h:319:0,
+                 from ffserver.c:33:
+./libavcodec/avcodec.h:4326:5: note: declared here
+ int avcodec_copy_context(AVCodecContext *dest, const AVCodecContext *src);
+     ^~~~~~~~~~~~~~~~~~~~
+[0m[91mffserver.c: In function 'build_file_streams':
+[0m[91mffserver.c:3682:17: warning: 'codec' is deprecated [-Wdeprecated-declarations]
+                 add_av_stream1(stream, infile->streams[i]->codec, 1);
+                 ^~~~~~~~~~~~~~
+In file included from ffserver.c:33:0:
+libavformat/avformat.h:893:21: note: declared here
+     AVCodecContext *codec;
+                     ^~~~~
+[0m[91mffserver_config.c: In function 'ffserver_parse_ffconfig':
+ffserver_config.c:718:24: warning: '%s' directive output may be truncated writing up to 1023 bytes into a region of size 1019 [-Wformat-truncation=]
+                  "/tmp/%s.ffm", feed->filename);
+                        ^~
+In file included from /usr/include/stdio.h:862:0,
+                 from libavutil/common.h:38,
+                 from libavutil/avutil.h:296,
+                 from libavutil/opt.h:31,
+                 from ffserver_config.c:22:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 10 and 1033 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91mffserver.c: In function 'find_rtp_session_with_url':
+[0m[91mffserver.c:3299:37: warning: '/streamid=' directive output may be truncated writing 10 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+       snprintf(buf, sizeof(buf), "%s/streamid=%d",
+                                     ^~~~~~~~~~
+[0m[91mffserver.c:3299:34: note: directive argument in the range [0, 2147483647]
+       snprintf(buf, sizeof(buf), "%s/streamid=%d",
+                                  ^~~~~~~~~~~~~~~~
+[0m[91mIn file included from /usr/include/stdio.h:862:0,
+                 from ffserver.c:32:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 12 and 1044 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mGEN	libavdevice/libavdevice.ver
+GEN	libavfilter/libavfilter.ver
+GEN	libavresample/libavresample.ver
+GEN	libavutil/libavutil.ver
+GEN	libswscale/libswscale.ver
+GEN	libpostproc/libpostproc.ver
+GEN	libavformat/libavformat.ver
+GEN	libavcodec/libavcodec.ver
+GEN	libswresample/libswresample.ver
+LD	libavutil/libavutil.so.55
+AR	libavcodec/libavcodec.a
+[91mffserver.c: In function 'rtsp_parse_request':
+[0m[91mffserver.c:3167:43: warning: '/streamid=' directive output may be truncated writing 10 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]
+             snprintf(buf, sizeof(buf), "%s/streamid=%d",
+                                           ^~~~~~~~~~
+[0m[91mffserver.c:3167:40: note: directive argument in the range [0, 2147483647]
+             snprintf(buf, sizeof(buf), "%s/streamid=%d",
+                                        ^~~~~~~~~~~~~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from ffserver.c:32:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 12 and 1044 bytes into a destination of size 1024
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0mLD	libavresample/libavresample.so.3
+LD	libswscale/libswscale.so.4
+LD	libpostproc/libpostproc.so.54
+LD	libswresample/libswresample.so.2
+LD	libavcodec/libavcodec.so.57
+LD	libavformat/libavformat.so.57
+LD	libavfilter/libavfilter.so.6
+LD	libavdevice/libavdevice.so.57
+LD	ffprobe_g
+LD	ffmpeg_g
+LD	ffserver_g
+CP	ffserver
+CP	ffmpeg
+CP	ffprobe
+STRIP	ffserver
+STRIP	ffprobe
+STRIP	ffmpeg
+[91m+ make install
+[0mINSTALL	libavdevice/libavdevice.a
+INSTALL	libavdevice/libavdevice.so
+INSTALL	libavfilter/libavfilter.a
+INSTALL	libavfilter/libavfilter.so
+STRIP	install-libavdevice-shared
+STRIP	install-libavfilter-shared
+INSTALL	libavformat/libavformat.a
+INSTALL	libavformat/libavformat.so
+STRIP	install-libavformat-shared
+INSTALL	libavcodec/libavcodec.a
+INSTALL	libavcodec/libavcodec.so
+STRIP	install-libavcodec-shared
+INSTALL	libavresample/libavresample.so
+INSTALL	libavresample/libavresample.a
+STRIP	install-libavresample-shared
+INSTALL	libpostproc/libpostproc.a
+INSTALL	libpostproc/libpostproc.so
+STRIP	install-libpostproc-shared
+INSTALL	libswresample/libswresample.a
+INSTALL	libswresample/libswresample.so
+STRIP	install-libswresample-shared
+INSTALL	libswscale/libswscale.a
+INSTALL	libswscale/libswscale.so
+STRIP	install-libswscale-shared
+INSTALL	libavutil/libavutil.a
+INSTALL	libavutil/libavutil.so
+STRIP	install-libavutil-shared
+INSTALL	libavdevice/avdevice.h
+INSTALL	libavdevice/version.h
+INSTALL	libavdevice/libavdevice.pc
+INSTALL	libavfilter/avfilter.h
+INSTALL	libavfilter/avfiltergraph.h
+INSTALL	libavfilter/buffersink.h
+INSTALL	libavfilter/buffersrc.h
+INSTALL	libavfilter/version.h
+INSTALL	libavfilter/libavfilter.pc
+INSTALL	libavformat/libavformat.pc
+INSTALL	libavformat/avformat.h
+INSTALL	libavformat/avio.h
+INSTALL	libavformat/version.h
+INSTALL	libavcodec/avcodec.h
+INSTALL	libavcodec/avdct.h
+INSTALL	libavcodec/avfft.h
+INSTALL	libavcodec/d3d11va.h
+INSTALL	libavcodec/dirac.h
+INSTALL	libavcodec/dv_profile.h
+INSTALL	libavcodec/dxva2.h
+INSTALL	libavcodec/jni.h
+INSTALL	libavcodec/mediacodec.h
+INSTALL	libavcodec/qsv.h
+INSTALL	libavcodec/vaapi.h
+INSTALL	libavcodec/vda.h
+INSTALL	libavcodec/vdpau.h
+INSTALL	libavcodec/version.h
+INSTALL	libavcodec/videotoolbox.h
+INSTALL	libavcodec/vorbis_parser.h
+INSTALL	libavcodec/xvmc.h
+INSTALL	libavcodec/libavcodec.pc
+INSTALL	libavresample/avresample.h
+INSTALL	libavresample/version.h
+INSTALL	libavresample/libavresample.pc
+INSTALL	libpostproc/libpostproc.pc
+INSTALL	libpostproc/postprocess.h
+INSTALL	libpostproc/version.h
+INSTALL	libswresample/swresample.h
+INSTALL	libswresample/version.h
+INSTALL	libswresample/libswresample.pc
+INSTALL	libswscale/libswscale.pc
+INSTALL	libswscale/swscale.h
+INSTALL	libswscale/version.h
+INSTALL	libavutil/libavutil.pc
+INSTALL	libavutil/adler32.h
+INSTALL	libavutil/aes.h
+INSTALL	libavutil/aes_ctr.h
+INSTALL	libavutil/attributes.h
+INSTALL	libavutil/audio_fifo.h
+INSTALL	libavutil/avassert.h
+INSTALL	libavutil/avstring.h
+INSTALL	libavutil/avutil.h
+INSTALL	libavutil/base64.h
+INSTALL	libavutil/blowfish.h
+INSTALL	libavutil/bprint.h
+INSTALL	libavutil/bswap.h
+INSTALL	libavutil/buffer.h
+INSTALL	libavutil/cast5.h
+INSTALL	libavutil/camellia.h
+INSTALL	libavutil/channel_layout.h
+INSTALL	libavutil/common.h
+INSTALL	libavutil/cpu.h
+INSTALL	libavutil/crc.h
+INSTALL	libavutil/des.h
+INSTALL	libavutil/dict.h
+INSTALL	libavutil/display.h
+INSTALL	libavutil/downmix_info.h
+INSTALL	libavutil/error.h
+INSTALL	libavutil/eval.h
+INSTALL	libavutil/fifo.h
+INSTALL	libavutil/file.h
+INSTALL	libavutil/frame.h
+INSTALL	libavutil/hash.h
+INSTALL	libavutil/hmac.h
+INSTALL	libavutil/hwcontext.h
+INSTALL	libavutil/hwcontext_cuda.h
+INSTALL	libavutil/hwcontext_dxva2.h
+INSTALL	libavutil/hwcontext_qsv.h
+INSTALL	libavutil/hwcontext_vaapi.h
+INSTALL	libavutil/hwcontext_vdpau.h
+INSTALL	libavutil/imgutils.h
+INSTALL	libavutil/intfloat.h
+INSTALL	libavutil/intreadwrite.h
+INSTALL	libavutil/lfg.h
+INSTALL	libavutil/log.h
+INSTALL	libavutil/macros.h
+INSTALL	libavutil/mathematics.h
+INSTALL	libavutil/mastering_display_metadata.h
+INSTALL	libavutil/md5.h
+INSTALL	libavutil/mem.h
+INSTALL	libavutil/motion_vector.h
+INSTALL	libavutil/murmur3.h
+INSTALL	libavutil/opt.h
+INSTALL	libavutil/parseutils.h
+INSTALL	libavutil/pixdesc.h
+INSTALL	libavutil/pixelutils.h
+INSTALL	libavutil/pixfmt.h
+INSTALL	libavutil/random_seed.h
+INSTALL	libavutil/rc4.h
+INSTALL	libavutil/rational.h
+INSTALL	libavutil/replaygain.h
+INSTALL	libavutil/ripemd.h
+INSTALL	libavutil/samplefmt.h
+INSTALL	libavutil/sha.h
+INSTALL	libavutil/sha512.h
+INSTALL	libavutil/spherical.h
+INSTALL	libavutil/stereo3d.h
+INSTALL	libavutil/threadmessage.h
+INSTALL	libavutil/time.h
+INSTALL	libavutil/timecode.h
+INSTALL	libavutil/timestamp.h
+INSTALL	libavutil/tree.h
+INSTALL	libavutil/twofish.h
+INSTALL	libavutil/version.h
+INSTALL	libavutil/xtea.h
+INSTALL	libavutil/tea.h
+INSTALL	libavutil/lzo.h
+INSTALL	libavutil/avconfig.h
+INSTALL	libavutil/ffversion.h
+INSTALL	install-progs-yes
+INSTALL	ffmpeg
+INSTALL	ffprobe
+INSTALL	ffserver
+INSTALL	presets/libvpx-1080p50_60.ffpreset
+INSTALL	presets/libvpx-360p.ffpreset
+INSTALL	presets/libvpx-1080p.ffpreset
+INSTALL	presets/libvpx-720p50_60.ffpreset
+INSTALL	presets/libvpx-720p.ffpreset
+INSTALL	doc/ffprobe.xsd
+INSTALL	doc/examples/transcoding.c
+INSTALL	doc/examples/metadata.c
+INSTALL	doc/examples/filtering_video.c
+INSTALL	doc/examples/muxing.c
+INSTALL	doc/examples/avio_dir_cmd.c
+INSTALL	doc/examples/extract_mvs.c
+INSTALL	doc/examples/encode_audio.c
+INSTALL	doc/examples/filtering_audio.c
+INSTALL	doc/examples/resampling_audio.c
+INSTALL	doc/examples/decode_video.c
+INSTALL	doc/examples/remuxing.c
+INSTALL	doc/examples/http_multiclient.c
+INSTALL	doc/examples/avio_reading.c
+INSTALL	doc/examples/qsvdec.c
+INSTALL	doc/examples/decode_audio.c
+INSTALL	doc/examples/filter_audio.c
+INSTALL	doc/examples/transcode_aac.c
+INSTALL	doc/examples/demuxing_decoding.c
+INSTALL	doc/examples/encode_video.c
+INSTALL	doc/examples/scaling_video.c
+INSTALL	doc/examples/Makefile
+INSTALL	doc/examples/README
+INSTALL	presets/libvpx-1080p50_60.ffpreset
+INSTALL	presets/libvpx-360p.ffpreset
+INSTALL	presets/libvpx-1080p.ffpreset
+INSTALL	presets/libvpx-720p50_60.ffpreset
+INSTALL	presets/libvpx-720p.ffpreset
+INSTALL	doc/ffprobe.xsd
+INSTALL	doc/examples/transcoding.c
+INSTALL	doc/examples/metadata.c
+INSTALL	doc/examples/filtering_video.c
+INSTALL	doc/examples/muxing.c
+INSTALL	doc/examples/avio_dir_cmd.c
+INSTALL	doc/examples/extract_mvs.c
+INSTALL	doc/examples/encode_audio.c
+INSTALL	doc/examples/filtering_audio.c
+INSTALL	doc/examples/resampling_audio.c
+INSTALL	doc/examples/decode_video.c
+INSTALL	doc/examples/remuxing.c
+INSTALL	doc/examples/http_multiclient.c
+INSTALL	doc/examples/avio_reading.c
+INSTALL	doc/examples/qsvdec.c
+INSTALL	doc/examples/decode_audio.c
+INSTALL	doc/examples/filter_audio.c
+INSTALL	doc/examples/transcode_aac.c
+INSTALL	doc/examples/demuxing_decoding.c
+INSTALL	doc/examples/encode_video.c
+INSTALL	doc/examples/scaling_video.c
+INSTALL	doc/examples/Makefile
+INSTALL	doc/examples/README
+[91m+ make distclean
+[0m[91m+ hash -r
++ cd tools
++ make qt-faststart
+[0mcc     qt-faststart.c   -o qt-faststart
+[91m+ cp qt-faststart /opt/ffmpeg/bin
+[0mRemoving intermediate container 5244cf018fcd
+ ---> 11de374564ec
+Step 65/73 : RUN set -xe &&         rm -f /usr/local/bin/nasm /usr/local/bin/ndisasm &&         ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ &&         cp ${PREFIX}/bin/* /usr/local/bin/ &&         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ &&         LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
+ ---> Running in 7dd2e587c277
+[91m+ rm -f /usr/local/bin/nasm /usr/local/bin/ndisasm
+[0m[91m+ ldd /opt/ffmpeg/bin/ffmpeg
+[0m[91m+ grep opt/ffmpeg
++ cut -d   -f 3
++ xargs -i cp {} /usr/local/lib/
+[0m[91m+ cp /opt/ffmpeg/bin/aomdec /opt/ffmpeg/bin/aomenc /opt/ffmpeg/bin/cwebp /opt/ffmpeg/bin/dwebp /opt/ffmpeg/bin/fc-cache /opt/ffmpeg/bin/fc-cat /opt/ffmpeg/bin/fc-list /opt/ffmpeg/bin/fc-match /opt/ffmpeg/bin/fc-pattern /opt/ffmpeg/bin/fc-query /opt/ffmpeg/bin/fc-scan /opt/ffmpeg/bin/fc-validate /opt/ffmpeg/bin/ffmpeg /opt/ffmpeg/bin/ffprobe /opt/ffmpeg/bin/ffserver /opt/ffmpeg/bin/kvazaar /opt/ffmpeg/bin/opj_compress /opt/ffmpeg/bin/opj_decompress /opt/ffmpeg/bin/opj_dump /opt/ffmpeg/bin/qt-faststart /usr/local/bin/
+[0m[91m+ cp -r /opt/ffmpeg/share/ffmpeg /usr/local/share/
+[0m[91m+ LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
+[0m[91mffmpeg version 3.3.9 Copyright (c) 2000-2018 the FFmpeg developers
+  built with gcc 7 (Ubuntu 7.4.0-1ubuntu1~18.04.1)
+  configuration: --disable-debug --disable-doc --disable-ffplay --enable-vaapi --enable-shared --enable-avresample --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-gpl --enable-libass --enable-libfreetype --enable-libvidstab --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxvid --enable-libx264 --enable-nonfree --enable-gnutls --enable-libfdk_aac --enable-postproc --enable-small --enable-version3 --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib --extra-libs=-ldl --prefix=/opt/ffmpeg
+  libavutil      55. 58.100 / 55. 58.100
+  libavcodec     57. 89.100 / 57. 89.100
+  libavformat    57. 71.100 / 57. 71.100
+  libavdevice    57.  6.100 / 57.  6.100
+  libavfilter     6. 82.100 /  6. 82.100
+  libavresample   3.  5.  0 /  3.  5.  0
+  libswscale      4.  6.100 /  4.  6.100
+  libswresample   2.  7.100 /  2.  7.100
+  libpostproc    54.  5.100 / 54.  5.100
+[0m
+  configuration:
+    --disable-debug
+    --disable-doc
+    --disable-ffplay
+    --enable-vaapi
+    --enable-shared
+    --enable-avresample
+    --enable-libopencore-amrnb
+    --enable-libopencore-amrwb
+    --enable-gpl
+    --enable-libass
+    --enable-libfreetype
+    --enable-libvidstab
+    --enable-libmp3lame
+    --enable-libopus
+    --enable-libtheora
+    --enable-libvorbis
+    --enable-libvpx
+    --enable-libwebp
+    --enable-libx265
+    --enable-libxvid
+    --enable-libx264
+    --enable-nonfree
+    --enable-gnutls
+    --enable-libfdk_aac
+    --enable-postproc
+    --enable-small
+    --enable-version3
+    --extra-cflags=-I/opt/ffmpeg/include
+    --extra-ldflags=-L/opt/ffmpeg/lib
+    --extra-libs=-ldl
+    --prefix=/opt/ffmpeg
+Removing intermediate container 7dd2e587c277
+ ---> 8e056bae6f02
+Step 66/73 : FROM        base AS release
+ ---> c3edae8e8da5
+Step 67/73 : LABEL maintainer="Julien Rottenberg <julien@rottenberg.info>"
+ ---> Using cache
+ ---> 54298f99cede
+Step 68/73 : LABEL ffmpeg=true
+ ---> Using cache
+ ---> 3de4463dd5c7
+Step 69/73 : CMD         ["-version"]
+ ---> Using cache
+ ---> 8ff685e43aea
+Step 70/73 : ENTRYPOINT  ["ffmpeg"]
+ ---> Using cache
+ ---> 08bf25139a1a
+Step 71/73 : ENV         LD_LIBRARY_PATH=/usr/local/lib
+ ---> Using cache
+ ---> 95fa66a1829d
+Step 72/73 : COPY --from=build /usr/local /usr/local/
+ ---> be21c67594c3
+Step 73/73 : RUN set -xe && 	apt-get update -y && 	apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver intel-gpu-tools && 	rm -rf /var/lib/apt/lists/*
+ ---> Running in 3ac77b870515
+[91m+ apt-get update -y
+[0mHit:1 http://archive.ubuntu.com/ubuntu bionic InRelease
+Get:2 http://security.ubuntu.com/ubuntu bionic-security InRelease [88.7 kB]
+Get:3 http://archive.ubuntu.com/ubuntu bionic-updates InRelease [88.7 kB]
+Get:4 http://archive.ubuntu.com/ubuntu bionic-backports InRelease [74.6 kB]
+Get:5 http://security.ubuntu.com/ubuntu bionic-security/main amd64 Packages [700 kB]
+Get:6 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 Packages [995 kB]
+Get:7 http://security.ubuntu.com/ubuntu bionic-security/universe amd64 Packages [782 kB]
+Get:8 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 Packages [1304 kB]
+Fetched 4034 kB in 3s (1339 kB/s)
+Reading package lists...
+[91m+ apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver intel-gpu-tools
+[0mReading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  fontconfig-config fonts-dejavu-core libbsd0 libcairo2 libdrm-common
+  libdrm-intel1 libdrm2 libfontconfig1 libfreetype6 libglib2.0-0 libkmod2
+  libpciaccess0 libpixman-1-0 libpng16-16 libunwind8 libx11-6 libx11-data
+  libxau6 libxcb-render0 libxcb-shm0 libxcb1 libxdmcp6 libxext6 libxrandr2
+  libxrender1 libxv1 multiarch-support ucf
+Suggested packages:
+  i965-va-driver-shaders pciutils
+Recommended packages:
+  libglib2.0-data shared-mime-info xdg-user-dirs
+The following NEW packages will be installed:
+  fontconfig-config fonts-dejavu-core i965-va-driver intel-gpu-tools libbsd0
+  libcairo2 libdrm-common libdrm-intel1 libdrm2 libfontconfig1 libfreetype6
+  libglib2.0-0 libkmod2 libpciaccess0 libpixman-1-0 libpng16-16 libunwind8
+  libva-drm2 libva2 libx11-6 libx11-data libxau6 libxcb-render0 libxcb-shm0
+  libxcb1 libxdmcp6 libxext6 libxrandr2 libxrender1 libxv1 multiarch-support
+  ucf
+0 upgraded, 32 newly installed, 0 to remove and 1 not upgraded.
+Need to get 6880 kB of archives.
+After this operation, 34.0 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu bionic/main amd64 multiarch-support amd64 2.27-3ubuntu1 [6916 B]
+Get:2 http://archive.ubuntu.com/ubuntu bionic/main amd64 libxau6 amd64 1:1.0.8-1 [8376 B]
+Get:3 http://archive.ubuntu.com/ubuntu bionic/main amd64 libbsd0 amd64 0.8.7-1 [41.5 kB]
+Get:4 http://archive.ubuntu.com/ubuntu bionic/main amd64 libxdmcp6 amd64 1:1.1.2-3 [10.7 kB]
+Get:5 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libxcb1 amd64 1.13-2~ubuntu18.04 [45.5 kB]
+Get:6 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libx11-data all 2:1.6.4-3ubuntu0.2 [113 kB]
+Get:7 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libx11-6 amd64 2:1.6.4-3ubuntu0.2 [569 kB]
+Get:8 http://archive.ubuntu.com/ubuntu bionic/main amd64 libxext6 amd64 2:1.3.3-1 [29.4 kB]
+Get:9 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libglib2.0-0 amd64 2.56.4-0ubuntu0.18.04.4 [1169 kB]
+Get:10 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libkmod2 amd64 24-1ubuntu3.2 [40.0 kB]
+Get:11 http://archive.ubuntu.com/ubuntu bionic/main amd64 ucf all 3.0038 [50.5 kB]
+Get:12 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libdrm-common all 2.4.97-1ubuntu1~18.04.1 [5216 B]
+Get:13 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libdrm2 amd64 2.4.97-1ubuntu1~18.04.1 [31.3 kB]
+Get:14 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libpng16-16 amd64 1.6.34-1ubuntu0.18.04.2 [176 kB]
+Get:15 http://archive.ubuntu.com/ubuntu bionic/main amd64 fonts-dejavu-core all 2.37-1 [1041 kB]
+Get:16 http://archive.ubuntu.com/ubuntu bionic/main amd64 fontconfig-config all 2.12.6-0ubuntu2 [55.8 kB]
+Get:17 http://archive.ubuntu.com/ubuntu bionic/main amd64 libfreetype6 amd64 2.8.1-2ubuntu2 [335 kB]
+Get:18 http://archive.ubuntu.com/ubuntu bionic/main amd64 libfontconfig1 amd64 2.12.6-0ubuntu2 [137 kB]
+Get:19 http://archive.ubuntu.com/ubuntu bionic/main amd64 libpixman-1-0 amd64 0.34.0-2 [229 kB]
+Get:20 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libxcb-render0 amd64 1.13-2~ubuntu18.04 [14.7 kB]
+Get:21 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libxcb-shm0 amd64 1.13-2~ubuntu18.04 [5600 B]
+Get:22 http://archive.ubuntu.com/ubuntu bionic/main amd64 libxrender1 amd64 1:0.9.10-1 [18.7 kB]
+Get:23 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libcairo2 amd64 1.15.10-2ubuntu0.1 [580 kB]
+Get:24 http://archive.ubuntu.com/ubuntu bionic/main amd64 libpciaccess0 amd64 0.14-1 [17.9 kB]
+Get:25 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libdrm-intel1 amd64 2.4.97-1ubuntu1~18.04.1 [59.9 kB]
+Get:26 http://archive.ubuntu.com/ubuntu bionic/main amd64 libunwind8 amd64 1.2.1-8 [47.5 kB]
+Get:27 http://archive.ubuntu.com/ubuntu bionic/main amd64 libxrandr2 amd64 2:1.5.1-1 [18.1 kB]
+Get:28 http://archive.ubuntu.com/ubuntu bionic/main amd64 libxv1 amd64 2:1.0.11-1 [10.7 kB]
+Get:29 http://archive.ubuntu.com/ubuntu bionic/main amd64 intel-gpu-tools amd64 1.22-1 [1033 kB]
+Get:30 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libva2 amd64 2.1.0-3 [47.6 kB]
+Get:31 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libva-drm2 amd64 2.1.0-3 [6880 B]
+Get:32 http://archive.ubuntu.com/ubuntu bionic/universe amd64 i965-va-driver amd64 2.1.0-0ubuntu1 [925 kB]
+[91mdebconf: delaying package configuration, since apt-utils is not installed
+[0mFetched 6880 kB in 13s (531 kB/s)
+Selecting previously unselected package multiarch-support.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 6326 files and directories currently installed.)
+Preparing to unpack .../multiarch-support_2.27-3ubuntu1_amd64.deb ...
+Unpacking multiarch-support (2.27-3ubuntu1) ...
+Setting up multiarch-support (2.27-3ubuntu1) ...
+Selecting previously unselected package libxau6:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 6329 files and directories currently installed.)
+Preparing to unpack .../00-libxau6_1%3a1.0.8-1_amd64.deb ...
+Unpacking libxau6:amd64 (1:1.0.8-1) ...
+Selecting previously unselected package libbsd0:amd64.
+Preparing to unpack .../01-libbsd0_0.8.7-1_amd64.deb ...
+Unpacking libbsd0:amd64 (0.8.7-1) ...
+Selecting previously unselected package libxdmcp6:amd64.
+Preparing to unpack .../02-libxdmcp6_1%3a1.1.2-3_amd64.deb ...
+Unpacking libxdmcp6:amd64 (1:1.1.2-3) ...
+Selecting previously unselected package libxcb1:amd64.
+Preparing to unpack .../03-libxcb1_1.13-2~ubuntu18.04_amd64.deb ...
+Unpacking libxcb1:amd64 (1.13-2~ubuntu18.04) ...
+Selecting previously unselected package libx11-data.
+Preparing to unpack .../04-libx11-data_2%3a1.6.4-3ubuntu0.2_all.deb ...
+Unpacking libx11-data (2:1.6.4-3ubuntu0.2) ...
+Selecting previously unselected package libx11-6:amd64.
+Preparing to unpack .../05-libx11-6_2%3a1.6.4-3ubuntu0.2_amd64.deb ...
+Unpacking libx11-6:amd64 (2:1.6.4-3ubuntu0.2) ...
+Selecting previously unselected package libxext6:amd64.
+Preparing to unpack .../06-libxext6_2%3a1.3.3-1_amd64.deb ...
+Unpacking libxext6:amd64 (2:1.3.3-1) ...
+Selecting previously unselected package libglib2.0-0:amd64.
+Preparing to unpack .../07-libglib2.0-0_2.56.4-0ubuntu0.18.04.4_amd64.deb ...
+Unpacking libglib2.0-0:amd64 (2.56.4-0ubuntu0.18.04.4) ...
+Selecting previously unselected package libkmod2:amd64.
+Preparing to unpack .../08-libkmod2_24-1ubuntu3.2_amd64.deb ...
+Unpacking libkmod2:amd64 (24-1ubuntu3.2) ...
+Selecting previously unselected package ucf.
+Preparing to unpack .../09-ucf_3.0038_all.deb ...
+Moving old data out of the way
+Unpacking ucf (3.0038) ...
+Selecting previously unselected package libdrm-common.
+Preparing to unpack .../10-libdrm-common_2.4.97-1ubuntu1~18.04.1_all.deb ...
+Unpacking libdrm-common (2.4.97-1ubuntu1~18.04.1) ...
+Selecting previously unselected package libdrm2:amd64.
+Preparing to unpack .../11-libdrm2_2.4.97-1ubuntu1~18.04.1_amd64.deb ...
+Unpacking libdrm2:amd64 (2.4.97-1ubuntu1~18.04.1) ...
+Selecting previously unselected package libpng16-16:amd64.
+Preparing to unpack .../12-libpng16-16_1.6.34-1ubuntu0.18.04.2_amd64.deb ...
+Unpacking libpng16-16:amd64 (1.6.34-1ubuntu0.18.04.2) ...
+Selecting previously unselected package fonts-dejavu-core.
+Preparing to unpack .../13-fonts-dejavu-core_2.37-1_all.deb ...
+Unpacking fonts-dejavu-core (2.37-1) ...
+Selecting previously unselected package fontconfig-config.
+Preparing to unpack .../14-fontconfig-config_2.12.6-0ubuntu2_all.deb ...
+Unpacking fontconfig-config (2.12.6-0ubuntu2) ...
+Selecting previously unselected package libfreetype6:amd64.
+Preparing to unpack .../15-libfreetype6_2.8.1-2ubuntu2_amd64.deb ...
+Unpacking libfreetype6:amd64 (2.8.1-2ubuntu2) ...
+Selecting previously unselected package libfontconfig1:amd64.
+Preparing to unpack .../16-libfontconfig1_2.12.6-0ubuntu2_amd64.deb ...
+Unpacking libfontconfig1:amd64 (2.12.6-0ubuntu2) ...
+Selecting previously unselected package libpixman-1-0:amd64.
+Preparing to unpack .../17-libpixman-1-0_0.34.0-2_amd64.deb ...
+Unpacking libpixman-1-0:amd64 (0.34.0-2) ...
+Selecting previously unselected package libxcb-render0:amd64.
+Preparing to unpack .../18-libxcb-render0_1.13-2~ubuntu18.04_amd64.deb ...
+Unpacking libxcb-render0:amd64 (1.13-2~ubuntu18.04) ...
+Selecting previously unselected package libxcb-shm0:amd64.
+Preparing to unpack .../19-libxcb-shm0_1.13-2~ubuntu18.04_amd64.deb ...
+Unpacking libxcb-shm0:amd64 (1.13-2~ubuntu18.04) ...
+Selecting previously unselected package libxrender1:amd64.
+Preparing to unpack .../20-libxrender1_1%3a0.9.10-1_amd64.deb ...
+Unpacking libxrender1:amd64 (1:0.9.10-1) ...
+Selecting previously unselected package libcairo2:amd64.
+Preparing to unpack .../21-libcairo2_1.15.10-2ubuntu0.1_amd64.deb ...
+Unpacking libcairo2:amd64 (1.15.10-2ubuntu0.1) ...
+Selecting previously unselected package libpciaccess0:amd64.
+Preparing to unpack .../22-libpciaccess0_0.14-1_amd64.deb ...
+Unpacking libpciaccess0:amd64 (0.14-1) ...
+Selecting previously unselected package libdrm-intel1:amd64.
+Preparing to unpack .../23-libdrm-intel1_2.4.97-1ubuntu1~18.04.1_amd64.deb ...
+Unpacking libdrm-intel1:amd64 (2.4.97-1ubuntu1~18.04.1) ...
+Selecting previously unselected package libunwind8:amd64.
+Preparing to unpack .../24-libunwind8_1.2.1-8_amd64.deb ...
+Unpacking libunwind8:amd64 (1.2.1-8) ...
+Selecting previously unselected package libxrandr2:amd64.
+Preparing to unpack .../25-libxrandr2_2%3a1.5.1-1_amd64.deb ...
+Unpacking libxrandr2:amd64 (2:1.5.1-1) ...
+Selecting previously unselected package libxv1:amd64.
+Preparing to unpack .../26-libxv1_2%3a1.0.11-1_amd64.deb ...
+Unpacking libxv1:amd64 (2:1.0.11-1) ...
+Selecting previously unselected package intel-gpu-tools.
+Preparing to unpack .../27-intel-gpu-tools_1.22-1_amd64.deb ...
+Unpacking intel-gpu-tools (1.22-1) ...
+Selecting previously unselected package libva2:amd64.
+Preparing to unpack .../28-libva2_2.1.0-3_amd64.deb ...
+Unpacking libva2:amd64 (2.1.0-3) ...
+Selecting previously unselected package libva-drm2:amd64.
+Preparing to unpack .../29-libva-drm2_2.1.0-3_amd64.deb ...
+Unpacking libva-drm2:amd64 (2.1.0-3) ...
+Selecting previously unselected package i965-va-driver:amd64.
+Preparing to unpack .../30-i965-va-driver_2.1.0-0ubuntu1_amd64.deb ...
+Unpacking i965-va-driver:amd64 (2.1.0-0ubuntu1) ...
+Setting up libpng16-16:amd64 (1.6.34-1ubuntu0.18.04.2) ...
+Setting up fonts-dejavu-core (2.37-1) ...
+Setting up libglib2.0-0:amd64 (2.56.4-0ubuntu0.18.04.4) ...
+No schema files found: doing nothing.
+Setting up libva2:amd64 (2.1.0-3) ...
+Setting up libbsd0:amd64 (0.8.7-1) ...
+Setting up ucf (3.0038) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.26.1 /usr/local/share/perl/5.26.1 /usr/lib/x86_64-linux-gnu/perl5/5.26 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl/5.26 /usr/share/perl/5.26 /usr/local/lib/site_perl /usr/lib/x86_64-linux-gnu/perl-base) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+debconf: falling back to frontend: Teletype
+Setting up libkmod2:amd64 (24-1ubuntu3.2) ...
+Setting up libfreetype6:amd64 (2.8.1-2ubuntu2) ...
+Setting up libdrm-common (2.4.97-1ubuntu1~18.04.1) ...
+Setting up libpixman-1-0:amd64 (0.34.0-2) ...
+Setting up libunwind8:amd64 (1.2.1-8) ...
+Setting up libpciaccess0:amd64 (0.14-1) ...
+Setting up libxdmcp6:amd64 (1:1.1.2-3) ...
+Setting up libx11-data (2:1.6.4-3ubuntu0.2) ...
+Setting up libxau6:amd64 (1:1.0.8-1) ...
+Setting up fontconfig-config (2.12.6-0ubuntu2) ...
+Setting up libdrm2:amd64 (2.4.97-1ubuntu1~18.04.1) ...
+Setting up libdrm-intel1:amd64 (2.4.97-1ubuntu1~18.04.1) ...
+Setting up libva-drm2:amd64 (2.1.0-3) ...
+Setting up libxcb1:amd64 (1.13-2~ubuntu18.04) ...
+Setting up libfontconfig1:amd64 (2.12.6-0ubuntu2) ...
+Setting up libxcb-render0:amd64 (1.13-2~ubuntu18.04) ...
+Setting up libx11-6:amd64 (2:1.6.4-3ubuntu0.2) ...
+Setting up i965-va-driver:amd64 (2.1.0-0ubuntu1) ...
+Setting up libxcb-shm0:amd64 (1.13-2~ubuntu18.04) ...
+Setting up libxrender1:amd64 (1:0.9.10-1) ...
+Setting up libxext6:amd64 (2:1.3.3-1) ...
+Setting up libxv1:amd64 (2:1.0.11-1) ...
+Setting up libxrandr2:amd64 (2:1.5.1-1) ...
+Setting up libcairo2:amd64 (1.15.10-2ubuntu0.1) ...
+Setting up intel-gpu-tools (1.22-1) ...
+Processing triggers for libc-bin (2.27-3ubuntu1) ...
+[91m+ rm -rf /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic-backports_InRelease /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic-backports_main_binary-amd64_Packages.lz4 /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic-backports_universe_binary-amd64_Packages.lz4 /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic-updates_InRelease /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic-updates_main_binary-amd64_Packages.lz4 /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic-updates_multiverse_binary-amd64_Packages.lz4 /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic-updates_restricted_binary-amd64_Packages.lz4 /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic-updates_universe_binary-amd64_Packages.lz4 /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic_InRelease /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic_main_binary-amd64_Packages.lz4 /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic_multiverse_binary-amd64_Packages.lz4 /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic_restricted_binary-amd64_Packages.lz4 /var/lib/apt/lists/archive.ubuntu.com_ubuntu_dists_bionic_universe_binary-amd64_Packages.lz4 /var/lib/apt/lists/auxfiles /var/lib/apt/lists/lock /var/lib/apt/lists/partial /var/lib/apt/lists/security.ubuntu.com_ubuntu_dists_bionic-security_InRelease /var/lib/apt/lists/security.ubuntu.com_ubuntu_dists_bionic-security_main_binary-amd64_Packages.lz4 /var/lib/apt/lists/security.ubuntu.com_ubuntu_dists_bionic-security_multiverse_binary-amd64_Packages.lz4 /var/lib/apt/lists/security.ubuntu.com_ubuntu_dists_bionic-security_restricted_binary-amd64_Packages.lz4 /var/lib/apt/lists/security.ubuntu.com_ubuntu_dists_bionic-security_universe_binary-amd64_Packages.lz4
+[0mRemoving intermediate container 3ac77b870515
+ ---> 0d4eca91ea4d
+Successfully built 0d4eca91ea4d
+Successfully tagged docker-images/3.3/vaapi:latest

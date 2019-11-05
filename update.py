@@ -69,10 +69,6 @@ for version in keep_version:
             docker_content = re.sub(r"--enable-libaom [^\\]*", "", docker_content)
         if (version == 'snapshot' or version[0] >= '3') and variant == 'vaapi':
             docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n        --enable-vaapi')
-
-        # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
-        # if variant == 'ubuntu' and (version[0] < '3' or (version[0] == '3' and version[2] < '2')):
-        #     docker_content = docker_content.replace('ubuntu:18.04', 'ubuntu:16.04')
         if variant == 'nvidia':
             docker_content = docker_content.replace('--extra-cflags="-I${PREFIX}/include"', '--extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/"')
             docker_content = docker_content.replace('--extra-ldflags="-L${PREFIX}/lib"', '--extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64/ -L/usr/local/cuda/lib32/"')
@@ -81,15 +77,6 @@ for version in keep_version:
             # Don't support hw decoding and scaling on older ffmpeg versions
             if (version[0] < '4') :
                 docker_content = docker_content.replace('--disable-ffplay', '--disable-ffplay \\\n      --enable-nvenc')
-            # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
-            # if (version[0] < '3' or (version[0] == '3' and version[2] < '3')):
-                # docker_content = docker_content.replace('-ubuntu18.04', '-ubuntu16.04')
-
-        # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
-        # if variant == 'vaapi' and (version[0] < '3' or (version[0] == '3' and version[2] < '3')):
-            # docker_content = docker_content.replace('ubuntu:18.04', 'ubuntu:16.04')
-            # docker_content = docker_content.replace('libva-drm2', 'libva-drm1')
-            # docker_content = docker_content.replace('libva2', 'libva1')
 
         d = os.path.dirname(dockerfile)
         if not os.path.exists(d):
