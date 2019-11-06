@@ -391,6 +391,7 @@ RUN set -xe \
 FROM        scratch AS release
 LABEL maintainer="Julien Rottenberg <julien@rottenberg.info>"
 LABEL ffmpeg=true
+LABEL ffmpeg_version=snapshot
 
 CMD         ["-version"]
 ENTRYPOINT  ["/bin/ffmpeg"]

@@ -61,6 +61,7 @@ for version in keep_version:
             run_content = tmpfile.read()
         run_content = run_content.replace('%%FFMPEG_VERSION%%', version)
         docker_content = template.replace('%%RUN%%', run_content)
+        docker_content = docker_content.replace('%%FFMPEG_VERSION%%', version)
         # OpenJpeg 2.3 is not supported in  < 3.3
         if (version[0] < '3' or (version[0] == '3' and version[2] < '4')):
             docker_content = docker_content.replace('--enable-libopenjpeg', '')

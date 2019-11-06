@@ -394,6 +394,7 @@ RUN set -xe && \
 FROM        base AS release
 LABEL maintainer="Julien Rottenberg <julien@rottenberg.info>"
 LABEL ffmpeg=true
+LABEL ffmpeg_version=3.3.9
 
 CMD         ["-version"]
 ENTRYPOINT  ["ffmpeg"]

@@ -423,6 +423,7 @@ RUN set -xe && \
 FROM        runtime-base AS release
 LABEL maintainer="Julien Rottenberg <julien@rottenberg.info>"
 LABEL ffmpeg=true
+LABEL ffmpeg_version=4.0.4
 
 CMD         ["-version"]
 ENTRYPOINT  ["ffmpeg"]
