@@ -27,7 +27,10 @@ ENV         FFMPEG_VERSION=3.3.9 \
             KVAZAAR_VERSION=1.2.0 \
             LAME_VERSION=3.100 \
             LIBASS_VERSION=0.13.7 \
+            LIBPTHREAD_STUBS_VERSION=0.4 \
             LIBVIDSTAB_VERSION=1.1.0 \
+            LIBXCB_VERSION=1.13.1 \
+            XCBPROTO_VERSION=1.13 \
             OGG_VERSION=1.3.2 \
             OPENCOREAMR_VERSION=0.1.5 \
             OPUS_VERSION=1.2 \
@@ -38,6 +41,9 @@ ENV         FFMPEG_VERSION=3.3.9 \
             WEBP_VERSION=1.0.2 \
             X264_VERSION=20170226-2245-stable \
             X265_VERSION=3.1.1 \
+            XAU_VERSION=1.0.9 \
+            XORG_MACROS_VERSION=1.19.2 \
+            XPROTO_VERSION=7.0.31 \
             XVID_VERSION=1.3.4 \
             SRC=/usr/local
 
@@ -318,6 +324,75 @@ RUN \
         make install ; \
         rm -rf ${DIR}
 
+## libxcb (and supporting libraries) for screen capture https://xcb.freedesktop.org/
+RUN \
+        DIR=/tmp/xorg-macros && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://www.x.org/archive//individual/util/util-macros-${XORG_MACROS_VERSION}.tar.gz &&\
+        tar -zx --strip-components=1 -f util-macros-${XORG_MACROS_VERSION}.tar.gz && \
+        ./configure -prefix="${PREFIX}" && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+RUN \
+        DIR=/tmp/xproto && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://www.x.org/archive/individual/proto/xproto-${XPROTO_VERSION}.tar.gz &&\
+        tar -zx --strip-components=1 -f xproto-${XPROTO_VERSION}.tar.gz && \
+        ./configure -prefix="${PREFIX}" && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+RUN \
+        DIR=/tmp/libXau && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://www.x.org/archive/individual/lib/libXau-${XAU_VERSION}.tar.gz &&\
+        tar -zx --strip-components=1 -f libXau-XAU_VERSION.tar.gz && \
+        ./configure -prefix="${PREFIX}" && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+RUN \
+        DIR=/tmp/libpthread-stubs && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://xcb.freedesktop.org/dist/libpthread-stubs-${LIBPTHREAD_STUBS_VERSION}.tar.gz &&\
+        tar -zx --strip-components=1 -f libpthread-stubs-${LIBPTHREAD_STUBS_VERSION}.tar.gz && \
+        PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig" ./configure -prefix="${PREFIX}" && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+RUN \
+        DIR=/tmp/libxcb-proto && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://xcb.freedesktop.org/dist/xcb-proto-${XCBPROTO_VERSION}.tar.gz &&\
+        tar -zx --strip-components=1 -f xcb-proto-${XCBPROTO_VERSION}.tar.gz && \
+        ACLOCAL_PATH="${PREFIX}/share/aclocal" ./autogen.sh && \
+        PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig" ./configure -prefix="${PREFIX}" && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+RUN \
+        DIR=/tmp/libxcb && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://xcb.freedesktop.org/dist/libxcb-${LIBXCB_VERSION}.tar.gz &&\
+        tar -zx --strip-components=1 -f libxcb-${LIBXCB_VERSION}.tar.gz && \
+        ACLOCAL_PATH="${PREFIX}/share/aclocal" ./autogen.sh && \
+        PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig" ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
 ## ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
@@ -347,6 +422,7 @@ RUN \
         --enable-libvorbis \
         --enable-libvpx \
         --enable-libwebp \
+        --enable-libxcb \
         --enable-libx265 \
         --enable-libxvid \
         --enable-libx264 \
