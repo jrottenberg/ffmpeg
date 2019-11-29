@@ -349,7 +349,7 @@ RUN \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
         curl -sLO https://www.x.org/archive/individual/lib/libXau-${XAU_VERSION}.tar.gz &&\
-        tar -zx --strip-components=1 -f libXau-XAU_VERSION.tar.gz && \
+        tar -zx --strip-components=1 -f libXau-${XAU_VERSION}.tar.gz && \
         ./configure -prefix="${PREFIX}" && \
         make && \
         make install && \
