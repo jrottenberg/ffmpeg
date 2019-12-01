@@ -9,6 +9,7 @@ recent-update-run:
   stage: lint
   script:
     - ./update.py
+    - git status
     - git diff-index --quiet HEAD
 
 linter-black:
