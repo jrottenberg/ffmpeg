@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 
-# Get latest release from ffmpeg.org
 import os
 import sys
 import re
@@ -14,6 +13,8 @@ FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
 
 gitlabci = []
 azure = []
+
+# Get latest release from ffmpeg.org
 with urllib.request.urlopen(FFMPEG_RELEASES) as conn:
     ffmpeg_releases = conn.read().decode("utf-8")
 
