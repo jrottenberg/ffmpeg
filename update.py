@@ -8,6 +8,9 @@ import urllib.request, urllib.error, urllib.parse
 from distutils.version import StrictVersion
 
 MIN_VERSION = "2.8"
+
+# https://ffmpeg.org/olddownload.html
+SKIP_VERSIONS = "3.1.11 3.0.12"
 VARIANTS = ["ubuntu", "alpine", "centos", "scratch", "vaapi", "nvidia"]
 FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
 
@@ -33,6 +36,8 @@ for cur in all_versions:
     if cur < MIN_VERSION:
         break
 
+    if cur in SKIP_VERSIONS:
+        break
     tmp = cur.split(".")
     # Check Minor
     if len(tmp) >= 2 and tmp[1].isdigit() and tmp[1] < last[1]:
