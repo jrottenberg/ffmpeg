@@ -1,252 +1,294 @@
 
 snapshot-ubuntu:
   extends: .docker
+  stage: ubuntu
   variables:
     VERSION: "snapshot"
     VARIANT: ubuntu
 
 snapshot-alpine:
   extends: .docker
+  stage: alpine
   variables:
     VERSION: "snapshot"
     VARIANT: alpine
 
 snapshot-centos:
   extends: .docker
+  stage: centos
   variables:
     VERSION: "snapshot"
     VARIANT: centos
 
 snapshot-scratch:
   extends: .docker
+  stage: scratch
   variables:
     VERSION: "snapshot"
     VARIANT: scratch
 
 snapshot-vaapi:
   extends: .docker
+  stage: vaapi
   variables:
     VERSION: "snapshot"
     VARIANT: vaapi
 
 snapshot-nvidia:
   extends: .docker
+  stage: nvidia
   variables:
     VERSION: "snapshot"
     VARIANT: nvidia
 
 4.2.1-ubuntu:
   extends: .docker
+  stage: ubuntu
   variables:
     VERSION: "4.2"
     VARIANT: ubuntu
 
 4.2.1-alpine:
   extends: .docker
+  stage: alpine
   variables:
     VERSION: "4.2"
     VARIANT: alpine
 
 4.2.1-centos:
   extends: .docker
+  stage: centos
   variables:
     VERSION: "4.2"
     VARIANT: centos
 
 4.2.1-scratch:
   extends: .docker
+  stage: scratch
   variables:
     VERSION: "4.2"
     VARIANT: scratch
 
 4.2.1-vaapi:
   extends: .docker
+  stage: vaapi
   variables:
     VERSION: "4.2"
     VARIANT: vaapi
 
 4.2.1-nvidia:
   extends: .docker
+  stage: nvidia
   variables:
     VERSION: "4.2"
     VARIANT: nvidia
 
 4.1.4-ubuntu:
   extends: .docker
+  stage: ubuntu
   variables:
     VERSION: "4.1"
     VARIANT: ubuntu
 
 4.1.4-alpine:
   extends: .docker
+  stage: alpine
   variables:
     VERSION: "4.1"
     VARIANT: alpine
 
 4.1.4-centos:
   extends: .docker
+  stage: centos
   variables:
     VERSION: "4.1"
     VARIANT: centos
 
 4.1.4-scratch:
   extends: .docker
+  stage: scratch
   variables:
     VERSION: "4.1"
     VARIANT: scratch
 
 4.1.4-vaapi:
   extends: .docker
+  stage: vaapi
   variables:
     VERSION: "4.1"
     VARIANT: vaapi
 
 4.1.4-nvidia:
   extends: .docker
+  stage: nvidia
   variables:
     VERSION: "4.1"
     VARIANT: nvidia
 
 4.0.5-ubuntu:
   extends: .docker
+  stage: ubuntu
   variables:
     VERSION: "4.0"
     VARIANT: ubuntu
 
 4.0.5-alpine:
   extends: .docker
+  stage: alpine
   variables:
     VERSION: "4.0"
     VARIANT: alpine
 
 4.0.5-centos:
   extends: .docker
+  stage: centos
   variables:
     VERSION: "4.0"
     VARIANT: centos
 
 4.0.5-scratch:
   extends: .docker
+  stage: scratch
   variables:
     VERSION: "4.0"
     VARIANT: scratch
 
 4.0.5-vaapi:
   extends: .docker
+  stage: vaapi
   variables:
     VERSION: "4.0"
     VARIANT: vaapi
 
 4.0.5-nvidia:
   extends: .docker
+  stage: nvidia
   variables:
     VERSION: "4.0"
     VARIANT: nvidia
 
 3.4.6-ubuntu:
   extends: .docker
+  stage: ubuntu
   variables:
     VERSION: "3.4"
     VARIANT: ubuntu
 
 3.4.6-alpine:
   extends: .docker
+  stage: alpine
   variables:
     VERSION: "3.4"
     VARIANT: alpine
 
 3.4.6-centos:
   extends: .docker
+  stage: centos
   variables:
     VERSION: "3.4"
     VARIANT: centos
 
 3.4.6-scratch:
   extends: .docker
+  stage: scratch
   variables:
     VERSION: "3.4"
     VARIANT: scratch
 
 3.4.6-vaapi:
   extends: .docker
+  stage: vaapi
   variables:
     VERSION: "3.4"
     VARIANT: vaapi
 
 3.4.6-nvidia:
   extends: .docker
+  stage: nvidia
   variables:
     VERSION: "3.4"
     VARIANT: nvidia
 
 3.3.9-ubuntu:
   extends: .docker
+  stage: ubuntu
   variables:
     VERSION: "3.3"
     VARIANT: ubuntu
 
 3.3.9-alpine:
   extends: .docker
+  stage: alpine
   variables:
     VERSION: "3.3"
     VARIANT: alpine
 
 3.3.9-centos:
   extends: .docker
+  stage: centos
   variables:
     VERSION: "3.3"
     VARIANT: centos
 
 3.3.9-scratch:
   extends: .docker
+  stage: scratch
   variables:
     VERSION: "3.3"
     VARIANT: scratch
 
 3.3.9-vaapi:
   extends: .docker
+  stage: vaapi
   variables:
     VERSION: "3.3"
     VARIANT: vaapi
 
 3.3.9-nvidia:
   extends: .docker
+  stage: nvidia
   variables:
     VERSION: "3.3"
     VARIANT: nvidia
 
 3.2.14-ubuntu:
   extends: .docker
+  stage: ubuntu
   variables:
     VERSION: "3.2"
     VARIANT: ubuntu
 
 3.2.14-alpine:
   extends: .docker
+  stage: alpine
   variables:
     VERSION: "3.2"
     VARIANT: alpine
 
 3.2.14-centos:
   extends: .docker
+  stage: centos
   variables:
     VERSION: "3.2"
     VARIANT: centos
 
 3.2.14-scratch:
   extends: .docker
+  stage: scratch
   variables:
     VERSION: "3.2"
     VARIANT: scratch
 
 3.2.14-vaapi:
   extends: .docker
+  stage: vaapi
   variables:
     VERSION: "3.2"
     VARIANT: vaapi
 
 3.2.14-nvidia:
   extends: .docker
+  stage: nvidia
   variables:
     VERSION: "3.2"
     VARIANT: nvidia
