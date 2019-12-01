@@ -29,7 +29,7 @@ RUN     apt-get -yqq update && \
 
 FROM  devel-base as build
 
-ENV        NVIDIA_HEADERS_VERSION=8.1.24.9
+ENV        NVIDIA_HEADERS_VERSION=9.1.23.1
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ENV        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/ffmpeg/lib"
 ARG        PREFIX=/opt/ffmpeg
@@ -98,11 +98,11 @@ RUN      buildDeps="autoconf \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
 
-RUN \ 
+RUN \
 	DIR=/tmp/nv-codec-headers && \
-	git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git ${DIR} && \
+	git clone https://github.com/FFmpeg/nv-codec-headers ${DIR} && \
 	cd ${DIR} && \
-	git checkout n${NVIDIA_HEADERS_VERSION} && \ 
+	git checkout n${NVIDIA_HEADERS_VERSION} && \
 	sed -i 's@/usr/local@'"$PREFIX"'@' Makefile && \
 	make && \
 	make install  && \
@@ -498,4 +498,3 @@ COPY --from=build /usr/local/lib /usr/local/lib/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
-
