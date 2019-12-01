@@ -1,0 +1,360 @@
+
+snapshot-ubuntu:
+  extends: .docker
+  variables:
+    VERSION: "snapshot"
+    VARIANT: ubuntu
+
+snapshot-alpine:
+  extends: .docker
+  variables:
+    VERSION: "snapshot"
+    VARIANT: alpine
+
+snapshot-centos:
+  extends: .docker
+  variables:
+    VERSION: "snapshot"
+    VARIANT: centos
+
+snapshot-scratch:
+  extends: .docker
+  variables:
+    VERSION: "snapshot"
+    VARIANT: scratch
+
+snapshot-vaapi:
+  extends: .docker
+  variables:
+    VERSION: "snapshot"
+    VARIANT: vaapi
+
+snapshot-nvidia:
+  extends: .docker
+  variables:
+    VERSION: "snapshot"
+    VARIANT: nvidia
+
+4.2.1-ubuntu:
+  extends: .docker
+  variables:
+    VERSION: "4.2"
+    VARIANT: ubuntu
+
+4.2.1-alpine:
+  extends: .docker
+  variables:
+    VERSION: "4.2"
+    VARIANT: alpine
+
+4.2.1-centos:
+  extends: .docker
+  variables:
+    VERSION: "4.2"
+    VARIANT: centos
+
+4.2.1-scratch:
+  extends: .docker
+  variables:
+    VERSION: "4.2"
+    VARIANT: scratch
+
+4.2.1-vaapi:
+  extends: .docker
+  variables:
+    VERSION: "4.2"
+    VARIANT: vaapi
+
+4.2.1-nvidia:
+  extends: .docker
+  variables:
+    VERSION: "4.2"
+    VARIANT: nvidia
+
+4.1.4-ubuntu:
+  extends: .docker
+  variables:
+    VERSION: "4.1"
+    VARIANT: ubuntu
+
+4.1.4-alpine:
+  extends: .docker
+  variables:
+    VERSION: "4.1"
+    VARIANT: alpine
+
+4.1.4-centos:
+  extends: .docker
+  variables:
+    VERSION: "4.1"
+    VARIANT: centos
+
+4.1.4-scratch:
+  extends: .docker
+  variables:
+    VERSION: "4.1"
+    VARIANT: scratch
+
+4.1.4-vaapi:
+  extends: .docker
+  variables:
+    VERSION: "4.1"
+    VARIANT: vaapi
+
+4.1.4-nvidia:
+  extends: .docker
+  variables:
+    VERSION: "4.1"
+    VARIANT: nvidia
+
+4.0.5-ubuntu:
+  extends: .docker
+  variables:
+    VERSION: "4.0"
+    VARIANT: ubuntu
+
+4.0.5-alpine:
+  extends: .docker
+  variables:
+    VERSION: "4.0"
+    VARIANT: alpine
+
+4.0.5-centos:
+  extends: .docker
+  variables:
+    VERSION: "4.0"
+    VARIANT: centos
+
+4.0.5-scratch:
+  extends: .docker
+  variables:
+    VERSION: "4.0"
+    VARIANT: scratch
+
+4.0.5-vaapi:
+  extends: .docker
+  variables:
+    VERSION: "4.0"
+    VARIANT: vaapi
+
+4.0.5-nvidia:
+  extends: .docker
+  variables:
+    VERSION: "4.0"
+    VARIANT: nvidia
+
+3.4.6-ubuntu:
+  extends: .docker
+  variables:
+    VERSION: "3.4"
+    VARIANT: ubuntu
+
+3.4.6-alpine:
+  extends: .docker
+  variables:
+    VERSION: "3.4"
+    VARIANT: alpine
+
+3.4.6-centos:
+  extends: .docker
+  variables:
+    VERSION: "3.4"
+    VARIANT: centos
+
+3.4.6-scratch:
+  extends: .docker
+  variables:
+    VERSION: "3.4"
+    VARIANT: scratch
+
+3.4.6-vaapi:
+  extends: .docker
+  variables:
+    VERSION: "3.4"
+    VARIANT: vaapi
+
+3.4.6-nvidia:
+  extends: .docker
+  variables:
+    VERSION: "3.4"
+    VARIANT: nvidia
+
+3.3.9-ubuntu:
+  extends: .docker
+  variables:
+    VERSION: "3.3"
+    VARIANT: ubuntu
+
+3.3.9-alpine:
+  extends: .docker
+  variables:
+    VERSION: "3.3"
+    VARIANT: alpine
+
+3.3.9-centos:
+  extends: .docker
+  variables:
+    VERSION: "3.3"
+    VARIANT: centos
+
+3.3.9-scratch:
+  extends: .docker
+  variables:
+    VERSION: "3.3"
+    VARIANT: scratch
+
+3.3.9-vaapi:
+  extends: .docker
+  variables:
+    VERSION: "3.3"
+    VARIANT: vaapi
+
+3.3.9-nvidia:
+  extends: .docker
+  variables:
+    VERSION: "3.3"
+    VARIANT: nvidia
+
+3.2.14-ubuntu:
+  extends: .docker
+  variables:
+    VERSION: "3.2"
+    VARIANT: ubuntu
+
+3.2.14-alpine:
+  extends: .docker
+  variables:
+    VERSION: "3.2"
+    VARIANT: alpine
+
+3.2.14-centos:
+  extends: .docker
+  variables:
+    VERSION: "3.2"
+    VARIANT: centos
+
+3.2.14-scratch:
+  extends: .docker
+  variables:
+    VERSION: "3.2"
+    VARIANT: scratch
+
+3.2.14-vaapi:
+  extends: .docker
+  variables:
+    VERSION: "3.2"
+    VARIANT: vaapi
+
+3.2.14-nvidia:
+  extends: .docker
+  variables:
+    VERSION: "3.2"
+    VARIANT: nvidia
+
+3.1.11-ubuntu:
+  extends: .docker
+  variables:
+    VERSION: "3.1"
+    VARIANT: ubuntu
+
+3.1.11-alpine:
+  extends: .docker
+  variables:
+    VERSION: "3.1"
+    VARIANT: alpine
+
+3.1.11-centos:
+  extends: .docker
+  variables:
+    VERSION: "3.1"
+    VARIANT: centos
+
+3.1.11-scratch:
+  extends: .docker
+  variables:
+    VERSION: "3.1"
+    VARIANT: scratch
+
+3.1.11-vaapi:
+  extends: .docker
+  variables:
+    VERSION: "3.1"
+    VARIANT: vaapi
+
+3.1.11-nvidia:
+  extends: .docker
+  variables:
+    VERSION: "3.1"
+    VARIANT: nvidia
+
+3.0.12-ubuntu:
+  extends: .docker
+  variables:
+    VERSION: "3.0"
+    VARIANT: ubuntu
+
+3.0.12-alpine:
+  extends: .docker
+  variables:
+    VERSION: "3.0"
+    VARIANT: alpine
+
+3.0.12-centos:
+  extends: .docker
+  variables:
+    VERSION: "3.0"
+    VARIANT: centos
+
+3.0.12-scratch:
+  extends: .docker
+  variables:
+    VERSION: "3.0"
+    VARIANT: scratch
+
+3.0.12-vaapi:
+  extends: .docker
+  variables:
+    VERSION: "3.0"
+    VARIANT: vaapi
+
+3.0.12-nvidia:
+  extends: .docker
+  variables:
+    VERSION: "3.0"
+    VARIANT: nvidia
+
+2.8.15-ubuntu:
+  extends: .docker
+  variables:
+    VERSION: "2.8"
+    VARIANT: ubuntu
+
+2.8.15-alpine:
+  extends: .docker
+  variables:
+    VERSION: "2.8"
+    VARIANT: alpine
+
+2.8.15-centos:
+  extends: .docker
+  variables:
+    VERSION: "2.8"
+    VARIANT: centos
+
+2.8.15-scratch:
+  extends: .docker
+  variables:
+    VERSION: "2.8"
+    VARIANT: scratch
+
+2.8.15-vaapi:
+  extends: .docker
+  variables:
+    VERSION: "2.8"
+    VARIANT: vaapi
+
+2.8.15-nvidia:
+  extends: .docker
+  variables:
+    VERSION: "2.8"
+    VARIANT: nvidia

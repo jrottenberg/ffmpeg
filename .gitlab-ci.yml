@@ -1,0 +1,36 @@
+
+stages:
+  - lint
+  - docker
+
+
+recent-update-run:
+  image: python:3
+  stage: lint
+  script:
+    - ./update.py
+    - git diff-index --quiet HEAD
+
+linter-black:
+  image: python:3
+  stage: lint
+  before_script:
+    - pip install black
+  script:
+    - black .
+
+.docker:
+  stage: docker
+  image: docker:latest
+  services:
+    - docker:19-dind
+  before_script:
+    - export IMAGE="ffmpeg:${VERSION}-${VARIANT:-ubuntu}"
+  script:
+    - docker build -t "${IMAGE}" --build-arg MAKEFLAGS="-j$(($(nproc) + 1))" docker-images/${VERSION}/${VARIANT}
+  after_script:
+    - docker run --rm ${IMAGE} -buildconf
+
+
+include:
+  - local: 'docker-images/.gitlab-ci.yml'
