@@ -33,4 +33,4 @@ linter-black:
 
 
 include:
-  - local: 'docker-images/.gitlab-ci.yml'
+  - local: 'docker-images/gitlab-ci.yml'
