@@ -11,6 +11,11 @@ recent-update-run:
     - ./update.py
     - git status
     - git diff-index --quiet HEAD
+  artifacts:
+    expire_in: 1 days
+    paths:
+    - docker-images/
+
 
 linter-black:
   image: python:3
@@ -23,6 +28,8 @@ linter-black:
 .docker:
   stage: docker
   image: docker:latest
+  variables:
+    GIT_STRATEGY: none
   services:
     - docker:19-dind
   before_script:
