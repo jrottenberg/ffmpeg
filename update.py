@@ -68,7 +68,7 @@ for version in keep_version:
 
         azure.append(
             "      %s_%s:\n        VERSION: %s\n        VARIANT: %s"
-            % (version.replace(".", "_"), variant, short_version, variant)
+            % (short_version.replace(".", "_"), variant, short_version, variant)
         )
 
         with open("templates/Dockerfile-env", "r") as tmpfile:

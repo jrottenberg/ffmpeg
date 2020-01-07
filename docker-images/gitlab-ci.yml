@@ -35,37 +35,37 @@ snapshot-nvidia:
     VERSION: "snapshot"
     VARIANT: nvidia
 
-4.2.1-ubuntu:
+4.2.2-ubuntu:
   extends: .docker
   variables:
     VERSION: "4.2"
     VARIANT: ubuntu
 
-4.2.1-alpine:
+4.2.2-alpine:
   extends: .docker
   variables:
     VERSION: "4.2"
     VARIANT: alpine
 
-4.2.1-centos:
+4.2.2-centos:
   extends: .docker
   variables:
     VERSION: "4.2"
     VARIANT: centos
 
-4.2.1-scratch:
+4.2.2-scratch:
   extends: .docker
   variables:
     VERSION: "4.2"
     VARIANT: scratch
 
-4.2.1-vaapi:
+4.2.2-vaapi:
   extends: .docker
   variables:
     VERSION: "4.2"
     VARIANT: vaapi
 
-4.2.1-nvidia:
+4.2.2-nvidia:
   extends: .docker
   variables:
     VERSION: "4.2"
@@ -143,37 +143,37 @@ snapshot-nvidia:
     VERSION: "4.0"
     VARIANT: nvidia
 
-3.4.6-ubuntu:
+3.4.7-ubuntu:
   extends: .docker
   variables:
     VERSION: "3.4"
     VARIANT: ubuntu
 
-3.4.6-alpine:
+3.4.7-alpine:
   extends: .docker
   variables:
     VERSION: "3.4"
     VARIANT: alpine
 
-3.4.6-centos:
+3.4.7-centos:
   extends: .docker
   variables:
     VERSION: "3.4"
     VARIANT: centos
 
-3.4.6-scratch:
+3.4.7-scratch:
   extends: .docker
   variables:
     VERSION: "3.4"
     VARIANT: scratch
 
-3.4.6-vaapi:
+3.4.7-vaapi:
   extends: .docker
   variables:
     VERSION: "3.4"
     VARIANT: vaapi
 
-3.4.6-nvidia:
+3.4.7-nvidia:
   extends: .docker
   variables:
     VERSION: "3.4"
