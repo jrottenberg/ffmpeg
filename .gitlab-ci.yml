@@ -1,7 +1,12 @@
 
 stages:
   - lint
-  - docker
+  - alpine
+  - centos
+  - nvidia
+  - scratch
+  - ubuntu
+  - vaapi
 
 
 recent-update-run:
@@ -26,7 +31,6 @@ linter-black:
     - black .
 
 .docker:
-  stage: docker
   image: docker:latest
   variables:
     GIT_STRATEGY: none

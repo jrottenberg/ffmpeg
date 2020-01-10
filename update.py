@@ -60,6 +60,7 @@ for version in keep_version:
             f"""
 {version}-{variant}:
   extends: .docker
+  stage: {variant}
   variables:
     VERSION: "{short_version}"
     VARIANT: {variant}
