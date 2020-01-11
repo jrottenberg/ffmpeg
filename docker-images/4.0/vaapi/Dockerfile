@@ -269,7 +269,7 @@ RUN  \
         cd ${DIR} && \
         curl -sLO https://github.com/fribidi/fribidi/releases/download/v${FRIBIDI_VERSION}/fribidi-${FRIBIDI_VERSION}.tar.bz2 && \
         echo ${FRIBIDI_SHA256SUM} | sha256sum --check && \
-        tar -jx --strip-components=1 -f ${FRIBIDI_VERSION}.tar.bz2 && \
+        tar -jx --strip-components=1 -f fribidi-${FRIBIDI_VERSION}.tar.bz2 && \
         ./autogen.sh && \
         make -j 1 && \
         make install && \
