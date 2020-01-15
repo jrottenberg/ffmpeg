@@ -5,10 +5,10 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM    centos:7 AS base
+FROM    centos:8 AS base
 
-RUN     yum -y install libgomp && \
-        yum clean all;
+RUN     dnf -y install libgomp && \
+        dnf clean all;
 
 
 FROM        base AS build
@@ -26,6 +26,7 @@ RUN     buildDeps="autoconf \
                    automake \
                    bzip2 \
                    cmake \
+                   diffutils \
                    expat-devel \
                    gcc \
                    gcc-c++ \
@@ -35,14 +36,16 @@ RUN     buildDeps="autoconf \
                    make \
                    nasm \
                    perl \
+                   python3 \
                    openssl-devel \
                    tar \
                    yasm \
                    which \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
-        yum --enablerepo=extras install -y epel-release && \
-        yum install -y ${buildDeps}
+        dnf --enablerepo=extras install -y epel-release && \
+        dnf --enablerepo=PowerTools install -y ${buildDeps} && \
+        alternatives --set python /usr/bin/python3
 %%RUN%%
 RUN \
         ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib64/ && \
