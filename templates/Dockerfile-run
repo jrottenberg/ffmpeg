@@ -309,6 +309,33 @@ RUN \
         make install && \
         rm -rf ${DIR}
 
+## libxml2 - for libbluray
+RUN \
+        DIR=/tmp/libxml2 && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://gitlab.gnome.org/GNOME/libxml2/-/archive/v${LIBXML2_VERSION}/libxml2-v${LIBXML2_VERSION}.tar.gz && \
+        echo ${LIBXML2_SHA256SUM} | sha256sum --check && \
+        tar -xz --strip-components=1 -f libxml2-v${LIBXML2_VERSION}.tar.gz && \
+        PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig" ./configure --prefix="${PREFIX}" --with-ftp=no --with-http=no --with-python=no && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+
+## libbluray - Requires libxml, freetype, and fontconfig
+RUN \
+        DIR=/tmp/libbluray && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://download.videolan.org/pub/videolan/libbluray/${LIBBLURAY_VERSION}/libbluray-${LIBBLURAY_VERSION}.tar.bz2 && \
+        echo ${LIBBLURAY_SHA256SUM} | sha256sum --check && \
+        tar -jx --strip-components=1 -f libbluray-${LIBBLURAY_VERSION}.tar.bz2 && \
+        PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig" ./configure --prefix="${PREFIX}" --disable-examples --disable-bdjava-jar --disable-static --enable-shared && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
 ## ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
@@ -350,6 +377,7 @@ RUN \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
+        --enable-libbluray \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \

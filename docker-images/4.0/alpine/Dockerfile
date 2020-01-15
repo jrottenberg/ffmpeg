@@ -45,6 +45,8 @@ ENV         FFMPEG_VERSION=4.0.5 \
             XORG_MACROS_VERSION=1.19.2 \
             XPROTO_VERSION=7.0.31 \
             XVID_VERSION=1.3.4 \
+            LIBXML2_VERSION=2.9.10 \
+            LIBBLURAY_VERSION=1.1.2 \
             SRC=/usr/local
 
 ARG         FREETYPE_SHA256SUM="5d03dd76c2171a7601e9ce10551d52d4471cf92cd205948e60289251daddffa8 freetype-2.5.5.tar.gz"
@@ -56,6 +58,8 @@ ARG         OPUS_SHA256SUM="77db45a87b51578fbc49555ef1b10926179861d854eb2613207d
 ARG         THEORA_SHA256SUM="40952956c47811928d1e7922cda3bc1f427eb75680c3c37249c91e949054916b libtheora-1.1.1.tar.gz"
 ARG         VORBIS_SHA256SUM="6efbcecdd3e5dfbf090341b485da9d176eb250d893e3eb378c428a2db38301ce libvorbis-1.3.5.tar.gz"
 ARG         XVID_SHA256SUM="4e9fd62728885855bc5007fe1be58df42e5e274497591fec37249e1052ae316f xvidcore-1.3.4.tar.gz"
+ARG         LIBXML2_SHA256SUM="f07dab13bf42d2b8db80620cce7419b3b87827cc937c8bb20fe13b8571ee9501  libxml2-v2.9.10.tar.gz"
+ARG         LIBBLURAY_SHA256SUM="a3dd452239b100dc9da0d01b30e1692693e2a332a7d29917bf84bb10ea7c0b42 libbluray-1.1.2.tar.bz2"
 
 
 
@@ -393,6 +397,33 @@ RUN \
         make install && \
         rm -rf ${DIR}
 
+## libxml2 - for libbluray
+RUN \
+        DIR=/tmp/libxml2 && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://gitlab.gnome.org/GNOME/libxml2/-/archive/v${LIBXML2_VERSION}/libxml2-v${LIBXML2_VERSION}.tar.gz && \
+        echo ${LIBXML2_SHA256SUM} | sha256sum --check && \
+        tar -xz --strip-components=1 -f libxml2-v${LIBXML2_VERSION}.tar.gz && \
+        PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig" ./configure --prefix="${PREFIX}" --with-ftp=no --with-http=no --with-python=no && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+
+## libbluray - Requires libxml, freetype, and fontconfig
+RUN \
+        DIR=/tmp/libbluray && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://download.videolan.org/pub/videolan/libbluray/${LIBBLURAY_VERSION}/libbluray-${LIBBLURAY_VERSION}.tar.bz2 && \
+        echo ${LIBBLURAY_SHA256SUM} | sha256sum --check && \
+        tar -jx --strip-components=1 -f libbluray-${LIBBLURAY_VERSION}.tar.bz2 && \
+        PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig" ./configure --prefix="${PREFIX}" --disable-examples --disable-bdjava-jar --disable-static --enable-shared && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
 ## ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
@@ -434,6 +465,7 @@ RUN \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
+        --enable-libbluray \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
