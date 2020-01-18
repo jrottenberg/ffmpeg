@@ -506,11 +506,8 @@ RUN \
         cp qt-faststart ${PREFIX}/bin
 
 ## cleanup
-# The rm libxml2.so.2 hackery appears to only be necessary for the nvidia container. Likely due to the difference
-# between the runtime container and the devel container.
 RUN \
-        rm -f /usr/lib/x86_64-linux-gnu/libxml2.so.2 && \
-        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
+        LD_LIBRARY_PATH="${PREFIX}/lib:${PREFIX}/lib64:${LD_LIBRARY_PATH}" ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
         LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
