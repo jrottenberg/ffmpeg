@@ -44,7 +44,7 @@ RUN     buildDeps="autoconf \
 
 RUN \
         mkdir -p /tmp/fakeroot/lib  && \
-        ldd ${PREFIX}/bin/ffmpeg | cut -d ' ' -f 3 | strings | xargs -I R cp R /tmp/fakeroot/lib/ && \
+        LD_LIBRARY_PATH="${PREFIX}/lib:${PREFIX}/lib64:${LD_LIBRARY_PATH}" ldd ${PREFIX}/bin/ffmpeg | cut -d ' ' -f 3 | strings | xargs -I R cp R /tmp/fakeroot/lib/ && \
         for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
         cp -r ${PREFIX}/bin /tmp/fakeroot/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/ && \
