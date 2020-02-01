@@ -408,7 +408,7 @@ RUN \
         curl -sLO https://gitlab.gnome.org/GNOME/libxml2/-/archive/v${LIBXML2_VERSION}/libxml2-v${LIBXML2_VERSION}.tar.gz && \
         echo ${LIBXML2_SHA256SUM} | sha256sum --check && \
         tar -xz --strip-components=1 -f libxml2-v${LIBXML2_VERSION}.tar.gz && \
-        PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig" ./configure --prefix="${PREFIX}" --with-ftp=no --with-http=no --with-python=no && \
+        PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig" ./autogen.sh --prefix="${PREFIX}" --with-ftp=no --with-http=no --with-python=no && \
         make && \
         make install && \
         rm -rf ${DIR}
