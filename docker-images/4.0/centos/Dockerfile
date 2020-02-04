@@ -70,6 +70,7 @@ RUN     buildDeps="autoconf \
                    cmake \
                    diffutils \
                    expat-devel \
+                   fribidi \
                    fribidi-devel \
                    gcc \
                    gcc-c++ \
