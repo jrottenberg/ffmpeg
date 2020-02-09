@@ -86,7 +86,11 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "False"
 
+<<<<<<< HEAD
 4.2.2-ubuntu1804:
+=======
+4.2-ubuntu:
+>>>>>>> after update.py
   extends: .docker
   stage: ubuntu1804
   variables:
@@ -101,7 +105,11 @@ snapshot-nvidia1804:
     VARIANT: ubuntu
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.2.2-alpine311:
+=======
+4.2-alpine:
+>>>>>>> after update.py
   extends: .docker
   stage: alpine311
   variables:
@@ -116,7 +124,11 @@ snapshot-nvidia1804:
     VARIANT: alpine
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.2.2-centos7:
+=======
+4.2-centos:
+>>>>>>> after update.py
   extends: .docker
   stage: centos7
   variables:
@@ -131,7 +143,11 @@ snapshot-nvidia1804:
     VARIANT: centos
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.2.2-centos8:
+=======
+4.2-scratch:
+>>>>>>> after update.py
   extends: .docker
   stage: centos8
   variables:
@@ -146,7 +162,11 @@ snapshot-nvidia1804:
     VARIANT: scratch
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.2.2-scratch311:
+=======
+4.2-vaapi:
+>>>>>>> after update.py
   extends: .docker
   stage: scratch311
   variables:
@@ -189,7 +209,11 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "False"
 
+<<<<<<< HEAD
 4.1.5-ubuntu1804:
+=======
+4.2-nvidia:
+>>>>>>> after update.py
   extends: .docker
   stage: ubuntu1804
   variables:
@@ -203,7 +227,11 @@ snapshot-nvidia1804:
     VARIANT: nvidia
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.1.5-alpine311:
+=======
+4.1-ubuntu:
+>>>>>>> after update.py
   extends: .docker
   stage: alpine311
   variables:
@@ -218,7 +246,11 @@ snapshot-nvidia1804:
     VARIANT: ubuntu
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.1.5-centos7:
+=======
+4.1-alpine:
+>>>>>>> after update.py
   extends: .docker
   stage: centos7
   variables:
@@ -233,7 +265,11 @@ snapshot-nvidia1804:
     VARIANT: alpine
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.1.5-centos8:
+=======
+4.1-centos:
+>>>>>>> after update.py
   extends: .docker
   stage: centos8
   variables:
@@ -248,7 +284,11 @@ snapshot-nvidia1804:
     VARIANT: centos
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.1.5-scratch311:
+=======
+4.1-scratch:
+>>>>>>> after update.py
   extends: .docker
   stage: scratch311
   variables:
@@ -263,7 +303,11 @@ snapshot-nvidia1804:
     VARIANT: scratch
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.1.5-vaapi1804:
+=======
+4.1-vaapi:
+>>>>>>> after update.py
   extends: .docker
   stage: vaapi1804
   variables:
@@ -278,7 +322,11 @@ snapshot-nvidia1804:
     VARIANT: vaapi
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.1.5-nvidia1804:
+=======
+4.1-nvidia:
+>>>>>>> after update.py
   extends: .docker
   stage: nvidia1804
   variables:
@@ -293,7 +341,11 @@ snapshot-nvidia1804:
     VARIANT: nvidia
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.0.5-ubuntu1604:
+=======
+4.0-ubuntu:
+>>>>>>> after update.py
   extends: .docker
   stage: ubuntu1604
   variables:
@@ -308,7 +360,11 @@ snapshot-nvidia1804:
     VARIANT: ubuntu
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.0.5-ubuntu1804:
+=======
+4.0-alpine:
+>>>>>>> after update.py
   extends: .docker
   stage: ubuntu1804
   variables:
@@ -323,7 +379,11 @@ snapshot-nvidia1804:
     VARIANT: alpine
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.0.5-alpine311:
+=======
+4.0-centos:
+>>>>>>> after update.py
   extends: .docker
   stage: alpine311
   variables:
@@ -338,7 +398,11 @@ snapshot-nvidia1804:
     VARIANT: centos
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.0.5-centos7:
+=======
+4.0-scratch:
+>>>>>>> after update.py
   extends: .docker
   stage: centos7
   variables:
@@ -353,7 +417,11 @@ snapshot-nvidia1804:
     VARIANT: scratch
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.0.5-centos8:
+=======
+4.0-vaapi:
+>>>>>>> after update.py
   extends: .docker
   stage: centos8
   variables:
@@ -368,7 +436,11 @@ snapshot-nvidia1804:
     VARIANT: vaapi
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 4.0.5-scratch311:
+=======
+4.0-nvidia:
+>>>>>>> after update.py
   extends: .docker
   stage: scratch311
   variables:
@@ -410,7 +482,11 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "False"
 
+<<<<<<< HEAD
 3.4.7-ubuntu1804:
+=======
+3.4-ubuntu:
+>>>>>>> after update.py
   extends: .docker
   stage: ubuntu1804
   variables:
@@ -425,7 +501,11 @@ snapshot-nvidia1804:
     VARIANT: ubuntu
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.4.7-alpine311:
+=======
+3.4-alpine:
+>>>>>>> after update.py
   extends: .docker
   stage: alpine311
   variables:
@@ -440,7 +520,11 @@ snapshot-nvidia1804:
     VARIANT: alpine
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.4.7-centos7:
+=======
+3.4-centos:
+>>>>>>> after update.py
   extends: .docker
   stage: centos7
   variables:
@@ -455,7 +539,11 @@ snapshot-nvidia1804:
     VARIANT: centos
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.4.7-centos8:
+=======
+3.4-scratch:
+>>>>>>> after update.py
   extends: .docker
   stage: centos8
   variables:
@@ -470,7 +558,11 @@ snapshot-nvidia1804:
     VARIANT: scratch
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.4.7-scratch311:
+=======
+3.4-vaapi:
+>>>>>>> after update.py
   extends: .docker
   stage: scratch311
   variables:
@@ -513,7 +605,11 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "False"
 
+<<<<<<< HEAD
 3.3.9-ubuntu1804:
+=======
+3.4-nvidia:
+>>>>>>> after update.py
   extends: .docker
   stage: ubuntu1804
   variables:
@@ -527,7 +623,11 @@ snapshot-nvidia1804:
     VARIANT: nvidia
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.3.9-alpine311:
+=======
+3.3-ubuntu:
+>>>>>>> after update.py
   extends: .docker
   stage: alpine311
   variables:
@@ -542,7 +642,11 @@ snapshot-nvidia1804:
     VARIANT: ubuntu
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.3.9-centos7:
+=======
+3.3-alpine:
+>>>>>>> after update.py
   extends: .docker
   stage: centos7
   variables:
@@ -557,7 +661,11 @@ snapshot-nvidia1804:
     VARIANT: alpine
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.3.9-centos8:
+=======
+3.3-centos:
+>>>>>>> after update.py
   extends: .docker
   stage: centos8
   variables:
@@ -572,7 +680,11 @@ snapshot-nvidia1804:
     VARIANT: centos
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.3.9-scratch311:
+=======
+3.3-scratch:
+>>>>>>> after update.py
   extends: .docker
   stage: scratch311
   variables:
@@ -587,7 +699,11 @@ snapshot-nvidia1804:
     VARIANT: scratch
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.3.9-vaapi1804:
+=======
+3.3-vaapi:
+>>>>>>> after update.py
   extends: .docker
   stage: vaapi1804
   variables:
@@ -602,7 +718,11 @@ snapshot-nvidia1804:
     VARIANT: vaapi
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.3.9-nvidia1804:
+=======
+3.3-nvidia:
+>>>>>>> after update.py
   extends: .docker
   stage: nvidia1804
   variables:
@@ -617,7 +737,11 @@ snapshot-nvidia1804:
     VARIANT: nvidia
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.2.14-ubuntu1604:
+=======
+3.2-ubuntu:
+>>>>>>> after update.py
   extends: .docker
   stage: ubuntu1604
   variables:
@@ -632,7 +756,11 @@ snapshot-nvidia1804:
     VARIANT: ubuntu
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.2.14-alpine38:
+=======
+3.2-alpine:
+>>>>>>> after update.py
   extends: .docker
   stage: alpine38
   variables:
@@ -647,7 +775,11 @@ snapshot-nvidia1804:
     VARIANT: alpine
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.2.14-centos7:
+=======
+3.2-centos:
+>>>>>>> after update.py
   extends: .docker
   stage: centos7
   variables:
@@ -662,7 +794,11 @@ snapshot-nvidia1804:
     VARIANT: centos
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.2.14-scratch38:
+=======
+3.2-scratch:
+>>>>>>> after update.py
   extends: .docker
   stage: scratch38
   variables:
@@ -677,7 +813,11 @@ snapshot-nvidia1804:
     VARIANT: scratch
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.2.14-vaapi1604:
+=======
+3.2-vaapi:
+>>>>>>> after update.py
   extends: .docker
   stage: vaapi1604
   variables:
@@ -692,7 +832,11 @@ snapshot-nvidia1804:
     VARIANT: vaapi
 >>>>>>> after update.py
 
+<<<<<<< HEAD
 3.2.14-nvidia1604:
+=======
+3.2-nvidia:
+>>>>>>> after update.py
   extends: .docker
   stage: nvidia1604
   variables:
