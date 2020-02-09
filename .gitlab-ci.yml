@@ -9,6 +9,8 @@ stages:
   - vaapi
 
 
+
+
 recent-update-run:
   image: python:3
   stage: lint
@@ -34,14 +36,15 @@ linter-black:
   image: docker:latest
   variables:
     GIT_STRATEGY: none
+    SHORT_IMAGE: "ffmpeg:${SHORT_VERSION}-${VARIANT}"
+    IMAGE: "ffmpeg:${VERSION}-${VARIANT}"
   services:
     - docker:19-dind
-  before_script:
-    - export IMAGE="ffmpeg:${VERSION}-${VARIANT:-ubuntu}"
   script:
-    - docker build -t "${IMAGE}" --build-arg MAKEFLAGS="-j$(($(nproc) + 1))" docker-images/${VERSION}/${VARIANT}
+    - docker build -t "${IMAGE}" -t "${SHORT_IMAGE}" --build-arg MAKEFLAGS="-j$(($(nproc) + 1))" docker-images/${VERSION}/${VARIANT}
   after_script:
     - docker run --rm ${IMAGE} -buildconf
+    - echo "Built ${IMAGE}"
 
 
 include:
