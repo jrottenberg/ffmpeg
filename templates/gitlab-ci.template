@@ -2,5 +2,6 @@
 ${VERSION}-${VARIANT}:
   extends: .docker
   variables:
+    SHORT_VERSION %s
     VERSION %s
     VARIANT %s

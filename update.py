@@ -19,54 +19,18 @@ TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 # https://ffmpeg.org/olddownload.html
 SKIP_VERSIONS = "3.1.11 3.0.12"
 VARIANTS = [
-    {
-        "name": "ubuntu1604",
-        "parent": "ubuntu",
-    },
-    {
-        "name": "ubuntu1804",
-        "parent": "ubuntu"
-    },
-    {
-        "name": "alpine311",
-        "parent": "alpine",
-    },
-    {
-        "name": "alpine38",
-        "parent": "alpine"
-    },
-    {
-       "name": "centos7",
-       "parent": "centos",
-    },
-    {
-        "name": "centos8",
-        "parent": "centos",
-    },
-    {
-        "name": "scratch311",
-        "parent": "scratch",
-    },
-    {
-        "name": "scratch38",
-        "parent": "scratch",
-    },
-    {
-        "name": "vaapi1804",
-        "parent": "vaapi",
-    },
-    {
-        "name": "vaapi1604",
-        "parent": "vaapi",
-    },
-    {
-        "name": "nvidia1804",
-        "parent": "nvidia",
-    },
-    {
-        "name": "nvidia1604",
-        "parent": "nvidia",
-    },
+    {"name": "ubuntu1604", "parent": "ubuntu",},
+    {"name": "ubuntu1804", "parent": "ubuntu"},
+    {"name": "alpine311", "parent": "alpine",},
+    {"name": "alpine38", "parent": "alpine"},
+    {"name": "centos7", "parent": "centos",},
+    {"name": "centos8", "parent": "centos",},
+    {"name": "scratch311", "parent": "scratch",},
+    {"name": "scratch38", "parent": "scratch",},
+    {"name": "vaapi1804", "parent": "vaapi",},
+    {"name": "vaapi1604", "parent": "vaapi",},
+    {"name": "nvidia1804", "parent": "nvidia",},
+    {"name": "nvidia1604", "parent": "nvidia",},
 ]
 FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
 gitlabci = []
@@ -76,14 +40,21 @@ azure = []
 with request.urlopen(FFMPEG_RELEASES) as conn:
     ffmpeg_releases = conn.read().decode("utf-8")
 
-parse_re = re.compile(r'ffmpeg-([.0-9]+).tar.bz2.asc</a>\s+')
+parse_re = re.compile(r"ffmpeg-([.0-9]+).tar.bz2.asc</a>\s+")
 all_versions = parse_re.findall(ffmpeg_releases)
 all_versions.sort(key=StrictVersion, reverse=True)
 
 version, all_versions = all_versions[0], all_versions[1:]
 
 SKIP_VARIANTS = {
-    "3.2": ["alpine311", "centos8", "nvidia1804", "scratch311", "ubuntu1804", "vaapi1804"],
+    "3.2": [
+        "alpine311",
+        "centos8",
+        "nvidia1804",
+        "scratch311",
+        "ubuntu1804",
+        "vaapi1804",
+    ],
     "3.3": ["alpine38", "nvidia1604", "scratch38", "vaapi1604"],
     "3.4": ["alpine38", "nvidia1604", "scratch38", "vaapi1604"],
     "4.0": ["alpine38", "nvidia1604", "scratch38", "vaapi1604"],
@@ -99,7 +70,7 @@ keep_version.append(version)
 
 
 def shorten_version(version):
-    if version == 'snapshot':
+    if version == "snapshot":
         return version
     else:
         return version[0:3]
@@ -126,19 +97,21 @@ for version in keep_version:
     for k, v in SKIP_VARIANTS.items():
         if version.startswith(k):
             skip_variants = v
-    compatible_variants = [v for v in VARIANTS if skip_variants is None or
-                           v['name'] not in skip_variants]
+    compatible_variants = [
+        v for v in VARIANTS if skip_variants is None or v["name"] not in skip_variants
+    ]
     short_ver = shorten_version(version)
-    ver_path = os.path.join('docker-images', short_ver)
+    ver_path = os.path.join("docker-images", short_ver)
     for existing_variant in os.listdir(ver_path):
         if existing_variant not in compatible_variants:
             shutil.rmtree(DIR_FORMAT_STR.format(short_ver, existing_variant))
 
     for variant in compatible_variants:
-        siblings = [v['name'] for v in compatible_variants if
-                    v['parent'] == variant['parent']]
-        is_parent = sorted(siblings, reverse=True)[0] == variant['name']
-        dockerfile = IMAGE_FORMAT_STR.format(short_ver, variant['name'])
+        siblings = [
+            v["name"] for v in compatible_variants if v["parent"] == variant["parent"]
+        ]
+        is_parent = sorted(siblings, reverse=True)[0] == variant["name"]
+        dockerfile = IMAGE_FORMAT_STR.format(short_ver, variant["name"])
         gitlabci.append(
             f"""
 {version}-{variant['name']}:
@@ -151,7 +124,7 @@ for version in keep_version:
     ISPARENT: "{is_parent}"
 """
         )
-
+        # Build the matric section
         azure.append(
             "      {0}_{1}:\n"
             "        VERSION: {2}\n"
@@ -159,87 +132,90 @@ for version in keep_version:
             "        PARENT: {4}\n"
             "        ISPARENT: {5}".format(
                 short_ver.replace(".", "_"),
-                variant['name'],
+                variant["name"],
                 short_ver,
-                variant['name'],
-                variant['parent'],
-                is_parent)
+                variant["name"],
+                variant["parent"],
+                is_parent,
+            )
         )
-        with open(TEMPLATE_STR.format(variant['name']), "r") as tmpfile:
+        with open(TEMPLATE_STR.format(variant["name"]), "r") as tmpfile:
             template = tmpfile.read()
 
         FFMPEG_CONFIG_FLAGS = [
-            '--disable-debug',
-            '--disable-doc',
-            '--disable-ffplay',
-            '--enable-shared',
-            '--enable-avresample',
-            '--enable-libopencore-amrnb',
-            '--enable-libopencore-amrwb',
-            '--enable-gpl',
-            '--enable-libass',
-            '--enable-fontconfig',
-            '--enable-libfreetype',
-            '--enable-libvidstab',
-            '--enable-libmp3lame',
-            '--enable-libopus',
-            '--enable-libtheora',
-            '--enable-libvorbis',
-            '--enable-libvpx',
-            '--enable-libwebp',
-            '--enable-libxcb',
-            '--enable-libx265',
-            '--enable-libxvid',
-            '--enable-libx264',
-            '--enable-nonfree',
-            '--enable-openssl',
-            '--enable-libfdk_aac',
-            '--enable-postproc',
-            '--enable-small',
-            '--enable-version3',
-            '--enable-libbluray',
-            '--enable-libzmq',
-            '--extra-libs=-ldl',
+            "--disable-debug",
+            "--disable-doc",
+            "--disable-ffplay",
+            "--enable-shared",
+            "--enable-avresample",
+            "--enable-libopencore-amrnb",
+            "--enable-libopencore-amrwb",
+            "--enable-gpl",
+            "--enable-libass",
+            "--enable-fontconfig",
+            "--enable-libfreetype",
+            "--enable-libvidstab",
+            "--enable-libmp3lame",
+            "--enable-libopus",
+            "--enable-libtheora",
+            "--enable-libvorbis",
+            "--enable-libvpx",
+            "--enable-libwebp",
+            "--enable-libxcb",
+            "--enable-libx265",
+            "--enable-libxvid",
+            "--enable-libx264",
+            "--enable-nonfree",
+            "--enable-openssl",
+            "--enable-libfdk_aac",
+            "--enable-postproc",
+            "--enable-small",
+            "--enable-version3",
+            "--enable-libbluray",
+            "--enable-libzmq",
+            "--extra-libs=-ldl",
             '--prefix="${PREFIX}"',
         ]
         CFLAGS = [
-            '-I${PREFIX}/include',
+            "-I${PREFIX}/include",
         ]
         LDFLAGS = [
-            '-L${PREFIX}/lib',
+            "-L${PREFIX}/lib",
         ]
 
         # OpenJpeg 2.1 is not supported in 2.8
         if version[0:3] != "2.8":
-            FFMPEG_CONFIG_FLAGS.append('--enable-libopenjpeg')
-            FFMPEG_CONFIG_FLAGS.append('--enable-libkvazaar')
-        if (version == "snapshot" or int(version[0]) > 3):
-            FFMPEG_CONFIG_FLAGS.append('--enable-libaom')
-            FFMPEG_CONFIG_FLAGS.append('--extra-libs=-lpthread')
+            FFMPEG_CONFIG_FLAGS.append("--enable-libopenjpeg")
+            FFMPEG_CONFIG_FLAGS.append("--enable-libkvazaar")
+        if version == "snapshot" or int(version[0]) > 3:
+            FFMPEG_CONFIG_FLAGS.append("--enable-libaom")
+            FFMPEG_CONFIG_FLAGS.append("--extra-libs=-lpthread")
 
-        if ((version == "snapshot" or int(version[0]) >= 3) and
-                variant['parent'] == "vaapi"):
-            FFMPEG_CONFIG_FLAGS.append('--enable-vaapi')
+        if (version == "snapshot" or int(version[0]) >= 3) and variant[
+            "parent"
+        ] == "vaapi":
+            FFMPEG_CONFIG_FLAGS.append("--enable-vaapi")
 
-        if variant['parent'] == "nvidia":
-            CFLAGS.append('-I${PREFIX}/include/ffnvcodec')
-            CFLAGS.append('-I/usr/local/cuda/include/')
-            LDFLAGS.append('-L/usr/local/cuda/lib64')
-            LDFLAGS.append('-L/usr/local/cuda/lib32/')
-            FFMPEG_CONFIG_FLAGS.append('--enable-nvenc')
+        if variant["parent"] == "nvidia":
+            CFLAGS.append("-I${PREFIX}/include/ffnvcodec")
+            CFLAGS.append("-I/usr/local/cuda/include/")
+            LDFLAGS.append("-L/usr/local/cuda/lib64")
+            LDFLAGS.append("-L/usr/local/cuda/lib32/")
+            FFMPEG_CONFIG_FLAGS.append("--enable-nvenc")
             if version == "snapshot" or int(version[0]) >= 4:
-                FFMPEG_CONFIG_FLAGS.append('--enable-cuda')
-                FFMPEG_CONFIG_FLAGS.append('--enable-cuvid')
-                FFMPEG_CONFIG_FLAGS.append('--enable-libnpp')
-        cflags = '--extra-cflags="{0}"'.format(' '.join(CFLAGS))
-        ldflags = '--extra-ldflags="{0}"'.format(' '.join(LDFLAGS))
+                FFMPEG_CONFIG_FLAGS.append("--enable-cuda")
+                FFMPEG_CONFIG_FLAGS.append("--enable-cuvid")
+                FFMPEG_CONFIG_FLAGS.append("--enable-libnpp")
+        cflags = '--extra-cflags="{0}"'.format(" ".join(CFLAGS))
+        ldflags = '--extra-ldflags="{0}"'.format(" ".join(LDFLAGS))
         FFMPEG_CONFIG_FLAGS.append(cflags)
         FFMPEG_CONFIG_FLAGS.append(ldflags)
-        FFMPEG_CONFIG_FLAGS[-1] += ' && \\'
-        COMBINED_CONFIG_FLAGS = ' \\\n        '.join(FFMPEG_CONFIG_FLAGS)
+        FFMPEG_CONFIG_FLAGS[-1] += " && \\"
+        COMBINED_CONFIG_FLAGS = " \\\n        ".join(FFMPEG_CONFIG_FLAGS)
 
-        run_content = RUN_CONTENT.replace("%%FFMPEG_CONFIG_FLAGS%%",
-                                          COMBINED_CONFIG_FLAGS)
+        run_content = RUN_CONTENT.replace(
+            "%%FFMPEG_CONFIG_FLAGS%%", COMBINED_CONFIG_FLAGS
+        )
         env_content = ENV_CONTENT.replace("%%FFMPEG_VERSION%%", version)
         docker_content = template.replace("%%ENV%%", env_content)
         docker_content = docker_content.replace("%%RUN%%", run_content)
