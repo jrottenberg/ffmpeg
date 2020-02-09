@@ -41,7 +41,7 @@ linter-black:
   services:
     - docker:19-dind
   script:
-    - docker build -t "${IMAGE}" -t "${SHORT_IMAGE}" --build-arg MAKEFLAGS="-j$(($(nproc) + 1))" docker-images/${VERSION}/${VARIANT}
+    - docker build -t "${IMAGE}" -t "${SHORT_IMAGE}" --build-arg MAKEFLAGS="-j$(($(nproc) + 1))" docker-images/${SHORT_VERSION}/${VARIANT}/
   after_script:
     - docker run --rm ${IMAGE} -buildconf
     - echo "Built ${IMAGE}"
