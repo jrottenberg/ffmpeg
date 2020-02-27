@@ -474,6 +474,7 @@ RUN \
         --enable-libopencore-amrwb \
         --enable-gpl \
         --enable-libass \
+        --enable-fontconfig \
         --enable-libfreetype \
         --enable-libvidstab \
         --enable-libmp3lame \
