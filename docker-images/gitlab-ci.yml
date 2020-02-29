@@ -13,12 +13,19 @@ snapshot-alpine:
     VERSION: "snapshot"
     VARIANT: alpine
 
-snapshot-centos:
+snapshot-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "snapshot"
-    VARIANT: centos
+    VARIANT: centos7
+
+snapshot-centos8:
+  extends: .docker
+  stage: centos8
+  variables:
+    VERSION: "snapshot"
+    VARIANT: centos8
 
 snapshot-scratch:
   extends: .docker
@@ -55,12 +62,19 @@ snapshot-nvidia:
     VERSION: "4.2"
     VARIANT: alpine
 
-4.2.2-centos:
+4.2.2-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "4.2"
-    VARIANT: centos
+    VARIANT: centos7
+
+4.2.2-centos8:
+  extends: .docker
+  stage: centos8
+  variables:
+    VERSION: "4.2"
+    VARIANT: centos8
 
 4.2.2-scratch:
   extends: .docker
@@ -97,12 +111,19 @@ snapshot-nvidia:
     VERSION: "4.1"
     VARIANT: alpine
 
-4.1.5-centos:
+4.1.5-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "4.1"
-    VARIANT: centos
+    VARIANT: centos7
+
+4.1.5-centos8:
+  extends: .docker
+  stage: centos8
+  variables:
+    VERSION: "4.1"
+    VARIANT: centos8
 
 4.1.5-scratch:
   extends: .docker
@@ -139,12 +160,19 @@ snapshot-nvidia:
     VERSION: "4.0"
     VARIANT: alpine
 
-4.0.5-centos:
+4.0.5-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "4.0"
-    VARIANT: centos
+    VARIANT: centos7
+
+4.0.5-centos8:
+  extends: .docker
+  stage: centos8
+  variables:
+    VERSION: "4.0"
+    VARIANT: centos8
 
 4.0.5-scratch:
   extends: .docker
@@ -181,12 +209,19 @@ snapshot-nvidia:
     VERSION: "3.4"
     VARIANT: alpine
 
-3.4.7-centos:
+3.4.7-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "3.4"
-    VARIANT: centos
+    VARIANT: centos7
+
+3.4.7-centos8:
+  extends: .docker
+  stage: centos8
+  variables:
+    VERSION: "3.4"
+    VARIANT: centos8
 
 3.4.7-scratch:
   extends: .docker
@@ -223,12 +258,19 @@ snapshot-nvidia:
     VERSION: "3.3"
     VARIANT: alpine
 
-3.3.9-centos:
+3.3.9-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "3.3"
-    VARIANT: centos
+    VARIANT: centos7
+
+3.3.9-centos8:
+  extends: .docker
+  stage: centos8
+  variables:
+    VERSION: "3.3"
+    VARIANT: centos8
 
 3.3.9-scratch:
   extends: .docker
@@ -265,12 +307,12 @@ snapshot-nvidia:
     VERSION: "3.2"
     VARIANT: alpine
 
-3.2.14-centos:
+3.2.14-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "3.2"
-    VARIANT: centos
+    VARIANT: centos7
 
 3.2.14-scratch:
   extends: .docker

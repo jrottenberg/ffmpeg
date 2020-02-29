@@ -16,9 +16,12 @@ jobs:
       snapshot_alpine:
         VERSION: snapshot
         VARIANT: alpine
-      snapshot_centos:
+      snapshot_centos7:
         VERSION: snapshot
-        VARIANT: centos
+        VARIANT: centos7
+      snapshot_centos8:
+        VERSION: snapshot
+        VARIANT: centos8
       snapshot_scratch:
         VERSION: snapshot
         VARIANT: scratch
@@ -34,9 +37,12 @@ jobs:
       4_2_alpine:
         VERSION: 4.2
         VARIANT: alpine
-      4_2_centos:
+      4_2_centos7:
         VERSION: 4.2
-        VARIANT: centos
+        VARIANT: centos7
+      4_2_centos8:
+        VERSION: 4.2
+        VARIANT: centos8
       4_2_scratch:
         VERSION: 4.2
         VARIANT: scratch
@@ -52,9 +58,12 @@ jobs:
       4_1_alpine:
         VERSION: 4.1
         VARIANT: alpine
-      4_1_centos:
+      4_1_centos7:
         VERSION: 4.1
-        VARIANT: centos
+        VARIANT: centos7
+      4_1_centos8:
+        VERSION: 4.1
+        VARIANT: centos8
       4_1_scratch:
         VERSION: 4.1
         VARIANT: scratch
@@ -70,9 +79,12 @@ jobs:
       4_0_alpine:
         VERSION: 4.0
         VARIANT: alpine
-      4_0_centos:
+      4_0_centos7:
         VERSION: 4.0
-        VARIANT: centos
+        VARIANT: centos7
+      4_0_centos8:
+        VERSION: 4.0
+        VARIANT: centos8
       4_0_scratch:
         VERSION: 4.0
         VARIANT: scratch
@@ -88,9 +100,12 @@ jobs:
       3_4_alpine:
         VERSION: 3.4
         VARIANT: alpine
-      3_4_centos:
+      3_4_centos7:
         VERSION: 3.4
-        VARIANT: centos
+        VARIANT: centos7
+      3_4_centos8:
+        VERSION: 3.4
+        VARIANT: centos8
       3_4_scratch:
         VERSION: 3.4
         VARIANT: scratch
@@ -106,9 +121,12 @@ jobs:
       3_3_alpine:
         VERSION: 3.3
         VARIANT: alpine
-      3_3_centos:
+      3_3_centos7:
         VERSION: 3.3
-        VARIANT: centos
+        VARIANT: centos7
+      3_3_centos8:
+        VERSION: 3.3
+        VARIANT: centos8
       3_3_scratch:
         VERSION: 3.3
         VARIANT: scratch
@@ -124,9 +142,9 @@ jobs:
       3_2_alpine:
         VERSION: 3.2
         VARIANT: alpine
-      3_2_centos:
+      3_2_centos7:
         VERSION: 3.2
-        VARIANT: centos
+        VARIANT: centos7
       3_2_scratch:
         VERSION: 3.2
         VARIANT: scratch

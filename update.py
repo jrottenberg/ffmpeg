@@ -4,6 +4,7 @@
 import os
 import sys
 import re
+import shutil
 import urllib.request, urllib.error, urllib.parse
 from distutils.version import StrictVersion
 
@@ -11,7 +12,7 @@ MIN_VERSION = "2.8"
 
 # https://ffmpeg.org/olddownload.html
 SKIP_VERSIONS = "3.1.11 3.0.12"
-VARIANTS = ["ubuntu", "alpine", "centos", "scratch", "vaapi", "nvidia"]
+VARIANTS = ["ubuntu", "alpine", "centos7", "centos8", "scratch", "vaapi", "nvidia"]
 FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
 
 gitlabci = []
@@ -27,10 +28,20 @@ all_versions.sort(key=StrictVersion, reverse=True)
 
 version, all_versions = all_versions[0], all_versions[1:]
 
+SKIP_VARIANTS = {
+    "3.2": ["centos8"]
+}
+
 last = version.split(".")
 keep_version = ["snapshot"]
 
 keep_version.append(version)
+
+def shorten_version(version):
+    if version == 'snapshot':
+        return version
+    else:
+        return version[0:3]
 
 for cur in all_versions:
     if cur < MIN_VERSION:
@@ -49,12 +60,17 @@ for cur in all_versions:
         last = tmp
 
 for version in keep_version:
-    for variant in VARIANTS:
-        if version != "snapshot":
-            short_version = version[0:3]
-        else:
-            short_version = version
+    skip_variants = None
+    for k,v in SKIP_VARIANTS.items():
+        if version.startswith(k):
+            skip_variants = v
+    compatible_variants = [v for v in VARIANTS if skip_variants is None or v not in skip_variants]
+    short_version = shorten_version(version)
+    for existing_variant in os.listdir(os.path.join('docker-images', short_version)):
+        if existing_variant not in compatible_variants:
+            shutil.rmtree(os.path.join('docker-images', short_version, existing_variant))
 
+    for variant in compatible_variants:
         dockerfile = "docker-images/%s/%s/Dockerfile" % (short_version, variant)
         gitlabci.append(
             f"""
@@ -141,3 +157,4 @@ azure = template.replace("%%VERSIONS%%", "\n".join(azure))
 
 with open("azure-pipelines.yml", "w") as azurefile:
     azurefile.write(azure)
+

@@ -5,10 +5,10 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM    centos:8 AS base
+FROM    centos:7 AS base
 
-RUN     dnf -y install libgomp && \
-        dnf clean all;
+RUN     yum -y install libgomp && \
+        yum clean all;
 
 
 FROM        base AS build
@@ -20,7 +20,7 @@ ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
 
-ENV         FFMPEG_VERSION=4.2.2 \
+ENV         FFMPEG_VERSION=3.4.7 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
@@ -68,16 +68,16 @@ ARG         LIBBLURAY_SHA256SUM="a3dd452239b100dc9da0d01b30e1692693e2a332a7d2991
 RUN     buildDeps="autoconf \
                    automake \
                    bzip2 \
-                   cmake \
+                   cmake3 \
                    diffutils \
                    expat-devel \
+                   file \
                    gcc \
                    gcc-c++ \
                    git \
                    gperf \
                    libtool \
                    make \
-                   nasm \
                    perl \
                    python3 \
                    openssl-devel \
@@ -86,9 +86,43 @@ RUN     buildDeps="autoconf \
                    which \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
-        dnf --enablerepo=extras install -y epel-release && \
-        dnf --enablerepo=PowerTools install -y ${buildDeps} && \
-        alternatives --set python /usr/bin/python3
+        yum --enablerepo=extras install -y epel-release && \
+        yum --enablerepo=epel install -y ${buildDeps} && \
+        alternatives --install /usr/bin/cmake cmake /usr/bin/cmake3 0 && \
+        # Install the tools required to build nasm 2.14.02 \
+        nasmDeps="asciidoc \
+                  perl-Font-TTF \
+                  perl-Sort-Versions \
+                  xmlto" && \
+        yum --enablerepo=epel install -y ${nasmDeps} && \
+        # Compile and install nasm 2.14.02 \
+        DIR=/tmp/nasm && \
+        mkdir -p ${DIR} && \
+        curl -LSs https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.gz | \
+        tar xzC ${DIR} --strip-components=1 && \
+        pushd ${DIR} && \
+        ./configure --host=x86_64-redhat-linux-gnu \
+                    --build=x86_64-redhat-linux-gnu \
+                    --prefix=/usr/local \
+                    --exec-prefix=/usr/local \
+                    --bindir=/usr/local/bin \
+                    --sbindir=/usr/local/sbin \
+                    --sysconfdir=/usr/local/etc \
+                    --datadir=/usr/local/share \
+                    --includedir=/usr/local/include \
+                    --libdir=/usr/local/lib \
+                    --libexecdir=/usr/local/libexec \
+                    --enable-sections && \
+        make all && \
+        make install && \
+        make install_rdf && \
+        popd && rm -rf ${DIR} && \
+        alternatives --install /usr/bin/nasm nasm /usr/local/bin/nasm 0 && \
+        # Now that we have a modern nasm build and available, we can undo the last \
+        # yum transaction as none of those packages are required for the rest of the build \
+        yum history undo $(yum history info | grep 'Transaction ID' | awk -F: '{print$2}' | tr -d ' ') -y && \
+        yum autoremove -y
+
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
