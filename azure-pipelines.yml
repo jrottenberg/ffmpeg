@@ -13,147 +13,243 @@ jobs:
       snapshot_ubuntu:
         VERSION: snapshot
         VARIANT: ubuntu
+        PARENT: ubuntu
+        ISPARENT: True
       snapshot_alpine:
         VERSION: snapshot
         VARIANT: alpine
+        PARENT: alpine
+        ISPARENT: True
       snapshot_centos7:
         VERSION: snapshot
         VARIANT: centos7
+        PARENT: centos
+        ISPARENT: False
       snapshot_centos8:
         VERSION: snapshot
         VARIANT: centos8
+        PARENT: centos
+        ISPARENT: True
       snapshot_scratch:
         VERSION: snapshot
         VARIANT: scratch
+        PARENT: scratch
+        ISPARENT: True
       snapshot_vaapi:
         VERSION: snapshot
         VARIANT: vaapi
+        PARENT: vaapi
+        ISPARENT: True
       snapshot_nvidia:
         VERSION: snapshot
         VARIANT: nvidia
+        PARENT: nvidia
+        ISPARENT: True
       4_2_ubuntu:
         VERSION: 4.2
         VARIANT: ubuntu
+        PARENT: ubuntu
+        ISPARENT: True
       4_2_alpine:
         VERSION: 4.2
         VARIANT: alpine
+        PARENT: alpine
+        ISPARENT: True
       4_2_centos7:
         VERSION: 4.2
         VARIANT: centos7
+        PARENT: centos
+        ISPARENT: False
       4_2_centos8:
         VERSION: 4.2
         VARIANT: centos8
+        PARENT: centos
+        ISPARENT: True
       4_2_scratch:
         VERSION: 4.2
         VARIANT: scratch
+        PARENT: scratch
+        ISPARENT: True
       4_2_vaapi:
         VERSION: 4.2
         VARIANT: vaapi
+        PARENT: vaapi
+        ISPARENT: True
       4_2_nvidia:
         VERSION: 4.2
         VARIANT: nvidia
+        PARENT: nvidia
+        ISPARENT: True
       4_1_ubuntu:
         VERSION: 4.1
         VARIANT: ubuntu
+        PARENT: ubuntu
+        ISPARENT: True
       4_1_alpine:
         VERSION: 4.1
         VARIANT: alpine
+        PARENT: alpine
+        ISPARENT: True
       4_1_centos7:
         VERSION: 4.1
         VARIANT: centos7
+        PARENT: centos
+        ISPARENT: False
       4_1_centos8:
         VERSION: 4.1
         VARIANT: centos8
+        PARENT: centos
+        ISPARENT: True
       4_1_scratch:
         VERSION: 4.1
         VARIANT: scratch
+        PARENT: scratch
+        ISPARENT: True
       4_1_vaapi:
         VERSION: 4.1
         VARIANT: vaapi
+        PARENT: vaapi
+        ISPARENT: True
       4_1_nvidia:
         VERSION: 4.1
         VARIANT: nvidia
+        PARENT: nvidia
+        ISPARENT: True
       4_0_ubuntu:
         VERSION: 4.0
         VARIANT: ubuntu
+        PARENT: ubuntu
+        ISPARENT: True
       4_0_alpine:
         VERSION: 4.0
         VARIANT: alpine
+        PARENT: alpine
+        ISPARENT: True
       4_0_centos7:
         VERSION: 4.0
         VARIANT: centos7
+        PARENT: centos
+        ISPARENT: False
       4_0_centos8:
         VERSION: 4.0
         VARIANT: centos8
+        PARENT: centos
+        ISPARENT: True
       4_0_scratch:
         VERSION: 4.0
         VARIANT: scratch
+        PARENT: scratch
+        ISPARENT: True
       4_0_vaapi:
         VERSION: 4.0
         VARIANT: vaapi
+        PARENT: vaapi
+        ISPARENT: True
       4_0_nvidia:
         VERSION: 4.0
         VARIANT: nvidia
+        PARENT: nvidia
+        ISPARENT: True
       3_4_ubuntu:
         VERSION: 3.4
         VARIANT: ubuntu
+        PARENT: ubuntu
+        ISPARENT: True
       3_4_alpine:
         VERSION: 3.4
         VARIANT: alpine
+        PARENT: alpine
+        ISPARENT: True
       3_4_centos7:
         VERSION: 3.4
         VARIANT: centos7
+        PARENT: centos
+        ISPARENT: False
       3_4_centos8:
         VERSION: 3.4
         VARIANT: centos8
+        PARENT: centos
+        ISPARENT: True
       3_4_scratch:
         VERSION: 3.4
         VARIANT: scratch
+        PARENT: scratch
+        ISPARENT: True
       3_4_vaapi:
         VERSION: 3.4
         VARIANT: vaapi
+        PARENT: vaapi
+        ISPARENT: True
       3_4_nvidia:
         VERSION: 3.4
         VARIANT: nvidia
+        PARENT: nvidia
+        ISPARENT: True
       3_3_ubuntu:
         VERSION: 3.3
         VARIANT: ubuntu
+        PARENT: ubuntu
+        ISPARENT: True
       3_3_alpine:
         VERSION: 3.3
         VARIANT: alpine
+        PARENT: alpine
+        ISPARENT: True
       3_3_centos7:
         VERSION: 3.3
         VARIANT: centos7
+        PARENT: centos
+        ISPARENT: False
       3_3_centos8:
         VERSION: 3.3
         VARIANT: centos8
+        PARENT: centos
+        ISPARENT: True
       3_3_scratch:
         VERSION: 3.3
         VARIANT: scratch
+        PARENT: scratch
+        ISPARENT: True
       3_3_vaapi:
         VERSION: 3.3
         VARIANT: vaapi
+        PARENT: vaapi
+        ISPARENT: True
       3_3_nvidia:
         VERSION: 3.3
         VARIANT: nvidia
+        PARENT: nvidia
+        ISPARENT: True
       3_2_ubuntu:
         VERSION: 3.2
         VARIANT: ubuntu
+        PARENT: ubuntu
+        ISPARENT: True
       3_2_alpine:
         VERSION: 3.2
         VARIANT: alpine
+        PARENT: alpine
+        ISPARENT: True
       3_2_centos7:
         VERSION: 3.2
         VARIANT: centos7
+        PARENT: centos
+        ISPARENT: True
       3_2_scratch:
         VERSION: 3.2
         VARIANT: scratch
+        PARENT: scratch
+        ISPARENT: True
       3_2_vaapi:
         VERSION: 3.2
         VARIANT: vaapi
+        PARENT: vaapi
+        ISPARENT: True
       3_2_nvidia:
         VERSION: 3.2
         VARIANT: nvidia
+        PARENT: nvidia
+        ISPARENT: True
   steps:
   - bash: |
       docker build -t ${DOCKER}:${VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
@@ -162,6 +258,7 @@ jobs:
   - bash: |
       docker login --username ${DOCKER_LOGIN} --password ${DOCKER_PASSWORD}
       docker push ${DOCKER}:${VERSION}-${VARIANT}
+      if [ "${ISPARENT}" == "True" ] && [ "${VARIANT}" != "${PARENT}" ]; then docker tag "${DOCKER}:${VERSION}-${VARIANT}" "${DOCKER}:${VERSION}-${PARENT}"; docker push "${DOCKER}:${VERSION}-${PARENT}"; fi
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Push docker image
     env:

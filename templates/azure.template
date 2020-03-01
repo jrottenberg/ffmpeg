@@ -19,6 +19,7 @@ jobs:
   - bash: |
       docker login --username ${DOCKER_LOGIN} --password ${DOCKER_PASSWORD}
       docker push ${DOCKER}:${VERSION}-${VARIANT}
+      if [ "${ISPARENT}" == "True" ] && [ "${VARIANT}" != "${PARENT}" ]; then docker tag "${DOCKER}:${VERSION}-${VARIANT}" "${DOCKER}:${VERSION}-${PARENT}"; docker push "${DOCKER}:${VERSION}-${PARENT}"; fi
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Push docker image
     env:

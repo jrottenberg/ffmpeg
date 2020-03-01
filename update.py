@@ -12,7 +12,37 @@ MIN_VERSION = "2.8"
 
 # https://ffmpeg.org/olddownload.html
 SKIP_VERSIONS = "3.1.11 3.0.12"
-VARIANTS = ["ubuntu", "alpine", "centos7", "centos8", "scratch", "vaapi", "nvidia"]
+
+VARIANTS = [
+    {
+        "name": "ubuntu",
+        "parent": "ubuntu",
+    },
+    {
+        "name": "alpine",
+        "parent": "alpine",
+    },
+    {
+       "name": "centos7",
+       "parent": "centos",
+    },
+    {
+        "name": "centos8",
+        "parent": "centos",
+    },
+    {
+        "name": "scratch",
+        "parent": "scratch",
+    },
+    {
+        "name": "vaapi",
+        "parent": "vaapi",
+    },
+    {
+        "name": "nvidia",
+        "parent": "nvidia",
+    },
+]
 FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
 
 gitlabci = []
@@ -64,33 +94,38 @@ for version in keep_version:
     for k,v in SKIP_VARIANTS.items():
         if version.startswith(k):
             skip_variants = v
-    compatible_variants = [v for v in VARIANTS if skip_variants is None or v not in skip_variants]
+    compatible_variants = [v for v in VARIANTS if skip_variants is None or v['name'] not in skip_variants]
     short_version = shorten_version(version)
     for existing_variant in os.listdir(os.path.join('docker-images', short_version)):
         if existing_variant not in compatible_variants:
             shutil.rmtree(os.path.join('docker-images', short_version, existing_variant))
 
     for variant in compatible_variants:
-        dockerfile = "docker-images/%s/%s/Dockerfile" % (short_version, variant)
+        sibling_variants = [v['name'] for v in compatible_variants if v['parent'] == variant['parent']]
+        
+        is_parent =  sorted(sibling_variants, reverse=True)[0] == variant['name']
+        dockerfile = "docker-images/%s/%s/Dockerfile" % (short_version, variant['name'])
         gitlabci.append(
             f"""
-{version}-{variant}:
+{version}-{variant['name']}:
   extends: .docker
-  stage: {variant}
+  stage: {variant['name']}
   variables:
     VERSION: "{short_version}"
-    VARIANT: {variant}
+    VARIANT: {variant['name']}
+    PARENT: "{variant['parent']}"
+    ISPARENT: "{is_parent}"
 """
         )
 
         azure.append(
-            "      %s_%s:\n        VERSION: %s\n        VARIANT: %s"
-            % (short_version.replace(".", "_"), variant, short_version, variant)
+            "      %s_%s:\n        VERSION: %s\n        VARIANT: %s\n        PARENT: %s\n        ISPARENT: %s"
+            % (short_version.replace(".", "_"), variant['name'], short_version, variant['name'], variant['parent'], is_parent)
         )
 
         with open("templates/Dockerfile-env", "r") as tmpfile:
             env_content = tmpfile.read()
-        with open("templates/Dockerfile-template." + variant, "r") as tmpfile:
+        with open("templates/Dockerfile-template." + variant['name'], "r") as tmpfile:
             template = tmpfile.read()
         with open("templates/Dockerfile-run", "r") as tmpfile:
             run_content = tmpfile.read()
@@ -101,14 +136,14 @@ for version in keep_version:
         if version[0:3] == "2.8":
             docker_content = docker_content.replace("--enable-libopenjpeg", "")
             docker_content = docker_content.replace("--enable-libkvazaar", "")
-        if (version != "snapshot" and version[0] < "4") or variant == "centos":
+        if (version != "snapshot" and version[0] < "4"):
             docker_content = re.sub(r"--enable-libaom [^\\]*", "", docker_content)
-        if (version == "snapshot" or version[0] >= "3") and variant == "vaapi":
+        if (version == "snapshot" or version[0] >= "3") and variant['parent'] == "vaapi":
             docker_content = docker_content.replace(
                 "--disable-ffplay", "--disable-ffplay \\\n        --enable-vaapi"
             )
 
-        if variant == "nvidia":
+        if variant['parent'] == "nvidia":
             docker_content = docker_content.replace(
                 '--extra-cflags="-I${PREFIX}/include"',
                 '--extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/"',
@@ -132,7 +167,7 @@ for version in keep_version:
                 docker_content = docker_content.replace("-ubuntu18.04", "-ubuntu16.04")
 
         # FFmpeg 3.2 and earlier don't compile correctly on Ubuntu 18.04 due to openssl issues
-        if variant == "vaapi" and (
+        if variant['parent'] == "vaapi" and (
             version[0] < "3" or (version[0] == "3" and version[2] < "3")
         ):
             docker_content = docker_content.replace("ubuntu:18.04", "ubuntu:16.04")
