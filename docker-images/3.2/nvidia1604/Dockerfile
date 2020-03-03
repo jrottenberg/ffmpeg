@@ -6,9 +6,9 @@
 #
 #
 
-FROM    nvidia/cuda:9.2-devel-ubuntu16.04 AS devel-base
+FROM    nvidia/cuda:10.2-devel-ubuntu16.04 AS devel-base
 
-ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
+ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
@@ -16,9 +16,9 @@ RUN     apt-get -yqq update && \
         apt-get autoremove -y && \
         apt-get clean -y
 
-FROM        nvidia/cuda:9.2-runtime-ubuntu16.04 AS runtime-base
+FROM        nvidia/cuda:10.2-runtime-ubuntu16.04 AS runtime-base
 
-ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
+ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
