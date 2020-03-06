@@ -5,6 +5,8 @@ snapshot-ubuntu:
   variables:
     VERSION: "snapshot"
     VARIANT: ubuntu
+    PARENT: "ubuntu"
+    ISPARENT: "True"
 
 snapshot-alpine:
   extends: .docker
@@ -12,13 +14,26 @@ snapshot-alpine:
   variables:
     VERSION: "snapshot"
     VARIANT: alpine
+    PARENT: "alpine"
+    ISPARENT: "True"
 
-snapshot-centos:
+snapshot-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "snapshot"
-    VARIANT: centos
+    VARIANT: centos7
+    PARENT: "centos"
+    ISPARENT: "False"
+
+snapshot-centos8:
+  extends: .docker
+  stage: centos8
+  variables:
+    VERSION: "snapshot"
+    VARIANT: centos8
+    PARENT: "centos"
+    ISPARENT: "True"
 
 snapshot-scratch:
   extends: .docker
@@ -26,6 +41,8 @@ snapshot-scratch:
   variables:
     VERSION: "snapshot"
     VARIANT: scratch
+    PARENT: "scratch"
+    ISPARENT: "True"
 
 snapshot-vaapi:
   extends: .docker
@@ -33,6 +50,8 @@ snapshot-vaapi:
   variables:
     VERSION: "snapshot"
     VARIANT: vaapi
+    PARENT: "vaapi"
+    ISPARENT: "True"
 
 snapshot-nvidia:
   extends: .docker
@@ -40,6 +59,8 @@ snapshot-nvidia:
   variables:
     VERSION: "snapshot"
     VARIANT: nvidia
+    PARENT: "nvidia"
+    ISPARENT: "True"
 
 4.2.2-ubuntu:
   extends: .docker
@@ -47,6 +68,8 @@ snapshot-nvidia:
   variables:
     VERSION: "4.2"
     VARIANT: ubuntu
+    PARENT: "ubuntu"
+    ISPARENT: "True"
 
 4.2.2-alpine:
   extends: .docker
@@ -54,13 +77,26 @@ snapshot-nvidia:
   variables:
     VERSION: "4.2"
     VARIANT: alpine
+    PARENT: "alpine"
+    ISPARENT: "True"
 
-4.2.2-centos:
+4.2.2-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "4.2"
-    VARIANT: centos
+    VARIANT: centos7
+    PARENT: "centos"
+    ISPARENT: "False"
+
+4.2.2-centos8:
+  extends: .docker
+  stage: centos8
+  variables:
+    VERSION: "4.2"
+    VARIANT: centos8
+    PARENT: "centos"
+    ISPARENT: "True"
 
 4.2.2-scratch:
   extends: .docker
@@ -68,6 +104,8 @@ snapshot-nvidia:
   variables:
     VERSION: "4.2"
     VARIANT: scratch
+    PARENT: "scratch"
+    ISPARENT: "True"
 
 4.2.2-vaapi:
   extends: .docker
@@ -75,6 +113,8 @@ snapshot-nvidia:
   variables:
     VERSION: "4.2"
     VARIANT: vaapi
+    PARENT: "vaapi"
+    ISPARENT: "True"
 
 4.2.2-nvidia:
   extends: .docker
@@ -82,6 +122,8 @@ snapshot-nvidia:
   variables:
     VERSION: "4.2"
     VARIANT: nvidia
+    PARENT: "nvidia"
+    ISPARENT: "True"
 
 4.1.5-ubuntu:
   extends: .docker
@@ -89,6 +131,8 @@ snapshot-nvidia:
   variables:
     VERSION: "4.1"
     VARIANT: ubuntu
+    PARENT: "ubuntu"
+    ISPARENT: "True"
 
 4.1.5-alpine:
   extends: .docker
@@ -96,13 +140,26 @@ snapshot-nvidia:
   variables:
     VERSION: "4.1"
     VARIANT: alpine
+    PARENT: "alpine"
+    ISPARENT: "True"
 
-4.1.5-centos:
+4.1.5-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "4.1"
-    VARIANT: centos
+    VARIANT: centos7
+    PARENT: "centos"
+    ISPARENT: "False"
+
+4.1.5-centos8:
+  extends: .docker
+  stage: centos8
+  variables:
+    VERSION: "4.1"
+    VARIANT: centos8
+    PARENT: "centos"
+    ISPARENT: "True"
 
 4.1.5-scratch:
   extends: .docker
@@ -110,6 +167,8 @@ snapshot-nvidia:
   variables:
     VERSION: "4.1"
     VARIANT: scratch
+    PARENT: "scratch"
+    ISPARENT: "True"
 
 4.1.5-vaapi:
   extends: .docker
@@ -117,6 +176,8 @@ snapshot-nvidia:
   variables:
     VERSION: "4.1"
     VARIANT: vaapi
+    PARENT: "vaapi"
+    ISPARENT: "True"
 
 4.1.5-nvidia:
   extends: .docker
@@ -124,6 +185,8 @@ snapshot-nvidia:
   variables:
     VERSION: "4.1"
     VARIANT: nvidia
+    PARENT: "nvidia"
+    ISPARENT: "True"
 
 4.0.5-ubuntu:
   extends: .docker
@@ -131,6 +194,8 @@ snapshot-nvidia:
   variables:
     VERSION: "4.0"
     VARIANT: ubuntu
+    PARENT: "ubuntu"
+    ISPARENT: "True"
 
 4.0.5-alpine:
   extends: .docker
@@ -138,13 +203,26 @@ snapshot-nvidia:
   variables:
     VERSION: "4.0"
     VARIANT: alpine
+    PARENT: "alpine"
+    ISPARENT: "True"
 
-4.0.5-centos:
+4.0.5-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "4.0"
-    VARIANT: centos
+    VARIANT: centos7
+    PARENT: "centos"
+    ISPARENT: "False"
+
+4.0.5-centos8:
+  extends: .docker
+  stage: centos8
+  variables:
+    VERSION: "4.0"
+    VARIANT: centos8
+    PARENT: "centos"
+    ISPARENT: "True"
 
 4.0.5-scratch:
   extends: .docker
@@ -152,6 +230,8 @@ snapshot-nvidia:
   variables:
     VERSION: "4.0"
     VARIANT: scratch
+    PARENT: "scratch"
+    ISPARENT: "True"
 
 4.0.5-vaapi:
   extends: .docker
@@ -159,6 +239,8 @@ snapshot-nvidia:
   variables:
     VERSION: "4.0"
     VARIANT: vaapi
+    PARENT: "vaapi"
+    ISPARENT: "True"
 
 4.0.5-nvidia:
   extends: .docker
@@ -166,6 +248,8 @@ snapshot-nvidia:
   variables:
     VERSION: "4.0"
     VARIANT: nvidia
+    PARENT: "nvidia"
+    ISPARENT: "True"
 
 3.4.7-ubuntu:
   extends: .docker
@@ -173,6 +257,8 @@ snapshot-nvidia:
   variables:
     VERSION: "3.4"
     VARIANT: ubuntu
+    PARENT: "ubuntu"
+    ISPARENT: "True"
 
 3.4.7-alpine:
   extends: .docker
@@ -180,13 +266,26 @@ snapshot-nvidia:
   variables:
     VERSION: "3.4"
     VARIANT: alpine
+    PARENT: "alpine"
+    ISPARENT: "True"
 
-3.4.7-centos:
+3.4.7-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "3.4"
-    VARIANT: centos
+    VARIANT: centos7
+    PARENT: "centos"
+    ISPARENT: "False"
+
+3.4.7-centos8:
+  extends: .docker
+  stage: centos8
+  variables:
+    VERSION: "3.4"
+    VARIANT: centos8
+    PARENT: "centos"
+    ISPARENT: "True"
 
 3.4.7-scratch:
   extends: .docker
@@ -194,6 +293,8 @@ snapshot-nvidia:
   variables:
     VERSION: "3.4"
     VARIANT: scratch
+    PARENT: "scratch"
+    ISPARENT: "True"
 
 3.4.7-vaapi:
   extends: .docker
@@ -201,6 +302,8 @@ snapshot-nvidia:
   variables:
     VERSION: "3.4"
     VARIANT: vaapi
+    PARENT: "vaapi"
+    ISPARENT: "True"
 
 3.4.7-nvidia:
   extends: .docker
@@ -208,6 +311,8 @@ snapshot-nvidia:
   variables:
     VERSION: "3.4"
     VARIANT: nvidia
+    PARENT: "nvidia"
+    ISPARENT: "True"
 
 3.3.9-ubuntu:
   extends: .docker
@@ -215,6 +320,8 @@ snapshot-nvidia:
   variables:
     VERSION: "3.3"
     VARIANT: ubuntu
+    PARENT: "ubuntu"
+    ISPARENT: "True"
 
 3.3.9-alpine:
   extends: .docker
@@ -222,13 +329,26 @@ snapshot-nvidia:
   variables:
     VERSION: "3.3"
     VARIANT: alpine
+    PARENT: "alpine"
+    ISPARENT: "True"
 
-3.3.9-centos:
+3.3.9-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "3.3"
-    VARIANT: centos
+    VARIANT: centos7
+    PARENT: "centos"
+    ISPARENT: "False"
+
+3.3.9-centos8:
+  extends: .docker
+  stage: centos8
+  variables:
+    VERSION: "3.3"
+    VARIANT: centos8
+    PARENT: "centos"
+    ISPARENT: "True"
 
 3.3.9-scratch:
   extends: .docker
@@ -236,6 +356,8 @@ snapshot-nvidia:
   variables:
     VERSION: "3.3"
     VARIANT: scratch
+    PARENT: "scratch"
+    ISPARENT: "True"
 
 3.3.9-vaapi:
   extends: .docker
@@ -243,6 +365,8 @@ snapshot-nvidia:
   variables:
     VERSION: "3.3"
     VARIANT: vaapi
+    PARENT: "vaapi"
+    ISPARENT: "True"
 
 3.3.9-nvidia:
   extends: .docker
@@ -250,6 +374,8 @@ snapshot-nvidia:
   variables:
     VERSION: "3.3"
     VARIANT: nvidia
+    PARENT: "nvidia"
+    ISPARENT: "True"
 
 3.2.14-ubuntu:
   extends: .docker
@@ -257,6 +383,8 @@ snapshot-nvidia:
   variables:
     VERSION: "3.2"
     VARIANT: ubuntu
+    PARENT: "ubuntu"
+    ISPARENT: "True"
 
 3.2.14-alpine:
   extends: .docker
@@ -264,13 +392,17 @@ snapshot-nvidia:
   variables:
     VERSION: "3.2"
     VARIANT: alpine
+    PARENT: "alpine"
+    ISPARENT: "True"
 
-3.2.14-centos:
+3.2.14-centos7:
   extends: .docker
-  stage: centos
+  stage: centos7
   variables:
     VERSION: "3.2"
-    VARIANT: centos
+    VARIANT: centos7
+    PARENT: "centos"
+    ISPARENT: "True"
 
 3.2.14-scratch:
   extends: .docker
@@ -278,6 +410,8 @@ snapshot-nvidia:
   variables:
     VERSION: "3.2"
     VARIANT: scratch
+    PARENT: "scratch"
+    ISPARENT: "True"
 
 3.2.14-vaapi:
   extends: .docker
@@ -285,6 +419,8 @@ snapshot-nvidia:
   variables:
     VERSION: "3.2"
     VARIANT: vaapi
+    PARENT: "vaapi"
+    ISPARENT: "True"
 
 3.2.14-nvidia:
   extends: .docker
@@ -292,3 +428,5 @@ snapshot-nvidia:
   variables:
     VERSION: "3.2"
     VARIANT: nvidia
+    PARENT: "nvidia"
+    ISPARENT: "True"
