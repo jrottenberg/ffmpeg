@@ -15,11 +15,6 @@ FROM        base AS build
 
 WORKDIR     /tmp/workdir
 
-ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
-ARG        LD_LIBRARY_PATH=/opt/ffmpeg/lib
-ARG        PREFIX=/opt/ffmpeg
-ARG        MAKEFLAGS="-j2"
-
 ENV         %%ENV%%
 
 RUN     buildDeps="autoconf \
@@ -48,7 +43,7 @@ RUN     buildDeps="autoconf \
         alternatives --set python /usr/bin/python3
 %%RUN%%
 RUN \
-        LD_LIBRARY_PATH="${PREFIX}/lib:${PREFIX}/lib64:${LD_LIBRARY_PATH}" ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib64/ && \
+        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib64/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
         LD_LIBRARY_PATH=/usr/local/lib64 ffmpeg -buildconf
@@ -56,10 +51,10 @@ RUN \
 FROM        base
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
+ENV         LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib:/usr/lib64:/usr/lib:/lib64:/lib
+
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
-
-ENV LD_LIBRARY_PATH=/usr/local/lib64
 
 COPY --from=build /usr/local/ /usr/local/
 

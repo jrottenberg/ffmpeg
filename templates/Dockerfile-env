@@ -41,3 +41,9 @@ ARG         XVID_SHA256SUM="4e9fd62728885855bc5007fe1be58df42e5e274497591fec3724
 ARG         LIBXML2_SHA256SUM="f07dab13bf42d2b8db80620cce7419b3b87827cc937c8bb20fe13b8571ee9501  libxml2-v2.9.10.tar.gz"
 ARG         LIBBLURAY_SHA256SUM="a3dd452239b100dc9da0d01b30e1692693e2a332a7d29917bf84bb10ea7c0b42 libbluray-1.1.2.tar.bz2"
 
+
+ARG         LD_LIBRARY_PATH=/opt/ffmpeg/lib
+ARG         MAKEFLAGS="-j2"
+ARG         PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig"
+ARG         PREFIX=/opt/ffmpeg
+ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/usr/lib64:/usr/lib:/lib64:/lib"

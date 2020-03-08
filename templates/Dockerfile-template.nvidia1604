@@ -6,7 +6,7 @@
 #
 #
 
-FROM    nvidia/cudagl:9.2-devel-ubuntu16.04 AS devel-base
+FROM    nvidia/cuda:9.2-devel-ubuntu16.04 AS devel-base
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
 WORKDIR     /tmp/workdir
@@ -16,7 +16,7 @@ RUN     apt-get -yqq update && \
         apt-get autoremove -y && \
         apt-get clean -y
 
-FROM        nvidia/cudagl:9.2-runtime-ubuntu16.04 AS runtime-base
+FROM        nvidia/cuda:9.2-runtime-ubuntu16.04 AS runtime-base
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
 WORKDIR     /tmp/workdir
@@ -30,10 +30,6 @@ RUN     apt-get -yqq update && \
 FROM  devel-base as build
 
 ENV        NVIDIA_HEADERS_VERSION=9.1.23.1
-ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
-ENV        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/ffmpeg/lib"
-ARG        PREFIX=/opt/ffmpeg
-ARG        MAKEFLAGS="-j12"
 
 ENV         %%ENV%%
 
@@ -64,17 +60,16 @@ RUN \
 	git clone https://github.com/FFmpeg/nv-codec-headers ${DIR} && \
 	cd ${DIR} && \
 	git checkout n${NVIDIA_HEADERS_VERSION} && \
-	sed -i 's@/usr/local@'"$PREFIX"'@' Makefile && \
-	make && \
-	make install  && \
-    rm -rf ${DIR}
+	make PREFIX="${PREFIX}" && \
+	make install PREFIX="${PREFIX}"  && \
+        rm -rf ${DIR}
 
 %%RUN%%
 ## cleanup
 RUN \
         LD_LIBRARY_PATH="${PREFIX}/lib:${PREFIX}/lib64:${LD_LIBRARY_PATH}" ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+        cp -r ${PREFIX}/share/* /usr/local/share/ && \
         LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
 
 
@@ -82,13 +77,12 @@ RUN \
 FROM        runtime-base AS release
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
+ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64:/usr/lib:/usr/lib64:/lib:/lib64
+
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
-ENV         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
 
-COPY --from=build /usr/local/bin /usr/local/bin/
-COPY --from=build /usr/local/share /usr/local/share/
-COPY --from=build /usr/local/lib /usr/local/lib/
+COPY --from=build /usr/local /usr/local
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
