@@ -347,42 +347,7 @@ RUN  \
 RUN \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         ./configure \
-        --disable-debug \
-        --disable-doc \
-        --disable-ffplay \
-        --enable-shared \
-        --enable-avresample \
-        --enable-libopencore-amrnb \
-        --enable-libopencore-amrwb \
-        --enable-gpl \
-        --enable-libass \
-        --enable-fontconfig \
-        --enable-libfreetype \
-        --enable-libvidstab \
-        --enable-libmp3lame \
-        --enable-libopenjpeg \
-        --enable-libopus \
-        --enable-libtheora \
-        --enable-libvorbis \
-        --enable-libvpx \
-        --enable-libwebp \
-        --enable-libxcb \
-        --enable-libx265 \
-        --enable-libxvid \
-        --enable-libx264 \
-        --enable-nonfree \
-        --enable-openssl \
-        --enable-libfdk_aac \
-        --enable-libkvazaar \
-        --enable-libaom --extra-libs=-lpthread \
-        --enable-postproc \
-        --enable-small \
-        --enable-version3 \
-        --enable-libbluray \
-        --extra-cflags="-I${PREFIX}/include" \
-        --extra-ldflags="-L${PREFIX}/lib" \
-        --extra-libs=-ldl \
-        --prefix="${PREFIX}" && \
+        %%FFMPEG_CONFIG_FLAGS%%
         make && \
         make install && \
         make distclean && \

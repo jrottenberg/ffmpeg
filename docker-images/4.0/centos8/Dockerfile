@@ -451,7 +451,6 @@ RUN \
         --enable-libfreetype \
         --enable-libvidstab \
         --enable-libmp3lame \
-        --enable-libopenjpeg \
         --enable-libopus \
         --enable-libtheora \
         --enable-libvorbis \
@@ -464,16 +463,18 @@ RUN \
         --enable-nonfree \
         --enable-openssl \
         --enable-libfdk_aac \
-        --enable-libkvazaar \
-        --enable-libaom --extra-libs=-lpthread \
         --enable-postproc \
         --enable-small \
         --enable-version3 \
         --enable-libbluray \
-        --extra-cflags="-I${PREFIX}/include" \
-        --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
-        --prefix="${PREFIX}" && \
+        --prefix="${PREFIX}" \
+        --enable-libopenjpeg \
+        --enable-libkvazaar \
+        --enable-libaom \
+        --extra-libs=-lpthread \
+        --extra-cflags="-I${PREFIX}/include" \
+        --extra-ldflags="-L${PREFIX}/lib" && \
         make && \
         make install && \
         make distclean && \

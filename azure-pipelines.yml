@@ -10,14 +10,19 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
-      snapshot_ubuntu:
+      snapshot_ubuntu1604:
         VERSION: snapshot
-        VARIANT: ubuntu
+        VARIANT: ubuntu1604
+        PARENT: ubuntu
+        ISPARENT: False
+      snapshot_ubuntu1804:
+        VERSION: snapshot
+        VARIANT: ubuntu1804
         PARENT: ubuntu
         ISPARENT: True
-      snapshot_alpine:
+      snapshot_alpine311:
         VERSION: snapshot
-        VARIANT: alpine
+        VARIANT: alpine311
         PARENT: alpine
         ISPARENT: True
       snapshot_centos7:
@@ -30,29 +35,34 @@ jobs:
         VARIANT: centos8
         PARENT: centos
         ISPARENT: True
-      snapshot_scratch:
+      snapshot_scratch311:
         VERSION: snapshot
-        VARIANT: scratch
+        VARIANT: scratch311
         PARENT: scratch
         ISPARENT: True
-      snapshot_vaapi:
+      snapshot_vaapi1804:
         VERSION: snapshot
-        VARIANT: vaapi
+        VARIANT: vaapi1804
         PARENT: vaapi
         ISPARENT: True
-      snapshot_nvidia:
+      snapshot_nvidia1804:
         VERSION: snapshot
-        VARIANT: nvidia
+        VARIANT: nvidia1804
         PARENT: nvidia
         ISPARENT: True
-      4_2_ubuntu:
+      4_2_ubuntu1604:
         VERSION: 4.2
-        VARIANT: ubuntu
+        VARIANT: ubuntu1604
+        PARENT: ubuntu
+        ISPARENT: False
+      4_2_ubuntu1804:
+        VERSION: 4.2
+        VARIANT: ubuntu1804
         PARENT: ubuntu
         ISPARENT: True
-      4_2_alpine:
+      4_2_alpine311:
         VERSION: 4.2
-        VARIANT: alpine
+        VARIANT: alpine311
         PARENT: alpine
         ISPARENT: True
       4_2_centos7:
@@ -65,29 +75,34 @@ jobs:
         VARIANT: centos8
         PARENT: centos
         ISPARENT: True
-      4_2_scratch:
+      4_2_scratch311:
         VERSION: 4.2
-        VARIANT: scratch
+        VARIANT: scratch311
         PARENT: scratch
         ISPARENT: True
-      4_2_vaapi:
+      4_2_vaapi1804:
         VERSION: 4.2
-        VARIANT: vaapi
+        VARIANT: vaapi1804
         PARENT: vaapi
         ISPARENT: True
-      4_2_nvidia:
+      4_2_nvidia1804:
         VERSION: 4.2
-        VARIANT: nvidia
+        VARIANT: nvidia1804
         PARENT: nvidia
         ISPARENT: True
-      4_1_ubuntu:
+      4_1_ubuntu1604:
         VERSION: 4.1
-        VARIANT: ubuntu
+        VARIANT: ubuntu1604
+        PARENT: ubuntu
+        ISPARENT: False
+      4_1_ubuntu1804:
+        VERSION: 4.1
+        VARIANT: ubuntu1804
         PARENT: ubuntu
         ISPARENT: True
-      4_1_alpine:
+      4_1_alpine311:
         VERSION: 4.1
-        VARIANT: alpine
+        VARIANT: alpine311
         PARENT: alpine
         ISPARENT: True
       4_1_centos7:
@@ -100,29 +115,34 @@ jobs:
         VARIANT: centos8
         PARENT: centos
         ISPARENT: True
-      4_1_scratch:
+      4_1_scratch311:
         VERSION: 4.1
-        VARIANT: scratch
+        VARIANT: scratch311
         PARENT: scratch
         ISPARENT: True
-      4_1_vaapi:
+      4_1_vaapi1804:
         VERSION: 4.1
-        VARIANT: vaapi
+        VARIANT: vaapi1804
         PARENT: vaapi
         ISPARENT: True
-      4_1_nvidia:
+      4_1_nvidia1804:
         VERSION: 4.1
-        VARIANT: nvidia
+        VARIANT: nvidia1804
         PARENT: nvidia
         ISPARENT: True
-      4_0_ubuntu:
+      4_0_ubuntu1604:
         VERSION: 4.0
-        VARIANT: ubuntu
+        VARIANT: ubuntu1604
+        PARENT: ubuntu
+        ISPARENT: False
+      4_0_ubuntu1804:
+        VERSION: 4.0
+        VARIANT: ubuntu1804
         PARENT: ubuntu
         ISPARENT: True
-      4_0_alpine:
+      4_0_alpine311:
         VERSION: 4.0
-        VARIANT: alpine
+        VARIANT: alpine311
         PARENT: alpine
         ISPARENT: True
       4_0_centos7:
@@ -135,29 +155,34 @@ jobs:
         VARIANT: centos8
         PARENT: centos
         ISPARENT: True
-      4_0_scratch:
+      4_0_scratch311:
         VERSION: 4.0
-        VARIANT: scratch
+        VARIANT: scratch311
         PARENT: scratch
         ISPARENT: True
-      4_0_vaapi:
+      4_0_vaapi1804:
         VERSION: 4.0
-        VARIANT: vaapi
+        VARIANT: vaapi1804
         PARENT: vaapi
         ISPARENT: True
-      4_0_nvidia:
+      4_0_nvidia1804:
         VERSION: 4.0
-        VARIANT: nvidia
+        VARIANT: nvidia1804
         PARENT: nvidia
         ISPARENT: True
-      3_4_ubuntu:
+      3_4_ubuntu1604:
         VERSION: 3.4
-        VARIANT: ubuntu
+        VARIANT: ubuntu1604
+        PARENT: ubuntu
+        ISPARENT: False
+      3_4_ubuntu1804:
+        VERSION: 3.4
+        VARIANT: ubuntu1804
         PARENT: ubuntu
         ISPARENT: True
-      3_4_alpine:
+      3_4_alpine311:
         VERSION: 3.4
-        VARIANT: alpine
+        VARIANT: alpine311
         PARENT: alpine
         ISPARENT: True
       3_4_centos7:
@@ -170,29 +195,34 @@ jobs:
         VARIANT: centos8
         PARENT: centos
         ISPARENT: True
-      3_4_scratch:
+      3_4_scratch311:
         VERSION: 3.4
-        VARIANT: scratch
+        VARIANT: scratch311
         PARENT: scratch
         ISPARENT: True
-      3_4_vaapi:
+      3_4_vaapi1804:
         VERSION: 3.4
-        VARIANT: vaapi
+        VARIANT: vaapi1804
         PARENT: vaapi
         ISPARENT: True
-      3_4_nvidia:
+      3_4_nvidia1804:
         VERSION: 3.4
-        VARIANT: nvidia
+        VARIANT: nvidia1804
         PARENT: nvidia
         ISPARENT: True
-      3_3_ubuntu:
+      3_3_ubuntu1604:
         VERSION: 3.3
-        VARIANT: ubuntu
+        VARIANT: ubuntu1604
+        PARENT: ubuntu
+        ISPARENT: False
+      3_3_ubuntu1804:
+        VERSION: 3.3
+        VARIANT: ubuntu1804
         PARENT: ubuntu
         ISPARENT: True
-      3_3_alpine:
+      3_3_alpine311:
         VERSION: 3.3
-        VARIANT: alpine
+        VARIANT: alpine311
         PARENT: alpine
         ISPARENT: True
       3_3_centos7:
@@ -205,29 +235,29 @@ jobs:
         VARIANT: centos8
         PARENT: centos
         ISPARENT: True
-      3_3_scratch:
+      3_3_scratch311:
         VERSION: 3.3
-        VARIANT: scratch
+        VARIANT: scratch311
         PARENT: scratch
         ISPARENT: True
-      3_3_vaapi:
+      3_3_vaapi1804:
         VERSION: 3.3
-        VARIANT: vaapi
+        VARIANT: vaapi1804
         PARENT: vaapi
         ISPARENT: True
-      3_3_nvidia:
+      3_3_nvidia1804:
         VERSION: 3.3
-        VARIANT: nvidia
+        VARIANT: nvidia1804
         PARENT: nvidia
         ISPARENT: True
-      3_2_ubuntu:
+      3_2_ubuntu1604:
         VERSION: 3.2
-        VARIANT: ubuntu
+        VARIANT: ubuntu1604
         PARENT: ubuntu
         ISPARENT: True
-      3_2_alpine:
+      3_2_alpine38:
         VERSION: 3.2
-        VARIANT: alpine
+        VARIANT: alpine38
         PARENT: alpine
         ISPARENT: True
       3_2_centos7:
@@ -235,25 +265,28 @@ jobs:
         VARIANT: centos7
         PARENT: centos
         ISPARENT: True
-      3_2_scratch:
+      3_2_scratch38:
         VERSION: 3.2
-        VARIANT: scratch
+        VARIANT: scratch38
         PARENT: scratch
         ISPARENT: True
-      3_2_vaapi:
+      3_2_vaapi1604:
         VERSION: 3.2
-        VARIANT: vaapi
+        VARIANT: vaapi1604
         PARENT: vaapi
         ISPARENT: True
-      3_2_nvidia:
+      3_2_nvidia1604:
         VERSION: 3.2
-        VARIANT: nvidia
+        VARIANT: nvidia1604
         PARENT: nvidia
         ISPARENT: True
   steps:
   - bash: |
       docker build -t ${DOCKER}:${VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
-      docker run --rm ${DOCKER}:${VERSION}-${VARIANT} -buildconf
+      # Create a uniquely tagged version of the container to avoid pulling a version that was already on docker hub
+      docker tag ${DOCKER}:${VERSION}-${VARIANT} ${DOCKER}:${VERSION}-${VARIANT}-$(Build.BuildId)
+      # Run -buildconf from the unique version we just tagged to make sure the build was ok
+      docker run --rm ${DOCKER}:${VERSION}-${VARIANT}-$(Build.BuildId) -buildconf
     displayName: Build docker image
   - bash: |
       docker login --username ${DOCKER_LOGIN} --password ${DOCKER_PASSWORD}
