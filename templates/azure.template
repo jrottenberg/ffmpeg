@@ -14,7 +14,10 @@ jobs:
   steps:
   - bash: |
       docker build -t ${DOCKER}:${VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
-      docker run --rm ${DOCKER}:${VERSION}-${VARIANT} -buildconf
+      # Create a uniquely tagged version of the container to avoid pulling a version that was already on docker hub
+      docker tag ${DOCKER}:${VERSION}-${VARIANT} ${DOCKER}:${VERSION}-${VARIANT}-$(Build.BuildId)
+      # Run -buildconf from the unique version we just tagged to make sure the build was ok
+      docker run --rm ${DOCKER}:${VERSION}-${VARIANT}-$(Build.BuildId) -buildconf
     displayName: Build docker image
   - bash: |
       docker login --username ${DOCKER_LOGIN} --password ${DOCKER_PASSWORD}

@@ -1,0 +1,88 @@
+# ffmpeg - http://ffmpeg.org/download.html
+#
+# From https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
+#
+# https://hub.docker.com/r/jrottenberg/ffmpeg/
+#
+#
+
+FROM    nvidia/cuda:9.2-devel-ubuntu16.04 AS devel-base
+
+ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
+WORKDIR     /tmp/workdir
+
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
+        apt-get autoremove -y && \
+        apt-get clean -y
+
+FROM        nvidia/cuda:9.2-runtime-ubuntu16.04 AS runtime-base
+
+ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
+WORKDIR     /tmp/workdir
+
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
+        apt-get autoremove -y && \
+        apt-get clean -y
+
+
+FROM  devel-base as build
+
+ENV        NVIDIA_HEADERS_VERSION=9.1.23.1
+
+ENV         %%ENV%%
+
+RUN      buildDeps="autoconf \
+                    automake \
+                    cmake \
+                    curl \
+                    bzip2 \
+                    libexpat1-dev \
+                    g++ \
+                    gcc \
+                    git \
+                    gperf \
+                    libtool \
+                    make \
+                    nasm \
+                    perl \
+                    pkg-config \
+                    python \
+                    libssl-dev \
+                    yasm \
+                    zlib1g-dev" && \
+        apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ${buildDeps}
+
+RUN \
+	DIR=/tmp/nv-codec-headers && \
+	git clone https://github.com/FFmpeg/nv-codec-headers ${DIR} && \
+	cd ${DIR} && \
+	git checkout n${NVIDIA_HEADERS_VERSION} && \
+	make PREFIX="${PREFIX}" && \
+	make install PREFIX="${PREFIX}"  && \
+        rm -rf ${DIR}
+
+%%RUN%%
+## cleanup
+RUN \
+        LD_LIBRARY_PATH="${PREFIX}/lib:${PREFIX}/lib64:${LD_LIBRARY_PATH}" ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
+        cp ${PREFIX}/bin/* /usr/local/bin/ && \
+        cp -r ${PREFIX}/share/* /usr/local/share/ && \
+        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
+
+
+
+FROM        runtime-base AS release
+MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+
+ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64:/usr/lib:/usr/lib64:/lib:/lib64
+
+CMD         ["--help"]
+ENTRYPOINT  ["ffmpeg"]
+
+COPY --from=build /usr/local /usr/local
+
+# Let's make sure the app built correctly
+# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
