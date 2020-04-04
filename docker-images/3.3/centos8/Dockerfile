@@ -32,6 +32,7 @@ ENV         FFMPEG_VERSION=3.3.9 \
             OPENCOREAMR_VERSION=0.1.5 \
             OPUS_VERSION=1.2 \
             OPENJPEG_VERSION=2.1.2 \
+            SRT_VERSION=1.3.2 \
             THEORA_VERSION=1.1.1 \
             VORBIS_VERSION=1.3.5 \
             VPX_VERSION=1.8.0 \
@@ -65,6 +66,9 @@ ARG         PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconf
 ARG         PREFIX=/opt/ffmpeg
 ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/usr/lib64:/usr/lib:/lib64:/lib"
 
+# Fix issues when installing tzdata on Ubuntu
+ARG         DEBIAN_FRONTEND=noninteractive
+
 
 RUN     buildDeps="autoconf \
                    automake \
@@ -83,6 +87,7 @@ RUN     buildDeps="autoconf \
                    python3 \
                    openssl-devel \
                    tar \
+                   tcl \
                    yasm \
                    which \
                    zlib-devel" && \
@@ -426,6 +431,19 @@ RUN \
         make && \
         make install && \
         rm -rf ${DIR}
+
+## libsrt - to allow receiving and pushing SRT streams
+RUN \
+        DIR=/tmp/libsrt && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/Haivision/srt/archive/v${SRT_VERSION}.tar.gz && \
+        tar -xz --strip-components=1 -f v${SRT_VERSION}.tar.gz && \
+        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
 
 ## ffmpeg https://ffmpeg.org/
 RUN  \
