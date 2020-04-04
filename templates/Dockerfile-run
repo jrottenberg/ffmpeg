@@ -335,6 +335,19 @@ RUN \
         make install && \
         rm -rf ${DIR}
 
+## libsrt - to allow receiving and pushing SRT streams
+RUN \
+        DIR=/tmp/libsrt && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/Haivision/srt/archive/v${SRT_VERSION}.tar.gz && \
+        tar -xz --strip-components=1 -f v${SRT_VERSION}.tar.gz && \
+        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+
 ## ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \

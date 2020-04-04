@@ -29,6 +29,7 @@ RUN     buildDeps="autoconf \
                    python \
                    openssl-dev \
                    tar \
+                   tcl \
                    yasm \
                    nasm \
                    zlib-dev \
