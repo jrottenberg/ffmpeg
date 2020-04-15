@@ -228,7 +228,7 @@ RUN \
         rm -rf ${DIR}
 
 RUN \
-	DIR=/tmp/aom && \
+        DIR=/tmp/aom && \
         git clone --branch ${AOM_VERSION} --depth 1 https://aomedia.googlesource.com/aom ${DIR} ; \
         cd ${DIR} ; \
         rm -rf CMakeCache.txt CMakeFiles ; \
@@ -321,7 +321,6 @@ RUN \
         make install && \
         rm -rf ${DIR}
 
-
 ## libbluray - Requires libxml, freetype, and fontconfig
 RUN \
         DIR=/tmp/libbluray && \
@@ -332,6 +331,21 @@ RUN \
         tar -jx --strip-components=1 -f libbluray-${LIBBLURAY_VERSION}.tar.bz2 && \
         ./configure --prefix="${PREFIX}" --disable-examples --disable-bdjava-jar --disable-static --enable-shared && \
         make && \
+        make install && \
+        rm -rf ${DIR}
+
+## libzmq https://github.com/zeromq/libzmq/
+RUN \
+        DIR=/tmp/libzmq && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/zeromq/libzmq/archive/v${LIBZMQ_VERSION}.tar.gz && \
+        echo ${LIBZMQ_SHA256SUM} | sha256sum --check && \
+        tar -xz --strip-components=1 -f v${LIBZMQ_VERSION}.tar.gz && \
+        ./autogen.sh && \
+        ./configure --prefix="${PREFIX}" && \
+        make && \
+        make check && \
         make install && \
         rm -rf ${DIR}
 
@@ -349,8 +363,8 @@ RUN \
         %%FFMPEG_CONFIG_FLAGS%%
         make && \
         make install && \
+        make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
         make distclean && \
         hash -r && \
         cd tools && \
-        make qt-faststart && \
-        cp qt-faststart ${PREFIX}/bin
+        make qt-faststart && cp qt-faststart ${PREFIX}/bin/

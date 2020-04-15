@@ -118,18 +118,18 @@ Please use [Github issues](https://github.com/jrottenberg/ffmpeg/issues/new) to 
 ## Test
 
 ```
-ffmpeg version 3.3.4 Copyright (c) 2000-2017 the FFmpeg developers
-  built with gcc 5.4.0 (Ubuntu 5.4.0-6ubuntu1~16.04.4) 20160609
-  configuration: --disable-debug --disable-doc --disable-ffplay --enable-shared --enable-avresample --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-gpl --enable-libass --enable-libfreetype --enable-libvidstab --enable-libmp3lame --enable-libopenjpeg --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxvid --enable-libx264 --enable-nonfree --enable-openssl --enable-libfdk_aac --enable-postproc --enable-small --enable-version3 --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib --extra-libs=-ldl --prefix=/opt/ffmpeg
-  libavutil      55. 58.100 / 55. 58.100
-  libavcodec     57. 89.100 / 57. 89.100
-  libavformat    57. 71.100 / 57. 71.100
-  libavdevice    57.  6.100 / 57.  6.100
-  libavfilter     6. 82.100 /  6. 82.100
-  libavresample   3.  5.  0 /  3.  5.  0
-  libswscale      4.  6.100 /  4.  6.100
-  libswresample   2.  7.100 /  2.  7.100
-  libpostproc    54.  5.100 / 54.  5.100
+ffmpeg version 4.2.2 Copyright (c) 2000-2019 the FFmpeg developers
+  built with gcc 7 (Ubuntu 7.5.0-3ubuntu1~18.04)
+  configuration: --disable-debug --disable-doc --disable-ffplay --enable-shared --enable-avresample --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-gpl --enable-libass --enable-fontconfig --enable-libfreetype --enable-libvidstab --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libxcb --enable-libx265 --enable-libxvid --enable-libx264 --enable-nonfree --enable-openssl --enable-libfdk_aac --enable-postproc --enable-small --enable-version3 --enable-libbluray --enable-libzmq --extra-libs=-ldl --prefix=/opt/ffmpeg --enable-libopenjpeg --enable-libkvazaar --enable-libaom --extra-libs=-lpthread --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib
+  libavutil      56. 31.100 / 56. 31.100
+  libavcodec     58. 54.100 / 58. 54.100
+  libavformat    58. 29.100 / 58. 29.100
+  libavdevice    58.  8.100 / 58.  8.100
+  libavfilter     7. 57.100 /  7. 57.100
+  libavresample   4.  0.  0 /  4.  0.  0
+  libswscale      5.  5.100 /  5.  5.100
+  libswresample   3.  5.100 /  3.  5.100
+  libpostproc    55.  5.100 / 55.  5.100
 
   configuration:
     --disable-debug
@@ -141,15 +141,16 @@ ffmpeg version 3.3.4 Copyright (c) 2000-2017 the FFmpeg developers
     --enable-libopencore-amrwb
     --enable-gpl
     --enable-libass
+    --enable-fontconfig
     --enable-libfreetype
     --enable-libvidstab
     --enable-libmp3lame
-    --enable-libopenjpeg
     --enable-libopus
     --enable-libtheora
     --enable-libvorbis
     --enable-libvpx
     --enable-libwebp
+    --enable-libxcb
     --enable-libx265
     --enable-libxvid
     --enable-libx264
@@ -159,10 +160,16 @@ ffmpeg version 3.3.4 Copyright (c) 2000-2017 the FFmpeg developers
     --enable-postproc
     --enable-small
     --enable-version3
-    --extra-cflags=-I/opt/ffmpeg/include
-    --extra-ldflags=-L/opt/ffmpeg/lib
+    --enable-libbluray
+    --enable-libzmq
     --extra-libs=-ldl
     --prefix=/opt/ffmpeg
+    --enable-libopenjpeg
+    --enable-libkvazaar
+    --enable-libaom
+    --extra-libs=-lpthread
+    --extra-cflags=-I/opt/ffmpeg/include
+    --extra-ldflags=-L/opt/ffmpeg/lib
 ```
 
 Capture output from the container to the host running the command
@@ -203,6 +210,25 @@ Let's assume ```original.gif``` is located in the current directory :
         jrottenberg/ffmpeg:3.2-scratch -stats \
         -i original.gif \
         original-converted.mp4
+```
+
+#### Use ZeroMQ to toggle filter value on-fly
+
+Let's start some process continuously writing some radio music, and listen it: 
+```
+ docker run --rm -d -v $(pwd):$(pwd) -w $(pwd) -p 11235:11235 \
+        --name radio-writer jrottenberg/ffmpeg \
+        -i http://radio.casse-tete.solutions/salut-radio-64.mp3 \
+        -filter_complex '[0:a]volume@vol=1,azmq=bind_address=tcp\\\://0.0.0.0\\\:11235[out]' \
+        -map '[out]' ./salut-radio.mp3
+
+ ffplay ./salut-radio.mp3
+```
+
+Now, just toggle its volume on-fly, and hear how it changes:
+```
+ docker run --rm --network=host --entrypoint sh jrottenberg/ffmpeg -c \
+        'echo "volume@vol volume 2" | zmqsend -b tcp://127.0.0.1:11235'
 ```
 
 #### Use hardware acceleration enabled build
@@ -261,7 +287,8 @@ See Dockerfile-env to update a version
 - [LIBVIDSTAB_VERSION](https://github.com/georgmartius/vid.stab/releases): [GNU General Public License (GPL) version 2](https://github.com/georgmartius/vid.stab/blob/master/LICENSE)
 - [LIBFRIDIBI_VERSION](https://www.fribidi.org/): [GNU General Public License (GPL) version 2](https://cgit.freedesktop.org/fribidi/fribidi/plain/COPYING)
 - [X264_VERSION](http://www.videolan.org/developers/x264.html): [GNU General Public License (GPL) version 2](https://git.videolan.org/?p=x264.git;a=blob_plain;f=COPYING;hb=HEAD)
-- [X265_VERSION](https://bitbucket.org/multicoreware/x265/downloads/):[GNU General Public License (GPL) version 2](https://bitbucket.org/multicoreware/x265/raw/f8ae7afc1f61ed0db3b2f23f5d581706fe6ed677/COPYING)
+- [X265_VERSION](https://bitbucket.org/multicoreware/x265/downloads/): [GNU General Public License (GPL) version 2](https://bitbucket.org/multicoreware/x265/raw/f8ae7afc1f61ed0db3b2f23f5d581706fe6ed677/COPYING)
+- [LIBZMQ_VERSION](https://github.com/zeromq/libzmq/releases/): [GNU Lesser General Public License (LGPL) version 3.0](https://github.com/zeromq/libzmq/blob/v4.3.2/COPYING.LESSER)
 
 
 ## Contribute
