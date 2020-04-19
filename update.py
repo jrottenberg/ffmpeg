@@ -198,6 +198,7 @@ for version in keep_version:
             '--enable-small',
             '--enable-version3',
             '--enable-libbluray',
+            '--enable-libzmq',
             '--extra-libs=-ldl',
             '--prefix="${PREFIX}"',
         ]
