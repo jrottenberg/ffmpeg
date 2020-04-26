@@ -124,7 +124,7 @@ for version in keep_version:
     ISPARENT: "{is_parent}"
 """
         )
-        # Build the matric section
+        # Build the matrice section
         azure.append(
             "      {0}_{1}:\n"
             "        VERSION: {2}\n"

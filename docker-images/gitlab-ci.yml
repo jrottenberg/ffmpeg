@@ -3,7 +3,6 @@ snapshot-ubuntu1604:
   extends: .docker
   stage: ubuntu1604
   variables:
-    SHORT_VERSION: "snapshot"
     VERSION: "snapshot"
     VARIANT: ubuntu1604
     PARENT: "ubuntu"
@@ -13,7 +12,6 @@ snapshot-ubuntu1804:
   extends: .docker
   stage: ubuntu1804
   variables:
-    SHORT_VERSION: "snapshot"
     VERSION: "snapshot"
     VARIANT: ubuntu1804
     PARENT: "ubuntu"
@@ -23,7 +21,6 @@ snapshot-alpine311:
   extends: .docker
   stage: alpine311
   variables:
-    SHORT_VERSION: "snapshot"
     VERSION: "snapshot"
     VARIANT: alpine311
     PARENT: "alpine"
@@ -33,7 +30,6 @@ snapshot-centos7:
   extends: .docker
   stage: centos7
   variables:
-    SHORT_VERSION: "snapshot"
     VERSION: "snapshot"
     VARIANT: centos7
     PARENT: "centos"
@@ -43,7 +39,6 @@ snapshot-centos8:
   extends: .docker
   stage: centos8
   variables:
-    SHORT_VERSION: "snapshot"
     VERSION: "snapshot"
     VARIANT: centos8
     PARENT: "centos"
@@ -53,7 +48,6 @@ snapshot-scratch311:
   extends: .docker
   stage: scratch311
   variables:
-    SHORT_VERSION: "snapshot"
     VERSION: "snapshot"
     VARIANT: scratch311
     PARENT: "scratch"
@@ -86,106 +80,55 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "False"
 
-<<<<<<< HEAD
 4.2.2-ubuntu1804:
-=======
-4.2-ubuntu:
->>>>>>> after update.py
   extends: .docker
   stage: ubuntu1804
   variables:
-<<<<<<< HEAD
     VERSION: "4.2"
     VARIANT: ubuntu1804
     PARENT: "ubuntu"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.2"
-    VERSION: "4.2.2"
-    VARIANT: ubuntu
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.2.2-alpine311:
-=======
-4.2-alpine:
->>>>>>> after update.py
   extends: .docker
   stage: alpine311
   variables:
-<<<<<<< HEAD
     VERSION: "4.2"
     VARIANT: alpine311
     PARENT: "alpine"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.2"
-    VERSION: "4.2.2"
-    VARIANT: alpine
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.2.2-centos7:
-=======
-4.2-centos:
->>>>>>> after update.py
   extends: .docker
   stage: centos7
   variables:
-<<<<<<< HEAD
     VERSION: "4.2"
     VARIANT: centos7
     PARENT: "centos"
     ISPARENT: "False"
-=======
-    SHORT_VERSION: "4.2"
-    VERSION: "4.2.2"
-    VARIANT: centos
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.2.2-centos8:
-=======
-4.2-scratch:
->>>>>>> after update.py
   extends: .docker
   stage: centos8
   variables:
-<<<<<<< HEAD
     VERSION: "4.2"
     VARIANT: centos8
     PARENT: "centos"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.2"
-    VERSION: "4.2.2"
-    VARIANT: scratch
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.2.2-scratch311:
-=======
-4.2-vaapi:
->>>>>>> after update.py
   extends: .docker
   stage: scratch311
   variables:
-<<<<<<< HEAD
     VERSION: "4.2"
     VARIANT: scratch311
     PARENT: "scratch"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.2"
-    VERSION: "4.2.2"
-    VARIANT: vaapi
->>>>>>> after update.py
 
 4.2.2-vaapi1804:
   extends: .docker
   stage: vaapi1804
   variables:
-<<<<<<< HEAD
     VERSION: "4.2"
     VARIANT: vaapi1804
     PARENT: "vaapi"
@@ -209,11 +152,7 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "False"
 
-<<<<<<< HEAD
 4.1.5-ubuntu1804:
-=======
-4.2-nvidia:
->>>>>>> after update.py
   extends: .docker
   stage: ubuntu1804
   variables:
@@ -221,239 +160,114 @@ snapshot-nvidia1804:
     VARIANT: ubuntu1804
     PARENT: "ubuntu"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.2"
-    VERSION: "4.2.2"
-    VARIANT: nvidia
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.1.5-alpine311:
-=======
-4.1-ubuntu:
->>>>>>> after update.py
   extends: .docker
   stage: alpine311
   variables:
-<<<<<<< HEAD
     VERSION: "4.1"
     VARIANT: alpine311
     PARENT: "alpine"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.1"
-    VERSION: "4.1.5"
-    VARIANT: ubuntu
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.1.5-centos7:
-=======
-4.1-alpine:
->>>>>>> after update.py
   extends: .docker
   stage: centos7
   variables:
-<<<<<<< HEAD
     VERSION: "4.1"
     VARIANT: centos7
     PARENT: "centos"
     ISPARENT: "False"
-=======
-    SHORT_VERSION: "4.1"
-    VERSION: "4.1.5"
-    VARIANT: alpine
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.1.5-centos8:
-=======
-4.1-centos:
->>>>>>> after update.py
   extends: .docker
   stage: centos8
   variables:
-<<<<<<< HEAD
     VERSION: "4.1"
     VARIANT: centos8
     PARENT: "centos"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.1"
-    VERSION: "4.1.5"
-    VARIANT: centos
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.1.5-scratch311:
-=======
-4.1-scratch:
->>>>>>> after update.py
   extends: .docker
   stage: scratch311
   variables:
-<<<<<<< HEAD
     VERSION: "4.1"
     VARIANT: scratch311
     PARENT: "scratch"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.1"
-    VERSION: "4.1.5"
-    VARIANT: scratch
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.1.5-vaapi1804:
-=======
-4.1-vaapi:
->>>>>>> after update.py
   extends: .docker
   stage: vaapi1804
   variables:
-<<<<<<< HEAD
     VERSION: "4.1"
     VARIANT: vaapi1804
     PARENT: "vaapi"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.1"
-    VERSION: "4.1.5"
-    VARIANT: vaapi
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.1.5-nvidia1804:
-=======
-4.1-nvidia:
->>>>>>> after update.py
   extends: .docker
   stage: nvidia1804
   variables:
-<<<<<<< HEAD
     VERSION: "4.1"
     VARIANT: nvidia1804
     PARENT: "nvidia"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.1"
-    VERSION: "4.1.5"
-    VARIANT: nvidia
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.0.5-ubuntu1604:
-=======
-4.0-ubuntu:
->>>>>>> after update.py
   extends: .docker
   stage: ubuntu1604
   variables:
-<<<<<<< HEAD
     VERSION: "4.0"
     VARIANT: ubuntu1604
     PARENT: "ubuntu"
     ISPARENT: "False"
-=======
-    SHORT_VERSION: "4.0"
-    VERSION: "4.0.5"
-    VARIANT: ubuntu
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.0.5-ubuntu1804:
-=======
-4.0-alpine:
->>>>>>> after update.py
   extends: .docker
   stage: ubuntu1804
   variables:
-<<<<<<< HEAD
     VERSION: "4.0"
     VARIANT: ubuntu1804
     PARENT: "ubuntu"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.0"
-    VERSION: "4.0.5"
-    VARIANT: alpine
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.0.5-alpine311:
-=======
-4.0-centos:
->>>>>>> after update.py
   extends: .docker
   stage: alpine311
   variables:
-<<<<<<< HEAD
     VERSION: "4.0"
     VARIANT: alpine311
     PARENT: "alpine"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.0"
-    VERSION: "4.0.5"
-    VARIANT: centos
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.0.5-centos7:
-=======
-4.0-scratch:
->>>>>>> after update.py
   extends: .docker
   stage: centos7
   variables:
-<<<<<<< HEAD
     VERSION: "4.0"
     VARIANT: centos7
     PARENT: "centos"
     ISPARENT: "False"
-=======
-    SHORT_VERSION: "4.0"
-    VERSION: "4.0.5"
-    VARIANT: scratch
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.0.5-centos8:
-=======
-4.0-vaapi:
->>>>>>> after update.py
   extends: .docker
   stage: centos8
   variables:
-<<<<<<< HEAD
     VERSION: "4.0"
     VARIANT: centos8
     PARENT: "centos"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.0"
-    VERSION: "4.0.5"
-    VARIANT: vaapi
->>>>>>> after update.py
 
-<<<<<<< HEAD
 4.0.5-scratch311:
-=======
-4.0-nvidia:
->>>>>>> after update.py
   extends: .docker
   stage: scratch311
   variables:
-<<<<<<< HEAD
     VERSION: "4.0"
     VARIANT: scratch311
     PARENT: "scratch"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "4.0"
-    VERSION: "4.0.5"
-    VARIANT: nvidia
->>>>>>> after update.py
 
 4.0.5-vaapi1804:
   extends: .docker
@@ -482,106 +296,55 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "False"
 
-<<<<<<< HEAD
 3.4.7-ubuntu1804:
-=======
-3.4-ubuntu:
->>>>>>> after update.py
   extends: .docker
   stage: ubuntu1804
   variables:
-<<<<<<< HEAD
     VERSION: "3.4"
     VARIANT: ubuntu1804
     PARENT: "ubuntu"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.4"
-    VERSION: "3.4.7"
-    VARIANT: ubuntu
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.4.7-alpine311:
-=======
-3.4-alpine:
->>>>>>> after update.py
   extends: .docker
   stage: alpine311
   variables:
-<<<<<<< HEAD
     VERSION: "3.4"
     VARIANT: alpine311
     PARENT: "alpine"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.4"
-    VERSION: "3.4.7"
-    VARIANT: alpine
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.4.7-centos7:
-=======
-3.4-centos:
->>>>>>> after update.py
   extends: .docker
   stage: centos7
   variables:
-<<<<<<< HEAD
     VERSION: "3.4"
     VARIANT: centos7
     PARENT: "centos"
     ISPARENT: "False"
-=======
-    SHORT_VERSION: "3.4"
-    VERSION: "3.4.7"
-    VARIANT: centos
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.4.7-centos8:
-=======
-3.4-scratch:
->>>>>>> after update.py
   extends: .docker
   stage: centos8
   variables:
-<<<<<<< HEAD
     VERSION: "3.4"
     VARIANT: centos8
     PARENT: "centos"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.4"
-    VERSION: "3.4.7"
-    VARIANT: scratch
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.4.7-scratch311:
-=======
-3.4-vaapi:
->>>>>>> after update.py
   extends: .docker
   stage: scratch311
   variables:
-<<<<<<< HEAD
     VERSION: "3.4"
     VARIANT: scratch311
     PARENT: "scratch"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.4"
-    VERSION: "3.4.7"
-    VARIANT: vaapi
->>>>>>> after update.py
 
 3.4.7-vaapi1804:
   extends: .docker
   stage: vaapi1804
   variables:
-<<<<<<< HEAD
     VERSION: "3.4"
     VARIANT: vaapi1804
     PARENT: "vaapi"
@@ -605,11 +368,7 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "False"
 
-<<<<<<< HEAD
 3.3.9-ubuntu1804:
-=======
-3.4-nvidia:
->>>>>>> after update.py
   extends: .docker
   stage: ubuntu1804
   variables:
@@ -617,236 +376,111 @@ snapshot-nvidia1804:
     VARIANT: ubuntu1804
     PARENT: "ubuntu"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.4"
-    VERSION: "3.4.7"
-    VARIANT: nvidia
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.3.9-alpine311:
-=======
-3.3-ubuntu:
->>>>>>> after update.py
   extends: .docker
   stage: alpine311
   variables:
-<<<<<<< HEAD
     VERSION: "3.3"
     VARIANT: alpine311
     PARENT: "alpine"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.3"
-    VERSION: "3.3.9"
-    VARIANT: ubuntu
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.3.9-centos7:
-=======
-3.3-alpine:
->>>>>>> after update.py
   extends: .docker
   stage: centos7
   variables:
-<<<<<<< HEAD
     VERSION: "3.3"
     VARIANT: centos7
     PARENT: "centos"
     ISPARENT: "False"
-=======
-    SHORT_VERSION: "3.3"
-    VERSION: "3.3.9"
-    VARIANT: alpine
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.3.9-centos8:
-=======
-3.3-centos:
->>>>>>> after update.py
   extends: .docker
   stage: centos8
   variables:
-<<<<<<< HEAD
     VERSION: "3.3"
     VARIANT: centos8
     PARENT: "centos"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.3"
-    VERSION: "3.3.9"
-    VARIANT: centos
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.3.9-scratch311:
-=======
-3.3-scratch:
->>>>>>> after update.py
   extends: .docker
   stage: scratch311
   variables:
-<<<<<<< HEAD
     VERSION: "3.3"
     VARIANT: scratch311
     PARENT: "scratch"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.3"
-    VERSION: "3.3.9"
-    VARIANT: scratch
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.3.9-vaapi1804:
-=======
-3.3-vaapi:
->>>>>>> after update.py
   extends: .docker
   stage: vaapi1804
   variables:
-<<<<<<< HEAD
     VERSION: "3.3"
     VARIANT: vaapi1804
     PARENT: "vaapi"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.3"
-    VERSION: "3.3.9"
-    VARIANT: vaapi
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.3.9-nvidia1804:
-=======
-3.3-nvidia:
->>>>>>> after update.py
   extends: .docker
   stage: nvidia1804
   variables:
-<<<<<<< HEAD
     VERSION: "3.3"
     VARIANT: nvidia1804
     PARENT: "nvidia"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.3"
-    VERSION: "3.3.9"
-    VARIANT: nvidia
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.2.14-ubuntu1604:
-=======
-3.2-ubuntu:
->>>>>>> after update.py
   extends: .docker
   stage: ubuntu1604
   variables:
-<<<<<<< HEAD
     VERSION: "3.2"
     VARIANT: ubuntu1604
     PARENT: "ubuntu"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.2"
-    VERSION: "3.2.14"
-    VARIANT: ubuntu
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.2.14-alpine38:
-=======
-3.2-alpine:
->>>>>>> after update.py
   extends: .docker
   stage: alpine38
   variables:
-<<<<<<< HEAD
     VERSION: "3.2"
     VARIANT: alpine38
     PARENT: "alpine"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.2"
-    VERSION: "3.2.14"
-    VARIANT: alpine
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.2.14-centos7:
-=======
-3.2-centos:
->>>>>>> after update.py
   extends: .docker
   stage: centos7
   variables:
-<<<<<<< HEAD
     VERSION: "3.2"
     VARIANT: centos7
     PARENT: "centos"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.2"
-    VERSION: "3.2.14"
-    VARIANT: centos
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.2.14-scratch38:
-=======
-3.2-scratch:
->>>>>>> after update.py
   extends: .docker
   stage: scratch38
   variables:
-<<<<<<< HEAD
     VERSION: "3.2"
     VARIANT: scratch38
     PARENT: "scratch"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.2"
-    VERSION: "3.2.14"
-    VARIANT: scratch
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.2.14-vaapi1604:
-=======
-3.2-vaapi:
->>>>>>> after update.py
   extends: .docker
   stage: vaapi1604
   variables:
-<<<<<<< HEAD
     VERSION: "3.2"
     VARIANT: vaapi1604
     PARENT: "vaapi"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.2"
-    VERSION: "3.2.14"
-    VARIANT: vaapi
->>>>>>> after update.py
 
-<<<<<<< HEAD
 3.2.14-nvidia1604:
-=======
-3.2-nvidia:
->>>>>>> after update.py
   extends: .docker
   stage: nvidia1604
   variables:
-<<<<<<< HEAD
     VERSION: "3.2"
     VARIANT: nvidia1604
     PARENT: "nvidia"
     ISPARENT: "True"
-=======
-    SHORT_VERSION: "3.2"
-    VERSION: "3.2.14"
-    VARIANT: nvidia
->>>>>>> after update.py
