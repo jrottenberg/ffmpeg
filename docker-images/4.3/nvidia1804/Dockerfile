@@ -559,6 +559,7 @@ RUN \
         --enable-libaribb24 \
         --enable-nvenc \
         --enable-cuda \
+        --enable-cuda-sdk \
         --enable-cuvid \
         --enable-libnpp \
         --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/" \

@@ -224,11 +224,12 @@ for version in keep_version:
             LDFLAGS.append("-L/usr/local/cuda/lib32/")
             FFMPEG_CONFIG_FLAGS.append("--enable-nvenc")
             if version == "snapshot" or int(version[0]) >= 4:
-                FFMPEG_CONFIG_FLAGS.append("--enable-cuda")
-                FFMPEG_CONFIG_FLAGS.append("--enable-cuvid")
-                FFMPEG_CONFIG_FLAGS.append("--enable-libnpp")
-        cflags = '--extra-cflags="{0}"'.format(" ".join(CFLAGS))
-        ldflags = '--extra-ldflags="{0}"'.format(" ".join(LDFLAGS))
+                FFMPEG_CONFIG_FLAGS.append('--enable-cuda')
+                FFMPEG_CONFIG_FLAGS.append('--enable-cuda-sdk')
+                FFMPEG_CONFIG_FLAGS.append('--enable-cuvid')
+                FFMPEG_CONFIG_FLAGS.append('--enable-libnpp')
+        cflags = '--extra-cflags="{0}"'.format(' '.join(CFLAGS))
+        ldflags = '--extra-ldflags="{0}"'.format(' '.join(LDFLAGS))
         FFMPEG_CONFIG_FLAGS.append(cflags)
         FFMPEG_CONFIG_FLAGS.append(ldflags)
         FFMPEG_CONFIG_FLAGS[-1] += " && \\"
