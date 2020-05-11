@@ -107,7 +107,7 @@ RUN      buildDeps="autoconf \
                     yasm \
                     zlib1g-dev" && \
         apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ${buildDeps}
+        DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends ${buildDeps}
 
 RUN \
 	DIR=/tmp/nv-codec-headers && \
