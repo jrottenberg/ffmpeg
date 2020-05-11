@@ -35,6 +35,7 @@ RUN      buildDeps="autoconf \
                     pkg-config \
                     python \
                     libssl-dev \
+                    tclsh \
                     yasm \
                     libva-dev \
                     zlib1g-dev" && \

@@ -1,6 +1,5 @@
 # FFmpeg Docker image
 
-
  [![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/) [![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
 [![gitlab pipeline status](https://gitlab.com/jrottenberg/ffmpeg/badges/master/pipeline.svg)](https://gitlab.com/jrottenberg/ffmpeg/commits/master)
 [![Azure Build Status](https://dev.azure.com/video-tools/ffmpeg/_apis/build/status/jrottenberg.ffmpeg)](https://dev.azure.com/video-tools/ffmpeg/_build/latest?definitionId=1)
@@ -24,6 +23,7 @@ alpine images  `ffmpeg:X.Y-alpine` to get the latest.
 scratch images `ffmpeg:X.Y-scratch` to get the latest. (Scratch is an experimental image containing only FFmpeg and libraries)
 
 Format is `ffmpeg:MAJOR.MINOR-VARIANT` with MAJOR.MINOR in :
+
 - 2.8
 - 3.0
 - 3.1
@@ -35,6 +35,7 @@ Format is `ffmpeg:MAJOR.MINOR-VARIANT` with MAJOR.MINOR in :
 - snapshot
 
 and VARIANT in :
+
 - alpine
 - centos
 - nvidia
@@ -42,10 +43,9 @@ and VARIANT in :
 - ubuntu
 - vaapi
 
-
 Recent images:
 
-```
+```text
 snapshot-vaapi      74mb
 snapshot-ubuntu     86mb
 snapshot-scratch    20mb
@@ -106,7 +106,7 @@ snapshot-alpine     35mb
 
 ### How the 'recent images' was generated
 
-```
+```bash
 $ curl --silent https://hub.docker.com/v2/repositories/jrottenberg/ffmpeg/tags/?page_size=500 | jq -cr ".results|sort_by(.name)|reverse[]|.sz=(.full_size/1048576|floor|tostring+\"mb\")|[.name,( (20-(.name|length))*\" \" ),.sz,( (8-(.sz|length))*\" \"),.last_updated[:10]]|@text|gsub(\"[,\\\"\\\]\\\[]\";null)"
 
 # If you want to compare the one you have locally
@@ -117,10 +117,10 @@ Please use [Github issues](https://github.com/jrottenberg/ffmpeg/issues/new) to 
 
 ## Test
 
-```
+```bash
 ffmpeg version 4.2.2 Copyright (c) 2000-2019 the FFmpeg developers
   built with gcc 7 (Ubuntu 7.5.0-3ubuntu1~18.04)
-  configuration: --disable-debug --disable-doc --disable-ffplay --enable-shared --enable-avresample --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-gpl --enable-libass --enable-fontconfig --enable-libfreetype --enable-libvidstab --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libxcb --enable-libx265 --enable-libxvid --enable-libx264 --enable-nonfree --enable-openssl --enable-libfdk_aac --enable-postproc --enable-small --enable-version3 --enable-libbluray --enable-libzmq --extra-libs=-ldl --prefix=/opt/ffmpeg --enable-libopenjpeg --enable-libkvazaar --enable-libaom --extra-libs=-lpthread --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib
+  configuration: --disable-debug --disable-doc --disable-ffplay --enable-shared --enable-avresample --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-gpl --enable-libass --enable-fontconfig --enable-libfreetype --enable-libvidstab --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libxcb --enable-libx265 --enable-libxvid --enable-libx264 --enable-nonfree --enable-openssl --enable-libfdk_aac --enable-postproc --enable-small --enable-version3 --enable-libbluray --enable-libzmq --enable-libsrt --extra-libs=-ldl --prefix=/opt/ffmpeg --enable-libopenjpeg --enable-libkvazaar --enable-libaom --extra-libs=-lpthread --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib
   libavutil      56. 31.100 / 56. 31.100
   libavcodec     58. 54.100 / 58. 54.100
   libavformat    58. 29.100 / 58. 29.100
@@ -162,6 +162,7 @@ ffmpeg version 4.2.2 Copyright (c) 2000-2019 the FFmpeg developers
     --enable-version3
     --enable-libbluray
     --enable-libzmq
+    --enable-libsrt
     --extra-libs=-ldl
     --prefix=/opt/ffmpeg
     --enable-libopenjpeg
@@ -174,7 +175,7 @@ ffmpeg version 4.2.2 Copyright (c) 2000-2019 the FFmpeg developers
 
 Capture output from the container to the host running the command
 
-```
+```bash
  docker run jrottenberg/ffmpeg \
             -i http://url/to/media.mp4 \
             -stats \
@@ -182,9 +183,10 @@ Capture output from the container to the host running the command
 ```
 
 ### Examples
+
 #### Extract 5s @00:49:42 into a GIF
 
-```
+```bash
  docker run jrottenberg/ffmpeg -stats  \
         -i http://archive.org/download/thethreeagesbusterkeaton/Buster.Keaton.The.Three.Ages.ogv \
         -loop 0  \
@@ -192,20 +194,23 @@ Capture output from the container to the host running the command
 ```
 
 #### Convert 10bits MKV into a 10Bits MP4
-```
+
+```bash
  docker run -v $(pwd):$(pwd) -w $(pwd) jrottenberg/ffmpeg:3.4-scratch \
         -stats \
         -i http://www.jell.yfish.us/media/jellyfish-20-mbps-hd-hevc-10bit.mkv \
         -c:v libx265 -pix_fmt yuv420p10 \
         -t 5 -f mp4 test.mp4
 ```
+
 The image has been compiled with [X265 Multilib](https://x265.readthedocs.io/en/default/api.html#multi-library-interface).
 Use the pixel format switch to change the number of bits per pixel by suffixing it with 10 for 10bits or 12 for 12bits.
 
 #### Convert a local GIF into a mp4
 
 Let's assume ```original.gif``` is located in the current directory :
-```
+
+```bash
  docker run -v $(pwd):$(pwd) -w $(pwd)\
         jrottenberg/ffmpeg:3.2-scratch -stats \
         -i original.gif \
@@ -214,8 +219,9 @@ Let's assume ```original.gif``` is located in the current directory :
 
 #### Use ZeroMQ to toggle filter value on-fly
 
-Let's start some process continuously writing some radio music, and listen it: 
-```
+Let's start some process continuously writing some radio music, and listen it:
+
+```bash
  docker run --rm -d -v $(pwd):$(pwd) -w $(pwd) -p 11235:11235 \
         --name radio-writer jrottenberg/ffmpeg \
         -i http://radio.casse-tete.solutions/salut-radio-64.mp3 \
@@ -226,9 +232,19 @@ Let's start some process continuously writing some radio music, and listen it:
 ```
 
 Now, just toggle its volume on-fly, and hear how it changes:
-```
+
+```bash
  docker run --rm --network=host --entrypoint sh jrottenberg/ffmpeg -c \
         'echo "volume@vol volume 2" | zmqsend -b tcp://127.0.0.1:11235'
+```
+
+#### Send a stream over SRT
+
+Let's send `video.mp4` to srt-listener on port 9000 over SRT protocol.
+
+```bash
+docker run -v $(pwd):$(pwd) jrottenberg/ffmpeg \
+       -re -i $(pwd)/video.mp4 -acodec copy -vcodec copy -f mpegts srt://srt-listener:9000?pkt_size=1316
 ```
 
 #### Use hardware acceleration enabled build
@@ -240,9 +256,9 @@ Thanks to [qmfrederik](https://github.com/qmfrederik) for the [vaapi ubuntu base
 - Run the container with the device attached /dev/dri from your host into the container :
 
 `docker run --device /dev/dri:/dev/dri -v $(pwd):$(pwd) -w $(pwd) jrottenberg/ffmpeg:vaapi [...]`
+
 - Have the Intel drivers up and running on your host. You can run `vainfo` (part of vainfo package on Ubuntu) to determine whether your graphics card has been recognized correctly.
 - Run ffmpeg with the correct parameters, this is the same as when running [ffmpeg natively](https://trac.ffmpeg.org/wiki/Hardware/VAAPI).
-
 
 #### Use nvidia hardware acceleration enabled build
 
@@ -255,14 +271,14 @@ Supports nvenc only on all ffmpeg versions, and hardware decoding and scaling on
 - Run container using "--runtime=nvidia" flag and use supported [ffmpeg hwaccel options](https://trac.ffmpeg.org/wiki/HWAccelIntro)
 
 Hardware encoding only example:
+
 `docker run --runtime=nvidia jrottenberg/ffmpeg:2.8-nvidia -i INPUT -c:v nvenc_h264 -preset hq OUTPUT`
 Full hardware acceleration example:
 `docker run --runtime=nvidia jrottenberg/ffmpeg:4.1-nvidia -hwaccel cuvid -c:v h264_cuvid -i INPUT -vf scale_npp=-1:720 -c:v h264_nvenc -preset slow OUTPUT`
 
-
 ##### See what's inside the beast
 
-```
+```bash
 docker run -it --entrypoint='bash' jrottenberg/ffmpeg
 
 for i in ogg amr vorbis theora mp3lame opus vpx xvid fdk x264 x265;do echo $i; find /usr/local/ -name *$i*;done
@@ -289,12 +305,11 @@ See Dockerfile-env to update a version
 - [X264_VERSION](http://www.videolan.org/developers/x264.html): [GNU General Public License (GPL) version 2](https://git.videolan.org/?p=x264.git;a=blob_plain;f=COPYING;hb=HEAD)
 - [X265_VERSION](https://bitbucket.org/multicoreware/x265/downloads/): [GNU General Public License (GPL) version 2](https://bitbucket.org/multicoreware/x265/raw/f8ae7afc1f61ed0db3b2f23f5d581706fe6ed677/COPYING)
 - [LIBZMQ_VERSION](https://github.com/zeromq/libzmq/releases/): [GNU Lesser General Public License (LGPL) version 3.0](https://github.com/zeromq/libzmq/blob/v4.3.2/COPYING.LESSER)
-
+- [LIBSRT_VERSION](https://github.com/Haivision/srt/releases/): [MPL-2.0](https://github.com/Haivision/srt/blob/master/LICENSE)
 
 ## Contribute
 
-
-```
+```text
 # Add / fix stuff
 ${EDITOR} templates/
 
@@ -307,6 +322,5 @@ docker build -t my-build docker-images/VERSION/
 # Make sure all variants pass before CI
 find ffmpeg/ -name Dockerfile | xargs dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
 ```
-
 
 Commit the templates files THEN all the generated Dockerfile for a merge request. So it's easier to review the template change.
