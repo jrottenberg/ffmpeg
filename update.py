@@ -199,7 +199,6 @@ for version in keep_version:
             '--enable-version3',
             '--enable-libbluray',
             '--enable-libzmq',
-            '--enable-libsrt',
             '--extra-libs=-ldl',
             '--prefix="${PREFIX}"',
         ]
@@ -217,6 +216,10 @@ for version in keep_version:
         if (version == "snapshot" or int(version[0]) > 3):
             FFMPEG_CONFIG_FLAGS.append('--enable-libaom')
             FFMPEG_CONFIG_FLAGS.append('--extra-libs=-lpthread')
+
+        # LibSRT is supported from 4.0
+        if (version == "snapshot" or int(version[0]) >= 4):
+            FFMPEG_CONFIG_FLAGS.append('--enable-libsrt')
 
         if ((version == "snapshot" or int(version[0]) >= 3) and
                 variant['parent'] == "vaapi"):

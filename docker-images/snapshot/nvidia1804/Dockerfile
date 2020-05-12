@@ -522,13 +522,13 @@ RUN \
         --enable-version3 \
         --enable-libbluray \
         --enable-libzmq \
-        --enable-libsrt \
         --extra-libs=-ldl \
         --prefix="${PREFIX}" \
         --enable-libopenjpeg \
         --enable-libkvazaar \
         --enable-libaom \
         --extra-libs=-lpthread \
+        --enable-libsrt \
         --enable-nvenc \
         --enable-cuda \
         --enable-cuvid \

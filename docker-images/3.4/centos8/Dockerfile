@@ -499,7 +499,6 @@ RUN \
         --enable-version3 \
         --enable-libbluray \
         --enable-libzmq \
-        --enable-libsrt \
         --extra-libs=-ldl \
         --prefix="${PREFIX}" \
         --enable-libopenjpeg \
