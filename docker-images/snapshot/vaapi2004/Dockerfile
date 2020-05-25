@@ -5,7 +5,7 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:18.04 AS base
+FROM        ubuntu:16.04 AS base
 
 WORKDIR     /tmp/workdir
 
@@ -16,7 +16,7 @@ RUN     apt-get -yqq update && \
 
 FROM base as build
 
-ENV         FFMPEG_VERSION=4.2.4 \
+ENV         FFMPEG_VERSION=snapshot \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
@@ -569,7 +569,7 @@ COPY --from=build /usr/local /usr/local/
 
 RUN \
 	apt-get update -y && \
-	apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver && \
+	apt-get install -y --no-install-recommends libva-drm1 libva1 i965-va-driver && \
 	rm -rf /var/lib/apt/lists/*
 
 # Let's make sure the app built correctly

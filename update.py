@@ -19,8 +19,8 @@ TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 # https://ffmpeg.org/olddownload.html
 SKIP_VERSIONS = "3.1.11 3.0.12"
 VARIANTS = [
-    {"name": "ubuntu1604", "parent": "ubuntu"},
     {"name": "ubuntu1804", "parent": "ubuntu"},
+    {"name": "ubuntu2004", "parent": "ubuntu"},
     {"name": "alpine311", "parent": "alpine"},
     {"name": "alpine38", "parent": "alpine"},
     {"name": "centos7", "parent": "centos"},
@@ -28,7 +28,7 @@ VARIANTS = [
     {"name": "scratch311", "parent": "scratch"},
     {"name": "scratch38", "parent": "scratch"},
     {"name": "vaapi1804", "parent": "vaapi"},
-    {"name": "vaapi1604", "parent": "vaapi"},
+    {"name": "vaapi2004", "parent": "vaapi"},
     {"name": "nvidia1804", "parent": "nvidia"},
     {"name": "nvidia1604", "parent": "nvidia"},
 ]
@@ -55,12 +55,12 @@ SKIP_VARIANTS = {
         "ubuntu1804",
         "vaapi1804",
     ],
-    "3.3": ["alpine38", "nvidia1604", "scratch38", "vaapi1604"],
-    "3.4": ["alpine38", "nvidia1604", "scratch38", "vaapi1604"],
-    "4.0": ["alpine38", "nvidia1604", "scratch38", "vaapi1604"],
-    "4.1": ["alpine38", "nvidia1604", "scratch38", "vaapi1604"],
-    "4.2": ["alpine38", "nvidia1604", "scratch38", "vaapi1604"],
-    "snapshot": ["alpine38", "nvidia1604", "scratch38", "vaapi1604"],
+    "3.3": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
+    "3.4": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
+    "4.0": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
+    "4.1": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
+    "4.2": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
+    "snapshot": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
 }
 
 last = version.split(".")

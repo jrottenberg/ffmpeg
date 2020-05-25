@@ -9,10 +9,10 @@ stages:
   - nvidia1804
   - scratch311
   - scratch38
-  - ubuntu1604
   - ubuntu1804
-  - vaapi1604
+  - ubuntu2004
   - vaapi1804
+  - vaapi2004
 
 recent-update-run:
   image: python:3

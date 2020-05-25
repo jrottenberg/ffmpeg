@@ -16,7 +16,7 @@ RUN     apt-get -yqq update && \
 
 FROM base as build
 
-ENV         FFMPEG_VERSION=snapshot \
+ENV         FFMPEG_VERSION=4.0.6 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
@@ -91,6 +91,7 @@ RUN      buildDeps="autoconf \
                     python \
                     libssl-dev \
                     yasm \
+                    libva-dev \
                     zlib1g-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
@@ -531,7 +532,7 @@ RUN \
         --enable-libaom \
         --extra-libs=-lpthread \
         --enable-libsrt \
-        --enable-libaribb24 \
+        --enable-vaapi \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" && \
         make && \
@@ -564,6 +565,11 @@ CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
 COPY --from=build /usr/local /usr/local/
+
+RUN \
+	apt-get update -y && \
+	apt-get install -y --no-install-recommends libva-drm1 libva1 i965-va-driver && \
+	rm -rf /var/lib/apt/lists/*
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

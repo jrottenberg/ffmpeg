@@ -5,7 +5,7 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:18.04 AS base
+FROM        ubuntu:20.04 AS base
 
 WORKDIR     /tmp/workdir
 
@@ -16,7 +16,7 @@ RUN     apt-get -yqq update && \
 
 FROM base as build
 
-ENV         FFMPEG_VERSION=4.1.6 \
+ENV         FFMPEG_VERSION=3.2.15 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
@@ -91,7 +91,6 @@ RUN      buildDeps="autoconf \
                     python \
                     libssl-dev \
                     yasm \
-                    libva-dev \
                     zlib1g-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
@@ -529,10 +528,6 @@ RUN \
         --prefix="${PREFIX}" \
         --enable-libopenjpeg \
         --enable-libkvazaar \
-        --enable-libaom \
-        --extra-libs=-lpthread \
-        --enable-libsrt \
-        --enable-vaapi \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" && \
         make && \
@@ -565,11 +560,6 @@ CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
 COPY --from=build /usr/local /usr/local/
-
-RUN \
-	apt-get update -y && \
-	apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver && \
-	rm -rf /var/lib/apt/lists/*
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

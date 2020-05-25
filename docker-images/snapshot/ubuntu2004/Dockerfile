@@ -5,7 +5,7 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:16.04 AS base
+FROM        ubuntu:20.04 AS base
 
 WORKDIR     /tmp/workdir
 
@@ -16,7 +16,7 @@ RUN     apt-get -yqq update && \
 
 FROM base as build
 
-ENV         FFMPEG_VERSION=3.3.9 \
+ENV         FFMPEG_VERSION=snapshot \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
@@ -528,6 +528,10 @@ RUN \
         --prefix="${PREFIX}" \
         --enable-libopenjpeg \
         --enable-libkvazaar \
+        --enable-libaom \
+        --extra-libs=-lpthread \
+        --enable-libsrt \
+        --enable-libaribb24 \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" && \
         make && \
