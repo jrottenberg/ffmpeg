@@ -10,288 +10,448 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
-      snapshot_ubuntu1604:
-        VERSION: snapshot
-        VARIANT: ubuntu1604
+
+      ubuntu1604_snapshot:
+        VERSION:  snapshot
+        LONG_VERSION: snapshot
+        VARIANT:  ubuntu1604
         PARENT: ubuntu
-        ISPARENT: False
-      snapshot_ubuntu1804:
-        VERSION: snapshot
-        VARIANT: ubuntu1804
+        ISPARENT:  False
+
+
+      ubuntu1804_snapshot:
+        VERSION:  snapshot
+        LONG_VERSION: snapshot
+        VARIANT:  ubuntu1804
         PARENT: ubuntu
-        ISPARENT: True
-      snapshot_alpine311:
-        VERSION: snapshot
-        VARIANT: alpine311
+        ISPARENT:  True
+
+
+      alpine311_snapshot:
+        VERSION:  snapshot
+        LONG_VERSION: snapshot
+        VARIANT:  alpine311
         PARENT: alpine
-        ISPARENT: True
-      snapshot_centos7:
-        VERSION: snapshot
-        VARIANT: centos7
+        ISPARENT:  True
+
+
+      centos7_snapshot:
+        VERSION:  snapshot
+        LONG_VERSION: snapshot
+        VARIANT:  centos7
         PARENT: centos
-        ISPARENT: False
-      snapshot_centos8:
-        VERSION: snapshot
-        VARIANT: centos8
+        ISPARENT:  False
+
+
+      centos8_snapshot:
+        VERSION:  snapshot
+        LONG_VERSION: snapshot
+        VARIANT:  centos8
         PARENT: centos
-        ISPARENT: True
-      snapshot_scratch311:
-        VERSION: snapshot
-        VARIANT: scratch311
+        ISPARENT:  True
+
+
+      scratch311_snapshot:
+        VERSION:  snapshot
+        LONG_VERSION: snapshot
+        VARIANT:  scratch311
         PARENT: scratch
-        ISPARENT: True
-      snapshot_vaapi1804:
-        VERSION: snapshot
-        VARIANT: vaapi1804
+        ISPARENT:  True
+
+
+      vaapi1804_snapshot:
+        VERSION:  snapshot
+        LONG_VERSION: snapshot
+        VARIANT:  vaapi1804
         PARENT: vaapi
-        ISPARENT: True
-      snapshot_nvidia1804:
-        VERSION: snapshot
-        VARIANT: nvidia1804
+        ISPARENT:  True
+
+
+      nvidia1804_snapshot:
+        VERSION:  snapshot
+        LONG_VERSION: snapshot
+        VARIANT:  nvidia1804
         PARENT: nvidia
-        ISPARENT: True
-      4_2_ubuntu1604:
-        VERSION: 4.2
-        VARIANT: ubuntu1604
+        ISPARENT:  True
+
+
+      ubuntu1604_4.2.3:
+        VERSION:  4.2
+        LONG_VERSION: 4.2.3
+        VARIANT:  ubuntu1604
         PARENT: ubuntu
-        ISPARENT: False
-      4_2_ubuntu1804:
-        VERSION: 4.2
-        VARIANT: ubuntu1804
+        ISPARENT:  False
+
+
+      ubuntu1804_4.2.3:
+        VERSION:  4.2
+        LONG_VERSION: 4.2.3
+        VARIANT:  ubuntu1804
         PARENT: ubuntu
-        ISPARENT: True
-      4_2_alpine311:
-        VERSION: 4.2
-        VARIANT: alpine311
+        ISPARENT:  True
+
+
+      alpine311_4.2.3:
+        VERSION:  4.2
+        LONG_VERSION: 4.2.3
+        VARIANT:  alpine311
         PARENT: alpine
-        ISPARENT: True
-      4_2_centos7:
-        VERSION: 4.2
-        VARIANT: centos7
+        ISPARENT:  True
+
+
+      centos7_4.2.3:
+        VERSION:  4.2
+        LONG_VERSION: 4.2.3
+        VARIANT:  centos7
         PARENT: centos
-        ISPARENT: False
-      4_2_centos8:
-        VERSION: 4.2
-        VARIANT: centos8
+        ISPARENT:  False
+
+
+      centos8_4.2.3:
+        VERSION:  4.2
+        LONG_VERSION: 4.2.3
+        VARIANT:  centos8
         PARENT: centos
-        ISPARENT: True
-      4_2_scratch311:
-        VERSION: 4.2
-        VARIANT: scratch311
+        ISPARENT:  True
+
+
+      scratch311_4.2.3:
+        VERSION:  4.2
+        LONG_VERSION: 4.2.3
+        VARIANT:  scratch311
         PARENT: scratch
-        ISPARENT: True
-      4_2_vaapi1804:
-        VERSION: 4.2
-        VARIANT: vaapi1804
+        ISPARENT:  True
+
+
+      vaapi1804_4.2.3:
+        VERSION:  4.2
+        LONG_VERSION: 4.2.3
+        VARIANT:  vaapi1804
         PARENT: vaapi
-        ISPARENT: True
-      4_2_nvidia1804:
-        VERSION: 4.2
-        VARIANT: nvidia1804
+        ISPARENT:  True
+
+
+      nvidia1804_4.2.3:
+        VERSION:  4.2
+        LONG_VERSION: 4.2.3
+        VARIANT:  nvidia1804
         PARENT: nvidia
-        ISPARENT: True
-      4_1_ubuntu1604:
-        VERSION: 4.1
-        VARIANT: ubuntu1604
+        ISPARENT:  True
+
+
+      ubuntu1604_4.1.5:
+        VERSION:  4.1
+        LONG_VERSION: 4.1.5
+        VARIANT:  ubuntu1604
         PARENT: ubuntu
-        ISPARENT: False
-      4_1_ubuntu1804:
-        VERSION: 4.1
-        VARIANT: ubuntu1804
+        ISPARENT:  False
+
+
+      ubuntu1804_4.1.5:
+        VERSION:  4.1
+        LONG_VERSION: 4.1.5
+        VARIANT:  ubuntu1804
         PARENT: ubuntu
-        ISPARENT: True
-      4_1_alpine311:
-        VERSION: 4.1
-        VARIANT: alpine311
+        ISPARENT:  True
+
+
+      alpine311_4.1.5:
+        VERSION:  4.1
+        LONG_VERSION: 4.1.5
+        VARIANT:  alpine311
         PARENT: alpine
-        ISPARENT: True
-      4_1_centos7:
-        VERSION: 4.1
-        VARIANT: centos7
+        ISPARENT:  True
+
+
+      centos7_4.1.5:
+        VERSION:  4.1
+        LONG_VERSION: 4.1.5
+        VARIANT:  centos7
         PARENT: centos
-        ISPARENT: False
-      4_1_centos8:
-        VERSION: 4.1
-        VARIANT: centos8
+        ISPARENT:  False
+
+
+      centos8_4.1.5:
+        VERSION:  4.1
+        LONG_VERSION: 4.1.5
+        VARIANT:  centos8
         PARENT: centos
-        ISPARENT: True
-      4_1_scratch311:
-        VERSION: 4.1
-        VARIANT: scratch311
+        ISPARENT:  True
+
+
+      scratch311_4.1.5:
+        VERSION:  4.1
+        LONG_VERSION: 4.1.5
+        VARIANT:  scratch311
         PARENT: scratch
-        ISPARENT: True
-      4_1_vaapi1804:
-        VERSION: 4.1
-        VARIANT: vaapi1804
+        ISPARENT:  True
+
+
+      vaapi1804_4.1.5:
+        VERSION:  4.1
+        LONG_VERSION: 4.1.5
+        VARIANT:  vaapi1804
         PARENT: vaapi
-        ISPARENT: True
-      4_1_nvidia1804:
-        VERSION: 4.1
-        VARIANT: nvidia1804
+        ISPARENT:  True
+
+
+      nvidia1804_4.1.5:
+        VERSION:  4.1
+        LONG_VERSION: 4.1.5
+        VARIANT:  nvidia1804
         PARENT: nvidia
-        ISPARENT: True
-      4_0_ubuntu1604:
-        VERSION: 4.0
-        VARIANT: ubuntu1604
+        ISPARENT:  True
+
+
+      ubuntu1604_4.0.5:
+        VERSION:  4.0
+        LONG_VERSION: 4.0.5
+        VARIANT:  ubuntu1604
         PARENT: ubuntu
-        ISPARENT: False
-      4_0_ubuntu1804:
-        VERSION: 4.0
-        VARIANT: ubuntu1804
+        ISPARENT:  False
+
+
+      ubuntu1804_4.0.5:
+        VERSION:  4.0
+        LONG_VERSION: 4.0.5
+        VARIANT:  ubuntu1804
         PARENT: ubuntu
-        ISPARENT: True
-      4_0_alpine311:
-        VERSION: 4.0
-        VARIANT: alpine311
+        ISPARENT:  True
+
+
+      alpine311_4.0.5:
+        VERSION:  4.0
+        LONG_VERSION: 4.0.5
+        VARIANT:  alpine311
         PARENT: alpine
-        ISPARENT: True
-      4_0_centos7:
-        VERSION: 4.0
-        VARIANT: centos7
+        ISPARENT:  True
+
+
+      centos7_4.0.5:
+        VERSION:  4.0
+        LONG_VERSION: 4.0.5
+        VARIANT:  centos7
         PARENT: centos
-        ISPARENT: False
-      4_0_centos8:
-        VERSION: 4.0
-        VARIANT: centos8
+        ISPARENT:  False
+
+
+      centos8_4.0.5:
+        VERSION:  4.0
+        LONG_VERSION: 4.0.5
+        VARIANT:  centos8
         PARENT: centos
-        ISPARENT: True
-      4_0_scratch311:
-        VERSION: 4.0
-        VARIANT: scratch311
+        ISPARENT:  True
+
+
+      scratch311_4.0.5:
+        VERSION:  4.0
+        LONG_VERSION: 4.0.5
+        VARIANT:  scratch311
         PARENT: scratch
-        ISPARENT: True
-      4_0_vaapi1804:
-        VERSION: 4.0
-        VARIANT: vaapi1804
+        ISPARENT:  True
+
+
+      vaapi1804_4.0.5:
+        VERSION:  4.0
+        LONG_VERSION: 4.0.5
+        VARIANT:  vaapi1804
         PARENT: vaapi
-        ISPARENT: True
-      4_0_nvidia1804:
-        VERSION: 4.0
-        VARIANT: nvidia1804
+        ISPARENT:  True
+
+
+      nvidia1804_4.0.5:
+        VERSION:  4.0
+        LONG_VERSION: 4.0.5
+        VARIANT:  nvidia1804
         PARENT: nvidia
-        ISPARENT: True
-      3_4_ubuntu1604:
-        VERSION: 3.4
-        VARIANT: ubuntu1604
+        ISPARENT:  True
+
+
+      ubuntu1604_3.4.7:
+        VERSION:  3.4
+        LONG_VERSION: 3.4.7
+        VARIANT:  ubuntu1604
         PARENT: ubuntu
-        ISPARENT: False
-      3_4_ubuntu1804:
-        VERSION: 3.4
-        VARIANT: ubuntu1804
+        ISPARENT:  False
+
+
+      ubuntu1804_3.4.7:
+        VERSION:  3.4
+        LONG_VERSION: 3.4.7
+        VARIANT:  ubuntu1804
         PARENT: ubuntu
-        ISPARENT: True
-      3_4_alpine311:
-        VERSION: 3.4
-        VARIANT: alpine311
+        ISPARENT:  True
+
+
+      alpine311_3.4.7:
+        VERSION:  3.4
+        LONG_VERSION: 3.4.7
+        VARIANT:  alpine311
         PARENT: alpine
-        ISPARENT: True
-      3_4_centos7:
-        VERSION: 3.4
-        VARIANT: centos7
+        ISPARENT:  True
+
+
+      centos7_3.4.7:
+        VERSION:  3.4
+        LONG_VERSION: 3.4.7
+        VARIANT:  centos7
         PARENT: centos
-        ISPARENT: False
-      3_4_centos8:
-        VERSION: 3.4
-        VARIANT: centos8
+        ISPARENT:  False
+
+
+      centos8_3.4.7:
+        VERSION:  3.4
+        LONG_VERSION: 3.4.7
+        VARIANT:  centos8
         PARENT: centos
-        ISPARENT: True
-      3_4_scratch311:
-        VERSION: 3.4
-        VARIANT: scratch311
+        ISPARENT:  True
+
+
+      scratch311_3.4.7:
+        VERSION:  3.4
+        LONG_VERSION: 3.4.7
+        VARIANT:  scratch311
         PARENT: scratch
-        ISPARENT: True
-      3_4_vaapi1804:
-        VERSION: 3.4
-        VARIANT: vaapi1804
+        ISPARENT:  True
+
+
+      vaapi1804_3.4.7:
+        VERSION:  3.4
+        LONG_VERSION: 3.4.7
+        VARIANT:  vaapi1804
         PARENT: vaapi
-        ISPARENT: True
-      3_4_nvidia1804:
-        VERSION: 3.4
-        VARIANT: nvidia1804
+        ISPARENT:  True
+
+
+      nvidia1804_3.4.7:
+        VERSION:  3.4
+        LONG_VERSION: 3.4.7
+        VARIANT:  nvidia1804
         PARENT: nvidia
-        ISPARENT: True
-      3_3_ubuntu1604:
-        VERSION: 3.3
-        VARIANT: ubuntu1604
+        ISPARENT:  True
+
+
+      ubuntu1604_3.3.9:
+        VERSION:  3.3
+        LONG_VERSION: 3.3.9
+        VARIANT:  ubuntu1604
         PARENT: ubuntu
-        ISPARENT: False
-      3_3_ubuntu1804:
-        VERSION: 3.3
-        VARIANT: ubuntu1804
+        ISPARENT:  False
+
+
+      ubuntu1804_3.3.9:
+        VERSION:  3.3
+        LONG_VERSION: 3.3.9
+        VARIANT:  ubuntu1804
         PARENT: ubuntu
-        ISPARENT: True
-      3_3_alpine311:
-        VERSION: 3.3
-        VARIANT: alpine311
+        ISPARENT:  True
+
+
+      alpine311_3.3.9:
+        VERSION:  3.3
+        LONG_VERSION: 3.3.9
+        VARIANT:  alpine311
         PARENT: alpine
-        ISPARENT: True
-      3_3_centos7:
-        VERSION: 3.3
-        VARIANT: centos7
+        ISPARENT:  True
+
+
+      centos7_3.3.9:
+        VERSION:  3.3
+        LONG_VERSION: 3.3.9
+        VARIANT:  centos7
         PARENT: centos
-        ISPARENT: False
-      3_3_centos8:
-        VERSION: 3.3
-        VARIANT: centos8
+        ISPARENT:  False
+
+
+      centos8_3.3.9:
+        VERSION:  3.3
+        LONG_VERSION: 3.3.9
+        VARIANT:  centos8
         PARENT: centos
-        ISPARENT: True
-      3_3_scratch311:
-        VERSION: 3.3
-        VARIANT: scratch311
+        ISPARENT:  True
+
+
+      scratch311_3.3.9:
+        VERSION:  3.3
+        LONG_VERSION: 3.3.9
+        VARIANT:  scratch311
         PARENT: scratch
-        ISPARENT: True
-      3_3_vaapi1804:
-        VERSION: 3.3
-        VARIANT: vaapi1804
+        ISPARENT:  True
+
+
+      vaapi1804_3.3.9:
+        VERSION:  3.3
+        LONG_VERSION: 3.3.9
+        VARIANT:  vaapi1804
         PARENT: vaapi
-        ISPARENT: True
-      3_3_nvidia1804:
-        VERSION: 3.3
-        VARIANT: nvidia1804
+        ISPARENT:  True
+
+
+      nvidia1804_3.3.9:
+        VERSION:  3.3
+        LONG_VERSION: 3.3.9
+        VARIANT:  nvidia1804
         PARENT: nvidia
-        ISPARENT: True
-      3_2_ubuntu1604:
-        VERSION: 3.2
-        VARIANT: ubuntu1604
+        ISPARENT:  True
+
+
+      ubuntu1604_3.2.14:
+        VERSION:  3.2
+        LONG_VERSION: 3.2.14
+        VARIANT:  ubuntu1604
         PARENT: ubuntu
-        ISPARENT: True
-      3_2_alpine38:
-        VERSION: 3.2
-        VARIANT: alpine38
+        ISPARENT:  True
+
+
+      alpine38_3.2.14:
+        VERSION:  3.2
+        LONG_VERSION: 3.2.14
+        VARIANT:  alpine38
         PARENT: alpine
-        ISPARENT: True
-      3_2_centos7:
-        VERSION: 3.2
-        VARIANT: centos7
+        ISPARENT:  True
+
+
+      centos7_3.2.14:
+        VERSION:  3.2
+        LONG_VERSION: 3.2.14
+        VARIANT:  centos7
         PARENT: centos
-        ISPARENT: True
-      3_2_scratch38:
-        VERSION: 3.2
-        VARIANT: scratch38
+        ISPARENT:  True
+
+
+      scratch38_3.2.14:
+        VERSION:  3.2
+        LONG_VERSION: 3.2.14
+        VARIANT:  scratch38
         PARENT: scratch
-        ISPARENT: True
-      3_2_vaapi1604:
-        VERSION: 3.2
-        VARIANT: vaapi1604
+        ISPARENT:  True
+
+
+      vaapi1604_3.2.14:
+        VERSION:  3.2
+        LONG_VERSION: 3.2.14
+        VARIANT:  vaapi1604
         PARENT: vaapi
-        ISPARENT: True
-      3_2_nvidia1604:
-        VERSION: 3.2
-        VARIANT: nvidia1604
+        ISPARENT:  True
+
+
+      nvidia1604_3.2.14:
+        VERSION:  3.2
+        LONG_VERSION: 3.2.14
+        VARIANT:  nvidia1604
         PARENT: nvidia
-        ISPARENT: True
+        ISPARENT:  True
+
   steps:
   - bash: |
-      docker build -t ${DOCKER}:${VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
-      # Create a uniquely tagged version of the container to avoid pulling a version that was already on docker hub
-      docker tag ${DOCKER}:${VERSION}-${VARIANT} ${DOCKER}:${VERSION}-${VARIANT}-$(Build.BuildId)
-      # Run -buildconf from the unique version we just tagged to make sure the build was ok
-      docker run --rm ${DOCKER}:${VERSION}-${VARIANT}-$(Build.BuildId) -buildconf
+      docker build -t ${DOCKER}:${VERSION}-${VARIANT}  -t ${DOCKER}:${LONG_VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
+      docker run --rm ${DOCKER}:${LONG_VERSION}-${VARIANT} -buildconf
     displayName: Build docker image
   - bash: |
       docker login --username ${DOCKER_LOGIN} --password ${DOCKER_PASSWORD}
       docker push ${DOCKER}:${VERSION}-${VARIANT}
-      if [ "${ISPARENT}" == "True" ] && [ "${VARIANT}" != "${PARENT}" ]; then docker tag "${DOCKER}:${VERSION}-${VARIANT}" "${DOCKER}:${VERSION}-${PARENT}"; docker push "${DOCKER}:${VERSION}-${PARENT}"; fi
+      docker push ${DOCKER}:${LONG_VERSION}-${VARIANT}
+      if [ "${ISPARENT}" == "True" ] && [ "${VARIANT}" != "${PARENT}" ]; then docker tag "${DOCKER}:${LONG_VERSION}-${VARIANT}" "${DOCKER}:${VERSION}-${PARENT}"; docker push "${DOCKER}:${VERSION}-${PARENT}"; fi
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Push docker image
     env:
