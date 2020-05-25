@@ -16,7 +16,7 @@ RUN     apt-get -yqq update && \
 
 FROM base as build
 
-ENV         FFMPEG_VERSION=4.2.2 \
+ENV         FFMPEG_VERSION=4.2.3 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
@@ -87,7 +87,6 @@ RUN      buildDeps="autoconf \
                     pkg-config \
                     python \
                     libssl-dev \
-                    tclsh \
                     yasm \
                     zlib1g-dev" && \
         apt-get -yqq update && \
@@ -450,7 +449,7 @@ RUN \
         cd ${DIR} && \
         curl -sLO https://github.com/Haivision/srt/archive/v${LIBSRT_VERSION}.tar.gz && \
         tar -xz --strip-components=1 -f v${LIBSRT_VERSION}.tar.gz && \
-        ./configure --prefix="${PREFIX}" && \
+        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
         make && \
         make install && \
         rm -rf ${DIR}

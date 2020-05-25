@@ -8,7 +8,7 @@ FROM        alpine:3.11 AS build
 
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=4.2.2 \
+ENV         FFMPEG_VERSION=4.2.3 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
@@ -80,7 +80,6 @@ RUN     buildDeps="autoconf \
                    make \
                    python \
                    openssl-dev \
-                   tcl \
                    tar \
                    yasm \
                    nasm \
@@ -451,7 +450,7 @@ RUN \
         cd ${DIR} && \
         curl -sLO https://github.com/Haivision/srt/archive/v${LIBSRT_VERSION}.tar.gz && \
         tar -xz --strip-components=1 -f v${LIBSRT_VERSION}.tar.gz && \
-        ./configure --prefix="${PREFIX}" && \
+        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
         make && \
         make install && \
         rm -rf ${DIR}

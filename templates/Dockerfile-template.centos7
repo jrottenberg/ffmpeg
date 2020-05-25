@@ -33,7 +33,6 @@ RUN     buildDeps="autoconf \
                    perl \
                    python3 \
                    openssl-devel \
-                   tcl \
                    tar \
                    yasm \
                    which \

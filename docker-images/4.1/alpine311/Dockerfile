@@ -84,7 +84,6 @@ RUN     buildDeps="autoconf \
                    make \
                    python \
                    openssl-dev \
-                   tcl \
                    tar \
                    yasm \
                    nasm \
@@ -449,7 +448,7 @@ RUN \
         cd ${DIR} && \
         curl -sLO https://github.com/Haivision/srt/archive/v${LIBSRT_VERSION}.tar.gz && \
         tar -xz --strip-components=1 -f v${LIBSRT_VERSION}.tar.gz && \
-        ./configure --prefix="${PREFIX}" && \
+        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
         make && \
         make install && \
         rm -rf ${DIR}

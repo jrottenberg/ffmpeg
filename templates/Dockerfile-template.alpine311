@@ -32,7 +32,6 @@ RUN     buildDeps="autoconf \
                    make \
                    python \
                    openssl-dev \
-                   tcl \
                    tar \
                    yasm \
                    nasm \
