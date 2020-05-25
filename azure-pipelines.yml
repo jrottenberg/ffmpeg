@@ -76,7 +76,7 @@ jobs:
 
 
       ubuntu1604_4.2.3:
-        VERSION:  4_2
+        VERSION:  4.2
         LONG_VERSION: 4.2.3
         VARIANT:  ubuntu1604
         PARENT: ubuntu
@@ -84,7 +84,7 @@ jobs:
 
 
       ubuntu1804_4.2.3:
-        VERSION:  4_2
+        VERSION:  4.2
         LONG_VERSION: 4.2.3
         VARIANT:  ubuntu1804
         PARENT: ubuntu
@@ -92,7 +92,7 @@ jobs:
 
 
       alpine311_4.2.3:
-        VERSION:  4_2
+        VERSION:  4.2
         LONG_VERSION: 4.2.3
         VARIANT:  alpine311
         PARENT: alpine
@@ -100,7 +100,7 @@ jobs:
 
 
       centos7_4.2.3:
-        VERSION:  4_2
+        VERSION:  4.2
         LONG_VERSION: 4.2.3
         VARIANT:  centos7
         PARENT: centos
@@ -108,7 +108,7 @@ jobs:
 
 
       centos8_4.2.3:
-        VERSION:  4_2
+        VERSION:  4.2
         LONG_VERSION: 4.2.3
         VARIANT:  centos8
         PARENT: centos
@@ -116,7 +116,7 @@ jobs:
 
 
       scratch311_4.2.3:
-        VERSION:  4_2
+        VERSION:  4.2
         LONG_VERSION: 4.2.3
         VARIANT:  scratch311
         PARENT: scratch
@@ -124,7 +124,7 @@ jobs:
 
 
       vaapi1804_4.2.3:
-        VERSION:  4_2
+        VERSION:  4.2
         LONG_VERSION: 4.2.3
         VARIANT:  vaapi1804
         PARENT: vaapi
@@ -132,7 +132,7 @@ jobs:
 
 
       nvidia1804_4.2.3:
-        VERSION:  4_2
+        VERSION:  4.2
         LONG_VERSION: 4.2.3
         VARIANT:  nvidia1804
         PARENT: nvidia
@@ -140,7 +140,7 @@ jobs:
 
 
       ubuntu1604_4.1.5:
-        VERSION:  4_1
+        VERSION:  4.1
         LONG_VERSION: 4.1.5
         VARIANT:  ubuntu1604
         PARENT: ubuntu
@@ -148,7 +148,7 @@ jobs:
 
 
       ubuntu1804_4.1.5:
-        VERSION:  4_1
+        VERSION:  4.1
         LONG_VERSION: 4.1.5
         VARIANT:  ubuntu1804
         PARENT: ubuntu
@@ -156,7 +156,7 @@ jobs:
 
 
       alpine311_4.1.5:
-        VERSION:  4_1
+        VERSION:  4.1
         LONG_VERSION: 4.1.5
         VARIANT:  alpine311
         PARENT: alpine
@@ -164,7 +164,7 @@ jobs:
 
 
       centos7_4.1.5:
-        VERSION:  4_1
+        VERSION:  4.1
         LONG_VERSION: 4.1.5
         VARIANT:  centos7
         PARENT: centos
@@ -172,7 +172,7 @@ jobs:
 
 
       centos8_4.1.5:
-        VERSION:  4_1
+        VERSION:  4.1
         LONG_VERSION: 4.1.5
         VARIANT:  centos8
         PARENT: centos
@@ -180,7 +180,7 @@ jobs:
 
 
       scratch311_4.1.5:
-        VERSION:  4_1
+        VERSION:  4.1
         LONG_VERSION: 4.1.5
         VARIANT:  scratch311
         PARENT: scratch
@@ -188,7 +188,7 @@ jobs:
 
 
       vaapi1804_4.1.5:
-        VERSION:  4_1
+        VERSION:  4.1
         LONG_VERSION: 4.1.5
         VARIANT:  vaapi1804
         PARENT: vaapi
@@ -196,7 +196,7 @@ jobs:
 
 
       nvidia1804_4.1.5:
-        VERSION:  4_1
+        VERSION:  4.1
         LONG_VERSION: 4.1.5
         VARIANT:  nvidia1804
         PARENT: nvidia
@@ -204,7 +204,7 @@ jobs:
 
 
       ubuntu1604_4.0.5:
-        VERSION:  4_0
+        VERSION:  4.0
         LONG_VERSION: 4.0.5
         VARIANT:  ubuntu1604
         PARENT: ubuntu
@@ -212,7 +212,7 @@ jobs:
 
 
       ubuntu1804_4.0.5:
-        VERSION:  4_0
+        VERSION:  4.0
         LONG_VERSION: 4.0.5
         VARIANT:  ubuntu1804
         PARENT: ubuntu
@@ -220,7 +220,7 @@ jobs:
 
 
       alpine311_4.0.5:
-        VERSION:  4_0
+        VERSION:  4.0
         LONG_VERSION: 4.0.5
         VARIANT:  alpine311
         PARENT: alpine
@@ -228,7 +228,7 @@ jobs:
 
 
       centos7_4.0.5:
-        VERSION:  4_0
+        VERSION:  4.0
         LONG_VERSION: 4.0.5
         VARIANT:  centos7
         PARENT: centos
@@ -236,7 +236,7 @@ jobs:
 
 
       centos8_4.0.5:
-        VERSION:  4_0
+        VERSION:  4.0
         LONG_VERSION: 4.0.5
         VARIANT:  centos8
         PARENT: centos
@@ -244,7 +244,7 @@ jobs:
 
 
       scratch311_4.0.5:
-        VERSION:  4_0
+        VERSION:  4.0
         LONG_VERSION: 4.0.5
         VARIANT:  scratch311
         PARENT: scratch
@@ -252,7 +252,7 @@ jobs:
 
 
       vaapi1804_4.0.5:
-        VERSION:  4_0
+        VERSION:  4.0
         LONG_VERSION: 4.0.5
         VARIANT:  vaapi1804
         PARENT: vaapi
@@ -260,7 +260,7 @@ jobs:
 
 
       nvidia1804_4.0.5:
-        VERSION:  4_0
+        VERSION:  4.0
         LONG_VERSION: 4.0.5
         VARIANT:  nvidia1804
         PARENT: nvidia
@@ -268,7 +268,7 @@ jobs:
 
 
       ubuntu1604_3.4.7:
-        VERSION:  3_4
+        VERSION:  3.4
         LONG_VERSION: 3.4.7
         VARIANT:  ubuntu1604
         PARENT: ubuntu
@@ -276,7 +276,7 @@ jobs:
 
 
       ubuntu1804_3.4.7:
-        VERSION:  3_4
+        VERSION:  3.4
         LONG_VERSION: 3.4.7
         VARIANT:  ubuntu1804
         PARENT: ubuntu
@@ -284,7 +284,7 @@ jobs:
 
 
       alpine311_3.4.7:
-        VERSION:  3_4
+        VERSION:  3.4
         LONG_VERSION: 3.4.7
         VARIANT:  alpine311
         PARENT: alpine
@@ -292,7 +292,7 @@ jobs:
 
 
       centos7_3.4.7:
-        VERSION:  3_4
+        VERSION:  3.4
         LONG_VERSION: 3.4.7
         VARIANT:  centos7
         PARENT: centos
@@ -300,7 +300,7 @@ jobs:
 
 
       centos8_3.4.7:
-        VERSION:  3_4
+        VERSION:  3.4
         LONG_VERSION: 3.4.7
         VARIANT:  centos8
         PARENT: centos
@@ -308,7 +308,7 @@ jobs:
 
 
       scratch311_3.4.7:
-        VERSION:  3_4
+        VERSION:  3.4
         LONG_VERSION: 3.4.7
         VARIANT:  scratch311
         PARENT: scratch
@@ -316,7 +316,7 @@ jobs:
 
 
       vaapi1804_3.4.7:
-        VERSION:  3_4
+        VERSION:  3.4
         LONG_VERSION: 3.4.7
         VARIANT:  vaapi1804
         PARENT: vaapi
@@ -324,7 +324,7 @@ jobs:
 
 
       nvidia1804_3.4.7:
-        VERSION:  3_4
+        VERSION:  3.4
         LONG_VERSION: 3.4.7
         VARIANT:  nvidia1804
         PARENT: nvidia
@@ -332,7 +332,7 @@ jobs:
 
 
       ubuntu1604_3.3.9:
-        VERSION:  3_3
+        VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  ubuntu1604
         PARENT: ubuntu
@@ -340,7 +340,7 @@ jobs:
 
 
       ubuntu1804_3.3.9:
-        VERSION:  3_3
+        VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  ubuntu1804
         PARENT: ubuntu
@@ -348,7 +348,7 @@ jobs:
 
 
       alpine311_3.3.9:
-        VERSION:  3_3
+        VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  alpine311
         PARENT: alpine
@@ -356,7 +356,7 @@ jobs:
 
 
       centos7_3.3.9:
-        VERSION:  3_3
+        VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  centos7
         PARENT: centos
@@ -364,7 +364,7 @@ jobs:
 
 
       centos8_3.3.9:
-        VERSION:  3_3
+        VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  centos8
         PARENT: centos
@@ -372,7 +372,7 @@ jobs:
 
 
       scratch311_3.3.9:
-        VERSION:  3_3
+        VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  scratch311
         PARENT: scratch
@@ -380,7 +380,7 @@ jobs:
 
 
       vaapi1804_3.3.9:
-        VERSION:  3_3
+        VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  vaapi1804
         PARENT: vaapi
@@ -388,7 +388,7 @@ jobs:
 
 
       nvidia1804_3.3.9:
-        VERSION:  3_3
+        VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  nvidia1804
         PARENT: nvidia
@@ -396,7 +396,7 @@ jobs:
 
 
       ubuntu1604_3.2.14:
-        VERSION:  3_2
+        VERSION:  3.2
         LONG_VERSION: 3.2.14
         VARIANT:  ubuntu1604
         PARENT: ubuntu
@@ -404,7 +404,7 @@ jobs:
 
 
       alpine38_3.2.14:
-        VERSION:  3_2
+        VERSION:  3.2
         LONG_VERSION: 3.2.14
         VARIANT:  alpine38
         PARENT: alpine
@@ -412,7 +412,7 @@ jobs:
 
 
       centos7_3.2.14:
-        VERSION:  3_2
+        VERSION:  3.2
         LONG_VERSION: 3.2.14
         VARIANT:  centos7
         PARENT: centos
@@ -420,7 +420,7 @@ jobs:
 
 
       scratch38_3.2.14:
-        VERSION:  3_2
+        VERSION:  3.2
         LONG_VERSION: 3.2.14
         VARIANT:  scratch38
         PARENT: scratch
@@ -428,7 +428,7 @@ jobs:
 
 
       vaapi1604_3.2.14:
-        VERSION:  3_2
+        VERSION:  3.2
         LONG_VERSION: 3.2.14
         VARIANT:  vaapi1604
         PARENT: vaapi
@@ -436,7 +436,7 @@ jobs:
 
 
       nvidia1604_3.2.14:
-        VERSION:  3_2
+        VERSION:  3.2
         LONG_VERSION: 3.2.14
         VARIANT:  nvidia1604
         PARENT: nvidia

@@ -104,25 +104,25 @@ for version in keep_version:
     compatible_variants = [
         v for v in VARIANTS if skip_variants is None or v["name"] not in skip_variants
     ]
-    short_ver = shorten_version(version)
-    ver_path = os.path.join("docker-images", short_ver)
+    short_version = shorten_version(version)
+    ver_path = os.path.join("docker-images", short_version)
     for existing_variant in os.listdir(ver_path):
         if existing_variant not in compatible_variants:
-            shutil.rmtree(DIR_FORMAT_STR.format(short_ver, existing_variant))
+            shutil.rmtree(DIR_FORMAT_STR.format(short_version, existing_variant))
 
     for variant in compatible_variants:
         siblings = [
             v["name"] for v in compatible_variants if v["parent"] == variant["parent"]
         ]
         is_parent = sorted(siblings, reverse=True)[0] == variant["name"]
-        dockerfile = IMAGE_FORMAT_STR.format(short_ver, variant["name"])
+        dockerfile = IMAGE_FORMAT_STR.format(short_version, variant["name"])
         gitlabci.append(
             f"""
 {version}-{variant['name']}:
   extends: .docker
   stage: {variant['name']}
   variables:
-    VERSION: "{short_ver}"
+    VERSION: "{short_version}"
     LONG_VERSION: "{version}"
     VARIANT: {variant['name']}
     PARENT: "{variant['parent']}"
@@ -133,7 +133,7 @@ for version in keep_version:
         azure.append(
             f"""
       {variant["name"]}_{version}:
-        VERSION:  {short_ver.replace(".", "_")}
+        VERSION:  {short_version}
         LONG_VERSION: {version}
         VARIANT:  {variant["name"]}
         PARENT: {variant["parent"]}
