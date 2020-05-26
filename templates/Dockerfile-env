@@ -28,6 +28,7 @@ FFMPEG_VERSION=%%FFMPEG_VERSION%% \
             LIBXML2_VERSION=2.9.10 \
             LIBBLURAY_VERSION=1.1.2 \
             LIBZMQ_VERSION=4.3.2 \
+            LIBSRT_VERSION=1.4.1 \
             SRC=/usr/local
 
 ARG         FREETYPE_SHA256SUM="5d03dd76c2171a7601e9ce10551d52d4471cf92cd205948e60289251daddffa8 freetype-2.5.5.tar.gz"

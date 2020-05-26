@@ -46,6 +46,7 @@ ENV         FFMPEG_VERSION=3.4.7 \
             LIBXML2_VERSION=2.9.10 \
             LIBBLURAY_VERSION=1.1.2 \
             LIBZMQ_VERSION=4.3.2 \
+            LIBSRT_VERSION=1.4.1 \
             SRC=/usr/local
 
 ARG         FREETYPE_SHA256SUM="5d03dd76c2171a7601e9ce10551d52d4471cf92cd205948e60289251daddffa8 freetype-2.5.5.tar.gz"
@@ -438,6 +439,18 @@ RUN \
         ./configure --prefix="${PREFIX}" && \
         make && \
         make check && \
+        make install && \
+        rm -rf ${DIR}
+
+## libsrt https://github.com/Haivision/srt
+RUN \
+        DIR=/tmp/srt && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/Haivision/srt/archive/v${LIBSRT_VERSION}.tar.gz && \
+        tar -xz --strip-components=1 -f v${LIBSRT_VERSION}.tar.gz && \
+        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
+        make && \
         make install && \
         rm -rf ${DIR}
 
