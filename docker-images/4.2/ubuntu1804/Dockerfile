@@ -90,7 +90,7 @@ RUN      buildDeps="autoconf \
                     yasm \
                     zlib1g-dev" && \
         apt-get -yqq update && \
-        DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends ${buildDeps}
+        apt-get install -yq --no-install-recommends ${buildDeps}
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
