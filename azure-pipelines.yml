@@ -444,16 +444,14 @@ jobs:
 
   steps:
   - bash: |
-      docker build -t ${DOCKER}:${VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
-      # Create a uniquely tagged version of the container to avoid pulling a version that was already on docker hub
-      docker tag ${DOCKER}:${VERSION}-${VARIANT} ${DOCKER}:${VERSION}-${VARIANT}-$(Build.BuildId)
-      # Run -buildconf from the unique version we just tagged to make sure the build was ok
-      docker run --rm ${DOCKER}:${VERSION}-${VARIANT}-$(Build.BuildId) -buildconf
+      docker build -t ${DOCKER}:${VERSION}-${VARIANT}  -t ${DOCKER}:${LONG_VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
+      docker run --rm ${DOCKER}:${LONG_VERSION}-${VARIANT} -buildconf
     displayName: Build docker image
   - bash: |
       docker login --username ${DOCKER_LOGIN} --password ${DOCKER_PASSWORD}
       docker push ${DOCKER}:${VERSION}-${VARIANT}
-      if [ "${ISPARENT}" == "True" ] && [ "${VARIANT}" != "${PARENT}" ]; then docker tag "${DOCKER}:${VERSION}-${VARIANT}" "${DOCKER}:${VERSION}-${PARENT}"; docker push "${DOCKER}:${VERSION}-${PARENT}"; fi
+      docker push ${DOCKER}:${LONG_VERSION}-${VARIANT}
+      if [ "${ISPARENT}" == "True" ] && [ "${VARIANT}" != "${PARENT}" ]; then docker tag "${DOCKER}:${LONG_VERSION}-${VARIANT}" "${DOCKER}:${VERSION}-${PARENT}"; docker push "${DOCKER}:${VERSION}-${PARENT}"; fi
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Push docker image
     env:

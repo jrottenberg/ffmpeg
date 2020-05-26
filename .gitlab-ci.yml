@@ -1,13 +1,18 @@
 
 stages:
   - lint
-  - alpine
-  - centos
-  - nvidia
-  - scratch
-  - ubuntu
-  - vaapi
-
+  - alpine311
+  - alpine38
+  - centos7
+  - centos8
+  - nvidia1604
+  - nvidia1804
+  - scratch311
+  - scratch38
+  - ubuntu1604
+  - ubuntu1804
+  - vaapi1604
+  - vaapi1804
 
 recent-update-run:
   image: python:3
@@ -22,13 +27,14 @@ recent-update-run:
     - docker-images/
 
 
-linter-black:
+linters:
   image: python:3
   stage: lint
   before_script:
-    - pip install black
+    - pip install -r requirements-dev.txt
   script:
     - black .
+    - flake8 .
 
 .docker:
   image: docker:latest
