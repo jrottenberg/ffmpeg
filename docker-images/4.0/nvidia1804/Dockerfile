@@ -31,7 +31,7 @@ FROM  devel-base as build
 
 ENV        NVIDIA_HEADERS_VERSION=9.1.23.1
 
-ENV         FFMPEG_VERSION=4.0.5 \
+ENV         FFMPEG_VERSION=4.0.6 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
