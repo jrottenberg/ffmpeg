@@ -491,49 +491,49 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu1604_3.2.14:
+      ubuntu1604_3.2.15:
         VERSION:  3.2
-        LONG_VERSION: 3.2.14
+        LONG_VERSION: 3.2.15
         VARIANT:  ubuntu1604
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine38_3.2.14:
+      alpine38_3.2.15:
         VERSION:  3.2
-        LONG_VERSION: 3.2.14
+        LONG_VERSION: 3.2.15
         VARIANT:  alpine38
         PARENT: alpine
         ISPARENT:  True
 
 
-      centos7_3.2.14:
+      centos7_3.2.15:
         VERSION:  3.2
-        LONG_VERSION: 3.2.14
+        LONG_VERSION: 3.2.15
         VARIANT:  centos7
         PARENT: centos
         ISPARENT:  True
 
 
-      scratch38_3.2.14:
+      scratch38_3.2.15:
         VERSION:  3.2
-        LONG_VERSION: 3.2.14
+        LONG_VERSION: 3.2.15
         VARIANT:  scratch38
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi1604_3.2.14:
+      vaapi1604_3.2.15:
         VERSION:  3.2
-        LONG_VERSION: 3.2.14
+        LONG_VERSION: 3.2.15
         VARIANT:  vaapi1604
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia1604_3.2.14:
+      nvidia1604_3.2.15:
         VERSION:  3.2
-        LONG_VERSION: 3.2.14
+        LONG_VERSION: 3.2.15
         VARIANT:  nvidia1604
         PARENT: nvidia
         ISPARENT:  True
