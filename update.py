@@ -17,7 +17,7 @@ IMAGE_FORMAT_STR = "{0}/Dockerfile".format(DIR_FORMAT_STR)
 TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 
 # https://ffmpeg.org/olddownload.html
-SKIP_VERSIONS = "3.1.11 3.0.12"
+SKIP_VERSIONS = "3.1.11 3.0.12 snapshot"
 VARIANTS = [
     {"name": "ubuntu1604", "parent": "ubuntu"},
     {"name": "ubuntu1804", "parent": "ubuntu"},
@@ -64,7 +64,7 @@ SKIP_VARIANTS = {
 }
 
 last = version.split(".")
-keep_version = ["snapshot"]
+keep_version = []
 
 keep_version.append(version)
 
@@ -193,8 +193,8 @@ for version in keep_version:
             FFMPEG_CONFIG_FLAGS.append("--extra-libs=-lpthread")
 
         # LibSRT is supported from 4.0
-        if (version == "snapshot" or int(version[0]) >= 4):
-            FFMPEG_CONFIG_FLAGS.append('--enable-libsrt')
+        if version == "snapshot" or int(version[0]) >= 4:
+            FFMPEG_CONFIG_FLAGS.append("--enable-libsrt")
 
         if (version == "snapshot" or int(version[0]) >= 3) and variant[
             "parent"
