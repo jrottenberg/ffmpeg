@@ -91,7 +91,7 @@ RUN \
 FROM        base
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
-ENV         LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib:/usr/lib64:/usr/lib:/lib64:/lib
+ENV         LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 
 ENTRYPOINT  ["ffmpeg"]
 
