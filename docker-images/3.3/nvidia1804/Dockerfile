@@ -553,7 +553,7 @@ RUN \
 FROM        runtime-base AS release
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
-ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64:/usr/lib:/usr/lib64:/lib:/lib64
+ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
