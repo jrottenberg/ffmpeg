@@ -86,9 +86,11 @@ CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 ENV         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
 
+# copy only needed files, without copying nvidia dev files 
 COPY --from=build /usr/local/bin /usr/local/bin/
 COPY --from=build /usr/local/share /usr/local/share/
 COPY --from=build /usr/local/lib /usr/local/lib/
+COPY --from=build /usr/local/include /usr/local/include/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
