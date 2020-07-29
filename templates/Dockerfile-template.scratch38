@@ -1,0 +1,65 @@
+# ffmpeg - http://ffmpeg.org/download.html
+#
+# https://hub.docker.com/r/jrottenberg/ffmpeg/
+#
+#
+
+FROM        alpine:3.8 AS build
+
+WORKDIR     /tmp/workdir
+
+ENV         %%ENV%%
+
+RUN     buildDeps="autoconf \
+                   automake \
+                   bash \
+                   binutils \
+                   bzip2 \
+                   cmake \
+                   curl \
+                   coreutils \
+                   diffutils \
+                   expat-dev \
+                   file \
+                   g++ \
+                   gcc \
+                   gperf \
+                   libtool \
+                   make \
+                   python \
+                   openssl-dev \
+                   tar \
+                   yasm \
+                   nasm \
+                   zlib-dev \
+                   git \
+                   libgcc \
+                   libstdc++ \
+                   ca-certificates \
+                   libcrypto1.0 \
+                   libssl1.0" && \
+        apk  add --update ${buildDeps} 
+
+%%RUN%%
+
+RUN \
+        mkdir -p /tmp/fakeroot/lib  && \
+        ldd ${PREFIX}/bin/ffmpeg | cut -d ' ' -f 3 | strings | xargs -I R cp R /tmp/fakeroot/lib/ && \
+        for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
+        cp -r ${PREFIX}/bin /tmp/fakeroot/bin/ && \
+        cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/ && \
+        LD_LIBRARY_PATH=/tmp/fakeroot/lib /tmp/fakeroot/bin/ffmpeg -buildconf
+
+### Release Stage
+FROM        scratch AS release
+MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+
+ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
+
+CMD         ["--help"]
+ENTRYPOINT  ["/bin/ffmpeg"]
+
+COPY --from=build /tmp/fakeroot/ /
+
+# Let's make sure the app built correctly
+# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

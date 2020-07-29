@@ -1,3 +1,8 @@
+variables:
+- group: videotoolsbuild-dockerhub
+- name: DOCKER
+  value: jrottenberg/ffmpeg
+
 jobs:
 - job: Build
   pool:
@@ -7,6 +12,18 @@ jobs:
     matrix:
 %%VERSIONS%%
   steps:
-  - script: |
-      docker build -t ffmpeg:${VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
-      docker run --rm ffmpeg:${VERSION}-${VARIANT} -buildconf 
+  - bash: |
+      set -eu
+      docker build -t ${DOCKER}:${VERSION}-${VARIANT}  -t ${DOCKER}:${LONG_VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
+      docker run --rm ${DOCKER}:${LONG_VERSION}-${VARIANT} -buildconf
+    displayName: Build docker image
+  - bash: |
+      set -eu
+      docker login --username ${DOCKER_LOGIN} --password ${DOCKER_PASSWORD}
+      docker push ${DOCKER}:${VERSION}-${VARIANT}
+      docker push ${DOCKER}:${LONG_VERSION}-${VARIANT}
+      if [ "${ISPARENT}" == "True" ] && [ "${VARIANT}" != "${PARENT}" ]; then docker tag "${DOCKER}:${LONG_VERSION}-${VARIANT}" "${DOCKER}:${VERSION}-${PARENT}"; docker push "${DOCKER}:${VERSION}-${PARENT}"; fi
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: Push docker image
+    env:
+      DOCKER_PASSWORD: $(docker.password)
