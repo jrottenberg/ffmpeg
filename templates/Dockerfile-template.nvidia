@@ -6,9 +6,9 @@
 #
 #
 
-FROM    nvidia/cuda:10.2-devel-ubuntu16.04 AS devel-base
+FROM    nvidia/cudagl:9.2-devel-ubuntu18.04 AS devel-base
 
-ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
+ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
@@ -16,9 +16,9 @@ RUN     apt-get -yqq update && \
         apt-get autoremove -y && \
         apt-get clean -y
 
-FROM        nvidia/cuda:10.2-runtime-ubuntu16.04 AS runtime-base
+FROM        nvidia/cudagl:9.2-runtime-ubuntu18.04 AS runtime-base
 
-ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
+ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
@@ -29,7 +29,11 @@ RUN     apt-get -yqq update && \
 
 FROM  devel-base as build
 
-ENV        NVIDIA_HEADERS_VERSION=9.1.23.1
+ENV        NVIDIA_HEADERS_VERSION=8.1.24.9
+ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
+ENV        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/ffmpeg/lib"
+ARG        PREFIX=/opt/ffmpeg
+ARG        MAKEFLAGS="-j12"
 
 ENV         %%ENV%%
 
@@ -55,38 +59,32 @@ RUN      buildDeps="autoconf \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
 
-RUN \
+RUN \ 
 	DIR=/tmp/nv-codec-headers && \
-	git clone https://github.com/FFmpeg/nv-codec-headers ${DIR} && \
+	git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git ${DIR} && \
 	cd ${DIR} && \
-	git checkout n${NVIDIA_HEADERS_VERSION} && \
-	make PREFIX="${PREFIX}" && \
-	make install PREFIX="${PREFIX}"  && \
-        rm -rf ${DIR}
+	git checkout n${NVIDIA_HEADERS_VERSION} && \ 
+	sed -i 's@/usr/local@'"$PREFIX"'@' Makefile && \
+	make && \
+	make install  && \
+    rm -rf ${DIR}
 
 %%RUN%%
 ## cleanup
 RUN \
-        LD_LIBRARY_PATH="${PREFIX}/lib:${PREFIX}/lib64:${LD_LIBRARY_PATH}" ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
-        for lib in /usr/local/lib/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
+        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/* /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-        cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-        mkdir -p /usr/local/lib/pkgconfig && \
-        for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-          sed "s:${PREFIX}:/usr/local:g; s:/lib64:/lib:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
-        done
+        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
 
 
 
 FROM        runtime-base AS release
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
-ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
-
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
+ENV         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
 
 # copy only needed files, without copying nvidia dev files 
 COPY --from=build /usr/local/bin /usr/local/bin/
@@ -96,3 +94,4 @@ COPY --from=build /usr/local/include /usr/local/include/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
+
