@@ -542,6 +542,7 @@ jobs:
   - bash: |
       set -eu
       docker build -t ${DOCKER}:${VERSION}-${VARIANT}  -t ${DOCKER}:${LONG_VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
+      docker images
       docker run --rm ${DOCKER}:${LONG_VERSION}-${VARIANT} -buildconf
     displayName: Build docker image
   - bash: |
