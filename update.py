@@ -193,8 +193,8 @@ for version in keep_version:
             FFMPEG_CONFIG_FLAGS.append("--extra-libs=-lpthread")
 
         # LibSRT is supported from 4.0
-        if (version == "snapshot" or int(version[0]) >= 4):
-            FFMPEG_CONFIG_FLAGS.append('--enable-libsrt')
+        if version == "snapshot" or int(version[0]) >= 4:
+            FFMPEG_CONFIG_FLAGS.append("--enable-libsrt")
 
         if (version == "snapshot" or int(version[0]) >= 3) and variant[
             "parent"
@@ -241,5 +241,5 @@ with open("templates/azure.template", "r") as tmpfile:
 azure = template.replace("%%VERSIONS%%", "\n".join(azure))
 
 
-with open("azure-pipelines.yml", "w") as azurefile:
+with open("docker-images/azure-jobs.yml", "w") as azurefile:
     azurefile.write(azure)
