@@ -534,3 +534,5 @@ jobs:
         PARENT: nvidia
         ISPARENT:  True
 
+  steps:
+  - template: ../templates/azure-steps.yml
