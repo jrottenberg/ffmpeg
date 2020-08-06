@@ -46,6 +46,7 @@ linters:
     - export IMAGE="ffmpeg:${VERSION}-${VARIANT:-ubuntu}"
   script:
     - docker build -t "${IMAGE}" --build-arg MAKEFLAGS="-j$(($(nproc) + 1))" docker-images/${VERSION}/${VARIANT}
+    - docker images
   after_script:
     - docker run --rm ${IMAGE} -buildconf
 
