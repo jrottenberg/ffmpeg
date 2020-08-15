@@ -118,18 +118,18 @@ Please use [Github issues](https://github.com/jrottenberg/ffmpeg/issues/new) to 
 ## Test
 
 ```bash
-ffmpeg version 4.2.2 Copyright (c) 2000-2019 the FFmpeg developers
+ffmpeg version N-98740-ga72d529 Copyright (c) 2000-2020 the FFmpeg developers
   built with gcc 7 (Ubuntu 7.5.0-3ubuntu1~18.04)
-  configuration: --disable-debug --disable-doc --disable-ffplay --enable-shared --enable-avresample --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-gpl --enable-libass --enable-fontconfig --enable-libfreetype --enable-libvidstab --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libxcb --enable-libx265 --enable-libxvid --enable-libx264 --enable-nonfree --enable-openssl --enable-libfdk_aac --enable-postproc --enable-small --enable-version3 --enable-libbluray --enable-libzmq --enable-libsrt --extra-libs=-ldl --prefix=/opt/ffmpeg --enable-libopenjpeg --enable-libkvazaar --enable-libaom --extra-libs=-lpthread --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib
-  libavutil      56. 31.100 / 56. 31.100
-  libavcodec     58. 54.100 / 58. 54.100
-  libavformat    58. 29.100 / 58. 29.100
-  libavdevice    58.  8.100 / 58.  8.100
-  libavfilter     7. 57.100 /  7. 57.100
+  configuration: --disable-debug --disable-doc --disable-ffplay --enable-shared --enable-avresample --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-gpl --enable-libass --enable-fontconfig --enable-libfreetype --enable-libvidstab --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libxcb --enable-libx265 --enable-libxvid --enable-libx264 --enable-nonfree --enable-openssl --enable-libfdk_aac --enable-postproc --enable-small --enable-version3 --enable-libbluray --enable-libzmq --extra-libs=-ldl --prefix=/opt/ffmpeg --enable-libopenjpeg --enable-libkvazaar --enable-libaom --extra-libs=-lpthread --enable-libsrt --enable-libaribb24 --enable-vaapi --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib
+  libavutil      56. 58.100 / 56. 58.100
+  libavcodec     58.100.100 / 58.100.100
+  libavformat    58. 51.100 / 58. 51.100
+  libavdevice    58. 11.101 / 58. 11.101
+  libavfilter     7. 87.100 /  7. 87.100
   libavresample   4.  0.  0 /  4.  0.  0
-  libswscale      5.  5.100 /  5.  5.100
-  libswresample   3.  5.100 /  3.  5.100
-  libpostproc    55.  5.100 / 55.  5.100
+  libswscale      5.  8.100 /  5.  8.100
+  libswresample   3.  8.100 /  3.  8.100
+  libpostproc    55.  8.100 / 55.  8.100
 
   configuration:
     --disable-debug
@@ -162,13 +162,15 @@ ffmpeg version 4.2.2 Copyright (c) 2000-2019 the FFmpeg developers
     --enable-version3
     --enable-libbluray
     --enable-libzmq
-    --enable-libsrt
     --extra-libs=-ldl
     --prefix=/opt/ffmpeg
     --enable-libopenjpeg
     --enable-libkvazaar
     --enable-libaom
     --extra-libs=-lpthread
+    --enable-libsrt
+    --enable-libaribb24
+    --enable-vaapi
     --extra-cflags=-I/opt/ffmpeg/include
     --extra-ldflags=-L/opt/ffmpeg/lib
 ```
@@ -306,6 +308,8 @@ See Dockerfile-env to update a version
 - [X265_VERSION](https://bitbucket.org/multicoreware/x265/downloads/): [GNU General Public License (GPL) version 2](https://bitbucket.org/multicoreware/x265/raw/f8ae7afc1f61ed0db3b2f23f5d581706fe6ed677/COPYING)
 - [LIBZMQ_VERSION](https://github.com/zeromq/libzmq/releases/): [GNU Lesser General Public License (LGPL) version 3.0](https://github.com/zeromq/libzmq/blob/v4.3.2/COPYING.LESSER)
 - [LIBSRT_VERSION](https://github.com/Haivision/srt/releases/): [MPL-2.0](https://github.com/Haivision/srt/blob/master/LICENSE)
+- [LIBPNG_VERSION](https://sourceforge.net/projects/libpng/files/): [zlib/libpng License](https://sourceforge.net/p/libpng/code/ci/master/tree/LICENSE)
+- [LIBARIBB24_VERSION](https://github.com/nkoriyama/aribb24/tree/bc45f1406899603033218c2cc6d611ddcc5b3720): [GNU Lesser General Public License (LGPL) version 2.1 or newer](https://github.com/nkoriyama/aribb24/issues/9)
 
 ## Contribute
 
