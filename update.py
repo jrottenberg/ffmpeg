@@ -174,6 +174,7 @@ for version in keep_version:
             "--enable-version3",
             "--enable-libbluray",
             "--enable-libzmq",
+            "--enable-libvmaf",
             "--extra-libs=-ldl",
             '--prefix="${PREFIX}"',
         ]
