@@ -8,6 +8,7 @@ jobs:
     matrix:
 
       ubuntu1604_snapshot:
+        MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
         VARIANT:  ubuntu1604
@@ -16,6 +17,7 @@ jobs:
 
 
       ubuntu1804_snapshot:
+        MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
         VARIANT:  ubuntu1804
@@ -24,6 +26,7 @@ jobs:
 
 
       alpine311_snapshot:
+        MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
         VARIANT:  alpine311
@@ -32,6 +35,7 @@ jobs:
 
 
       centos7_snapshot:
+        MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
         VARIANT:  centos7
@@ -40,6 +44,7 @@ jobs:
 
 
       centos8_snapshot:
+        MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
         VARIANT:  centos8
@@ -48,6 +53,7 @@ jobs:
 
 
       scratch311_snapshot:
+        MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
         VARIANT:  scratch311
@@ -56,6 +62,7 @@ jobs:
 
 
       vaapi1804_snapshot:
+        MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
         VARIANT:  vaapi1804
@@ -64,6 +71,7 @@ jobs:
 
 
       nvidia1804_snapshot:
+        MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
         VARIANT:  nvidia1804
@@ -72,6 +80,7 @@ jobs:
 
 
       ubuntu1604_4.3.1:
+        MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  ubuntu1604
@@ -80,6 +89,7 @@ jobs:
 
 
       ubuntu1804_4.3.1:
+        MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  ubuntu1804
@@ -88,6 +98,7 @@ jobs:
 
 
       alpine311_4.3.1:
+        MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  alpine311
@@ -96,6 +107,7 @@ jobs:
 
 
       alpine38_4.3.1:
+        MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  alpine38
@@ -104,6 +116,7 @@ jobs:
 
 
       centos7_4.3.1:
+        MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  centos7
@@ -112,6 +125,7 @@ jobs:
 
 
       centos8_4.3.1:
+        MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  centos8
@@ -120,6 +134,7 @@ jobs:
 
 
       scratch311_4.3.1:
+        MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  scratch311
@@ -128,6 +143,7 @@ jobs:
 
 
       scratch38_4.3.1:
+        MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  scratch38
@@ -136,6 +152,7 @@ jobs:
 
 
       vaapi1804_4.3.1:
+        MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  vaapi1804
@@ -144,6 +161,7 @@ jobs:
 
 
       vaapi1604_4.3.1:
+        MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  vaapi1604
@@ -152,6 +170,7 @@ jobs:
 
 
       nvidia1804_4.3.1:
+        MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  nvidia1804
@@ -160,6 +179,7 @@ jobs:
 
 
       nvidia1604_4.3.1:
+        MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  nvidia1604
@@ -168,6 +188,7 @@ jobs:
 
 
       ubuntu1604_4.2.4:
+        MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
         VARIANT:  ubuntu1604
@@ -176,6 +197,7 @@ jobs:
 
 
       ubuntu1804_4.2.4:
+        MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
         VARIANT:  ubuntu1804
@@ -184,6 +206,7 @@ jobs:
 
 
       alpine311_4.2.4:
+        MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
         VARIANT:  alpine311
@@ -192,6 +215,7 @@ jobs:
 
 
       centos7_4.2.4:
+        MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
         VARIANT:  centos7
@@ -200,6 +224,7 @@ jobs:
 
 
       centos8_4.2.4:
+        MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
         VARIANT:  centos8
@@ -208,6 +233,7 @@ jobs:
 
 
       scratch311_4.2.4:
+        MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
         VARIANT:  scratch311
@@ -216,6 +242,7 @@ jobs:
 
 
       vaapi1804_4.2.4:
+        MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
         VARIANT:  vaapi1804
@@ -224,6 +251,7 @@ jobs:
 
 
       nvidia1804_4.2.4:
+        MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
         VARIANT:  nvidia1804
@@ -232,6 +260,7 @@ jobs:
 
 
       ubuntu1604_4.1.6:
+        MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
         VARIANT:  ubuntu1604
@@ -240,6 +269,7 @@ jobs:
 
 
       ubuntu1804_4.1.6:
+        MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
         VARIANT:  ubuntu1804
@@ -248,6 +278,7 @@ jobs:
 
 
       alpine311_4.1.6:
+        MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
         VARIANT:  alpine311
@@ -256,6 +287,7 @@ jobs:
 
 
       centos7_4.1.6:
+        MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
         VARIANT:  centos7
@@ -264,6 +296,7 @@ jobs:
 
 
       centos8_4.1.6:
+        MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
         VARIANT:  centos8
@@ -272,6 +305,7 @@ jobs:
 
 
       scratch311_4.1.6:
+        MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
         VARIANT:  scratch311
@@ -280,6 +314,7 @@ jobs:
 
 
       vaapi1804_4.1.6:
+        MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
         VARIANT:  vaapi1804
@@ -288,6 +323,7 @@ jobs:
 
 
       nvidia1804_4.1.6:
+        MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
         VARIANT:  nvidia1804
@@ -296,6 +332,7 @@ jobs:
 
 
       ubuntu1604_4.0.6:
+        MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
         VARIANT:  ubuntu1604
@@ -304,6 +341,7 @@ jobs:
 
 
       ubuntu1804_4.0.6:
+        MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
         VARIANT:  ubuntu1804
@@ -312,6 +350,7 @@ jobs:
 
 
       alpine311_4.0.6:
+        MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
         VARIANT:  alpine311
@@ -320,6 +359,7 @@ jobs:
 
 
       centos7_4.0.6:
+        MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
         VARIANT:  centos7
@@ -328,6 +368,7 @@ jobs:
 
 
       centos8_4.0.6:
+        MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
         VARIANT:  centos8
@@ -336,6 +377,7 @@ jobs:
 
 
       scratch311_4.0.6:
+        MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
         VARIANT:  scratch311
@@ -344,6 +386,7 @@ jobs:
 
 
       vaapi1804_4.0.6:
+        MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
         VARIANT:  vaapi1804
@@ -352,6 +395,7 @@ jobs:
 
 
       nvidia1804_4.0.6:
+        MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
         VARIANT:  nvidia1804
@@ -360,6 +404,7 @@ jobs:
 
 
       ubuntu1604_3.4.8:
+        MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
         VARIANT:  ubuntu1604
@@ -368,6 +413,7 @@ jobs:
 
 
       ubuntu1804_3.4.8:
+        MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
         VARIANT:  ubuntu1804
@@ -376,6 +422,7 @@ jobs:
 
 
       alpine311_3.4.8:
+        MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
         VARIANT:  alpine311
@@ -384,6 +431,7 @@ jobs:
 
 
       centos7_3.4.8:
+        MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
         VARIANT:  centos7
@@ -392,6 +440,7 @@ jobs:
 
 
       centos8_3.4.8:
+        MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
         VARIANT:  centos8
@@ -400,6 +449,7 @@ jobs:
 
 
       scratch311_3.4.8:
+        MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
         VARIANT:  scratch311
@@ -408,6 +458,7 @@ jobs:
 
 
       vaapi1804_3.4.8:
+        MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
         VARIANT:  vaapi1804
@@ -416,6 +467,7 @@ jobs:
 
 
       nvidia1804_3.4.8:
+        MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
         VARIANT:  nvidia1804
@@ -424,6 +476,7 @@ jobs:
 
 
       ubuntu1604_3.3.9:
+        MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  ubuntu1604
@@ -432,6 +485,7 @@ jobs:
 
 
       ubuntu1804_3.3.9:
+        MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  ubuntu1804
@@ -440,6 +494,7 @@ jobs:
 
 
       alpine311_3.3.9:
+        MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  alpine311
@@ -448,6 +503,7 @@ jobs:
 
 
       centos7_3.3.9:
+        MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  centos7
@@ -456,6 +512,7 @@ jobs:
 
 
       centos8_3.3.9:
+        MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  centos8
@@ -464,6 +521,7 @@ jobs:
 
 
       scratch311_3.3.9:
+        MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  scratch311
@@ -472,6 +530,7 @@ jobs:
 
 
       vaapi1804_3.3.9:
+        MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  vaapi1804
@@ -480,6 +539,7 @@ jobs:
 
 
       nvidia1804_3.3.9:
+        MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  nvidia1804
@@ -488,6 +548,7 @@ jobs:
 
 
       ubuntu1604_3.2.15:
+        MAJOR_VERSION: 3
         VERSION:  3.2
         LONG_VERSION: 3.2.15
         VARIANT:  ubuntu1604
@@ -496,6 +557,7 @@ jobs:
 
 
       alpine38_3.2.15:
+        MAJOR_VERSION: 3
         VERSION:  3.2
         LONG_VERSION: 3.2.15
         VARIANT:  alpine38
@@ -504,6 +566,7 @@ jobs:
 
 
       centos7_3.2.15:
+        MAJOR_VERSION: 3
         VERSION:  3.2
         LONG_VERSION: 3.2.15
         VARIANT:  centos7
@@ -512,6 +575,7 @@ jobs:
 
 
       scratch38_3.2.15:
+        MAJOR_VERSION: 3
         VERSION:  3.2
         LONG_VERSION: 3.2.15
         VARIANT:  scratch38
@@ -520,6 +584,7 @@ jobs:
 
 
       vaapi1604_3.2.15:
+        MAJOR_VERSION: 3
         VERSION:  3.2
         LONG_VERSION: 3.2.15
         VARIANT:  vaapi1604
@@ -528,6 +593,7 @@ jobs:
 
 
       nvidia1604_3.2.15:
+        MAJOR_VERSION: 3
         VERSION:  3.2
         LONG_VERSION: 3.2.15
         VARIANT:  nvidia1604

@@ -3,6 +3,7 @@ snapshot-ubuntu1604:
   extends: .docker
   stage: ubuntu1604
   variables:
+    MAJOR_VERSION: snapshot
     VERSION: "snapshot"
     LONG_VERSION: "snapshot"
     VARIANT: ubuntu1604
@@ -13,6 +14,7 @@ snapshot-ubuntu1804:
   extends: .docker
   stage: ubuntu1804
   variables:
+    MAJOR_VERSION: snapshot
     VERSION: "snapshot"
     LONG_VERSION: "snapshot"
     VARIANT: ubuntu1804
@@ -23,6 +25,7 @@ snapshot-alpine311:
   extends: .docker
   stage: alpine311
   variables:
+    MAJOR_VERSION: snapshot
     VERSION: "snapshot"
     LONG_VERSION: "snapshot"
     VARIANT: alpine311
@@ -33,6 +36,7 @@ snapshot-centos7:
   extends: .docker
   stage: centos7
   variables:
+    MAJOR_VERSION: snapshot
     VERSION: "snapshot"
     LONG_VERSION: "snapshot"
     VARIANT: centos7
@@ -43,6 +47,7 @@ snapshot-centos8:
   extends: .docker
   stage: centos8
   variables:
+    MAJOR_VERSION: snapshot
     VERSION: "snapshot"
     LONG_VERSION: "snapshot"
     VARIANT: centos8
@@ -53,6 +58,7 @@ snapshot-scratch311:
   extends: .docker
   stage: scratch311
   variables:
+    MAJOR_VERSION: snapshot
     VERSION: "snapshot"
     LONG_VERSION: "snapshot"
     VARIANT: scratch311
@@ -63,6 +69,7 @@ snapshot-vaapi1804:
   extends: .docker
   stage: vaapi1804
   variables:
+    MAJOR_VERSION: snapshot
     VERSION: "snapshot"
     LONG_VERSION: "snapshot"
     VARIANT: vaapi1804
@@ -73,6 +80,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: nvidia1804
   variables:
+    MAJOR_VERSION: snapshot
     VERSION: "snapshot"
     LONG_VERSION: "snapshot"
     VARIANT: nvidia1804
@@ -83,6 +91,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1604
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
     VARIANT: ubuntu1604
@@ -93,6 +102,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1804
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
     VARIANT: ubuntu1804
@@ -103,6 +113,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: alpine311
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
     VARIANT: alpine311
@@ -113,6 +124,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: alpine38
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
     VARIANT: alpine38
@@ -123,6 +135,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos7
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
     VARIANT: centos7
@@ -133,6 +146,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos8
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
     VARIANT: centos8
@@ -143,6 +157,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: scratch311
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
     VARIANT: scratch311
@@ -153,6 +168,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: scratch38
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
     VARIANT: scratch38
@@ -163,6 +179,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: vaapi1804
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
     VARIANT: vaapi1804
@@ -173,6 +190,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: vaapi1604
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
     VARIANT: vaapi1604
@@ -183,6 +201,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: nvidia1804
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
     VARIANT: nvidia1804
@@ -193,6 +212,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: nvidia1604
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
     VARIANT: nvidia1604
@@ -203,6 +223,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1604
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.4"
     VARIANT: ubuntu1604
@@ -213,6 +234,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1804
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.4"
     VARIANT: ubuntu1804
@@ -223,6 +245,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: alpine311
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.4"
     VARIANT: alpine311
@@ -233,6 +256,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos7
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.4"
     VARIANT: centos7
@@ -243,6 +267,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos8
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.4"
     VARIANT: centos8
@@ -253,6 +278,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: scratch311
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.4"
     VARIANT: scratch311
@@ -263,6 +289,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: vaapi1804
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.4"
     VARIANT: vaapi1804
@@ -273,6 +300,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: nvidia1804
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.4"
     VARIANT: nvidia1804
@@ -283,6 +311,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1604
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.6"
     VARIANT: ubuntu1604
@@ -293,6 +322,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1804
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.6"
     VARIANT: ubuntu1804
@@ -303,6 +333,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: alpine311
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.6"
     VARIANT: alpine311
@@ -313,6 +344,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos7
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.6"
     VARIANT: centos7
@@ -323,6 +355,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos8
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.6"
     VARIANT: centos8
@@ -333,6 +366,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: scratch311
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.6"
     VARIANT: scratch311
@@ -343,6 +377,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: vaapi1804
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.6"
     VARIANT: vaapi1804
@@ -353,6 +388,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: nvidia1804
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.6"
     VARIANT: nvidia1804
@@ -363,6 +399,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1604
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.0"
     LONG_VERSION: "4.0.6"
     VARIANT: ubuntu1604
@@ -373,6 +410,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1804
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.0"
     LONG_VERSION: "4.0.6"
     VARIANT: ubuntu1804
@@ -383,6 +421,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: alpine311
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.0"
     LONG_VERSION: "4.0.6"
     VARIANT: alpine311
@@ -393,6 +432,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos7
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.0"
     LONG_VERSION: "4.0.6"
     VARIANT: centos7
@@ -403,6 +443,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos8
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.0"
     LONG_VERSION: "4.0.6"
     VARIANT: centos8
@@ -413,6 +454,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: scratch311
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.0"
     LONG_VERSION: "4.0.6"
     VARIANT: scratch311
@@ -423,6 +465,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: vaapi1804
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.0"
     LONG_VERSION: "4.0.6"
     VARIANT: vaapi1804
@@ -433,6 +476,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: nvidia1804
   variables:
+    MAJOR_VERSION: 4
     VERSION: "4.0"
     LONG_VERSION: "4.0.6"
     VARIANT: nvidia1804
@@ -443,6 +487,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1604
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.8"
     VARIANT: ubuntu1604
@@ -453,6 +498,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1804
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.8"
     VARIANT: ubuntu1804
@@ -463,6 +509,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: alpine311
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.8"
     VARIANT: alpine311
@@ -473,6 +520,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos7
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.8"
     VARIANT: centos7
@@ -483,6 +531,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos8
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.8"
     VARIANT: centos8
@@ -493,6 +542,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: scratch311
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.8"
     VARIANT: scratch311
@@ -503,6 +553,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: vaapi1804
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.8"
     VARIANT: vaapi1804
@@ -513,6 +564,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: nvidia1804
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.8"
     VARIANT: nvidia1804
@@ -523,6 +575,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1604
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
     VARIANT: ubuntu1604
@@ -533,6 +586,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1804
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
     VARIANT: ubuntu1804
@@ -543,6 +597,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: alpine311
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
     VARIANT: alpine311
@@ -553,6 +608,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos7
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
     VARIANT: centos7
@@ -563,6 +619,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos8
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
     VARIANT: centos8
@@ -573,6 +630,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: scratch311
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
     VARIANT: scratch311
@@ -583,6 +641,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: vaapi1804
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
     VARIANT: vaapi1804
@@ -593,6 +652,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: nvidia1804
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
     VARIANT: nvidia1804
@@ -603,6 +663,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: ubuntu1604
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.2"
     LONG_VERSION: "3.2.15"
     VARIANT: ubuntu1604
@@ -613,6 +674,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: alpine38
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.2"
     LONG_VERSION: "3.2.15"
     VARIANT: alpine38
@@ -623,6 +685,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: centos7
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.2"
     LONG_VERSION: "3.2.15"
     VARIANT: centos7
@@ -633,6 +696,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: scratch38
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.2"
     LONG_VERSION: "3.2.15"
     VARIANT: scratch38
@@ -643,6 +707,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: vaapi1604
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.2"
     LONG_VERSION: "3.2.15"
     VARIANT: vaapi1604
@@ -653,6 +718,7 @@ snapshot-nvidia1804:
   extends: .docker
   stage: nvidia1604
   variables:
+    MAJOR_VERSION: 3
     VERSION: "3.2"
     LONG_VERSION: "3.2.15"
     VARIANT: nvidia1604
