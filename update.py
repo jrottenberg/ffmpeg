@@ -69,12 +69,21 @@ keep_version = ["snapshot"]
 keep_version.append(version)
 
 
-def shorten_version(version):
+def get_shorten_version(version):
     if version == "snapshot":
         return version
     else:
         major, minor, *patch = version.split(".")
         return f"{major}.{minor}"
+
+
+def get_major_version(version):
+    print(version)
+    if version == "snapshot":
+        return version
+    else:
+        major, minor, *patch = version.split(".")
+        return f"{major}"
 
 
 for cur in all_versions:
@@ -104,7 +113,8 @@ for version in keep_version:
     compatible_variants = [
         v for v in VARIANTS if skip_variants is None or v["name"] not in skip_variants
     ]
-    short_version = shorten_version(version)
+    short_version = get_shorten_version(version)
+    major_version = get_major_version(version)
     ver_path = os.path.join("docker-images", short_version)
     for existing_variant in os.listdir(ver_path):
         if existing_variant not in compatible_variants:
@@ -122,6 +132,7 @@ for version in keep_version:
   extends: .docker
   stage: {variant['name']}
   variables:
+    MAJOR_VERSION: {major_version}
     VERSION: "{short_version}"
     LONG_VERSION: "{version}"
     VARIANT: {variant['name']}
@@ -133,6 +144,7 @@ for version in keep_version:
         azure.append(
             f"""
       {variant["name"]}_{version}:
+        MAJOR_VERSION: {major_version}
         VERSION:  {short_version}
         LONG_VERSION: {version}
         VARIANT:  {variant["name"]}
