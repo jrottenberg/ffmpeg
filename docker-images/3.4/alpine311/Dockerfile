@@ -15,7 +15,7 @@ WORKDIR     /tmp/workdir
 
 ENV         FFMPEG_VERSION=3.4.8 \
             AOM_VERSION=v1.0.0 \
-            FDKAAC_VERSION=0.1.5 \
+            FDKAAC_VERSION=2.0.0 \
             FONTCONFIG_VERSION=2.12.4 \
             FREETYPE_VERSION=2.5.5 \
             FRIBIDI_VERSION=0.19.7 \
