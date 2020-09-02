@@ -18,13 +18,13 @@ FROM base as build
 
 ENV         FFMPEG_VERSION=3.4.8 \
             AOM_VERSION=v1.0.0 \
-            FDKAAC_VERSION=0.1.5 \
+            FDKAAC_VERSION=2.0.0 \
             FONTCONFIG_VERSION=2.12.4 \
             FREETYPE_VERSION=2.5.5 \
             FRIBIDI_VERSION=0.19.7 \
             KVAZAAR_VERSION=1.2.0 \
             LAME_VERSION=3.100 \
-            LIBASS_VERSION=0.13.7 \
+            LIBASS_VERSION=0.14.0 \
             LIBPTHREAD_STUBS_VERSION=0.4 \
             LIBVIDSTAB_VERSION=1.1.0 \
             LIBXCB_VERSION=1.13.1 \
@@ -37,7 +37,7 @@ ENV         FFMPEG_VERSION=3.4.8 \
             VORBIS_VERSION=1.3.5 \
             VPX_VERSION=1.8.0 \
             WEBP_VERSION=1.0.2 \
-            X264_VERSION=20170226-2245-stable \
+            X264_VERSION=20191217-2245-stable \
             X265_VERSION=3.1.1 \
             XAU_VERSION=1.0.9 \
             XORG_MACROS_VERSION=1.19.2 \
@@ -53,7 +53,7 @@ ENV         FFMPEG_VERSION=3.4.8 \
 
 ARG         FREETYPE_SHA256SUM="5d03dd76c2171a7601e9ce10551d52d4471cf92cd205948e60289251daddffa8 freetype-2.5.5.tar.gz"
 ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8 0.19.7.tar.gz"
-ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a47889315526adbafd7 0.13.7.tar.gz"
+ARG         LIBASS_SHA256SUM="82e70ee1f9afe2e54ab4bf6510b83bb563fcb2af978f0f9da82e2dbc9ae0fd72  0.14.0.tar.gz"
 ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb v1.1.0.tar.gz"
 ARG         OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692 libogg-1.3.2.tar.gz"
 ARG         OPUS_SHA256SUM="77db45a87b51578fbc49555ef1b10926179861d854eb2613207dc79d9ec0a9a9 opus-1.2.tar.gz"
