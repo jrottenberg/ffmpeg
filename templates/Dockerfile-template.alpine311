@@ -6,7 +6,7 @@
 
 FROM        alpine:3.11 AS base
 
-RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.1 libssl1.1 libgomp expat git
+RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.1 libssl1.1 libgomp expat git libssh
 
 
 FROM        base AS build
@@ -31,6 +31,7 @@ RUN     buildDeps="autoconf \
                    libtool \
                    make \
                    python \
+                   libssh-dev \
                    openssl-dev \
                    tar \
                    yasm \

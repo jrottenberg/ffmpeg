@@ -179,6 +179,7 @@ for version in keep_version:
             "--enable-libxvid",
             "--enable-libx264",
             "--enable-nonfree",
+            "--enable-libssh",
             "--enable-openssl",
             "--enable-libfdk_aac",
             "--enable-postproc",
