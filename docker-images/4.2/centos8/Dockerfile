@@ -7,7 +7,7 @@
 #
 FROM    centos:8 AS base
 
-RUN     dnf -y install libgomp && \
+RUN     dnf -y install libgomp libssh && \
         dnf clean all;
 
 
@@ -87,6 +87,7 @@ RUN     buildDeps="autoconf \
                    nasm \
                    perl \
                    python3 \
+                   libssh-devel \
                    openssl-devel \
                    tar \
                    yasm \
@@ -519,6 +520,7 @@ RUN \
         --enable-libxvid \
         --enable-libx264 \
         --enable-nonfree \
+        --enable-libssh \
         --enable-openssl \
         --enable-libfdk_aac \
         --enable-postproc \

@@ -82,6 +82,7 @@ RUN     buildDeps="autoconf \
                    libtool \
                    make \
                    python \
+                   libssh-dev \
                    openssl-dev \
                    tar \
                    yasm \
@@ -518,6 +519,7 @@ RUN \
         --enable-libxvid \
         --enable-libx264 \
         --enable-nonfree \
+        --enable-libssh \
         --enable-openssl \
         --enable-libfdk_aac \
         --enable-postproc \
