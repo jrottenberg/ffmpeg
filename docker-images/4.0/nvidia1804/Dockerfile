@@ -22,7 +22,7 @@ ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev libssh-4 && \
         apt-get autoremove -y && \
         apt-get clean -y
 
@@ -104,6 +104,7 @@ RUN      buildDeps="autoconf \
                     perl \
                     pkg-config \
                     python \
+                    libssh-dev \
                     libssl-dev \
                     yasm \
                     zlib1g-dev" && \
@@ -542,6 +543,7 @@ RUN \
         --enable-libxvid \
         --enable-libx264 \
         --enable-nonfree \
+        --enable-libssh \
         --enable-openssl \
         --enable-libfdk_aac \
         --enable-postproc \
