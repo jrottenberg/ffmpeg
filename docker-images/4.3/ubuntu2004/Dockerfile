@@ -5,7 +5,7 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:16.04 AS base
+FROM        ubuntu:20.04 AS base
 
 WORKDIR     /tmp/workdir
 
