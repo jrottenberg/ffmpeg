@@ -18,6 +18,8 @@ FROM base as build
 
 ENV         %%ENV%%
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN      buildDeps="autoconf \
                     automake \
                     cmake \
