@@ -30,7 +30,6 @@ VARIANTS = [
     {"name": "vaapi1804", "parent": "vaapi"},
     {"name": "vaapi2004", "parent": "vaapi"},
     {"name": "nvidia1804", "parent": "nvidia"},
-    {"name": "nvidia1604", "parent": "nvidia"},
 ]
 FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
 gitlabci = []
