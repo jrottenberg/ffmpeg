@@ -73,6 +73,8 @@ ARG         PREFIX=/opt/ffmpeg
 ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN      buildDeps="autoconf \
                     automake \
                     cmake \

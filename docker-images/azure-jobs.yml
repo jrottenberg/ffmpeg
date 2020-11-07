@@ -178,15 +178,6 @@ jobs:
         ISPARENT:  True
 
 
-      nvidia1604_4.3.1:
-        MAJOR_VERSION: 4
-        VERSION:  4.3
-        LONG_VERSION: 4.3.1
-        VARIANT:  nvidia1604
-        PARENT: nvidia
-        ISPARENT:  False
-
-
       ubuntu1804_4.2.4:
         MAJOR_VERSION: 4
         VERSION:  4.2
@@ -589,15 +580,6 @@ jobs:
         LONG_VERSION: 3.2.15
         VARIANT:  vaapi2004
         PARENT: vaapi
-        ISPARENT:  True
-
-
-      nvidia1604_3.2.15:
-        MAJOR_VERSION: 3
-        VERSION:  3.2
-        LONG_VERSION: 3.2.15
-        VARIANT:  nvidia1604
-        PARENT: nvidia
         ISPARENT:  True
 
   steps:
