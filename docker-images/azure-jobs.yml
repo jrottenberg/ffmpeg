@@ -7,20 +7,20 @@ jobs:
     maxParallel: 10
     matrix:
 
-      ubuntu1604_snapshot:
-        MAJOR_VERSION: snapshot
-        VERSION:  snapshot
-        LONG_VERSION: snapshot
-        VARIANT:  ubuntu1604
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
       ubuntu1804_snapshot:
         MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
         VARIANT:  ubuntu1804
+        PARENT: ubuntu
+        ISPARENT:  False
+
+
+      ubuntu2004_snapshot:
+        MAJOR_VERSION: snapshot
+        VERSION:  snapshot
+        LONG_VERSION: snapshot
+        VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -61,11 +61,11 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi1804_snapshot:
+      vaapi2004_snapshot:
         MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
-        VARIANT:  vaapi1804
+        VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
@@ -79,20 +79,20 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu1604_4.3.1:
-        MAJOR_VERSION: 4
-        VERSION:  4.3
-        LONG_VERSION: 4.3.1
-        VARIANT:  ubuntu1604
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
       ubuntu1804_4.3.1:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
         VARIANT:  ubuntu1804
+        PARENT: ubuntu
+        ISPARENT:  False
+
+
+      ubuntu2004_4.3.1:
+        MAJOR_VERSION: 4
+        VERSION:  4.3
+        LONG_VERSION: 4.3.1
+        VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -157,16 +157,16 @@ jobs:
         LONG_VERSION: 4.3.1
         VARIANT:  vaapi1804
         PARENT: vaapi
-        ISPARENT:  True
+        ISPARENT:  False
 
 
-      vaapi1604_4.3.1:
+      vaapi2004_4.3.1:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
-        VARIANT:  vaapi1604
+        VARIANT:  vaapi2004
         PARENT: vaapi
-        ISPARENT:  False
+        ISPARENT:  True
 
 
       nvidia1804_4.3.1:
@@ -178,29 +178,20 @@ jobs:
         ISPARENT:  True
 
 
-      nvidia1604_4.3.1:
-        MAJOR_VERSION: 4
-        VERSION:  4.3
-        LONG_VERSION: 4.3.1
-        VARIANT:  nvidia1604
-        PARENT: nvidia
-        ISPARENT:  False
-
-
-      ubuntu1604_4.2.4:
-        MAJOR_VERSION: 4
-        VERSION:  4.2
-        LONG_VERSION: 4.2.4
-        VARIANT:  ubuntu1604
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
       ubuntu1804_4.2.4:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
         VARIANT:  ubuntu1804
+        PARENT: ubuntu
+        ISPARENT:  False
+
+
+      ubuntu2004_4.2.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.2
+        LONG_VERSION: 4.2.4
+        VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -241,11 +232,11 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi1804_4.2.4:
+      vaapi2004_4.2.4:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
-        VARIANT:  vaapi1804
+        VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
@@ -259,20 +250,20 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu1604_4.1.6:
-        MAJOR_VERSION: 4
-        VERSION:  4.1
-        LONG_VERSION: 4.1.6
-        VARIANT:  ubuntu1604
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
       ubuntu1804_4.1.6:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
         VARIANT:  ubuntu1804
+        PARENT: ubuntu
+        ISPARENT:  False
+
+
+      ubuntu2004_4.1.6:
+        MAJOR_VERSION: 4
+        VERSION:  4.1
+        LONG_VERSION: 4.1.6
+        VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -313,11 +304,11 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi1804_4.1.6:
+      vaapi2004_4.1.6:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
-        VARIANT:  vaapi1804
+        VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
@@ -331,20 +322,20 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu1604_4.0.6:
-        MAJOR_VERSION: 4
-        VERSION:  4.0
-        LONG_VERSION: 4.0.6
-        VARIANT:  ubuntu1604
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
       ubuntu1804_4.0.6:
         MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
         VARIANT:  ubuntu1804
+        PARENT: ubuntu
+        ISPARENT:  False
+
+
+      ubuntu2004_4.0.6:
+        MAJOR_VERSION: 4
+        VERSION:  4.0
+        LONG_VERSION: 4.0.6
+        VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -385,11 +376,11 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi1804_4.0.6:
+      vaapi2004_4.0.6:
         MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
-        VARIANT:  vaapi1804
+        VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
@@ -403,20 +394,20 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu1604_3.4.8:
-        MAJOR_VERSION: 3
-        VERSION:  3.4
-        LONG_VERSION: 3.4.8
-        VARIANT:  ubuntu1604
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
       ubuntu1804_3.4.8:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
         VARIANT:  ubuntu1804
+        PARENT: ubuntu
+        ISPARENT:  False
+
+
+      ubuntu2004_3.4.8:
+        MAJOR_VERSION: 3
+        VERSION:  3.4
+        LONG_VERSION: 3.4.8
+        VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -457,11 +448,11 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi1804_3.4.8:
+      vaapi2004_3.4.8:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
-        VARIANT:  vaapi1804
+        VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
@@ -475,20 +466,20 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu1604_3.3.9:
-        MAJOR_VERSION: 3
-        VERSION:  3.3
-        LONG_VERSION: 3.3.9
-        VARIANT:  ubuntu1604
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
       ubuntu1804_3.3.9:
         MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  ubuntu1804
+        PARENT: ubuntu
+        ISPARENT:  False
+
+
+      ubuntu2004_3.3.9:
+        MAJOR_VERSION: 3
+        VERSION:  3.3
+        LONG_VERSION: 3.3.9
+        VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -529,11 +520,11 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi1804_3.3.9:
+      vaapi2004_3.3.9:
         MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
-        VARIANT:  vaapi1804
+        VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
@@ -547,11 +538,11 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu1604_3.2.15:
+      ubuntu2004_3.2.15:
         MAJOR_VERSION: 3
         VERSION:  3.2
         LONG_VERSION: 3.2.15
-        VARIANT:  ubuntu1604
+        VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -583,21 +574,12 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi1604_3.2.15:
+      vaapi2004_3.2.15:
         MAJOR_VERSION: 3
         VERSION:  3.2
         LONG_VERSION: 3.2.15
-        VARIANT:  vaapi1604
+        VARIANT:  vaapi2004
         PARENT: vaapi
-        ISPARENT:  True
-
-
-      nvidia1604_3.2.15:
-        MAJOR_VERSION: 3
-        VERSION:  3.2
-        LONG_VERSION: 3.2.15
-        VARIANT:  nvidia1604
-        PARENT: nvidia
         ISPARENT:  True
 
   steps:
