@@ -4,7 +4,7 @@
 #
 #
 
-FROM        alpine:3.11 AS base
+FROM        alpine:3.12 AS base
 
 RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.1 libssl1.1 libgomp expat git
 
@@ -13,7 +13,7 @@ FROM        base AS build
 
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=snapshot \
+ENV         FFMPEG_VERSION=4.2.4 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
@@ -85,7 +85,7 @@ RUN     buildDeps="autoconf \
                    gperf \
                    libtool \
                    make \
-                   python \
+                   python3 \
                    openssl-dev \
                    tar \
                    yasm \
