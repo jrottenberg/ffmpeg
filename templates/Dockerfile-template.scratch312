@@ -4,7 +4,7 @@
 #
 #
 
-FROM        alpine:3.11 AS build
+FROM        alpine:3.12 AS build
 
 WORKDIR     /tmp/workdir
 
@@ -26,7 +26,7 @@ RUN     buildDeps="autoconf \
                    gperf \
                    libtool \
                    make \
-                   python \
+                   python3 \
                    openssl-dev \
                    tar \
                    yasm \
