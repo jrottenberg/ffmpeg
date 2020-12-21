@@ -25,11 +25,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine311_snapshot:
+      alpine312_snapshot:
         MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
-        VARIANT:  alpine311
+        VARIANT:  alpine312
         PARENT: alpine
         ISPARENT:  True
 
@@ -52,11 +52,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch311_snapshot:
+      scratch312_snapshot:
         MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
-        VARIANT:  scratch311
+        VARIANT:  scratch312
         PARENT: scratch
         ISPARENT:  True
 
@@ -97,11 +97,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine311_4.3.1:
+      alpine312_4.3.1:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
-        VARIANT:  alpine311
+        VARIANT:  alpine312
         PARENT: alpine
         ISPARENT:  False
 
@@ -133,11 +133,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch311_4.3.1:
+      scratch312_4.3.1:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.1
-        VARIANT:  scratch311
+        VARIANT:  scratch312
         PARENT: scratch
         ISPARENT:  False
 
@@ -196,11 +196,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine311_4.2.4:
+      alpine312_4.2.4:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
-        VARIANT:  alpine311
+        VARIANT:  alpine312
         PARENT: alpine
         ISPARENT:  True
 
@@ -223,11 +223,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch311_4.2.4:
+      scratch312_4.2.4:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
-        VARIANT:  scratch311
+        VARIANT:  scratch312
         PARENT: scratch
         ISPARENT:  True
 
@@ -268,11 +268,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine311_4.1.6:
+      alpine312_4.1.6:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
-        VARIANT:  alpine311
+        VARIANT:  alpine312
         PARENT: alpine
         ISPARENT:  True
 
@@ -295,11 +295,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch311_4.1.6:
+      scratch312_4.1.6:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
-        VARIANT:  scratch311
+        VARIANT:  scratch312
         PARENT: scratch
         ISPARENT:  True
 
@@ -340,11 +340,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine311_4.0.6:
+      alpine312_4.0.6:
         MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
-        VARIANT:  alpine311
+        VARIANT:  alpine312
         PARENT: alpine
         ISPARENT:  True
 
@@ -367,11 +367,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch311_4.0.6:
+      scratch312_4.0.6:
         MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
-        VARIANT:  scratch311
+        VARIANT:  scratch312
         PARENT: scratch
         ISPARENT:  True
 
@@ -412,11 +412,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine311_3.4.8:
+      alpine312_3.4.8:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
-        VARIANT:  alpine311
+        VARIANT:  alpine312
         PARENT: alpine
         ISPARENT:  True
 
@@ -439,11 +439,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch311_3.4.8:
+      scratch312_3.4.8:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
-        VARIANT:  scratch311
+        VARIANT:  scratch312
         PARENT: scratch
         ISPARENT:  True
 
@@ -484,11 +484,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine311_3.3.9:
+      alpine312_3.3.9:
         MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
-        VARIANT:  alpine311
+        VARIANT:  alpine312
         PARENT: alpine
         ISPARENT:  True
 
@@ -511,11 +511,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch311_3.3.9:
+      scratch312_3.3.9:
         MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
-        VARIANT:  scratch311
+        VARIANT:  scratch312
         PARENT: scratch
         ISPARENT:  True
 

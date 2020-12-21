@@ -21,14 +21,14 @@ snapshot-ubuntu2004:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-snapshot-alpine311:
+snapshot-alpine312:
   extends: .docker
-  stage: alpine311
+  stage: alpine312
   variables:
     MAJOR_VERSION: snapshot
     VERSION: "snapshot"
     LONG_VERSION: "snapshot"
-    VARIANT: alpine311
+    VARIANT: alpine312
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -54,14 +54,14 @@ snapshot-centos8:
     PARENT: "centos"
     ISPARENT: "True"
 
-snapshot-scratch311:
+snapshot-scratch312:
   extends: .docker
-  stage: scratch311
+  stage: scratch312
   variables:
     MAJOR_VERSION: snapshot
     VERSION: "snapshot"
     LONG_VERSION: "snapshot"
-    VARIANT: scratch311
+    VARIANT: scratch312
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -109,14 +109,14 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.3.1-alpine311:
+4.3.1-alpine312:
   extends: .docker
-  stage: alpine311
+  stage: alpine312
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
-    VARIANT: alpine311
+    VARIANT: alpine312
     PARENT: "alpine"
     ISPARENT: "False"
 
@@ -153,14 +153,14 @@ snapshot-nvidia1804:
     PARENT: "centos"
     ISPARENT: "True"
 
-4.3.1-scratch311:
+4.3.1-scratch312:
   extends: .docker
-  stage: scratch311
+  stage: scratch312
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.1"
-    VARIANT: scratch311
+    VARIANT: scratch312
     PARENT: "scratch"
     ISPARENT: "False"
 
@@ -230,14 +230,14 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.2.4-alpine311:
+4.2.4-alpine312:
   extends: .docker
-  stage: alpine311
+  stage: alpine312
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.4"
-    VARIANT: alpine311
+    VARIANT: alpine312
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -263,14 +263,14 @@ snapshot-nvidia1804:
     PARENT: "centos"
     ISPARENT: "True"
 
-4.2.4-scratch311:
+4.2.4-scratch312:
   extends: .docker
-  stage: scratch311
+  stage: scratch312
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.4"
-    VARIANT: scratch311
+    VARIANT: scratch312
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -318,14 +318,14 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.1.6-alpine311:
+4.1.6-alpine312:
   extends: .docker
-  stage: alpine311
+  stage: alpine312
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.6"
-    VARIANT: alpine311
+    VARIANT: alpine312
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -351,14 +351,14 @@ snapshot-nvidia1804:
     PARENT: "centos"
     ISPARENT: "True"
 
-4.1.6-scratch311:
+4.1.6-scratch312:
   extends: .docker
-  stage: scratch311
+  stage: scratch312
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.6"
-    VARIANT: scratch311
+    VARIANT: scratch312
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -406,14 +406,14 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.0.6-alpine311:
+4.0.6-alpine312:
   extends: .docker
-  stage: alpine311
+  stage: alpine312
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.0"
     LONG_VERSION: "4.0.6"
-    VARIANT: alpine311
+    VARIANT: alpine312
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -439,14 +439,14 @@ snapshot-nvidia1804:
     PARENT: "centos"
     ISPARENT: "True"
 
-4.0.6-scratch311:
+4.0.6-scratch312:
   extends: .docker
-  stage: scratch311
+  stage: scratch312
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.0"
     LONG_VERSION: "4.0.6"
-    VARIANT: scratch311
+    VARIANT: scratch312
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -494,14 +494,14 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-3.4.8-alpine311:
+3.4.8-alpine312:
   extends: .docker
-  stage: alpine311
+  stage: alpine312
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.8"
-    VARIANT: alpine311
+    VARIANT: alpine312
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -527,14 +527,14 @@ snapshot-nvidia1804:
     PARENT: "centos"
     ISPARENT: "True"
 
-3.4.8-scratch311:
+3.4.8-scratch312:
   extends: .docker
-  stage: scratch311
+  stage: scratch312
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.8"
-    VARIANT: scratch311
+    VARIANT: scratch312
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -582,14 +582,14 @@ snapshot-nvidia1804:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-3.3.9-alpine311:
+3.3.9-alpine312:
   extends: .docker
-  stage: alpine311
+  stage: alpine312
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
-    VARIANT: alpine311
+    VARIANT: alpine312
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -615,14 +615,14 @@ snapshot-nvidia1804:
     PARENT: "centos"
     ISPARENT: "True"
 
-3.3.9-scratch311:
+3.3.9-scratch312:
   extends: .docker
-  stage: scratch311
+  stage: scratch312
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
-    VARIANT: scratch311
+    VARIANT: scratch312
     PARENT: "scratch"
     ISPARENT: "True"
 

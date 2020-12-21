@@ -4,16 +4,11 @@
 #
 #
 
-FROM        alpine:3.11 AS base
-
-RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.1 libssl1.1 libgomp expat git
-
-
-FROM        base AS build
+FROM        alpine:3.12 AS build
 
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=4.1.6 \
+ENV         FFMPEG_VERSION=4.3.1 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
@@ -79,20 +74,27 @@ RUN     buildDeps="autoconf \
                    curl \
                    coreutils \
                    diffutils \
+                   expat-dev \
                    file \
                    g++ \
                    gcc \
                    gperf \
                    libtool \
                    make \
-                   python \
+                   python3 \
                    openssl-dev \
                    tar \
                    yasm \
                    nasm \
                    zlib-dev \
-                   expat-dev" && \
-        apk add --no-cache --update ${buildDeps}
+                   git \
+                   libgcc \
+                   libstdc++ \
+                   ca-certificates \
+                   libcrypto1.1 \
+                   libssl1.1" && \
+        apk  add --update ${buildDeps}
+
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -530,6 +532,7 @@ RUN \
         --enable-libaom \
         --extra-libs=-lpthread \
         --enable-libsrt \
+        --enable-libaribb24 \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" && \
         make && \
@@ -542,28 +545,23 @@ RUN \
 
 
 RUN \
-    ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
-    for lib in /usr/local/lib/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
-    cp ${PREFIX}/bin/* /usr/local/bin/ && \
-    cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-    mkdir -p /usr/local/include && \
-    cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-    mkdir -p /usr/local/lib/pkgconfig && \
-    for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-        sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
-    done
+        mkdir -p /tmp/fakeroot/lib  && \
+        ldd ${PREFIX}/bin/ffmpeg | cut -d ' ' -f 3 | strings | xargs -I R cp R /tmp/fakeroot/lib/ && \
+        for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
+        cp -r ${PREFIX}/bin /tmp/fakeroot/bin/ && \
+        cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/ && \
+        LD_LIBRARY_PATH=/tmp/fakeroot/lib /tmp/fakeroot/bin/ffmpeg -buildconf
 
 ### Release Stage
-FROM        base AS release
+FROM        scratch AS release
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
 ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 CMD         ["--help"]
-ENTRYPOINT  ["ffmpeg"]
+ENTRYPOINT  ["/bin/ffmpeg"]
 
-COPY --from=build /usr/local /usr/local
+COPY --from=build /tmp/fakeroot/ /
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

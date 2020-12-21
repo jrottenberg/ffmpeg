@@ -21,11 +21,11 @@ SKIP_VERSIONS = "3.1.11 3.0.12"
 VARIANTS = [
     {"name": "ubuntu1804", "parent": "ubuntu"},
     {"name": "ubuntu2004", "parent": "ubuntu"},
-    {"name": "alpine311", "parent": "alpine"},
+    {"name": "alpine312", "parent": "alpine"},
     {"name": "alpine38", "parent": "alpine"},
     {"name": "centos7", "parent": "centos"},
     {"name": "centos8", "parent": "centos"},
-    {"name": "scratch311", "parent": "scratch"},
+    {"name": "scratch312", "parent": "scratch"},
     {"name": "scratch38", "parent": "scratch"},
     {"name": "vaapi1804", "parent": "vaapi"},
     {"name": "vaapi2004", "parent": "vaapi"},
@@ -47,10 +47,10 @@ version, all_versions = all_versions[0], all_versions[1:]
 
 SKIP_VARIANTS = {
     "3.2": [
-        "alpine311",
+        "alpine312",
         "centos8",
         "nvidia1804",
-        "scratch311",
+        "scratch312",
         "ubuntu1804",
         "vaapi1804",
     ],
