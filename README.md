@@ -13,103 +13,46 @@ This image can be used as a base for an encoding farm.
 
 ## Builds
 
-You can use jrottenberg/ffmpeg or jrottenberg/ffmpeg:3.3
-to get the latest build based on ubuntu.
+There are different builds available:
+- alpine based images `ffmpeg:<version>-alpine38` or `ffmpeg:<version>-alpine312` (the `ffmpeg:<version>-alpine` builds are not updated any more)
+  - alpine based scratch images `ffmpeg:<version>-scratch38` or `ffmpeg:<version>-scratch312` (experimental image containing only FFmpeg and libraries, the `ffmpeg:<version>-alpine` builds are not updated any more)
+- centos based images `ffmpeg:<version>-centos7` or `ffmpeg:<version>-centos8`
+- ubuntu based images `ffmpeg:<version>-ubuntu1804` or `ffmpeg:<version>-ubuntu2004` (the default, you can also use `ffmpeg:<version>-ubuntu` as an alias)
+  - ubuntu based nvidia images `ffmpeg:<version>-nvidia1804`
+  - ubuntu based vaapi images `ffmpeg:<version>-vaapi1804` or `ffmpeg:<version>-vaapi2004`
 
-Note : I've made ubuntu the default after 3.1
-
-You'll find centos based image using `ffmpeg:X.Y-centos` or `ffmpeg:centos` to get the latest.
-alpine images  `ffmpeg:X.Y-alpine` to get the latest.
-scratch images `ffmpeg:X.Y-scratch` to get the latest. (Scratch is an experimental image containing only FFmpeg and libraries)
-
-Format is `ffmpeg:MAJOR.MINOR-VARIANT` with MAJOR.MINOR in :
-
-- 2.8
-- 3.0
-- 3.1
+`<version>` can be one of the following:
 - 3.2
 - 3.3
 - 3.4
 - 4.0
 - 4.1
+- 4.2
+- 4.3
 - snapshot
 
-and VARIANT in :
+Not all combinations are supported and older versions will fade out over time. See the table below for the currently supported combinations.
 
-- alpine
-- centos
-- nvidia
-- scratch
-- ubuntu
-- vaapi
+| *Version*         | alpine38           | alpine312          | centos7            | centos8            | nvidia1804         | scratch38          | scratch312         | ubuntu1804         | ubuntu2004         | vaapi1804          | vaapi2004          |
+|-------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
+| *3.2*             | :heavy_check_mark: | :x:                | :heavy_check_mark: | :x:                | :x:                | :heavy_check_mark: | :x:                | :x:                | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *3.3*             | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *3.4*             | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *4.0*             | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *4.1*             | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *4.2*             | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *4.3*             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| *snapshot*        | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
 
-Recent images:
+### Generate list of recent images
 
-```text
-snapshot-vaapi      74mb
-snapshot-ubuntu     86mb
-snapshot-scratch    20mb
-snapshot-nvidia     640mb
-snapshot-centos     97mb
-snapshot-alpine     35mb
-4.1-vaapi           73mb
-4.1-ubuntu          85mb
-4.1-scratch         20mb
-4.1-nvidia          640mb
-4.1-centos          97mb
-4.1-alpine          34mb
-4.0-vaapi           73mb
-4.0-ubuntu          83mb
-4.0-scratch         20mb
-4.0-nvidia          639mb
-4.0-centos          97mb
-4.0-alpine          34mb
-3.4-vaapi           71mb
-3.4-ubuntu          83mb
-3.4-scratch         18mb
-3.4-nvidia          637mb
-3.4-centos          97mb
-3.4-alpine          32mb
-3.4                 83mb
-3.3-vaapi           71mb
-3.3-ubuntu          83mb
-3.3-scratch         18mb
-3.3-nvidia          637mb
-3.3-centos          96mb
-3.3-alpine          31mb
-3.3                 82mb
-3.2-vaapi           83mb
-3.2-ubuntu          83mb
-3.2-scratch         18mb
-3.2-nvidia          623mb
-3.2-centos          96mb
-3.2-alpine          32mb
-3.1-vaapi           83mb
-3.1-ubuntu          82mb
-3.1-scratch         17mb
-3.1-nvidia          623mb
-3.1-centos          96mb
-3.1-alpine          32mb
-3.1                 81mb
-3.0-ubuntu          82mb
-3.0-scratch         17mb
-3.0-nvidia          623mb
-3.0-centos          96mb
-3.0-alpine          31mb
-2.8-vaapi           82mb
-2.8-ubuntu          81mb
-2.8-scratch         17mb
-2.8-nvidia          622mb
-2.8-centos          95mb
-2.8-alpine          30mb
-```
-
-### How the 'recent images' was generated
-
+You can use the following command to generate a list of current images:
 ```bash
 $ curl --silent https://hub.docker.com/v2/repositories/jrottenberg/ffmpeg/tags/?page_size=500 | jq -cr ".results|sort_by(.name)|reverse[]|.sz=(.full_size/1048576|floor|tostring+\"mb\")|[.name,( (20-(.name|length))*\" \" ),.sz,( (8-(.sz|length))*\" \"),.last_updated[:10]]|@text|gsub(\"[,\\\"\\\]\\\[]\";null)"
+```
 
-# If you want to compare the one you have locally
+If you want to compare the one you have locally, use the following command:
+```bash
 $ docker images | grep ffmpeg | sort | awk '{print $1 ":" $2 "\t" $7 $8}'
 ```
 
