@@ -54,12 +54,12 @@ SKIP_VARIANTS = {
         "ubuntu1804",
         "vaapi1804",
     ],
-    "3.3": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
-    "3.4": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
-    "4.0": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
-    "4.1": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
-    "4.2": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
-    "snapshot": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
+    "3.3": ["alpine38",  "scratch38", "vaapi1804"],
+    "3.4": ["alpine38",  "scratch38", "vaapi1804"],
+    "4.0": ["alpine38",  "scratch38", "vaapi1804"],
+    "4.1": ["alpine38",  "scratch38", "vaapi1804"],
+    "4.2": ["alpine38",  "scratch38", "vaapi1804"],
+    "snapshot": ["alpine38",  "scratch38", "vaapi1804"],
 }
 
 last = version.split(".")
