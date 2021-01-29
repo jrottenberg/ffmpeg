@@ -21,7 +21,7 @@ ENV         FFMPEG_VERSION=snapshot \
             FONTCONFIG_VERSION=2.12.4 \
             FREETYPE_VERSION=2.5.5 \
             FRIBIDI_VERSION=0.19.7 \
-            KVAZAAR_VERSION=1.2.0 \
+            KVAZAAR_VERSION=2.0.0 \
             LAME_VERSION=3.100 \
             LIBASS_VERSION=0.13.7 \
             LIBPTHREAD_STUBS_VERSION=0.4 \
@@ -94,7 +94,7 @@ RUN     buildDeps="autoconf \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         dnf --enablerepo=extras install -y epel-release && \
-        dnf --enablerepo=PowerTools install -y ${buildDeps} && \
+        dnf --enablerepo=powertools install -y ${buildDeps} && \
         alternatives --set python /usr/bin/python3
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
