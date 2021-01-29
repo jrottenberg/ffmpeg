@@ -94,7 +94,7 @@ RUN     buildDeps="autoconf \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         dnf --enablerepo=extras install -y epel-release && \
-        dnf --enablerepo=PowerTools install -y ${buildDeps} && \
+        dnf --enablerepo=powertools install -y ${buildDeps} && \
         alternatives --set python /usr/bin/python3
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
