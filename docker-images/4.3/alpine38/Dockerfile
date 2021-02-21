@@ -13,7 +13,7 @@ FROM        base AS build
 
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=4.3.1 \
+ENV         FFMPEG_VERSION=4.3.2 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
