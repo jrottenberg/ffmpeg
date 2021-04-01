@@ -48,6 +48,7 @@ ENV         FFMPEG_VERSION=4.2.4 \
             LIBSRT_VERSION=1.4.1 \
             LIBARIBB24_VERSION=1.0.3 \
             LIBPNG_VERSION=1.6.9 \
+            LIBVMAF_VERSION=2.1.1 \
             SRC=/usr/local
 
 ARG         FREETYPE_SHA256SUM="5d03dd76c2171a7601e9ce10551d52d4471cf92cd205948e60289251daddffa8 freetype-2.5.5.tar.gz"
@@ -63,6 +64,7 @@ ARG         LIBXML2_SHA256SUM="f07dab13bf42d2b8db80620cce7419b3b87827cc937c8bb20
 ARG         LIBBLURAY_SHA256SUM="a3dd452239b100dc9da0d01b30e1692693e2a332a7d29917bf84bb10ea7c0b42 libbluray-1.1.2.tar.bz2"
 ARG         LIBZMQ_SHA256SUM="02ecc88466ae38cf2c8d79f09cfd2675ba299a439680b64ade733e26a349edeb v4.3.2.tar.gz"
 ARG         LIBARIBB24_SHA256SUM="f61560738926e57f9173510389634d8c06cabedfa857db4b28fb7704707ff128 v1.0.3.tar.gz"
+ARG         LIBVMAF_SHA256SUM="e7fc00ae1322a7eccfcf6d4f1cdf9c67eec8058709887c8c6c3795c617326f77 v2.1.1.tar.gz"
 
 
 ARG         LD_LIBRARY_PATH=/opt/ffmpeg/lib
@@ -129,6 +131,26 @@ RUN     buildDeps="autoconf \
         # yum transaction as none of those packages are required for the rest of the build \
         yum history undo $(yum history info | grep 'Transaction ID' | awk -F: '{print$2}' | tr -d ' ') -y && \
         yum autoremove -y
+
+## libvmaf https://github.com/Netflix/vmaf
+RUN \
+        if which meson || false; then \
+                echo "Building VMAF." && \
+                DIR=/tmp/vmaf && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://github.com/Netflix/vmaf/archive/v${LIBVMAF_VERSION}.tar.gz && \
+                tar -xz --strip-components=1 -f v${LIBVMAF_VERSION}.tar.gz && \
+                cd /tmp/vmaf/libvmaf && \
+                meson build --buildtype release --prefix=${PREFIX} && \
+                ninja -vC build && \
+                ninja -vC build install && \
+                mkdir -p ${PREFIX}/share/model/ && \
+                cp -r /tmp/vmaf/model/* ${PREFIX}/share/model/ && \
+                rm -rf ${DIR}; \
+        else \
+                echo "VMAF skipped."; \
+        fi
 
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
