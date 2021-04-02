@@ -32,6 +32,7 @@ RUN      buildDeps="autoconf \
                     gperf \
                     libtool \
                     make \
+                    meson \
                     nasm \
                     perl \
                     pkg-config \
