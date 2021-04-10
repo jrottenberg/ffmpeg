@@ -79,6 +79,105 @@ jobs:
         ISPARENT:  True
 
 
+      ubuntu1804_4.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4
+        VARIANT:  ubuntu1804
+        PARENT: ubuntu
+        ISPARENT:  False
+
+
+      ubuntu2004_4.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4
+        VARIANT:  ubuntu2004
+        PARENT: ubuntu
+        ISPARENT:  True
+
+
+      alpine312_4.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4
+        VARIANT:  alpine312
+        PARENT: alpine
+        ISPARENT:  False
+
+
+      alpine38_4.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4
+        VARIANT:  alpine38
+        PARENT: alpine
+        ISPARENT:  True
+
+
+      centos7_4.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4
+        VARIANT:  centos7
+        PARENT: centos
+        ISPARENT:  False
+
+
+      centos8_4.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4
+        VARIANT:  centos8
+        PARENT: centos
+        ISPARENT:  True
+
+
+      scratch312_4.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4
+        VARIANT:  scratch312
+        PARENT: scratch
+        ISPARENT:  False
+
+
+      scratch38_4.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4
+        VARIANT:  scratch38
+        PARENT: scratch
+        ISPARENT:  True
+
+
+      vaapi1804_4.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4
+        VARIANT:  vaapi1804
+        PARENT: vaapi
+        ISPARENT:  False
+
+
+      vaapi2004_4.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4
+        VARIANT:  vaapi2004
+        PARENT: vaapi
+        ISPARENT:  True
+
+
+      nvidia1804_4.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4
+        VARIANT:  nvidia1804
+        PARENT: nvidia
+        ISPARENT:  True
+
+
       ubuntu1804_4.3.2:
         MAJOR_VERSION: 4
         VERSION:  4.3
