@@ -17,10 +17,14 @@ WORKDIR     /tmp/workdir
 
 ENV         FFMPEG_VERSION=snapshot \
             AOM_VERSION=v1.0.0 \
+            CAIRO_VERSION=1.16.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
-            FREETYPE_VERSION=2.5.5 \
+            FREETYPE_VERSION=2.10.4 \
             FRIBIDI_VERSION=0.19.7 \
+            HARFBUZZ_VERSION=2.8.1 \
+            GDKPIXBUF_VERSION=2.42.0 \
+            GLIB_VERSION=2.68.1 \
             KVAZAAR_VERSION=2.0.0 \
             LAME_VERSION=3.100 \
             LIBASS_VERSION=0.13.7 \
@@ -32,6 +36,8 @@ ENV         FFMPEG_VERSION=snapshot \
             OPENCOREAMR_VERSION=0.1.5 \
             OPUS_VERSION=1.2 \
             OPENJPEG_VERSION=2.1.2 \
+            PANGO_VERSION=1.48.4 \
+            PIXMAN_VERSION=0.40.0 \
             THEORA_VERSION=1.1.1 \
             VORBIS_VERSION=1.3.5 \
             VPX_VERSION=1.8.0 \
@@ -49,14 +55,21 @@ ENV         FFMPEG_VERSION=snapshot \
             LIBARIBB24_VERSION=1.0.3 \
             LIBPNG_VERSION=1.6.9 \
             LIBVMAF_VERSION=2.1.1 \
+            LIBRSVG_VERSION=2.50.5 \
             SRC=/usr/local
 
-ARG         FREETYPE_SHA256SUM="5d03dd76c2171a7601e9ce10551d52d4471cf92cd205948e60289251daddffa8 freetype-2.5.5.tar.gz"
+ARG         CAIRO_SHA256SUM="5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331 cairo-1.16.0.tar.xz"
+ARG         FREETYPE_SHA256SUM="5eab795ebb23ac77001cfb68b7d4d50b5d6c7469247b0b01b2c953269f658dac freetype-2.10.4.tar.gz"
 ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8 0.19.7.tar.gz"
+ARG         HARFBUZZ_SHA256SUM="4124f663ec4bf4e294d9cf230668370b4249a48ff34deaf0f06e8fc82d891300 harfbuzz-2.8.1.tar.xz"
+ARG         GDKPIXBUF_SHA256SUM="d00ee49302a75c61f0cbaa71ba0b7f7f2366ced7535122f7dc1bcc53ea658367 gdk-pixbuf-2.42.0.tar.gz"
+ARG         GLIB_SHA256SUM="10b8786f533efd2bf253ce1978ec39fe0f0848c963a57cd51c760eee5595ca8b glib-2.68.1.tar.gz"
 ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a47889315526adbafd7 0.13.7.tar.gz"
 ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb v1.1.0.tar.gz"
 ARG         OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692 libogg-1.3.2.tar.gz"
 ARG         OPUS_SHA256SUM="77db45a87b51578fbc49555ef1b10926179861d854eb2613207dc79d9ec0a9a9 opus-1.2.tar.gz"
+ARG         PANGO_SHA256SUM="2c7e92f2430ae2ab91d6156488f41dfb0fd1ea787fbfb807dfe53a4f361a9d1a pango-1.48.4.tar.gz"
+ARG         PIXMAN_SHA256SUM="6d200dec3740d9ec4ec8d1180e25779c00bc749f94278c8b9021f5534db223fc pixman-0.40.0.tar.gz"
 ARG         THEORA_SHA256SUM="40952956c47811928d1e7922cda3bc1f427eb75680c3c37249c91e949054916b libtheora-1.1.1.tar.gz"
 ARG         VORBIS_SHA256SUM="6efbcecdd3e5dfbf090341b485da9d176eb250d893e3eb378c428a2db38301ce libvorbis-1.3.5.tar.gz"
 ARG         XVID_SHA256SUM="4e9fd62728885855bc5007fe1be58df42e5e274497591fec37249e1052ae316f xvidcore-1.3.4.tar.gz"
@@ -65,14 +78,16 @@ ARG         LIBBLURAY_SHA256SUM="a3dd452239b100dc9da0d01b30e1692693e2a332a7d2991
 ARG         LIBZMQ_SHA256SUM="02ecc88466ae38cf2c8d79f09cfd2675ba299a439680b64ade733e26a349edeb v4.3.2.tar.gz"
 ARG         LIBARIBB24_SHA256SUM="f61560738926e57f9173510389634d8c06cabedfa857db4b28fb7704707ff128 v1.0.3.tar.gz"
 ARG         LIBVMAF_SHA256SUM="e7fc00ae1322a7eccfcf6d4f1cdf9c67eec8058709887c8c6c3795c617326f77 v2.1.1.tar.gz"
+ARG         LIBRSVG_SHA256SUM="4188c790e9590b5ea17d6e9e07adf31b60744252f92a4880916c98100593acbd librsvg-2.50.5.tar.gz"
 
 
-ARG         LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG         MAKEFLAGS="-j2"
-ARG         PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig"
+ARG         PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig"
 ARG         PREFIX=/opt/ffmpeg
-ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
-
+ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/x86_64-linux-gnu"
+ARG         XDG_DATA_DIRS="/opt/ffmpeg/share:$XDG_DATA_DIRS"
+ARG         PATH="/opt/ffmpeg/bin:$PATH"
+ 
 
 RUN     buildDeps="autoconf \
                    automake \
@@ -506,6 +521,113 @@ RUN \
         make && \
         make install && \
         rm -rf ${DIR}
+
+## glib https://gitlab.gnome.org/GNOME/glib
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/glib && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://gitlab.gnome.org/GNOME/glib/-/archive/${GLIB_VERSION}/glib-${GLIB_VERSION}.tar.gz && \
+                echo ${GLIB_SHA256SUM} | sha256sum --check && \
+                tar -xz --strip-components=1 -f glib-${GLIB_VERSION}.tar.gz && \
+                meson build . --prefix="${PREFIX}" && \
+                ninja -vC build && \
+                ninja -vC build install && \
+                rm -rf ${DIR}; \
+        fi
+
+## gdk-pixbuf https://gitlab.gnome.org/GNOME/gdk-pixbuf
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/gdk-pixbuf && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/archive/${GDKPIXBUF_VERSION}/gdk-pixbuf-${GDKPIXBUF_VERSION}.tar.gz && \
+                echo ${GDKPIXBUF_SHA256SUM} | sha256sum --check && \
+                tar -xz --strip-components=1 -f gdk-pixbuf-${GDKPIXBUF_VERSION}.tar.gz && \
+                meson build . --prefix="${PREFIX}" && \
+                ninja -vC build && \
+                ninja -vC build install && \
+                rm -rf ${DIR}; \
+        fi
+
+## pixman - https://www.cairographics.org/
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/pixman && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://www.cairographics.org/releases/pixman-${PIXMAN_VERSION}.tar.gz && \
+                echo ${PIXMAN_SHA256SUM} | sha256sum --check && \
+                tar -xz --strip-components=1 -f pixman-${PIXMAN_VERSION}.tar.gz && \
+                ./configure --prefix="${PREFIX}" && \
+                make && \
+                make install && \
+                rm -rf ${DIR}; \
+        fi
+
+## cairo - https://www.cairographics.org/
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/cairo && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://www.cairographics.org/releases/cairo-${CAIRO_VERSION}.tar.xz && \
+                echo ${CAIRO_SHA256SUM} | sha256sum --check && \
+                tar -x --strip-components=1 -f cairo-${CAIRO_VERSION}.tar.xz && \
+                ./configure --prefix="${PREFIX}" && \
+                make && \
+                make install && \
+                rm -rf ${DIR}; \
+        fi
+
+## harfbuzz https://github.com/harfbuzz/harfbuzz
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/harfbuzz && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://github.com/harfbuzz/harfbuzz/releases/download/${HARFBUZZ_VERSION}/harfbuzz-${HARFBUZZ_VERSION}.tar.xz && \
+                echo ${HARFBUZZ_SHA256SUM} | sha256sum --check && \
+                tar -x --strip-components=1 -f harfbuzz-${HARFBUZZ_VERSION}.tar.xz && \
+                meson build . --prefix="${PREFIX}" && \
+                meson compile -C build && \
+                meson install -C build && \
+                rm -rf ${DIR}; \
+        fi
+
+## pango https://pango.gnome.org/
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/pango && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://gitlab.gnome.org/GNOME/pango/-/archive/${PANGO_VERSION}/pango-${PANGO_VERSION}.tar.gz && \
+                echo ${PANGO_SHA256SUM} | sha256sum --check && \
+                tar -xz --strip-components=1 -f pango-${PANGO_VERSION}.tar.gz && \
+                meson build . --prefix="${PREFIX}" && \
+                meson compile -C build && \
+                meson install -C build && \
+                rm -rf ${DIR}; \
+        fi
+
+## librsvg https://gitlab.gnome.org/GNOME/librsvg - Requires pixbuf, cairo and pango
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/librsvg && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://gitlab.gnome.org/GNOME/librsvg/-/archive/${LIBRSVG_VERSION}/librsvg-${LIBRSVG_VERSION}.tar.gz && \
+                echo ${LIBRSVG_SHA256SUM} | sha256sum --check && \
+                tar -xz --strip-components=1 -f librsvg-${LIBRSVG_VERSION}.tar.gz && \
+                ./autogen.sh --prefix="${PREFIX}" && \
+                make && \
+                make install && \
+                rm -rf ${DIR}; \
+        else \
+                echo "libsvg skipped."; \
+        fi
 
 ## ffmpeg https://ffmpeg.org/
 RUN  \
