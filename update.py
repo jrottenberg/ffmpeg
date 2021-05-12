@@ -202,6 +202,10 @@ for version in keep_version:
         if version == "snapshot" or int(version[0]) > 3:
             FFMPEG_CONFIG_FLAGS.append("--enable-libaom")
             FFMPEG_CONFIG_FLAGS.append("--extra-libs=-lpthread")
+        
+        # Librsvg is supported from 3.4
+        if ((template.find('meson') > 0) and (version == "snapshot" or float(version[0:3]) >= 3.4)):
+            FFMPEG_CONFIG_FLAGS.append("--enable-librsvg")
 
         # LibSRT is supported from 4.0
         if version == "snapshot" or int(version[0]) >= 4:

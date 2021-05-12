@@ -407,6 +407,113 @@ RUN \
         make install && \
         rm -rf ${DIR}
 
+## glib https://gitlab.gnome.org/GNOME/glib
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/glib && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://gitlab.gnome.org/GNOME/glib/-/archive/${GLIB_VERSION}/glib-${GLIB_VERSION}.tar.gz && \
+                echo ${GLIB_SHA256SUM} | sha256sum --check && \
+                tar -xz --strip-components=1 -f glib-${GLIB_VERSION}.tar.gz && \
+                meson build . --prefix="${PREFIX}" && \
+                ninja -vC build && \
+                ninja -vC build install && \
+                rm -rf ${DIR}; \
+        fi
+
+## gdk-pixbuf https://gitlab.gnome.org/GNOME/gdk-pixbuf
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/gdk-pixbuf && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/archive/${GDKPIXBUF_VERSION}/gdk-pixbuf-${GDKPIXBUF_VERSION}.tar.gz && \
+                echo ${GDKPIXBUF_SHA256SUM} | sha256sum --check && \
+                tar -xz --strip-components=1 -f gdk-pixbuf-${GDKPIXBUF_VERSION}.tar.gz && \
+                meson build . --prefix="${PREFIX}" && \
+                ninja -vC build && \
+                ninja -vC build install && \
+                rm -rf ${DIR}; \
+        fi
+
+## pixman - https://www.cairographics.org/
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/pixman && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://www.cairographics.org/releases/pixman-${PIXMAN_VERSION}.tar.gz && \
+                echo ${PIXMAN_SHA256SUM} | sha256sum --check && \
+                tar -xz --strip-components=1 -f pixman-${PIXMAN_VERSION}.tar.gz && \
+                ./configure --prefix="${PREFIX}" && \
+                make && \
+                make install && \
+                rm -rf ${DIR}; \
+        fi
+
+## cairo - https://www.cairographics.org/
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/cairo && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://www.cairographics.org/releases/cairo-${CAIRO_VERSION}.tar.xz && \
+                echo ${CAIRO_SHA256SUM} | sha256sum --check && \
+                tar -x --strip-components=1 -f cairo-${CAIRO_VERSION}.tar.xz && \
+                ./configure --prefix="${PREFIX}" && \
+                make && \
+                make install && \
+                rm -rf ${DIR}; \
+        fi
+
+## harfbuzz https://github.com/harfbuzz/harfbuzz
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/harfbuzz && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://github.com/harfbuzz/harfbuzz/releases/download/${HARFBUZZ_VERSION}/harfbuzz-${HARFBUZZ_VERSION}.tar.xz && \
+                echo ${HARFBUZZ_SHA256SUM} | sha256sum --check && \
+                tar -x --strip-components=1 -f harfbuzz-${HARFBUZZ_VERSION}.tar.xz && \
+                meson build . --prefix="${PREFIX}" && \
+                meson compile -C build && \
+                meson install -C build && \
+                rm -rf ${DIR}; \
+        fi
+
+## pango https://pango.gnome.org/
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/pango && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://gitlab.gnome.org/GNOME/pango/-/archive/${PANGO_VERSION}/pango-${PANGO_VERSION}.tar.gz && \
+                echo ${PANGO_SHA256SUM} | sha256sum --check && \
+                tar -xz --strip-components=1 -f pango-${PANGO_VERSION}.tar.gz && \
+                meson build . --prefix="${PREFIX}" && \
+                meson compile -C build && \
+                meson install -C build && \
+                rm -rf ${DIR}; \
+        fi
+
+## librsvg https://gitlab.gnome.org/GNOME/librsvg - Requires pixbuf, cairo and pango
+RUN \
+        if which meson || false; then \
+                DIR=/tmp/librsvg && \
+                mkdir -p ${DIR} && \
+                cd ${DIR} && \
+                curl -sLO https://gitlab.gnome.org/GNOME/librsvg/-/archive/${LIBRSVG_VERSION}/librsvg-${LIBRSVG_VERSION}.tar.gz && \
+                echo ${LIBRSVG_SHA256SUM} | sha256sum --check && \
+                tar -xz --strip-components=1 -f librsvg-${LIBRSVG_VERSION}.tar.gz && \
+                ./autogen.sh --prefix="${PREFIX}" && \
+                make && \
+                make install && \
+                rm -rf ${DIR}; \
+        else \
+                echo "libsvg skipped."; \
+        fi
+
 ## ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
