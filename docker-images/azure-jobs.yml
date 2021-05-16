@@ -70,11 +70,11 @@ jobs:
         ISPARENT:  True
 
 
-      nvidia1804_snapshot:
+      nvidia2004_snapshot:
         MAJOR_VERSION: snapshot
         VERSION:  snapshot
         LONG_VERSION: snapshot
-        VARIANT:  nvidia1804
+        VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
@@ -169,11 +169,11 @@ jobs:
         ISPARENT:  True
 
 
-      nvidia1804_4.4:
+      nvidia2004_4.4:
         MAJOR_VERSION: 4
         VERSION:  4.4
         LONG_VERSION: 4.4
-        VARIANT:  nvidia1804
+        VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
@@ -268,11 +268,11 @@ jobs:
         ISPARENT:  True
 
 
-      nvidia1804_4.3.2:
+      nvidia2004_4.3.2:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.2
-        VARIANT:  nvidia1804
+        VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
@@ -340,11 +340,11 @@ jobs:
         ISPARENT:  True
 
 
-      nvidia1804_4.2.4:
+      nvidia2004_4.2.4:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.4
-        VARIANT:  nvidia1804
+        VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
@@ -412,11 +412,11 @@ jobs:
         ISPARENT:  True
 
 
-      nvidia1804_4.1.6:
+      nvidia2004_4.1.6:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.6
-        VARIANT:  nvidia1804
+        VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
@@ -484,11 +484,11 @@ jobs:
         ISPARENT:  True
 
 
-      nvidia1804_4.0.6:
+      nvidia2004_4.0.6:
         MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
-        VARIANT:  nvidia1804
+        VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
@@ -556,11 +556,11 @@ jobs:
         ISPARENT:  True
 
 
-      nvidia1804_3.4.8:
+      nvidia2004_3.4.8:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.8
-        VARIANT:  nvidia1804
+        VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
@@ -628,11 +628,11 @@ jobs:
         ISPARENT:  True
 
 
-      nvidia1804_3.3.9:
+      nvidia2004_3.3.9:
         MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
-        VARIANT:  nvidia1804
+        VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
