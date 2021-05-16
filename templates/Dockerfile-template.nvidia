@@ -6,7 +6,7 @@
 #
 #
 
-FROM    nvidia/cudagl:9.2-devel-ubuntu18.04 AS devel-base
+FROM    nvidia/cuda:11.3.0-devel-ubuntu20.04 AS devel-base
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES compat32,compute,video
 WORKDIR     /tmp/workdir
@@ -29,7 +29,7 @@ RUN     apt-get -yqq update && \
 
 FROM  devel-base as build
 
-ENV        NVIDIA_HEADERS_VERSION=8.1.24.9
+ENV        NVIDIA_HEADERS_VERSION=11.0.10.2
 ARG        PKG_CONFIG_PATH=/opt/ffmpeg/lib/pkgconfig
 ENV        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/ffmpeg/lib"
 ARG        PREFIX=/opt/ffmpeg
@@ -59,11 +59,11 @@ RUN      buildDeps="autoconf \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
 
-RUN \ 
+RUN \
 	DIR=/tmp/nv-codec-headers && \
 	git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git ${DIR} && \
 	cd ${DIR} && \
-	git checkout n${NVIDIA_HEADERS_VERSION} && \ 
+	git checkout n${NVIDIA_HEADERS_VERSION} && \
 	sed -i 's@/usr/local@'"$PREFIX"'@' Makefile && \
 	make && \
 	make install  && \
@@ -86,7 +86,7 @@ CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 ENV         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
 
-# copy only needed files, without copying nvidia dev files 
+# copy only needed files, without copying nvidia dev files
 COPY --from=build /usr/local/bin /usr/local/bin/
 COPY --from=build /usr/local/share /usr/local/share/
 COPY --from=build /usr/local/lib /usr/local/lib/
@@ -94,4 +94,3 @@ COPY --from=build /usr/local/include /usr/local/include/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
-
