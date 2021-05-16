@@ -29,7 +29,7 @@ VARIANTS = [
     {"name": "scratch38", "parent": "scratch"},
     {"name": "vaapi1804", "parent": "vaapi"},
     {"name": "vaapi2004", "parent": "vaapi"},
-    {"name": "nvidia1804", "parent": "nvidia"},
+    {"name": "nvidia2004", "parent": "nvidia"},
 ]
 FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
 gitlabci = []
@@ -49,7 +49,7 @@ SKIP_VARIANTS = {
     "3.2": [
         "alpine312",
         "centos8",
-        "nvidia1804",
+        "nvidia2004",
         "scratch312",
         "ubuntu1804",
         "vaapi1804",
