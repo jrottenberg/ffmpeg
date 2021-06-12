@@ -96,7 +96,7 @@ RUN     buildDeps="autoconf \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         dnf --enablerepo=extras install -y epel-release && \
-        dnf --enablerepo=powertools install -y ${buildDeps} && \
+        dnf --enablerepo=PowerTools install -y ${buildDeps} && \
         alternatives --set python /usr/bin/python3
 ## libvmaf https://github.com/Netflix/vmaf
 RUN \
