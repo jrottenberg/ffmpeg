@@ -181,7 +181,7 @@ RUN \
         cd ${DIR} && \
         curl -sL https://github.com/videolan/x265/archive/refs/tags/${X265_VERSION}.tar.gz | \
         tar -zx && \
-        cd x265_${X265_VERSION}/build/linux && \
+        cd x265-${X265_VERSION}/build/linux && \
         sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
         sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh && \
         ./multilib.sh && \

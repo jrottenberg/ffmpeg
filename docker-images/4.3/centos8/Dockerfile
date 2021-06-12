@@ -96,6 +96,7 @@ RUN     buildDeps="autoconf \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         dnf --enablerepo=extras install -y epel-release && \
+        dnf update -y && \
         dnf --enablerepo=PowerTools install -y ${buildDeps} && \
         alternatives --set python /usr/bin/python3
 ## libvmaf https://github.com/Netflix/vmaf
@@ -147,7 +148,7 @@ RUN \
         cd ${DIR} && \
         curl -sL https://github.com/videolan/x265/archive/refs/tags/${X265_VERSION}.tar.gz | \
         tar -zx && \
-        cd x265_${X265_VERSION}/build/linux && \
+        cd x265-${X265_VERSION}/build/linux && \
         sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
         sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh && \
         ./multilib.sh && \
