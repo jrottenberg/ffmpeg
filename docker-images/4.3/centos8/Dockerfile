@@ -98,7 +98,7 @@ RUN     buildDeps="autoconf \
         dnf --enablerepo=extras install -y epel-release && \
         dnf update -y && \
         dnf -y install dnf-plugins-core && \
-        yum config-manager --set-enabled powertools
+        yum config-manager --set-enabled powertools && \
         dnf install -y ${buildDeps} && \
         alternatives --set python /usr/bin/python3
 ## libvmaf https://github.com/Netflix/vmaf
