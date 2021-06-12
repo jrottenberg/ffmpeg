@@ -17,7 +17,7 @@ IMAGE_FORMAT_STR = "{0}/Dockerfile".format(DIR_FORMAT_STR)
 TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 
 # https://ffmpeg.org/olddownload.html
-SKIP_VERSIONS = "3.1.11 3.0.12"
+SKIP_VERSIONS = "3.1.11 3.0.12 snapshot"
 VARIANTS = [
     {"name": "ubuntu1804", "parent": "ubuntu"},
     {"name": "ubuntu2004", "parent": "ubuntu"},
@@ -59,11 +59,10 @@ SKIP_VARIANTS = {
     "4.0": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
     "4.1": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
     "4.2": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
-    "snapshot": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
 }
 
 last = version.split(".")
-keep_version = ["snapshot"]
+keep_version = []
 
 keep_version.append(version)
 
@@ -104,7 +103,9 @@ for cur in all_versions:
 print(f"Preparing docker images for ffmpeg versions : {keep_version}")
 
 
+print(keep_version)
 for version in keep_version:
+    print(version)
     skip_variants = None
     for k, v in SKIP_VARIANTS.items():
         if version.startswith(k):
