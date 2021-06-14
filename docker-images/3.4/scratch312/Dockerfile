@@ -12,7 +12,7 @@ ENV         FFMPEG_VERSION=3.4.8 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
-            FREETYPE_VERSION=2.5.5 \
+            FREETYPE_VERSION=2.10.4 \
             FRIBIDI_VERSION=0.19.7 \
             KVAZAAR_VERSION=2.0.0 \
             LAME_VERSION=3.100 \
@@ -30,7 +30,7 @@ ENV         FFMPEG_VERSION=3.4.8 \
             VPX_VERSION=1.8.0 \
             WEBP_VERSION=1.0.2 \
             X264_VERSION=20170226-2245-stable \
-            X265_VERSION=3.1.1 \
+            X265_VERSION=3.4 \
             XAU_VERSION=1.0.9 \
             XORG_MACROS_VERSION=1.19.2 \
             XPROTO_VERSION=7.0.31 \
@@ -44,7 +44,7 @@ ENV         FFMPEG_VERSION=3.4.8 \
             LIBVMAF_VERSION=2.1.1 \
             SRC=/usr/local
 
-ARG         FREETYPE_SHA256SUM="5d03dd76c2171a7601e9ce10551d52d4471cf92cd205948e60289251daddffa8 freetype-2.5.5.tar.gz"
+ARG         FREETYPE_SHA256SUM="5eab795ebb23ac77001cfb68b7d4d50b5d6c7469247b0b01b2c953269f658dac freetype-2.10.4.tar.gz"
 ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8 0.19.7.tar.gz"
 ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a47889315526adbafd7 0.13.7.tar.gz"
 ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb v1.1.0.tar.gz"
@@ -144,9 +144,9 @@ RUN \
         DIR=/tmp/x265 && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
+        curl -sL https://github.com/videolan/x265/archive/refs/tags/${X265_VERSION}.tar.gz | \
         tar -zx && \
-        cd x265_${X265_VERSION}/build/linux && \
+        cd x265-${X265_VERSION}/build/linux && \
         sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
         sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh && \
         ./multilib.sh && \

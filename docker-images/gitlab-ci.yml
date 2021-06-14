@@ -1,92 +1,4 @@
 
-snapshot-ubuntu1804:
-  extends: .docker
-  stage: ubuntu1804
-  variables:
-    MAJOR_VERSION: snapshot
-    VERSION: "snapshot"
-    LONG_VERSION: "snapshot"
-    VARIANT: ubuntu1804
-    PARENT: "ubuntu"
-    ISPARENT: "False"
-
-snapshot-ubuntu2004:
-  extends: .docker
-  stage: ubuntu2004
-  variables:
-    MAJOR_VERSION: snapshot
-    VERSION: "snapshot"
-    LONG_VERSION: "snapshot"
-    VARIANT: ubuntu2004
-    PARENT: "ubuntu"
-    ISPARENT: "True"
-
-snapshot-alpine312:
-  extends: .docker
-  stage: alpine312
-  variables:
-    MAJOR_VERSION: snapshot
-    VERSION: "snapshot"
-    LONG_VERSION: "snapshot"
-    VARIANT: alpine312
-    PARENT: "alpine"
-    ISPARENT: "True"
-
-snapshot-centos7:
-  extends: .docker
-  stage: centos7
-  variables:
-    MAJOR_VERSION: snapshot
-    VERSION: "snapshot"
-    LONG_VERSION: "snapshot"
-    VARIANT: centos7
-    PARENT: "centos"
-    ISPARENT: "False"
-
-snapshot-centos8:
-  extends: .docker
-  stage: centos8
-  variables:
-    MAJOR_VERSION: snapshot
-    VERSION: "snapshot"
-    LONG_VERSION: "snapshot"
-    VARIANT: centos8
-    PARENT: "centos"
-    ISPARENT: "True"
-
-snapshot-scratch312:
-  extends: .docker
-  stage: scratch312
-  variables:
-    MAJOR_VERSION: snapshot
-    VERSION: "snapshot"
-    LONG_VERSION: "snapshot"
-    VARIANT: scratch312
-    PARENT: "scratch"
-    ISPARENT: "True"
-
-snapshot-vaapi2004:
-  extends: .docker
-  stage: vaapi2004
-  variables:
-    MAJOR_VERSION: snapshot
-    VERSION: "snapshot"
-    LONG_VERSION: "snapshot"
-    VARIANT: vaapi2004
-    PARENT: "vaapi"
-    ISPARENT: "True"
-
-snapshot-nvidia1804:
-  extends: .docker
-  stage: nvidia1804
-  variables:
-    MAJOR_VERSION: snapshot
-    VERSION: "snapshot"
-    LONG_VERSION: "snapshot"
-    VARIANT: nvidia1804
-    PARENT: "nvidia"
-    ISPARENT: "True"
-
 4.4-ubuntu1804:
   extends: .docker
   stage: ubuntu1804
@@ -197,14 +109,14 @@ snapshot-nvidia1804:
     PARENT: "vaapi"
     ISPARENT: "True"
 
-4.4-nvidia1804:
+4.4-nvidia2004:
   extends: .docker
-  stage: nvidia1804
+  stage: nvidia2004
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
     LONG_VERSION: "4.4"
-    VARIANT: nvidia1804
+    VARIANT: nvidia2004
     PARENT: "nvidia"
     ISPARENT: "True"
 
@@ -318,14 +230,14 @@ snapshot-nvidia1804:
     PARENT: "vaapi"
     ISPARENT: "True"
 
-4.3.2-nvidia1804:
+4.3.2-nvidia2004:
   extends: .docker
-  stage: nvidia1804
+  stage: nvidia2004
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.2"
-    VARIANT: nvidia1804
+    VARIANT: nvidia2004
     PARENT: "nvidia"
     ISPARENT: "True"
 
@@ -406,14 +318,14 @@ snapshot-nvidia1804:
     PARENT: "vaapi"
     ISPARENT: "True"
 
-4.2.4-nvidia1804:
+4.2.4-nvidia2004:
   extends: .docker
-  stage: nvidia1804
+  stage: nvidia2004
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.4"
-    VARIANT: nvidia1804
+    VARIANT: nvidia2004
     PARENT: "nvidia"
     ISPARENT: "True"
 
@@ -494,14 +406,14 @@ snapshot-nvidia1804:
     PARENT: "vaapi"
     ISPARENT: "True"
 
-4.1.6-nvidia1804:
+4.1.6-nvidia2004:
   extends: .docker
-  stage: nvidia1804
+  stage: nvidia2004
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.6"
-    VARIANT: nvidia1804
+    VARIANT: nvidia2004
     PARENT: "nvidia"
     ISPARENT: "True"
 
@@ -582,14 +494,14 @@ snapshot-nvidia1804:
     PARENT: "vaapi"
     ISPARENT: "True"
 
-4.0.6-nvidia1804:
+4.0.6-nvidia2004:
   extends: .docker
-  stage: nvidia1804
+  stage: nvidia2004
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.0"
     LONG_VERSION: "4.0.6"
-    VARIANT: nvidia1804
+    VARIANT: nvidia2004
     PARENT: "nvidia"
     ISPARENT: "True"
 
@@ -670,14 +582,14 @@ snapshot-nvidia1804:
     PARENT: "vaapi"
     ISPARENT: "True"
 
-3.4.8-nvidia1804:
+3.4.8-nvidia2004:
   extends: .docker
-  stage: nvidia1804
+  stage: nvidia2004
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.8"
-    VARIANT: nvidia1804
+    VARIANT: nvidia2004
     PARENT: "nvidia"
     ISPARENT: "True"
 
@@ -758,14 +670,14 @@ snapshot-nvidia1804:
     PARENT: "vaapi"
     ISPARENT: "True"
 
-3.3.9-nvidia1804:
+3.3.9-nvidia2004:
   extends: .docker
-  stage: nvidia1804
+  stage: nvidia2004
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
-    VARIANT: nvidia1804
+    VARIANT: nvidia2004
     PARENT: "nvidia"
     ISPARENT: "True"
 

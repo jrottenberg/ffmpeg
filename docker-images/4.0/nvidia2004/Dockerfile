@@ -1,25 +1,41 @@
 # ffmpeg - http://ffmpeg.org/download.html
 #
-# From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
+# From https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
 #
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM    centos:8 AS base
 
-RUN     dnf -y install libgomp && \
-        dnf clean all;
+FROM    nvidia/cuda:10.2-devel-ubuntu18.04 AS devel-base
 
-
-FROM        base AS build
-
+ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=snapshot \
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
+        apt-get autoremove -y && \
+        apt-get clean -y
+
+FROM        nvidia/cuda:10.2-runtime-ubuntu18.04 AS runtime-base
+
+ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
+WORKDIR     /tmp/workdir
+
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
+        apt-get autoremove -y && \
+        apt-get clean -y
+
+
+FROM  devel-base as build
+
+ENV        NVIDIA_HEADERS_VERSION=9.1.23.1
+
+ENV         FFMPEG_VERSION=4.0.6 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
-            FREETYPE_VERSION=2.5.5 \
+            FREETYPE_VERSION=2.10.4 \
             FRIBIDI_VERSION=0.19.7 \
             KVAZAAR_VERSION=2.0.0 \
             LAME_VERSION=3.100 \
@@ -37,7 +53,7 @@ ENV         FFMPEG_VERSION=snapshot \
             VPX_VERSION=1.8.0 \
             WEBP_VERSION=1.0.2 \
             X264_VERSION=20170226-2245-stable \
-            X265_VERSION=3.1.1 \
+            X265_VERSION=3.4 \
             XAU_VERSION=1.0.9 \
             XORG_MACROS_VERSION=1.19.2 \
             XPROTO_VERSION=7.0.31 \
@@ -51,7 +67,7 @@ ENV         FFMPEG_VERSION=snapshot \
             LIBVMAF_VERSION=2.1.1 \
             SRC=/usr/local
 
-ARG         FREETYPE_SHA256SUM="5d03dd76c2171a7601e9ce10551d52d4471cf92cd205948e60289251daddffa8 freetype-2.5.5.tar.gz"
+ARG         FREETYPE_SHA256SUM="5eab795ebb23ac77001cfb68b7d4d50b5d6c7469247b0b01b2c953269f658dac freetype-2.10.4.tar.gz"
 ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8 0.19.7.tar.gz"
 ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a47889315526adbafd7 0.13.7.tar.gz"
 ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb v1.1.0.tar.gz"
@@ -74,30 +90,37 @@ ARG         PREFIX=/opt/ffmpeg
 ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 
-RUN     buildDeps="autoconf \
-                   automake \
-                   bzip2 \
-                   cmake \
-                   diffutils \
-                   expat-devel \
-                   gcc \
-                   gcc-c++ \
-                   git \
-                   gperf \
-                   libtool \
-                   make \
-                   nasm \
-                   perl \
-                   python3 \
-                   openssl-devel \
-                   tar \
-                   yasm \
-                   which \
-                   zlib-devel" && \
-        echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
-        dnf --enablerepo=extras install -y epel-release && \
-        dnf --enablerepo=powertools install -y ${buildDeps} && \
-        alternatives --set python /usr/bin/python3
+RUN      buildDeps="autoconf \
+                    automake \
+                    cmake \
+                    curl \
+                    bzip2 \
+                    libexpat1-dev \
+                    g++ \
+                    gcc \
+                    git \
+                    gperf \
+                    libtool \
+                    make \
+                    nasm \
+                    perl \
+                    pkg-config \
+                    python \
+                    libssl-dev \
+                    yasm \
+                    zlib1g-dev" && \
+        apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ${buildDeps}
+
+RUN \
+	DIR=/tmp/nv-codec-headers && \
+	git clone https://github.com/FFmpeg/nv-codec-headers ${DIR} && \
+	cd ${DIR} && \
+	git checkout n${NVIDIA_HEADERS_VERSION} && \
+	make PREFIX="${PREFIX}" && \
+	make install PREFIX="${PREFIX}" && \
+        rm -rf ${DIR}
+
 ## libvmaf https://github.com/Netflix/vmaf
 RUN \
         if which meson || false; then \
@@ -145,9 +168,9 @@ RUN \
         DIR=/tmp/x265 && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://download.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz  | \
+        curl -sL https://github.com/videolan/x265/archive/refs/tags/${X265_VERSION}.tar.gz | \
         tar -zx && \
-        cd x265_${X265_VERSION}/build/linux && \
+        cd x265-${X265_VERSION}/build/linux && \
         sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
         sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh && \
         ./multilib.sh && \
@@ -555,9 +578,12 @@ RUN \
         --enable-libaom \
         --extra-libs=-lpthread \
         --enable-libsrt \
-        --enable-libaribb24 \
-        --extra-cflags="-I${PREFIX}/include" \
-        --extra-ldflags="-L${PREFIX}/lib" && \
+        --enable-nvenc \
+        --enable-cuda \
+        --enable-cuvid \
+        --enable-libnpp \
+        --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/" \
+        --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/" && \
         make && \
         make install && \
         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
@@ -566,27 +592,34 @@ RUN \
         cd tools && \
         make qt-faststart && cp qt-faststart ${PREFIX}/bin/
 
+## cleanup
 RUN \
-        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib64/ && \
-        for lib in /usr/local/lib64/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
+        LD_LIBRARY_PATH="${PREFIX}/lib:${PREFIX}/lib64:${LD_LIBRARY_PATH}" ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
+        for lib in /usr/local/lib/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib64 ffmpeg -buildconf && \
+        cp -r ${PREFIX}/share/* /usr/local/share/ && \
+        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
         cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-        mkdir -p /usr/local/lib64/pkgconfig && \
+        mkdir -p /usr/local/lib/pkgconfig && \
         for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-          sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib64/pkgconfig/"${pc##*/}"; \
+          sed "s:${PREFIX}:/usr/local:g; s:/lib64:/lib:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
         done
 
-FROM        base
+
+
+FROM        runtime-base AS release
 MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
-ENV         LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
+ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
-COPY --from=build /usr/local/ /usr/local/
+# copy only needed files, without copying nvidia dev files 
+COPY --from=build /usr/local/bin /usr/local/bin/
+COPY --from=build /usr/local/share /usr/local/share/
+COPY --from=build /usr/local/lib /usr/local/lib/
+COPY --from=build /usr/local/include /usr/local/include/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

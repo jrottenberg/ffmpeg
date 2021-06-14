@@ -39,7 +39,10 @@ RUN     buildDeps="autoconf \
                    zlib-devel" && \
         echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
         dnf --enablerepo=extras install -y epel-release && \
-        dnf --enablerepo=powertools install -y ${buildDeps} && \
+        dnf update -y && \
+        dnf -y install dnf-plugins-core && \
+        yum config-manager --set-enabled powertools && \
+        dnf install -y ${buildDeps} && \
         alternatives --set python /usr/bin/python3
 %%RUN%%
 RUN \
