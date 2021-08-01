@@ -1,7 +1,0 @@
-variables:
-- group: videotoolsbuild-dockerhub
-- name: DOCKER
-  value: jrottenberg/ffmpeg
-
-jobs:
-- template: docker-images/azure-jobs.yml
