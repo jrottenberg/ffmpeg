@@ -329,90 +329,90 @@
     PARENT: "nvidia"
     ISPARENT: "True"
 
-4.1.6-ubuntu1804:
+4.1.7-ubuntu1804:
   extends: .docker
   stage: ubuntu1804
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
-    LONG_VERSION: "4.1.6"
+    LONG_VERSION: "4.1.7"
     VARIANT: ubuntu1804
     PARENT: "ubuntu"
     ISPARENT: "False"
 
-4.1.6-ubuntu2004:
+4.1.7-ubuntu2004:
   extends: .docker
   stage: ubuntu2004
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
-    LONG_VERSION: "4.1.6"
+    LONG_VERSION: "4.1.7"
     VARIANT: ubuntu2004
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.1.6-alpine312:
+4.1.7-alpine312:
   extends: .docker
   stage: alpine312
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
-    LONG_VERSION: "4.1.6"
+    LONG_VERSION: "4.1.7"
     VARIANT: alpine312
     PARENT: "alpine"
     ISPARENT: "True"
 
-4.1.6-centos7:
+4.1.7-centos7:
   extends: .docker
   stage: centos7
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
-    LONG_VERSION: "4.1.6"
+    LONG_VERSION: "4.1.7"
     VARIANT: centos7
     PARENT: "centos"
     ISPARENT: "False"
 
-4.1.6-centos8:
+4.1.7-centos8:
   extends: .docker
   stage: centos8
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
-    LONG_VERSION: "4.1.6"
+    LONG_VERSION: "4.1.7"
     VARIANT: centos8
     PARENT: "centos"
     ISPARENT: "True"
 
-4.1.6-scratch312:
+4.1.7-scratch312:
   extends: .docker
   stage: scratch312
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
-    LONG_VERSION: "4.1.6"
+    LONG_VERSION: "4.1.7"
     VARIANT: scratch312
     PARENT: "scratch"
     ISPARENT: "True"
 
-4.1.6-vaapi2004:
+4.1.7-vaapi2004:
   extends: .docker
   stage: vaapi2004
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
-    LONG_VERSION: "4.1.6"
+    LONG_VERSION: "4.1.7"
     VARIANT: vaapi2004
     PARENT: "vaapi"
     ISPARENT: "True"
 
-4.1.6-nvidia2004:
+4.1.7-nvidia2004:
   extends: .docker
   stage: nvidia2004
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
-    LONG_VERSION: "4.1.6"
+    LONG_VERSION: "4.1.7"
     VARIANT: nvidia2004
     PARENT: "nvidia"
     ISPARENT: "True"
