@@ -34,40 +34,41 @@ FROM  devel-base as build
 ENV        NVIDIA_HEADERS_VERSION=11.1.5.0
 
 ENV         FFMPEG_VERSION=4.0.6 \
-            AOM_VERSION=v1.0.0 \
-            FDKAAC_VERSION=0.1.5 \
-            FONTCONFIG_VERSION=2.12.4 \
-            FREETYPE_VERSION=2.10.4 \
-            FRIBIDI_VERSION=0.19.7 \
-            KVAZAAR_VERSION=2.0.0 \
-            LAME_VERSION=3.100 \
-            LIBASS_VERSION=0.13.7 \
-            LIBPTHREAD_STUBS_VERSION=0.4 \
-            LIBVIDSTAB_VERSION=1.1.0 \
-            LIBXCB_VERSION=1.13.1 \
-            XCBPROTO_VERSION=1.13 \
-            OGG_VERSION=1.3.2 \
-            OPENCOREAMR_VERSION=0.1.5 \
-            OPUS_VERSION=1.2 \
-            OPENJPEG_VERSION=2.1.2 \
-            THEORA_VERSION=1.1.1 \
-            VORBIS_VERSION=1.3.5 \
-            VPX_VERSION=1.8.0 \
-            WEBP_VERSION=1.0.2 \
-            X264_VERSION=20170226-2245-stable \
-            X265_VERSION=3.4 \
-            XAU_VERSION=1.0.9 \
-            XORG_MACROS_VERSION=1.19.2 \
-            XPROTO_VERSION=7.0.31 \
-            XVID_VERSION=1.3.4 \
-            LIBXML2_VERSION=2.9.10 \
-            LIBBLURAY_VERSION=1.1.2 \
-            LIBZMQ_VERSION=4.3.2 \
-            LIBSRT_VERSION=1.4.1 \
-            LIBARIBB24_VERSION=1.0.3 \
-            LIBPNG_VERSION=1.6.9 \
-            LIBVMAF_VERSION=2.1.1 \
-            SRC=/usr/local
+    AOM_VERSION=v1.0.0 \
+    FDKAAC_VERSION=0.1.5 \
+    FONTCONFIG_VERSION=2.12.4 \
+    FREETYPE_VERSION=2.10.4 \
+    FRIBIDI_VERSION=0.19.7 \
+    KVAZAAR_VERSION=2.0.0 \
+    LAME_VERSION=3.100 \
+    LIBARIBB24_VERSION=1.0.3 \
+    LIBASS_VERSION=0.13.7 \
+    LIBBLURAY_VERSION=1.1.2 \
+    LIBPNG_VERSION=1.6.9 \
+    LIBPTHREAD_STUBS_VERSION=0.4 \
+    LIBSRT_VERSION=1.4.1 \
+    LIBVIDSTAB_VERSION=1.1.0 \
+    LIBVMAF_VERSION=2.1.1 \
+    LIBXCB_VERSION=1.13.1 \
+    LIBXML2_VERSION=2.9.10 \
+    LIBZMQ_VERSION=4.3.2 \
+    OGG_VERSION=1.3.2 \
+    OPENCOREAMR_VERSION=0.1.5 \
+    OPENJPEG_VERSION=2.1.2 \
+    OPUS_VERSION=1.2 \
+    THEORA_VERSION=1.1.1 \
+    VORBIS_VERSION=1.3.5 \
+    VPX_VERSION=1.8.0 \
+    WEBP_VERSION=1.0.2 \
+    X264_VERSION=20170226-2245-stable \
+    X265_VERSION=3.4 \
+    XAU_VERSION=1.0.9 \
+    XCBPROTO_VERSION=1.13 \
+    XORG_MACROS_VERSION=1.19.2 \
+    XPROTO_VERSION=7.0.31 \
+    XVID_VERSION=1.3.4 \
+    ZIMG_VERSION=3.0.3 \
+    SRC=/usr/local
 
 ARG         FREETYPE_SHA256SUM="5eab795ebb23ac77001cfb68b7d4d50b5d6c7469247b0b01b2c953269f658dac freetype-2.10.4.tar.gz"
 ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8 0.19.7.tar.gz"
@@ -123,24 +124,39 @@ RUN \
 	make install PREFIX="${PREFIX}" && \
         rm -rf ${DIR}
 
+# zimg  https://github.com/sekrit-twc/zimg
+RUN \
+        DIR=/tmp/zimg && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sL https://github.com/sekrit-twc/zimg/archive/refs/tags/release-${ZIMG_VERSION}.tar.gz | \
+        tar -zx --strip-components=1 && \
+        ./autogen.sh && \
+        ./configure --prefix="${PREFIX}" --enable-shared  && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+
+
 ## libvmaf https://github.com/Netflix/vmaf
 RUN \
         if which meson || false; then \
-                echo "Building VMAF." && \
-                DIR=/tmp/vmaf && \
-                mkdir -p ${DIR} && \
-                cd ${DIR} && \
-                curl -sLO https://github.com/Netflix/vmaf/archive/v${LIBVMAF_VERSION}.tar.gz && \
-                tar -xz --strip-components=1 -f v${LIBVMAF_VERSION}.tar.gz && \
-                cd /tmp/vmaf/libvmaf && \
-                meson build --buildtype release --prefix=${PREFIX} && \
-                ninja -vC build && \
-                ninja -vC build install && \
-                mkdir -p ${PREFIX}/share/model/ && \
-                cp -r /tmp/vmaf/model/* ${PREFIX}/share/model/ && \
-                rm -rf ${DIR}; \
+        echo "Building VMAF." && \
+        DIR=/tmp/vmaf && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/Netflix/vmaf/archive/v${LIBVMAF_VERSION}.tar.gz && \
+        tar -xz --strip-components=1 -f v${LIBVMAF_VERSION}.tar.gz && \
+        cd /tmp/vmaf/libvmaf && \
+        meson build --buildtype release --prefix=${PREFIX} && \
+        ninja -vC build && \
+        ninja -vC build install && \
+        mkdir -p ${PREFIX}/share/model/ && \
+        cp -r /tmp/vmaf/model/* ${PREFIX}/share/model/ && \
+        rm -rf ${DIR}; \
         else \
-                echo "VMAF skipped."; \
+        echo "VMAF skipped."; \
         fi
 
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
@@ -546,33 +562,34 @@ RUN \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
-        --enable-shared \
         --enable-avresample \
-        --enable-libopencore-amrnb \
-        --enable-libopencore-amrwb \
+        --enable-fontconfig \
         --enable-gpl \
         --enable-libass \
-        --enable-fontconfig \
+        --enable-libbluray \
+        --enable-libfdk_aac \
         --enable-libfreetype \
-        --enable-libvidstab \
         --enable-libmp3lame \
+        --enable-libopencore-amrnb \
+        --enable-libopencore-amrwb \
         --enable-libopus \
         --enable-libtheora \
+        --enable-libvidstab \
         --enable-libvorbis \
         --enable-libvpx \
         --enable-libwebp \
-        --enable-libxcb \
-        --enable-libx265 \
-        --enable-libxvid \
         --enable-libx264 \
+        --enable-libx265 \
+        --enable-libxcb \
+        --enable-libxvid \
+        --enable-libzmq \
         --enable-nonfree \
         --enable-openssl \
-        --enable-libfdk_aac \
         --enable-postproc \
+        --enable-shared \
         --enable-small \
         --enable-version3 \
-        --enable-libbluray \
-        --enable-libzmq \
+        --enable-zimg \
         --extra-libs=-ldl \
         --prefix="${PREFIX}" \
         --enable-libopenjpeg \
@@ -586,7 +603,7 @@ RUN \
         --enable-libnpp \
         --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/" \
         --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/" && \
-        make && \
+make && \
         make install && \
         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
         make distclean && \
