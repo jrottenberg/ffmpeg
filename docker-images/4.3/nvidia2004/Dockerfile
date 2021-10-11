@@ -9,7 +9,7 @@
 FROM    nvidia/cuda:11.4.1-devel-ubuntu20.04 AS devel-base
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
-ENV	    DEBIAN_FRONTEND=nonintercative
+ENV	    DEBIAN_FRONTEND=noninteractive
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
@@ -20,7 +20,7 @@ RUN     apt-get -yqq update && \
 FROM        nvidia/cuda:11.4.1-runtime-ubuntu20.04 AS runtime-base
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
-ENV	    DEBIAN_FRONTEND=nonintercative
+ENV	    DEBIAN_FRONTEND=noninteractive
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
@@ -94,6 +94,7 @@ ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 RUN      buildDeps="autoconf \
                     automake \
+                    clang \
                     cmake \
                     curl \
                     bzip2 \
@@ -585,6 +586,7 @@ RUN \
         --enable-cuda \
         --enable-cuvid \
         --enable-libnpp \
+        --enable-cuda-llvm \
         --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/" \
         --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/" && \
         make && \
