@@ -232,6 +232,7 @@ for version in keep_version:
                 FFMPEG_CONFIG_FLAGS.append("--enable-libnpp")
             if version == "snapshot" or float(version[0:3]) >= 4.2:
                 FFMPEG_CONFIG_FLAGS.append("--enable-cuda-llvm")
+                FFMPEG_CONFIG_FLAGS.append("--enable-ffnvcodec")
         cflags = '--extra-cflags="{0}"'.format(" ".join(CFLAGS))
         ldflags = '--extra-ldflags="{0}"'.format(" ".join(LDFLAGS))
         FFMPEG_CONFIG_FLAGS.append(cflags)
