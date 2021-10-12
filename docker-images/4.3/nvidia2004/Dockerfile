@@ -587,6 +587,7 @@ RUN \
         --enable-cuvid \
         --enable-libnpp \
         --enable-cuda-llvm \
+        --enable-ffnvcodec \
         --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/" \
         --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/" && \
         make && \
