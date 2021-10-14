@@ -36,6 +36,8 @@ RUN     buildDeps="autoconf \
                    yasm \
                    nasm \
                    zlib-dev \
+                   meson \
+                   xxd \
                    expat-dev" && \
         apk add --no-cache --update ${buildDeps}
 %%RUN%%
