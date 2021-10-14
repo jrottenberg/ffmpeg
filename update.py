@@ -202,6 +202,7 @@ for version in keep_version:
             FFMPEG_CONFIG_FLAGS.append("--enable-libkvazaar")
         if version == "snapshot" or int(version[0]) > 3:
             FFMPEG_CONFIG_FLAGS.append("--enable-libaom")
+            FFMPEG_CONFIG_FLAGS.append("--enable-libsvtav1")
             FFMPEG_CONFIG_FLAGS.append("--extra-libs=-lpthread")
 
         # LibSRT is supported from 4.0
