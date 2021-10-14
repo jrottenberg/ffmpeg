@@ -573,7 +573,7 @@ RUN \
         --enable-libvmaf \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" && \
-        make -j $(nproc) && \
+        make && \
         make install && \
         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
         make distclean && \
@@ -601,10 +601,11 @@ MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
 
 ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
-CMD         ["--help"]
-ENTRYPOINT  ["ffmpeg"]
+#CMD         ["--help"]
+#ENTRYPOINT  ["ffmpeg"]
 
 COPY --from=build /usr/local /usr/local
+RUN apk add -U bash strace
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
