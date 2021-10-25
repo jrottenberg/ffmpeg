@@ -8,7 +8,7 @@ FROM        alpine:3.12 AS build
 
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=4.4 \
+ENV         FFMPEG_VERSION=4.4.1 \
             AOM_VERSION=v1.0.0 \
             FDKAAC_VERSION=0.1.5 \
             FONTCONFIG_VERSION=2.12.4 \
