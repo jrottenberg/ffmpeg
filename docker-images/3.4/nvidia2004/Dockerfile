@@ -126,21 +126,21 @@ RUN \
 ## libvmaf https://github.com/Netflix/vmaf
 RUN \
         if which meson || false; then \
-                echo "Building VMAF." && \
-                DIR=/tmp/vmaf && \
-                mkdir -p ${DIR} && \
-                cd ${DIR} && \
-                curl -sLO https://github.com/Netflix/vmaf/archive/v${LIBVMAF_VERSION}.tar.gz && \
-                tar -xz --strip-components=1 -f v${LIBVMAF_VERSION}.tar.gz && \
-                cd /tmp/vmaf/libvmaf && \
-                meson build --buildtype release --prefix=${PREFIX} && \
-                ninja -vC build && \
-                ninja -vC build install && \
-                mkdir -p ${PREFIX}/share/model/ && \
-                cp -r /tmp/vmaf/model/* ${PREFIX}/share/model/ && \
-                rm -rf ${DIR}; \
+        echo "Building VMAF." && \
+        DIR=/tmp/vmaf && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/Netflix/vmaf/archive/v${LIBVMAF_VERSION}.tar.gz && \
+        tar -xz --strip-components=1 -f v${LIBVMAF_VERSION}.tar.gz && \
+        cd /tmp/vmaf/libvmaf && \
+        meson build --buildtype release --prefix=${PREFIX} && \
+        ninja -vC build && \
+        ninja -vC build install && \
+        mkdir -p ${PREFIX}/share/model/ && \
+        cp -r /tmp/vmaf/model/* ${PREFIX}/share/model/ && \
+        rm -rf ${DIR}; \
         else \
-                echo "VMAF skipped."; \
+        echo "VMAF skipped."; \
         fi
 
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
@@ -148,7 +148,7 @@ RUN \
         DIR=/tmp/opencore-amr && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://versaweb.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz | \
+        curl -sL https://sourceforge.net/projects/opencore-amr/files/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz/download | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --enable-shared  && \
         make && \
@@ -255,7 +255,7 @@ RUN \
         DIR=/tmp/lame && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://versaweb.dl.sourceforge.net/project/lame/lame/$(echo ${LAME_VERSION} | sed -e 's/[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)/\1.\2/')/lame-${LAME_VERSION}.tar.gz | \
+        curl -sL https://sourceforge.net/projects/lame/files/lame/${LAME_VERSION}/lame-${LAME_VERSION}.tar.gz/download | \
         tar -zx --strip-components=1 && \
         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --enable-shared --enable-nasm --disable-frontend && \
         make && \
@@ -580,7 +580,7 @@ RUN \
         --enable-nvenc \
         --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/" \
         --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/" && \
-        make && \
+make && \
         make install && \
         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
         make distclean && \
