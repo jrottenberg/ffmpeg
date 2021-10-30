@@ -61,6 +61,15 @@ jobs:
         ISPARENT:  True
 
 
+      almalinux8_4.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4
+        VARIANT:  almalinux8
+        PARENT: centos
+        ISPARENT:  True
+
+
       scratch312_4.4:
         MAJOR_VERSION: 4
         VERSION:  4.4
@@ -160,6 +169,15 @@ jobs:
         ISPARENT:  True
 
 
+      almalinux8_4.3.2:
+        MAJOR_VERSION: 4
+        VERSION:  4.3
+        LONG_VERSION: 4.3.2
+        VARIANT:  almalinux8
+        PARENT: centos
+        ISPARENT:  True
+
+
       scratch312_4.3.2:
         MAJOR_VERSION: 4
         VERSION:  4.3
@@ -250,6 +268,15 @@ jobs:
         ISPARENT:  True
 
 
+      almalinux8_4.2.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.2
+        LONG_VERSION: 4.2.4
+        VARIANT:  almalinux8
+        PARENT: centos
+        ISPARENT:  True
+
+
       scratch312_4.2.4:
         MAJOR_VERSION: 4
         VERSION:  4.2
@@ -318,6 +345,15 @@ jobs:
         VERSION:  4.1
         LONG_VERSION: 4.1.7
         VARIANT:  centos8
+        PARENT: centos
+        ISPARENT:  True
+
+
+      almalinux8_4.1.7:
+        MAJOR_VERSION: 4
+        VERSION:  4.1
+        LONG_VERSION: 4.1.7
+        VARIANT:  almalinux8
         PARENT: centos
         ISPARENT:  True
 
@@ -394,6 +430,15 @@ jobs:
         ISPARENT:  True
 
 
+      almalinux8_4.0.6:
+        MAJOR_VERSION: 4
+        VERSION:  4.0
+        LONG_VERSION: 4.0.6
+        VARIANT:  almalinux8
+        PARENT: centos
+        ISPARENT:  True
+
+
       scratch312_4.0.6:
         MAJOR_VERSION: 4
         VERSION:  4.0
@@ -466,6 +511,15 @@ jobs:
         ISPARENT:  True
 
 
+      almalinux8_3.4.8:
+        MAJOR_VERSION: 3
+        VERSION:  3.4
+        LONG_VERSION: 3.4.8
+        VARIANT:  almalinux8
+        PARENT: centos
+        ISPARENT:  True
+
+
       scratch312_3.4.8:
         MAJOR_VERSION: 3
         VERSION:  3.4
@@ -534,6 +588,15 @@ jobs:
         VERSION:  3.3
         LONG_VERSION: 3.3.9
         VARIANT:  centos8
+        PARENT: centos
+        ISPARENT:  True
+
+
+      almalinux8_3.3.9:
+        MAJOR_VERSION: 3
+        VERSION:  3.3
+        LONG_VERSION: 3.3.9
+        VARIANT:  almalinux8
         PARENT: centos
         ISPARENT:  True
 
