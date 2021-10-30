@@ -25,6 +25,7 @@ VARIANTS = [
     {"name": "alpine38", "parent": "alpine"},
     {"name": "centos7", "parent": "centos"},
     {"name": "centos8", "parent": "centos"},
+    {"name": "almalinux8", "parent": "almalinux"},
     {"name": "scratch312", "parent": "scratch"},
     {"name": "scratch38", "parent": "scratch"},
     {"name": "vaapi1804", "parent": "vaapi"},
@@ -49,6 +50,7 @@ SKIP_VARIANTS = {
     "3.2": [
         "alpine312",
         "centos8",
+        "almalinux8",
         "nvidia2004",
         "scratch312",
         "ubuntu1804",

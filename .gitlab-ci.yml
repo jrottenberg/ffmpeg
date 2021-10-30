@@ -5,6 +5,7 @@ stages:
   - alpine38
   - centos7
   - centos8
+  - almalinux8
   - nvidia1604
   - nvidia1804
   - scratch311

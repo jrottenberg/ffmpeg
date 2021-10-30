@@ -65,6 +65,17 @@
     PARENT: "centos"
     ISPARENT: "True"
 
+4.4-almalinux8:
+  extends: .docker
+  stage: almalinux8
+  variables:
+    MAJOR_VERSION: 4
+    VERSION: "4.4"
+    LONG_VERSION: "4.4"
+    VARIANT: almalinux8
+    PARENT: "almalinux"
+    ISPARENT: "True"
+
 4.4-scratch312:
   extends: .docker
   stage: scratch312
@@ -186,6 +197,17 @@
     PARENT: "centos"
     ISPARENT: "True"
 
+4.3.2-almalinux8:
+  extends: .docker
+  stage: almalinux8
+  variables:
+    MAJOR_VERSION: 4
+    VERSION: "4.3"
+    LONG_VERSION: "4.3.2"
+    VARIANT: almalinux8
+    PARENT: "almalinux"
+    ISPARENT: "True"
+
 4.3.2-scratch312:
   extends: .docker
   stage: scratch312
@@ -296,6 +318,17 @@
     PARENT: "centos"
     ISPARENT: "True"
 
+4.2.4-almalinux8:
+  extends: .docker
+  stage: almalinux8
+  variables:
+    MAJOR_VERSION: 4
+    VERSION: "4.2"
+    LONG_VERSION: "4.2.4"
+    VARIANT: almalinux8
+    PARENT: "centos"
+    ISPARENT: "True"
+
 4.2.4-scratch312:
   extends: .docker
   stage: scratch312
@@ -381,6 +414,17 @@
     VERSION: "4.1"
     LONG_VERSION: "4.1.7"
     VARIANT: centos8
+    PARENT: "centos"
+    ISPARENT: "True"
+
+4.1.7-almalinux8:
+  extends: .docker
+  stage: almalinux8
+  variables:
+    MAJOR_VERSION: 4
+    VERSION: "4.1"
+    LONG_VERSION: "4.1.7"
+    VARIANT: almalinux8
     PARENT: "centos"
     ISPARENT: "True"
 
@@ -472,6 +516,17 @@
     PARENT: "centos"
     ISPARENT: "True"
 
+4.0.6-almalinux8:
+  extends: .docker
+  stage: almalinux8
+  variables:
+    MAJOR_VERSION: 4
+    VERSION: "4.0"
+    LONG_VERSION: "4.0.6"
+    VARIANT: almalinux8
+    PARENT: "centos"
+    ISPARENT: "True"
+
 4.0.6-scratch312:
   extends: .docker
   stage: scratch312
@@ -560,6 +615,17 @@
     PARENT: "centos"
     ISPARENT: "True"
 
+3.4.8-almalinux8:
+  extends: .docker
+  stage: almalinux8
+  variables:
+    MAJOR_VERSION: 3
+    VERSION: "3.4"
+    LONG_VERSION: "3.4.8"
+    VARIANT: almalinux8
+    PARENT: "centos"
+    ISPARENT: "True"
+
 3.4.8-scratch312:
   extends: .docker
   stage: scratch312
@@ -645,6 +711,17 @@
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
     VARIANT: centos8
+    PARENT: "centos"
+    ISPARENT: "True"
+
+3.3.9-almalinux8:
+  extends: .docker
+  stage: almalinux8
+  variables:
+    MAJOR_VERSION: 3
+    VERSION: "3.3"
+    LONG_VERSION: "3.3.9"
+    VARIANT: almalinux8
     PARENT: "centos"
     ISPARENT: "True"
 
