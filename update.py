@@ -4,9 +4,8 @@
 import os
 import re
 import shutil
-from urllib import request
 from distutils.version import StrictVersion
-
+from urllib import request
 
 MIN_VERSION = "2.7"
 with open("templates/Dockerfile-env", "r") as tmpfile:
