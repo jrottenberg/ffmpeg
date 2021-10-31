@@ -34,7 +34,7 @@ VARIANTS = [
 FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
 
 
-all_parents = sorted(set([sub['parent'] for sub in VARIANTS]))
+all_parents = sorted(set([sub["parent"] for sub in VARIANTS]))
 gitlabci = ["stages:\n  - lint\n"]
 azure = []
 
@@ -220,7 +220,9 @@ for version in keep_version:
         if version == "snapshot" or float(version[0:3]) >= 4.2:
             FFMPEG_CONFIG_FLAGS.append("--enable-libaribb24")
 
-        if ((template.find('meson') > 0) and (version == "snapshot" or float(version[0:3]) >= 4.3)):
+        if (template.find("meson") > 0) and (
+            version == "snapshot" or float(version[0:3]) >= 4.3
+        ):
             FFMPEG_CONFIG_FLAGS.append("--enable-libvmaf")
 
         if (version == "snapshot" or int(version[0]) >= 3) and variant[
