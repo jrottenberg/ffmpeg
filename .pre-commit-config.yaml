@@ -38,3 +38,12 @@ repos: # pre-commit autoupdate
     hooks:
       - id: black
         language_version: python3
+
+  - repo: local
+    hooks:
+      - id: update
+        name: Generate Dockerfiles
+        entry: ./update.py
+        language: script
+        types: [python]
+        pass_filenames: false
