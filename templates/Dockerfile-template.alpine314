@@ -21,22 +21,23 @@ RUN     buildDeps="autoconf \
                    binutils \
                    bzip2 \
                    cmake \
-                   curl \
                    coreutils \
+                   curl \
                    diffutils \
+                   expat-dev \
                    file \
                    g++ \
                    gcc \
                    gperf \
                    libtool \
                    make \
-                   python3 \
-                   openssl-dev \
-                   tar \
-                   yasm \
                    nasm \
-                   zlib-dev \
-                   expat-dev" && \
+                   openssl-dev \
+                   python3 \
+                   tar \
+                   xcb-proto \
+                   yasm \
+                   zlib-dev" && \
         apk add --no-cache --update ${buildDeps}
 %%RUN%%
 

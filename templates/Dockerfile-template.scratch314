@@ -15,29 +15,30 @@ RUN     buildDeps="autoconf \
                    bash \
                    binutils \
                    bzip2 \
+                   ca-certificates \
                    cmake \
-                   curl \
                    coreutils \
+                   curl \
                    diffutils \
                    expat-dev \
                    file \
                    g++ \
                    gcc \
+                   git \
                    gperf \
+                   libcrypto1.1 \
+                   libgcc \
+                   libssl1.1 \
+                   libstdc++ \
                    libtool \
                    make \
-                   python3 \
-                   openssl-dev \
-                   tar \
-                   yasm \
                    nasm \
-                   zlib-dev \
-                   git \
-                   libgcc \
-                   libstdc++ \
-                   ca-certificates \
-                   libcrypto1.1 \
-                   libssl1.1" && \
+                   openssl-dev \
+                   python3 \
+                   tar \
+                   xcb-proto \
+                   yasm \
+                   zlib-dev" && \
         apk  add --update ${buildDeps}
 
 %%RUN%%
