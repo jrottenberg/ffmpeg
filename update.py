@@ -6,7 +6,6 @@ import re
 import shutil
 from urllib import request
 from distutils.version import StrictVersion
-import itertools
 
 
 MIN_VERSION = "2.7"
