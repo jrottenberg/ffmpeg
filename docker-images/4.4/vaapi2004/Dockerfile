@@ -17,40 +17,40 @@ RUN     apt-get -yqq update && \
 FROM base as build
 
 ENV         FFMPEG_VERSION=4.4.1 \
-            AOM_VERSION=v1.0.0 \
-            FDKAAC_VERSION=0.1.5 \
-            FONTCONFIG_VERSION=2.12.4 \
-            FREETYPE_VERSION=2.10.4 \
-            FRIBIDI_VERSION=0.19.7 \
-            KVAZAAR_VERSION=2.0.0 \
-            LAME_VERSION=3.100 \
-            LIBASS_VERSION=0.13.7 \
-            LIBPTHREAD_STUBS_VERSION=0.4 \
-            LIBVIDSTAB_VERSION=1.1.0 \
-            LIBXCB_VERSION=1.13.1 \
-            XCBPROTO_VERSION=1.13 \
-            OGG_VERSION=1.3.2 \
-            OPENCOREAMR_VERSION=0.1.5 \
-            OPUS_VERSION=1.2 \
-            OPENJPEG_VERSION=2.1.2 \
-            THEORA_VERSION=1.1.1 \
-            VORBIS_VERSION=1.3.5 \
-            VPX_VERSION=1.8.0 \
-            WEBP_VERSION=1.0.2 \
-            X264_VERSION=20170226-2245-stable \
-            X265_VERSION=3.4 \
-            XAU_VERSION=1.0.9 \
-            XORG_MACROS_VERSION=1.19.2 \
-            XPROTO_VERSION=7.0.31 \
-            XVID_VERSION=1.3.4 \
-            LIBXML2_VERSION=2.9.10 \
-            LIBBLURAY_VERSION=1.1.2 \
-            LIBZMQ_VERSION=4.3.2 \
-            LIBSRT_VERSION=1.4.1 \
-            LIBARIBB24_VERSION=1.0.3 \
-            LIBPNG_VERSION=1.6.9 \
-            LIBVMAF_VERSION=2.1.1 \
-            SRC=/usr/local
+    AOM_VERSION=v1.0.0 \
+    FDKAAC_VERSION=0.1.5 \
+    FONTCONFIG_VERSION=2.12.4 \
+    FREETYPE_VERSION=2.10.4 \
+    FRIBIDI_VERSION=0.19.7 \
+    KVAZAAR_VERSION=2.0.0 \
+    LAME_VERSION=3.100 \
+    LIBASS_VERSION=0.13.7 \
+    LIBPTHREAD_STUBS_VERSION=0.4 \
+    LIBVIDSTAB_VERSION=1.1.0 \
+    LIBXCB_VERSION=1.13.1 \
+    XCBPROTO_VERSION=1.13 \
+    OGG_VERSION=1.3.2 \
+    OPENCOREAMR_VERSION=0.1.5 \
+    OPUS_VERSION=1.2 \
+    OPENJPEG_VERSION=2.1.2 \
+    THEORA_VERSION=1.1.1 \
+    VORBIS_VERSION=1.3.5 \
+    VPX_VERSION=1.8.0 \
+    WEBP_VERSION=1.0.2 \
+    X264_VERSION=20170226-2245-stable \
+    X265_VERSION=3.4 \
+    XAU_VERSION=1.0.9 \
+    XORG_MACROS_VERSION=1.19.2 \
+    XPROTO_VERSION=7.0.31 \
+    XVID_VERSION=1.3.4 \
+    LIBXML2_VERSION=2.9.12 \
+    LIBBLURAY_VERSION=1.1.2 \
+    LIBZMQ_VERSION=4.3.2 \
+    LIBSRT_VERSION=1.4.1 \
+    LIBARIBB24_VERSION=1.0.3 \
+    LIBPNG_VERSION=1.6.9 \
+    LIBVMAF_VERSION=2.1.1 \
+    SRC=/usr/local
 
 ARG         FREETYPE_SHA256SUM="5eab795ebb23ac77001cfb68b7d4d50b5d6c7469247b0b01b2c953269f658dac freetype-2.10.4.tar.gz"
 ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8 0.19.7.tar.gz"
@@ -61,7 +61,6 @@ ARG         OPUS_SHA256SUM="77db45a87b51578fbc49555ef1b10926179861d854eb2613207d
 ARG         THEORA_SHA256SUM="40952956c47811928d1e7922cda3bc1f427eb75680c3c37249c91e949054916b libtheora-1.1.1.tar.gz"
 ARG         VORBIS_SHA256SUM="6efbcecdd3e5dfbf090341b485da9d176eb250d893e3eb378c428a2db38301ce libvorbis-1.3.5.tar.gz"
 ARG         XVID_SHA256SUM="4e9fd62728885855bc5007fe1be58df42e5e274497591fec37249e1052ae316f xvidcore-1.3.4.tar.gz"
-ARG         LIBXML2_SHA256SUM="f07dab13bf42d2b8db80620cce7419b3b87827cc937c8bb20fe13b8571ee9501  libxml2-v2.9.10.tar.gz"
 ARG         LIBBLURAY_SHA256SUM="a3dd452239b100dc9da0d01b30e1692693e2a332a7d29917bf84bb10ea7c0b42 libbluray-1.1.2.tar.bz2"
 ARG         LIBZMQ_SHA256SUM="02ecc88466ae38cf2c8d79f09cfd2675ba299a439680b64ade733e26a349edeb v4.3.2.tar.gz"
 ARG         LIBARIBB24_SHA256SUM="f61560738926e57f9173510389634d8c06cabedfa857db4b28fb7704707ff128 v1.0.3.tar.gz"
@@ -435,9 +434,8 @@ RUN \
         DIR=/tmp/libxml2 && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sLO https://gitlab.gnome.org/GNOME/libxml2/-/archive/v${LIBXML2_VERSION}/libxml2-v${LIBXML2_VERSION}.tar.gz && \
-        echo ${LIBXML2_SHA256SUM} | sha256sum --check && \
-        tar -xz --strip-components=1 -f libxml2-v${LIBXML2_VERSION}.tar.gz && \
+        curl -sL https://github.com/GNOME/libxml2/archive/refs/tags/v${LIBXML2_VERSION}.tar.gz | \
+        tar -xz --strip-components=1 && \
         ./autogen.sh --prefix="${PREFIX}" --with-ftp=no --with-http=no --with-python=no && \
         make && \
         make install && \
