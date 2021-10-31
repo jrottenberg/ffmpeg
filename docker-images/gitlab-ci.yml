@@ -1,4 +1,5 @@
 stages:
+  - lint
   - alpine
   - centos
   - nvidia

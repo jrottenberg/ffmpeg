@@ -35,7 +35,7 @@ FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
 
 
 all_parents = sorted(set([sub['parent'] for sub in VARIANTS]))
-gitlabci = ["stages:\n"]
+gitlabci = ["stages:\n  - lint\n"]
 azure = []
 
 
