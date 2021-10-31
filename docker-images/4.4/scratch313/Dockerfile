@@ -4,11 +4,11 @@
 #
 #
 
-FROM        alpine:3.14 AS build
+FROM        alpine:3.13 AS build
 
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=4.0.6 \
+ENV         FFMPEG_VERSION=4.4.1 \
     AOM_VERSION=v1.0.0 \
     FDKAAC_VERSION=0.1.5 \
     FONTCONFIG_VERSION=2.12.4 \
@@ -553,6 +553,7 @@ RUN \
         --enable-libaom \
         --extra-libs=-lpthread \
         --enable-libsrt \
+        --enable-libaribb24 \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" && \
 make && \

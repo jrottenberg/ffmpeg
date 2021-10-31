@@ -26,7 +26,7 @@ VARIANTS = [
     {"name": "alpine313", "parent": "alpine"},
     {"name": "centos7", "parent": "centos"},
     {"name": "centos8", "parent": "centos"},
-    {"name": "scratch314", "parent": "scratch"},
+    {"name": "scratch313", "parent": "scratch"},
     {"name": "vaapi1804", "parent": "vaapi"},
     {"name": "vaapi2004", "parent": "vaapi"},
     {"name": "nvidia2004", "parent": "nvidia"},
