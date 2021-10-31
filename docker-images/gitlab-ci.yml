@@ -1,7 +1,14 @@
+stages:
+  - alpine
+  - centos
+  - nvidia
+  - scratch
+  - ubuntu
+  - vaapi
 
 4.4.1-ubuntu1804:
   extends: .docker
-  stage: ubuntu1804
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
@@ -12,7 +19,7 @@
 
 4.4.1-ubuntu2004:
   extends: .docker
-  stage: ubuntu2004
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
@@ -21,20 +28,20 @@
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.4.1-alpine314:
+4.4.1-alpine313:
   extends: .docker
-  stage: alpine314
+  stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
     LONG_VERSION: "4.4.1"
-    VARIANT: alpine314
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
 4.4.1-centos7:
   extends: .docker
-  stage: centos7
+  stage: centos
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
@@ -45,7 +52,7 @@
 
 4.4.1-centos8:
   extends: .docker
-  stage: centos8
+  stage: centos
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
@@ -56,7 +63,7 @@
 
 4.4.1-scratch314:
   extends: .docker
-  stage: scratch314
+  stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
@@ -67,7 +74,7 @@
 
 4.4.1-vaapi1804:
   extends: .docker
-  stage: vaapi1804
+  stage: vaapi
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
@@ -78,7 +85,7 @@
 
 4.4.1-vaapi2004:
   extends: .docker
-  stage: vaapi2004
+  stage: vaapi
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
@@ -89,7 +96,7 @@
 
 4.4.1-nvidia2004:
   extends: .docker
-  stage: nvidia2004
+  stage: nvidia
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
@@ -100,7 +107,7 @@
 
 4.3.3-ubuntu1804:
   extends: .docker
-  stage: ubuntu1804
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
@@ -111,7 +118,7 @@
 
 4.3.3-ubuntu2004:
   extends: .docker
-  stage: ubuntu2004
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
@@ -120,20 +127,20 @@
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.3.3-alpine314:
+4.3.3-alpine313:
   extends: .docker
-  stage: alpine314
+  stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.3"
-    VARIANT: alpine314
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
 4.3.3-centos7:
   extends: .docker
-  stage: centos7
+  stage: centos
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
@@ -144,7 +151,7 @@
 
 4.3.3-centos8:
   extends: .docker
-  stage: centos8
+  stage: centos
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
@@ -155,7 +162,7 @@
 
 4.3.3-scratch314:
   extends: .docker
-  stage: scratch314
+  stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
@@ -166,7 +173,7 @@
 
 4.3.3-vaapi1804:
   extends: .docker
-  stage: vaapi1804
+  stage: vaapi
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
@@ -177,7 +184,7 @@
 
 4.3.3-vaapi2004:
   extends: .docker
-  stage: vaapi2004
+  stage: vaapi
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
@@ -188,7 +195,7 @@
 
 4.3.3-nvidia2004:
   extends: .docker
-  stage: nvidia2004
+  stage: nvidia
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
@@ -199,7 +206,7 @@
 
 4.2.5-ubuntu1804:
   extends: .docker
-  stage: ubuntu1804
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
@@ -210,7 +217,7 @@
 
 4.2.5-ubuntu2004:
   extends: .docker
-  stage: ubuntu2004
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
@@ -219,20 +226,20 @@
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.2.5-alpine314:
+4.2.5-alpine313:
   extends: .docker
-  stage: alpine314
+  stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.5"
-    VARIANT: alpine314
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
 4.2.5-centos7:
   extends: .docker
-  stage: centos7
+  stage: centos
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
@@ -243,7 +250,7 @@
 
 4.2.5-centos8:
   extends: .docker
-  stage: centos8
+  stage: centos
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
@@ -254,7 +261,7 @@
 
 4.2.5-scratch314:
   extends: .docker
-  stage: scratch314
+  stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
@@ -265,7 +272,7 @@
 
 4.2.5-vaapi2004:
   extends: .docker
-  stage: vaapi2004
+  stage: vaapi
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
@@ -276,7 +283,7 @@
 
 4.2.5-nvidia2004:
   extends: .docker
-  stage: nvidia2004
+  stage: nvidia
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
@@ -287,7 +294,7 @@
 
 4.1.8-ubuntu1804:
   extends: .docker
-  stage: ubuntu1804
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
@@ -298,7 +305,7 @@
 
 4.1.8-ubuntu2004:
   extends: .docker
-  stage: ubuntu2004
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
@@ -307,20 +314,20 @@
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.1.8-alpine314:
+4.1.8-alpine313:
   extends: .docker
-  stage: alpine314
+  stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.8"
-    VARIANT: alpine314
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
 4.1.8-centos7:
   extends: .docker
-  stage: centos7
+  stage: centos
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
@@ -331,7 +338,7 @@
 
 4.1.8-centos8:
   extends: .docker
-  stage: centos8
+  stage: centos
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
@@ -342,7 +349,7 @@
 
 4.1.8-scratch314:
   extends: .docker
-  stage: scratch314
+  stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
@@ -353,7 +360,7 @@
 
 4.1.8-vaapi2004:
   extends: .docker
-  stage: vaapi2004
+  stage: vaapi
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
@@ -364,7 +371,7 @@
 
 4.1.8-nvidia2004:
   extends: .docker
-  stage: nvidia2004
+  stage: nvidia
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
@@ -375,7 +382,7 @@
 
 4.0.6-ubuntu1804:
   extends: .docker
-  stage: ubuntu1804
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.0"
@@ -386,7 +393,7 @@
 
 4.0.6-ubuntu2004:
   extends: .docker
-  stage: ubuntu2004
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.0"
@@ -395,20 +402,20 @@
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.0.6-alpine314:
+4.0.6-alpine313:
   extends: .docker
-  stage: alpine314
+  stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.0"
     LONG_VERSION: "4.0.6"
-    VARIANT: alpine314
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
 4.0.6-centos7:
   extends: .docker
-  stage: centos7
+  stage: centos
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.0"
@@ -419,7 +426,7 @@
 
 4.0.6-centos8:
   extends: .docker
-  stage: centos8
+  stage: centos
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.0"
@@ -430,7 +437,7 @@
 
 4.0.6-scratch314:
   extends: .docker
-  stage: scratch314
+  stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.0"
@@ -441,7 +448,7 @@
 
 4.0.6-vaapi2004:
   extends: .docker
-  stage: vaapi2004
+  stage: vaapi
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.0"
@@ -452,7 +459,7 @@
 
 4.0.6-nvidia2004:
   extends: .docker
-  stage: nvidia2004
+  stage: nvidia
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.0"
@@ -463,7 +470,7 @@
 
 3.4.9-ubuntu1804:
   extends: .docker
-  stage: ubuntu1804
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
@@ -474,7 +481,7 @@
 
 3.4.9-ubuntu2004:
   extends: .docker
-  stage: ubuntu2004
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
@@ -483,20 +490,20 @@
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-3.4.9-alpine314:
+3.4.9-alpine313:
   extends: .docker
-  stage: alpine314
+  stage: alpine
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.9"
-    VARIANT: alpine314
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
 3.4.9-centos7:
   extends: .docker
-  stage: centos7
+  stage: centos
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
@@ -507,7 +514,7 @@
 
 3.4.9-centos8:
   extends: .docker
-  stage: centos8
+  stage: centos
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
@@ -518,7 +525,7 @@
 
 3.4.9-scratch314:
   extends: .docker
-  stage: scratch314
+  stage: scratch
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
@@ -529,7 +536,7 @@
 
 3.4.9-vaapi2004:
   extends: .docker
-  stage: vaapi2004
+  stage: vaapi
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
@@ -540,7 +547,7 @@
 
 3.4.9-nvidia2004:
   extends: .docker
-  stage: nvidia2004
+  stage: nvidia
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
@@ -551,7 +558,7 @@
 
 3.3.9-ubuntu1804:
   extends: .docker
-  stage: ubuntu1804
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.3"
@@ -562,7 +569,7 @@
 
 3.3.9-ubuntu2004:
   extends: .docker
-  stage: ubuntu2004
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.3"
@@ -571,20 +578,20 @@
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-3.3.9-alpine314:
+3.3.9-alpine313:
   extends: .docker
-  stage: alpine314
+  stage: alpine
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.3"
     LONG_VERSION: "3.3.9"
-    VARIANT: alpine314
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
 3.3.9-centos7:
   extends: .docker
-  stage: centos7
+  stage: centos
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.3"
@@ -595,7 +602,7 @@
 
 3.3.9-centos8:
   extends: .docker
-  stage: centos8
+  stage: centos
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.3"
@@ -606,7 +613,7 @@
 
 3.3.9-scratch314:
   extends: .docker
-  stage: scratch314
+  stage: scratch
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.3"
@@ -617,7 +624,7 @@
 
 3.3.9-vaapi2004:
   extends: .docker
-  stage: vaapi2004
+  stage: vaapi
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.3"
@@ -628,7 +635,7 @@
 
 3.3.9-nvidia2004:
   extends: .docker
-  stage: nvidia2004
+  stage: nvidia
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.3"
@@ -639,7 +646,7 @@
 
 3.2.16-ubuntu2004:
   extends: .docker
-  stage: ubuntu2004
+  stage: ubuntu
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.2"
@@ -648,20 +655,20 @@
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-3.2.16-alpine314:
+3.2.16-alpine313:
   extends: .docker
-  stage: alpine314
+  stage: alpine
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.2"
     LONG_VERSION: "3.2.16"
-    VARIANT: alpine314
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
 3.2.16-centos7:
   extends: .docker
-  stage: centos7
+  stage: centos
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.2"
@@ -672,7 +679,7 @@
 
 3.2.16-scratch314:
   extends: .docker
-  stage: scratch314
+  stage: scratch
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.2"
@@ -683,7 +690,7 @@
 
 3.2.16-vaapi2004:
   extends: .docker
-  stage: vaapi2004
+  stage: vaapi
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.2"

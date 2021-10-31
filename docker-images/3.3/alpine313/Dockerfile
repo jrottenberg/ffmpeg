@@ -4,7 +4,7 @@
 #
 #
 
-FROM        alpine:3.14 AS base
+FROM        alpine:3.13 AS base
 
 RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.1 libssl1.1 libgomp expat git
 
@@ -13,7 +13,7 @@ FROM        base AS build
 
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=3.2.16 \
+ENV         FFMPEG_VERSION=3.3.9 \
     AOM_VERSION=v1.0.0 \
     FDKAAC_VERSION=0.1.5 \
     FONTCONFIG_VERSION=2.12.4 \

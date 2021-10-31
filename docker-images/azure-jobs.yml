@@ -25,11 +25,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine314_4.4.1:
+      alpine313_4.4.1:
         MAJOR_VERSION: 4
         VERSION:  4.4
         LONG_VERSION: 4.4.1
-        VARIANT:  alpine314
+        VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
@@ -106,11 +106,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine314_4.3.3:
+      alpine313_4.3.3:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.3
-        VARIANT:  alpine314
+        VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
@@ -187,11 +187,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine314_4.2.5:
+      alpine313_4.2.5:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.5
-        VARIANT:  alpine314
+        VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
@@ -259,11 +259,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine314_4.1.8:
+      alpine313_4.1.8:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.8
-        VARIANT:  alpine314
+        VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
@@ -331,11 +331,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine314_4.0.6:
+      alpine313_4.0.6:
         MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
-        VARIANT:  alpine314
+        VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
@@ -403,11 +403,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine314_3.4.9:
+      alpine313_3.4.9:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.9
-        VARIANT:  alpine314
+        VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
@@ -475,11 +475,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine314_3.3.9:
+      alpine313_3.3.9:
         MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
-        VARIANT:  alpine314
+        VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
@@ -538,11 +538,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine314_3.2.16:
+      alpine313_3.2.16:
         MAJOR_VERSION: 3
         VERSION:  3.2
         LONG_VERSION: 3.2.16
-        VARIANT:  alpine314
+        VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 

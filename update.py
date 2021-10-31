@@ -6,6 +6,8 @@ import re
 import shutil
 from urllib import request
 from distutils.version import StrictVersion
+import itertools
+
 
 MIN_VERSION = "2.7"
 with open("templates/Dockerfile-env", "r") as tmpfile:
@@ -21,7 +23,7 @@ SKIP_VERSIONS = "3.1.11 3.0.12 snapshot"
 VARIANTS = [
     {"name": "ubuntu1804", "parent": "ubuntu"},
     {"name": "ubuntu2004", "parent": "ubuntu"},
-    {"name": "alpine314", "parent": "alpine"},
+    {"name": "alpine313", "parent": "alpine"},
     {"name": "centos7", "parent": "centos"},
     {"name": "centos8", "parent": "centos"},
     {"name": "scratch314", "parent": "scratch"},
@@ -30,8 +32,16 @@ VARIANTS = [
     {"name": "nvidia2004", "parent": "nvidia"},
 ]
 FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
-gitlabci = []
+
+
+all_parents = sorted(set([sub['parent'] for sub in VARIANTS]))
+gitlabci = ["stages:\n"]
 azure = []
+
+
+for parent in all_parents:
+    gitlabci.append(f"  - {parent}\n")
+
 
 # Get latest release from ffmpeg.org
 with request.urlopen(FFMPEG_RELEASES) as conn:
@@ -128,7 +138,7 @@ for version in keep_version:
             f"""
 {version}-{variant['name']}:
   extends: .docker
-  stage: {variant['name']}
+  stage: {variant['parent']}
   variables:
     MAJOR_VERSION: {major_version}
     VERSION: "{short_version}"
