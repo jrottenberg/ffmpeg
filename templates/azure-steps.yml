@@ -9,7 +9,7 @@
 
     - bash: |
         set -eu
-        docker login --username ${DOCKER_LOGIN} --password ${DOCKER_PASSWORD}      
+        docker login --username ${DOCKER_LOGIN} --password ${DOCKER_PASSWORD}
         docker push ${DOCKER}:${VERSION}-${VARIANT}
         docker push ${DOCKER}:${LONG_VERSION}-${VARIANT}
         if [ "${ISPARENT}" == "True" ] && [ "${VARIANT}" != "${PARENT}" ]

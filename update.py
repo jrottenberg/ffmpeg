@@ -4,8 +4,8 @@
 import os
 import re
 import shutil
-from urllib import request
 from distutils.version import StrictVersion
+from urllib import request
 
 MIN_VERSION = "2.7"
 with open("templates/Dockerfile-env", "r") as tmpfile:
@@ -21,19 +21,25 @@ SKIP_VERSIONS = "3.1.11 3.0.12 snapshot"
 VARIANTS = [
     {"name": "ubuntu1804", "parent": "ubuntu"},
     {"name": "ubuntu2004", "parent": "ubuntu"},
-    {"name": "alpine312", "parent": "alpine"},
-    {"name": "alpine38", "parent": "alpine"},
+    {"name": "alpine313", "parent": "alpine"},
     {"name": "centos7", "parent": "centos"},
     {"name": "centos8", "parent": "centos"},
-    {"name": "scratch312", "parent": "scratch"},
-    {"name": "scratch38", "parent": "scratch"},
+    {"name": "scratch313", "parent": "scratch"},
     {"name": "vaapi1804", "parent": "vaapi"},
     {"name": "vaapi2004", "parent": "vaapi"},
     {"name": "nvidia2004", "parent": "nvidia"},
 ]
 FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
-gitlabci = []
+
+
+all_parents = sorted(set([sub["parent"] for sub in VARIANTS]))
+gitlabci = ["stages:\n  - lint\n"]
 azure = []
+
+
+for parent in all_parents:
+    gitlabci.append(f"  - {parent}\n")
+
 
 # Get latest release from ffmpeg.org
 with request.urlopen(FFMPEG_RELEASES) as conn:
@@ -130,7 +136,7 @@ for version in keep_version:
             f"""
 {version}-{variant['name']}:
   extends: .docker
-  stage: {variant['name']}
+  stage: {variant['parent']}
   variables:
     MAJOR_VERSION: {major_version}
     VERSION: "{short_version}"
@@ -212,7 +218,9 @@ for version in keep_version:
         if version == "snapshot" or float(version[0:3]) >= 4.2:
             FFMPEG_CONFIG_FLAGS.append("--enable-libaribb24")
 
-        if ((template.find('meson') > 0) and (version == "snapshot" or float(version[0:3]) >= 4.3)):
+        if (template.find("meson") > 0) and (
+            version == "snapshot" or float(version[0:3]) >= 4.3
+        ):
             FFMPEG_CONFIG_FLAGS.append("--enable-libvmaf")
 
         if (version == "snapshot" or int(version[0]) >= 3) and variant[

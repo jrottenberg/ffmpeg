@@ -90,7 +90,7 @@ ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
-# copy only needed files, without copying nvidia dev files 
+# copy only needed files, without copying nvidia dev files
 COPY --from=build /usr/local/bin /usr/local/bin/
 COPY --from=build /usr/local/share /usr/local/share/
 COPY --from=build /usr/local/lib /usr/local/lib/
