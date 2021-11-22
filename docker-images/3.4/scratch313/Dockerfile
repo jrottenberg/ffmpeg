@@ -10,6 +10,7 @@ WORKDIR     /tmp/workdir
 
 ENV         FFMPEG_VERSION=3.4.9 \
     AOM_VERSION=v1.0.0 \
+    CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
     FONTCONFIG_VERSION=2.12.4 \
     FREETYPE_VERSION=2.10.4 \
@@ -96,6 +97,18 @@ RUN     buildDeps="autoconf \
                    yasm \
                    zlib-dev" && \
         apk  add --update ${buildDeps}
+
+## chromaprint https://github.com/acoustid/chromaprint
+RUN \
+        echo "Building Chromaprint." && \
+        DIR=/tmp/chromaprint && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sL https://github.com/acoustid/chromaprint/releases/download/v${CHROMAPRINT_VERSION}/chromaprint-${CHROMAPRINT_VERSION}.tar.gz | tar -zx --strip-components=1  && \
+        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=ON . && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
 
 ## libvmaf https://github.com/Netflix/vmaf
 RUN \
@@ -505,7 +518,7 @@ RUN \
         make install && \
         rm -rf ${DIR}
 
-## ffmpeg https://ffmpeg.org/
+## Download ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
@@ -513,8 +526,22 @@ RUN  \
 
 
 
+## chromaprint https://github.com/acoustid/chromaprint
 RUN \
-        DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
+        echo "Building Chromaprint." && \
+        DIR=/tmp/chromaprint && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sL https://github.com/acoustid/chromaprint/releases/download/v${CHROMAPRINT_VERSION}/chromaprint-${CHROMAPRINT_VERSION}.tar.gz | tar -zx --strip-components=1  && \
+        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=ON . && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+
+## Build ffmpeg https://ffmpeg.org/
+RUN  \
+        DIR=/tmp/ffmpeg && cd ${DIR} && \
         ./configure \
         --disable-debug \
         --disable-doc \
@@ -571,7 +598,7 @@ RUN \
 
 ### Release Stage
 FROM        scratch AS release
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+LABEL       org.opencontainers.image.authors="julien@rottenberg.info"
 
 ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
