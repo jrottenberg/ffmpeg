@@ -546,6 +546,7 @@ RUN  \
         --disable-ffplay \
         --enable-shared \
         --enable-avresample \
+        --enable-chromaprint \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
         --enable-gpl \
