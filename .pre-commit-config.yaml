@@ -44,6 +44,5 @@ repos: # pre-commit autoupdate
       - id: update
         name: Generate Dockerfiles
         entry: ./update.py
-        language: script
-        types: [python]
+        language: python
         pass_filenames: false
