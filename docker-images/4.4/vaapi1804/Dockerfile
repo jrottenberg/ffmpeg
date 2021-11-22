@@ -97,18 +97,6 @@ RUN      buildDeps="autoconf \
                     zlib1g-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
-## chromaprint https://github.com/acoustid/chromaprint
-RUN \
-        echo "Building Chromaprint." && \
-        DIR=/tmp/chromaprint && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sL https://github.com/acoustid/chromaprint/releases/download/v${CHROMAPRINT_VERSION}/chromaprint-${CHROMAPRINT_VERSION}.tar.gz | tar -zx --strip-components=1  && \
-        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=ON . && \
-        make && \
-        make install && \
-        rm -rf ${DIR}
-
 ## libvmaf https://github.com/Netflix/vmaf
 RUN \
         if which meson || false; then \
