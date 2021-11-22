@@ -421,7 +421,7 @@ RUN \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
         curl -sL https://github.com/acoustid/chromaprint/releases/download/v${CHROMAPRINT_VERSION}/chromaprint-${CHROMAPRINT_VERSION}.tar.gz | tar -zx --strip-components=1  && \
-        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=ON . && \
+        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=ON -DFFMPEG_ROOT=/tmp/ffmpeg . && \
         make && \
         make install && \
         rm -rf ${DIR}
