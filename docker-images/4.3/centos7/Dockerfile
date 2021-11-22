@@ -544,8 +544,9 @@ RUN \
 RUN  \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
-
+        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
+        ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-avresample   --enable-gpl  --extra-libs=-ldl && \
+        make ;  make install
 
 
 ## chromaprint https://github.com/acoustid/chromaprint
@@ -555,7 +556,7 @@ RUN \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
         curl -sL https://github.com/acoustid/chromaprint/releases/download/v${CHROMAPRINT_VERSION}/chromaprint-${CHROMAPRINT_VERSION}.tar.gz | tar -zx --strip-components=1  && \
-        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=ON -DFFMPEG_ROOT=/tmp/ffmpeg . && \
+        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=ON . && \
         make && \
         make install && \
         rm -rf ${DIR}
@@ -606,7 +607,7 @@ RUN  \
         --enable-libaribb24 \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" && \
-make && \
+make clean && make && \
         make install && \
         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
         make distclean && \
