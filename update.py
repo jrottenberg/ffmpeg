@@ -162,34 +162,34 @@ for version in keep_version:
             "--disable-debug",
             "--disable-doc",
             "--disable-ffplay",
-            "--enable-shared",
             "--enable-avresample",
             "--enable-chromaprint",
-            "--enable-libopencore-amrnb",
-            "--enable-libopencore-amrwb",
+            "--enable-fontconfig",
             "--enable-gpl",
             "--enable-libass",
-            "--enable-fontconfig",
+            "--enable-libbluray",
+            "--enable-libfdk_aac",
             "--enable-libfreetype",
-            "--enable-libvidstab",
             "--enable-libmp3lame",
+            "--enable-libopencore-amrnb",
+            "--enable-libopencore-amrwb",
             "--enable-libopus",
             "--enable-libtheora",
+            "--enable-libvidstab",
             "--enable-libvorbis",
             "--enable-libvpx",
             "--enable-libwebp",
-            "--enable-libxcb",
-            "--enable-libx265",
-            "--enable-libxvid",
             "--enable-libx264",
+            "--enable-libx265",
+            "--enable-libxcb",
+            "--enable-libxvid",
+            "--enable-libzmq",
             "--enable-nonfree",
             "--enable-openssl",
-            "--enable-libfdk_aac",
             "--enable-postproc",
+            "--enable-shared",
             "--enable-small",
             "--enable-version3",
-            "--enable-libbluray",
-            "--enable-libzmq",
             "--extra-libs=-ldl",
             '--prefix="${PREFIX}"',
         ]
@@ -240,7 +240,8 @@ for version in keep_version:
         ldflags = '--extra-ldflags="{0}"'.format(" ".join(LDFLAGS))
         FFMPEG_CONFIG_FLAGS.append(cflags)
         FFMPEG_CONFIG_FLAGS.append(ldflags)
-        FFMPEG_CONFIG_FLAGS[-1] += " && \\"
+        FFMPEG_CONFIG_FLAGS.sort()
+
         COMBINED_CONFIG_FLAGS = " \\\n        ".join(FFMPEG_CONFIG_FLAGS)
 
         run_content = RUN_CONTENT.replace(

@@ -432,8 +432,9 @@ RUN \
 RUN  \
         DIR=/tmp/ffmpeg && cd ${DIR} && \
         ./configure \
-        %%FFMPEG_CONFIG_FLAGS%%
-make clean && make && \
+        %%FFMPEG_CONFIG_FLAGS%% && \
+        make clean && \
+        make && \
         make install && \
         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
         make distclean && \

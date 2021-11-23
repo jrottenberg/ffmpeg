@@ -560,42 +560,43 @@ RUN  \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
-        --enable-shared \
         --enable-avresample \
         --enable-chromaprint \
-        --enable-libopencore-amrnb \
-        --enable-libopencore-amrwb \
+        --enable-fontconfig \
         --enable-gpl \
         --enable-libass \
-        --enable-fontconfig \
+        --enable-libbluray \
+        --enable-libfdk_aac \
         --enable-libfreetype \
-        --enable-libvidstab \
+        --enable-libkvazaar \
         --enable-libmp3lame \
+        --enable-libopencore-amrnb \
+        --enable-libopencore-amrwb \
+        --enable-libopenjpeg \
         --enable-libopus \
         --enable-libtheora \
+        --enable-libvidstab \
         --enable-libvorbis \
         --enable-libvpx \
         --enable-libwebp \
-        --enable-libxcb \
-        --enable-libx265 \
-        --enable-libxvid \
         --enable-libx264 \
+        --enable-libx265 \
+        --enable-libxcb \
+        --enable-libxvid \
+        --enable-libzmq \
         --enable-nonfree \
+        --enable-nvenc \
         --enable-openssl \
-        --enable-libfdk_aac \
         --enable-postproc \
+        --enable-shared \
         --enable-small \
         --enable-version3 \
-        --enable-libbluray \
-        --enable-libzmq \
-        --extra-libs=-ldl \
-        --prefix="${PREFIX}" \
-        --enable-libopenjpeg \
-        --enable-libkvazaar \
-        --enable-nvenc \
         --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/" \
-        --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/" && \
-make clean && make && \
+        --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/" \
+        --extra-libs=-ldl \
+        --prefix="${PREFIX}" && \
+        make clean && \
+        make && \
         make install && \
         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
         make distclean && \

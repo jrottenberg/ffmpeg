@@ -560,49 +560,50 @@ RUN  \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
-        --enable-shared \
         --enable-avresample \
         --enable-chromaprint \
+        --enable-cuda \
+        --enable-cuvid \
+        --enable-fontconfig \
+        --enable-gpl \
+        --enable-libaom \
+        --enable-libaribb24 \
+        --enable-libass \
+        --enable-libbluray \
+        --enable-libfdk_aac \
+        --enable-libfreetype \
+        --enable-libkvazaar \
+        --enable-libmp3lame \
+        --enable-libnpp \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
-        --enable-gpl \
-        --enable-libass \
-        --enable-fontconfig \
-        --enable-libfreetype \
-        --enable-libvidstab \
-        --enable-libmp3lame \
+        --enable-libopenjpeg \
         --enable-libopus \
+        --enable-libsrt \
         --enable-libtheora \
+        --enable-libvidstab \
         --enable-libvorbis \
         --enable-libvpx \
         --enable-libwebp \
-        --enable-libxcb \
-        --enable-libx265 \
-        --enable-libxvid \
         --enable-libx264 \
+        --enable-libx265 \
+        --enable-libxcb \
+        --enable-libxvid \
+        --enable-libzmq \
         --enable-nonfree \
+        --enable-nvenc \
         --enable-openssl \
-        --enable-libfdk_aac \
         --enable-postproc \
+        --enable-shared \
         --enable-small \
         --enable-version3 \
-        --enable-libbluray \
-        --enable-libzmq \
-        --extra-libs=-ldl \
-        --prefix="${PREFIX}" \
-        --enable-libopenjpeg \
-        --enable-libkvazaar \
-        --enable-libaom \
-        --extra-libs=-lpthread \
-        --enable-libsrt \
-        --enable-libaribb24 \
-        --enable-nvenc \
-        --enable-cuda \
-        --enable-cuvid \
-        --enable-libnpp \
         --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/" \
-        --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/" && \
-make clean && make && \
+        --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/" \
+        --extra-libs=-ldl \
+        --extra-libs=-lpthread \
+        --prefix="${PREFIX}" && \
+        make clean && \
+        make && \
         make install && \
         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
         make distclean && \
