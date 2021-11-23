@@ -82,7 +82,6 @@ def get_shorten_version(version):
 
 
 def get_major_version(version):
-    print(version)
     if version == "snapshot":
         return version
     else:
@@ -106,10 +105,8 @@ for cur in all_versions:
         keep_version.append(cur)
         last = tmp
 
-print(f"Preparing docker images for ffmpeg versions : {keep_version}")
+print("Preparing docker images for ffmpeg versions: ")
 
-
-print(keep_version)
 for version in keep_version:
     print(version)
     skip_variants = None
