@@ -1,7 +1,7 @@
 
 
 jobs:
-- job: Build Docker
+- job: Build_Docker_Images
   pool:
     vmImage: ubuntu-latest
   strategy:
