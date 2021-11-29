@@ -17,6 +17,7 @@ WORKDIR     /tmp/workdir
 
 ENV         FFMPEG_VERSION=3.4.9 \
     AOM_VERSION=v1.0.0 \
+    CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
     FONTCONFIG_VERSION=2.12.4 \
     FREETYPE_VERSION=2.10.4 \
@@ -508,54 +509,71 @@ RUN \
         make install && \
         rm -rf ${DIR}
 
-## ffmpeg https://ffmpeg.org/
+## Download ffmpeg https://ffmpeg.org/
 RUN  \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
+        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
+        ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-avresample   --enable-gpl  --extra-libs=-ldl && \
+        make ;  make install
 
 
-
+## chromaprint https://github.com/acoustid/chromaprint
 RUN \
-        DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
+        echo "Building Chromaprint." && \
+        DIR=/tmp/chromaprint && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sL https://github.com/acoustid/chromaprint/releases/download/v${CHROMAPRINT_VERSION}/chromaprint-${CHROMAPRINT_VERSION}.tar.gz | tar -zx --strip-components=1  && \
+        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=ON . && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+
+## Build ffmpeg https://ffmpeg.org/
+RUN  \
+        DIR=/tmp/ffmpeg && cd ${DIR} && \
         ./configure \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
-        --enable-shared \
         --enable-avresample \
-        --enable-libopencore-amrnb \
-        --enable-libopencore-amrwb \
+        --enable-chromaprint \
+        --enable-fontconfig \
         --enable-gpl \
         --enable-libass \
-        --enable-fontconfig \
+        --enable-libbluray \
+        --enable-libfdk_aac \
         --enable-libfreetype \
-        --enable-libvidstab \
+        --enable-libkvazaar \
         --enable-libmp3lame \
+        --enable-libopencore-amrnb \
+        --enable-libopencore-amrwb \
+        --enable-libopenjpeg \
         --enable-libopus \
         --enable-libtheora \
+        --enable-libvidstab \
         --enable-libvorbis \
         --enable-libvpx \
         --enable-libwebp \
-        --enable-libxcb \
-        --enable-libx265 \
-        --enable-libxvid \
         --enable-libx264 \
+        --enable-libx265 \
+        --enable-libxcb \
+        --enable-libxvid \
+        --enable-libzmq \
         --enable-nonfree \
         --enable-openssl \
-        --enable-libfdk_aac \
         --enable-postproc \
+        --enable-shared \
         --enable-small \
         --enable-version3 \
-        --enable-libbluray \
-        --enable-libzmq \
-        --extra-libs=-ldl \
-        --prefix="${PREFIX}" \
-        --enable-libopenjpeg \
-        --enable-libkvazaar \
         --extra-cflags="-I${PREFIX}/include" \
-        --extra-ldflags="-L${PREFIX}/lib" && \
-make && \
+        --extra-ldflags="-L${PREFIX}/lib" \
+        --extra-libs=-ldl \
+        --prefix="${PREFIX}" && \
+        make clean && \
+        make && \
         make install && \
         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
         make distclean && \
@@ -568,7 +586,7 @@ RUN \
         for lib in /usr/local/lib64/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib64 ffmpeg -buildconf && \
+        LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib ffmpeg -buildconf && \
         cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
         mkdir -p /usr/local/lib64/pkgconfig && \
         for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
@@ -576,7 +594,8 @@ RUN \
         done
 
 FROM        base
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
+            org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
 ENV         LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 

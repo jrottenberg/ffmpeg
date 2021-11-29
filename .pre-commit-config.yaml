@@ -29,12 +29,12 @@ repos: # pre-commit autoupdate
           [--in-place, --remove-all-unused-imports, --remove-unused-variables]
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.9.3
+    rev: 5.10.1
     hooks:
       - id: isort
 
   - repo: https://github.com/psf/black
-    rev: 21.7b0
+    rev: 21.11b1
     hooks:
       - id: black
         language_version: python3
@@ -44,6 +44,5 @@ repos: # pre-commit autoupdate
       - id: update
         name: Generate Dockerfiles
         entry: ./update.py
-        language: script
-        types: [python]
+        language: python
         pass_filenames: false
