@@ -586,7 +586,7 @@ RUN \
         for lib in /usr/local/lib64/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib64 ffmpeg -buildconf && \
+        LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib ffmpeg -buildconf && \
         cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
         mkdir -p /usr/local/lib64/pkgconfig && \
         for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
