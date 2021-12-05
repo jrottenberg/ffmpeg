@@ -1,26 +1,28 @@
 # FFmpeg Docker image
 
- [![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/) [![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
-[![gitlab pipeline status](https://gitlab.com/jrottenberg/ffmpeg/badges/master/pipeline.svg)](https://gitlab.com/jrottenberg/ffmpeg/commits/master)
+[![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?logo=docker&style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/)
+[![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?logo=docker&style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
+[![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?logo=docker)](https://hub.docker.com/r/jrottenberg/ffmpeg/tags)
+[![Huthub Container Registry Images](https://img.shields.io/badge/images-automated-blue?logo=github&style=plastic)](https://github.com/jrottenberg/ffmpeg/pkgs/container/ffmpeg)
+[![gitlab pipeline status](https://gitlab.com/jrottenberg/ffmpeg/badges/main/pipeline.svg)](https://gitlab.com/jrottenberg/ffmpeg/commits/main)
 [![Azure Build Status](https://dev.azure.com/video-tools/ffmpeg/_apis/build/status/jrottenberg.ffmpeg)](https://dev.azure.com/video-tools/ffmpeg/_build/latest?definitionId=1)
-[![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?maxAge=2592000?style=plastic)](https://github.com/jrottenberg/ffmpeg/)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/jrottenberg/ffmpeg/master.svg)](https://results.pre-commit.ci/latest/github/jrottenberg/ffmpeg/master)
+
 
 This project prepares a minimalist Docker image with FFmpeg. It compiles FFmpeg from sources following instructions from the [Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide).
 
-You can install the latest build of this image by running `docker pull jrottenberg/ffmpeg`.
+You can install the latest build of this image by running `docker pull jrottenberg/ffmpeg:${VERSION}-${VARIANT}` or `docker pull ghcr.io/jrottenberg/ffmpeg:${VERSION}-${VARIANT}`.
 
 This image can be used as a base for an encoding farm.
 
 ## Builds
 
 There are different builds available:
-- alpine based images `ffmpeg:<version>-alpine38` or `ffmpeg:<version>-alpine312` (the `ffmpeg:<version>-alpine` builds are not updated any more)
-  - alpine based scratch images `ffmpeg:<version>-scratch38` or `ffmpeg:<version>-scratch312` (experimental image containing only FFmpeg and libraries, the `ffmpeg:<version>-alpine` builds are not updated any more)
-- centos based images `ffmpeg:<version>-centos7` or `ffmpeg:<version>-centos8`
-- ubuntu based images `ffmpeg:<version>-ubuntu1804` or `ffmpeg:<version>-ubuntu2004` (the default, you can also use `ffmpeg:<version>-ubuntu` as an alias)
-  - ubuntu based nvidia images `ffmpeg:<version>-nvidia1804`
-  - ubuntu based vaapi images `ffmpeg:<version>-vaapi1804` or `ffmpeg:<version>-vaapi2004`
+- alpine based images `ffmpeg:<version>-alpine` or `ffmpeg:<version>-alpine313`  (old versions with `ffmpeg:<version>-alpine312` , `ffmpeg:<version>-alpine311`)
+  - alpine based scratch images `ffmpeg:<version>-scratch` or `ffmpeg:<version>-scratch313`   (old versions with `ffmpeg:<version>-scratch312` , `ffmpeg:<version>-scratch311`)
+- centos based images  `ffmpeg:<version>-centos` or  `ffmpeg:<version>-centos7` or `ffmpeg:<version>-centos8`
+- ubuntu based images `ffmpeg:<version>-ubuntu` or `ffmpeg:<version>-ubuntu2004` (old versions with `ffmpeg:<version>-ubuntu1804` , `ffmpeg:<version>-ubuntu1604`)
+  - ubuntu based nvidia images `ffmpeg:<version>-nvidia` or `ffmpeg:<version>-nvidia2004` (old versions with `ffmpeg:<version>-nvidia1804`, `ffmpeg:<version>-nvidia1604`)
+  - ubuntu based vaapi images `ffmpeg:<version>-vaapi1804` or `ffmpeg:<version>-vaapi2004` (old versions with `ffmpeg:<version>-vaapi1804`, `ffmpeg:<version>-nvidia1604`)
 
 `<version>` can be one of the following:
 - 3.2
