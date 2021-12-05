@@ -2,6 +2,8 @@ variables:
   - group: videotoolsbuild-dockerhub
   - name: DOCKER
     value: jrottenberg/ffmpeg
+  - name: GHCR
+    value: ghcr.io/jrottenberg/ffmpeg
 
 stages:
   - stage: lint

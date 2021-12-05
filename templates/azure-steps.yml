@@ -1,16 +1,21 @@
 steps:
   - bash: |
       set -eu
-      docker build -t ${DOCKER}:${VERSION}-${VARIANT}  -t ${DOCKER}:${LONG_VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
+      docker build -t ${DOCKER}:${VERSION}-${VARIANT} -t ${DOCKER}:${LONG_VERSION}-${VARIANT} -t ${GHCR}/${VERSION}-${VARIANT} -t ${GHCR}/${LONG_VERSION}-${VARIANT} --build-arg MAKEFLAGS="-j$(($(grep -c ^processor /proc/cpuinfo) + 1))" docker-images/${VERSION}/${VARIANT}
       docker run --rm ${DOCKER}:${LONG_VERSION}-${VARIANT} -buildconf
       docker images
     displayName: Build docker image
 
   - bash: |
       set -eu
-      docker login --username ${DOCKER_LOGIN} --password ${DOCKER_PASSWORD}
+      echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_LOGIN} --password-stdin
       docker push ${DOCKER}:${VERSION}-${VARIANT}
       docker push ${DOCKER}:${LONG_VERSION}-${VARIANT}
+
+      echo ${GHCR_PAT} | docker login ghcr.io --username USERNAME --password-stdin
+      docker push ${GHCR}/${VERSION}-${VARIANT}
+      docker push ${GHCR}/${LONG_VERSION}-${VARIANT}
+
       if [ "${ISPARENT}" == "True" ] && [ "${VARIANT}" != "${PARENT}" ]
         then
         docker tag "${DOCKER}:${LONG_VERSION}-${VARIANT}" "${DOCKER}:${VERSION}-${PARENT}"
@@ -18,8 +23,13 @@ steps:
         docker push "${DOCKER}:${VERSION}-${PARENT}"
         docker push "${DOCKER}:${MAJOR_VERSION}-${PARENT}"
 
+        docker tag "${DOCKER}:${LONG_VERSION}-${VARIANT}" "${GHCR}:${VERSION}-${PARENT}"
+        docker tag "${DOCKER}:${LONG_VERSION}-${VARIANT}" "${GHCR}:${MAJOR_VERSION}-${PARENT}"
+        docker push "${GHCR}:${VERSION}-${PARENT}"
+        docker push "${GHCR}:${MAJOR_VERSION}-${PARENT}"
       fi
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     displayName: Push docker image
     env:
       DOCKER_PASSWORD: $(docker.password)
+      GHCR_PAT: $(ghcr.pat)
