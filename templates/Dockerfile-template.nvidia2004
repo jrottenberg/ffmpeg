@@ -6,9 +6,10 @@
 #
 #
 
-FROM    nvidia/cuda:10.2-devel-ubuntu18.04 AS devel-base
+FROM    nvidia/cuda:11.4.1-devel-ubuntu20.04 AS devel-base
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
+ENV	    DEBIAN_FRONTEND=nonintercative
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
@@ -16,9 +17,10 @@ RUN     apt-get -yqq update && \
         apt-get autoremove -y && \
         apt-get clean -y
 
-FROM        nvidia/cuda:10.2-runtime-ubuntu18.04 AS runtime-base
+FROM        nvidia/cuda:11.4.1-runtime-ubuntu20.04 AS runtime-base
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
+ENV	    DEBIAN_FRONTEND=nonintercative
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
@@ -29,7 +31,7 @@ RUN     apt-get -yqq update && \
 
 FROM  devel-base as build
 
-ENV        NVIDIA_HEADERS_VERSION=9.1.23.1
+ENV        NVIDIA_HEADERS_VERSION=11.1.5.0
 
 ENV         %%ENV%%
 
@@ -81,14 +83,15 @@ RUN \
 
 
 FROM        runtime-base AS release
-MAINTAINER  Julien Rottenberg <julien@rottenberg.info>
+LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
+            org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
 ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
-# copy only needed files, without copying nvidia dev files 
+# copy only needed files, without copying nvidia dev files
 COPY --from=build /usr/local/bin /usr/local/bin/
 COPY --from=build /usr/local/share /usr/local/share/
 COPY --from=build /usr/local/lib /usr/local/lib/

@@ -4,8 +4,8 @@
 import os
 import re
 import shutil
-from urllib import request
 from distutils.version import StrictVersion
+from urllib import request
 
 MIN_VERSION = "2.7"
 with open("templates/Dockerfile-env", "r") as tmpfile:
@@ -21,19 +21,25 @@ SKIP_VERSIONS = "3.1.11 3.0.12 snapshot"
 VARIANTS = [
     {"name": "ubuntu1804", "parent": "ubuntu"},
     {"name": "ubuntu2004", "parent": "ubuntu"},
-    {"name": "alpine312", "parent": "alpine"},
-    {"name": "alpine38", "parent": "alpine"},
+    {"name": "alpine313", "parent": "alpine"},
     {"name": "centos7", "parent": "centos"},
     {"name": "centos8", "parent": "centos"},
-    {"name": "scratch312", "parent": "scratch"},
-    {"name": "scratch38", "parent": "scratch"},
+    {"name": "scratch313", "parent": "scratch"},
     {"name": "vaapi1804", "parent": "vaapi"},
     {"name": "vaapi2004", "parent": "vaapi"},
     {"name": "nvidia2004", "parent": "nvidia"},
 ]
 FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
-gitlabci = []
+
+
+all_parents = sorted(set([sub["parent"] for sub in VARIANTS]))
+gitlabci = ["stages:\n  - lint\n"]
 azure = []
+
+
+for parent in all_parents:
+    gitlabci.append(f"  - {parent}\n")
+
 
 # Get latest release from ffmpeg.org
 with request.urlopen(FFMPEG_RELEASES) as conn:
@@ -76,7 +82,6 @@ def get_shorten_version(version):
 
 
 def get_major_version(version):
-    print(version)
     if version == "snapshot":
         return version
     else:
@@ -100,10 +105,8 @@ for cur in all_versions:
         keep_version.append(cur)
         last = tmp
 
-print(f"Preparing docker images for ffmpeg versions : {keep_version}")
+print("Preparing docker images for ffmpeg versions: ")
 
-
-print(keep_version)
 for version in keep_version:
     print(version)
     skip_variants = None
@@ -130,7 +133,7 @@ for version in keep_version:
             f"""
 {version}-{variant['name']}:
   extends: .docker
-  stage: {variant['name']}
+  stage: {variant['parent']}
   variables:
     MAJOR_VERSION: {major_version}
     VERSION: "{short_version}"
@@ -159,33 +162,34 @@ for version in keep_version:
             "--disable-debug",
             "--disable-doc",
             "--disable-ffplay",
-            "--enable-shared",
             "--enable-avresample",
-            "--enable-libopencore-amrnb",
-            "--enable-libopencore-amrwb",
+            "--enable-chromaprint",
+            "--enable-fontconfig",
             "--enable-gpl",
             "--enable-libass",
-            "--enable-fontconfig",
+            "--enable-libbluray",
+            "--enable-libfdk_aac",
             "--enable-libfreetype",
-            "--enable-libvidstab",
             "--enable-libmp3lame",
+            "--enable-libopencore-amrnb",
+            "--enable-libopencore-amrwb",
             "--enable-libopus",
             "--enable-libtheora",
+            "--enable-libvidstab",
             "--enable-libvorbis",
             "--enable-libvpx",
             "--enable-libwebp",
-            "--enable-libxcb",
-            "--enable-libx265",
-            "--enable-libxvid",
             "--enable-libx264",
+            "--enable-libx265",
+            "--enable-libxcb",
+            "--enable-libxvid",
+            "--enable-libzmq",
             "--enable-nonfree",
             "--enable-openssl",
-            "--enable-libfdk_aac",
             "--enable-postproc",
+            "--enable-shared",
             "--enable-small",
             "--enable-version3",
-            "--enable-libbluray",
-            "--enable-libzmq",
             "--extra-libs=-ldl",
             '--prefix="${PREFIX}"',
         ]
@@ -212,7 +216,9 @@ for version in keep_version:
         if version == "snapshot" or float(version[0:3]) >= 4.2:
             FFMPEG_CONFIG_FLAGS.append("--enable-libaribb24")
 
-        if ((template.find('meson') > 0) and (version == "snapshot" or float(version[0:3]) >= 4.3)):
+        if (template.find("meson") > 0) and (
+            version == "snapshot" or float(version[0:3]) >= 4.3
+        ):
             FFMPEG_CONFIG_FLAGS.append("--enable-libvmaf")
 
         if (version == "snapshot" or int(version[0]) >= 3) and variant[
@@ -234,7 +240,8 @@ for version in keep_version:
         ldflags = '--extra-ldflags="{0}"'.format(" ".join(LDFLAGS))
         FFMPEG_CONFIG_FLAGS.append(cflags)
         FFMPEG_CONFIG_FLAGS.append(ldflags)
-        FFMPEG_CONFIG_FLAGS[-1] += " && \\"
+        FFMPEG_CONFIG_FLAGS.sort()
+
         COMBINED_CONFIG_FLAGS = " \\\n        ".join(FFMPEG_CONFIG_FLAGS)
 
         run_content = RUN_CONTENT.replace(

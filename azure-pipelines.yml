@@ -1,7 +1,37 @@
 variables:
-- group: videotoolsbuild-dockerhub
-- name: DOCKER
-  value: jrottenberg/ffmpeg
+  - group: videotoolsbuild-dockerhub
+  - name: DOCKER
+    value: jrottenberg/ffmpeg
+  - name: GHCR
+    value: ghcr.io/jrottenberg/ffmpeg
 
-jobs:
-- template: docker-images/azure-jobs.yml
+stages:
+  - stage: lint
+    jobs:
+      - job: precommit
+        pool:
+          vmImage: ubuntu-latest
+        variables:
+          PRE_COMMIT_HOME: $(Pipeline.Workspace)/pre-commit-cache
+
+        steps:
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: "3.9"
+
+          - script: |
+              echo "##vso[task.setvariable variable=PY]$(python -VV)"
+            displayName: set version variables
+          - task: CacheBeta@0
+            inputs:
+              key: pre-commit | "4" | .pre-commit-config.yaml | "$(PY)"
+              path: $(PRE_COMMIT_HOME)
+
+          - script: python -m pip install --upgrade pre-commit
+            displayName: install pre-commit
+          - script: pre-commit run --all-files --show-diff-on-failure
+            displayName: run pre-commit
+
+  - stage: Build_Docker_Images
+    jobs:
+      - template: docker-images/azure-jobs.yml

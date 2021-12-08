@@ -1,8 +1,9 @@
 
+
 jobs:
-- job: Build
+- job: Build_Docker_Images
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: ubuntu-latest
   strategy:
     maxParallel: 10
     matrix:

@@ -1,25 +1,28 @@
 # FFmpeg Docker image
 
- [![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/) [![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
-[![gitlab pipeline status](https://gitlab.com/jrottenberg/ffmpeg/badges/master/pipeline.svg)](https://gitlab.com/jrottenberg/ffmpeg/commits/master)
+[![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?logo=docker&style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/)
+[![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?logo=docker&style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
+[![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?logo=docker)](https://hub.docker.com/r/jrottenberg/ffmpeg/tags)
+[![Huthub Container Registry Images](https://img.shields.io/badge/images-automated-blue?logo=github&style=plastic)](https://github.com/jrottenberg/ffmpeg/pkgs/container/ffmpeg)
+[![gitlab pipeline status](https://gitlab.com/jrottenberg/ffmpeg/badges/main/pipeline.svg)](https://gitlab.com/jrottenberg/ffmpeg/commits/main)
 [![Azure Build Status](https://dev.azure.com/video-tools/ffmpeg/_apis/build/status/jrottenberg.ffmpeg)](https://dev.azure.com/video-tools/ffmpeg/_build/latest?definitionId=1)
-[![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?maxAge=2592000?style=plastic)](https://github.com/jrottenberg/ffmpeg/)
+
 
 This project prepares a minimalist Docker image with FFmpeg. It compiles FFmpeg from sources following instructions from the [Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide).
 
-You can install the latest build of this image by running `docker pull jrottenberg/ffmpeg`.
+You can install the latest build of this image by running `docker pull jrottenberg/ffmpeg:${VERSION}-${VARIANT}` or `docker pull ghcr.io/jrottenberg/ffmpeg:${VERSION}-${VARIANT}`.
 
 This image can be used as a base for an encoding farm.
 
 ## Builds
 
 There are different builds available:
-- alpine based images `ffmpeg:<version>-alpine38` or `ffmpeg:<version>-alpine312` (the `ffmpeg:<version>-alpine` builds are not updated any more)
-  - alpine based scratch images `ffmpeg:<version>-scratch38` or `ffmpeg:<version>-scratch312` (experimental image containing only FFmpeg and libraries, the `ffmpeg:<version>-alpine` builds are not updated any more)
-- centos based images `ffmpeg:<version>-centos7` or `ffmpeg:<version>-centos8`
-- ubuntu based images `ffmpeg:<version>-ubuntu1804` or `ffmpeg:<version>-ubuntu2004` (the default, you can also use `ffmpeg:<version>-ubuntu` as an alias)
-  - ubuntu based nvidia images `ffmpeg:<version>-nvidia1804`
-  - ubuntu based vaapi images `ffmpeg:<version>-vaapi1804` or `ffmpeg:<version>-vaapi2004`
+- alpine based images `ffmpeg:<version>-alpine` or `ffmpeg:<version>-alpine313`  (old versions with `ffmpeg:<version>-alpine312` , `ffmpeg:<version>-alpine311`)
+  - alpine based scratch images `ffmpeg:<version>-scratch` or `ffmpeg:<version>-scratch313`   (old versions with `ffmpeg:<version>-scratch312` , `ffmpeg:<version>-scratch311`)
+- centos based images  `ffmpeg:<version>-centos` or  `ffmpeg:<version>-centos7` or `ffmpeg:<version>-centos8`
+- ubuntu based images `ffmpeg:<version>-ubuntu` or `ffmpeg:<version>-ubuntu2004` (old versions with `ffmpeg:<version>-ubuntu1804` , `ffmpeg:<version>-ubuntu1604`)
+  - ubuntu based nvidia images `ffmpeg:<version>-nvidia` or `ffmpeg:<version>-nvidia2004` (old versions with `ffmpeg:<version>-nvidia1804`, `ffmpeg:<version>-nvidia1604`)
+  - ubuntu based vaapi images `ffmpeg:<version>-vaapi1804` or `ffmpeg:<version>-vaapi2004` (old versions with `ffmpeg:<version>-vaapi1804`, `ffmpeg:<version>-nvidia1604`)
 
 `<version>` can be one of the following:
 - 3.2
@@ -29,20 +32,20 @@ There are different builds available:
 - 4.1
 - 4.2
 - 4.3
-- snapshot
+- 4.4
 
 Not all combinations are supported and older versions will fade out over time. See the table below for the currently supported combinations.
 
-| *Version*         | alpine38           | alpine312          | centos7            | centos8            | nvidia1804         | scratch38          | scratch312         | ubuntu1804         | ubuntu2004         | vaapi1804          | vaapi2004          |
-|-------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| *3.2*             | :heavy_check_mark: | :x:                | :heavy_check_mark: | :x:                | :x:                | :heavy_check_mark: | :x:                | :x:                | :heavy_check_mark: | :x:                | :heavy_check_mark: |
-| *3.3*             | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
-| *3.4*             | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
-| *4.0*             | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
-| *4.1*             | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
-| *4.2*             | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
-| *4.3*             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| *snapshot*        | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *Version*  | alpine38           | alpine312          | centos7            | centos8            | nvidia1804         | scratch38          | scratch312         | ubuntu1804         | ubuntu2004         | vaapi1804          | vaapi2004          |
+| ---------- | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ |
+| *3.2*      | :heavy_check_mark: | :x:                | :heavy_check_mark: | :x:                | :x:                | :heavy_check_mark: | :x:                | :x:                | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *3.3*      | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *3.4*      | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *4.0*      | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *4.1*      | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *4.2*      | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| *4.3*      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| *snapshot* | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
 
 ### Generate list of recent images
 
@@ -121,7 +124,7 @@ ffmpeg version N-98740-ga72d529 Copyright (c) 2000-2020 the FFmpeg developers
 Capture output from the container to the host running the command
 
 ```bash
- docker run jrottenberg/ffmpeg \
+ docker run jrottenberg/ffmpeg:4.4-alpine \
             -i http://url/to/media.mp4 \
             -stats \
             $ffmpeg_options  - > out.mp4
@@ -132,7 +135,7 @@ Capture output from the container to the host running the command
 #### Extract 5s @00:49:42 into a GIF
 
 ```bash
- docker run jrottenberg/ffmpeg -stats  \
+ docker run jrottenberg/ffmpeg:4.4-alpine -stats  \
         -i http://archive.org/download/thethreeagesbusterkeaton/Buster.Keaton.The.Three.Ages.ogv \
         -loop 0  \
         -final_delay 500 -c:v gif -f gif -ss 00:49:42 -t 5 - > trow_ball.gif
@@ -141,7 +144,7 @@ Capture output from the container to the host running the command
 #### Convert 10bits MKV into a 10Bits MP4
 
 ```bash
- docker run -v $(pwd):$(pwd) -w $(pwd) jrottenberg/ffmpeg:3.4-scratch \
+ docker run -v $(pwd):$(pwd) -w $(pwd) jrottenberg/ffmpeg:4.4-scratch \
         -stats \
         -i http://www.jell.yfish.us/media/jellyfish-20-mbps-hd-hevc-10bit.mkv \
         -c:v libx265 -pix_fmt yuv420p10 \
@@ -157,7 +160,7 @@ Let's assume ```original.gif``` is located in the current directory :
 
 ```bash
  docker run -v $(pwd):$(pwd) -w $(pwd)\
-        jrottenberg/ffmpeg:3.2-scratch -stats \
+        jrottenberg/ffmpeg:4.4-scratch -stats \
         -i original.gif \
         original-converted.mp4
 ```
@@ -167,19 +170,19 @@ Let's assume ```original.gif``` is located in the current directory :
 Let's start some process continuously writing some radio music, and listen it:
 
 ```bash
- docker run --rm -d -v $(pwd):$(pwd) -w $(pwd) -p 11235:11235 \
-        --name radio-writer jrottenberg/ffmpeg \
+docker run --rm -d -v $(pwd):$(pwd) -w $(pwd) -p 11235:11235 \
+        --name radio-writer jrottenberg/ffmpeg:4.4-alpine \
         -i http://radio.casse-tete.solutions/salut-radio-64.mp3 \
         -filter_complex '[0:a]volume@vol=1,azmq=bind_address=tcp\\\://0.0.0.0\\\:11235[out]' \
         -map '[out]' ./salut-radio.mp3
 
- ffplay ./salut-radio.mp3
+docker run -it -v $(pwd):$(pwd) -w $(pwd) --entrypoint=ffprobe jrottenberg/ffmpeg:4.4-alpine -v quiet  -show_streams salut-radio.mp3
 ```
 
 Now, just toggle its volume on-fly, and hear how it changes:
 
 ```bash
- docker run --rm --network=host --entrypoint sh jrottenberg/ffmpeg -c \
+docker run --rm --network=host --entrypoint sh jrottenberg/ffmpeg:4.4-ubuntu -c \
         'echo "volume@vol volume 2" | zmqsend -b tcp://127.0.0.1:11235'
 ```
 
@@ -188,7 +191,7 @@ Now, just toggle its volume on-fly, and hear how it changes:
 Let's send `video.mp4` to srt-listener on port 9000 over SRT protocol.
 
 ```bash
-docker run -v $(pwd):$(pwd) jrottenberg/ffmpeg \
+docker run -v $(pwd):$(pwd) jrottenberg/ffmpeg:4.4-centos \
        -re -i $(pwd)/video.mp4 -acodec copy -vcodec copy -f mpegts srt://srt-listener:9000?pkt_size=1316
 ```
 
@@ -200,7 +203,7 @@ Thanks to [qmfrederik](https://github.com/qmfrederik) for the [vaapi ubuntu base
 
 - Run the container with the device attached /dev/dri from your host into the container :
 
-`docker run --device /dev/dri:/dev/dri -v $(pwd):$(pwd) -w $(pwd) jrottenberg/ffmpeg:vaapi [...]`
+`docker run --device /dev/dri:/dev/dri -v $(pwd):$(pwd) -w $(pwd) jrottenberg/ffmpeg:4.4-vaapi [...]`
 
 - Have the Intel drivers up and running on your host. You can run `vainfo` (part of vainfo package on Ubuntu) to determine whether your graphics card has been recognized correctly.
 - Run ffmpeg with the correct parameters, this is the same as when running [ffmpeg natively](https://trac.ffmpeg.org/wiki/Hardware/VAAPI).
@@ -217,14 +220,14 @@ Supports nvenc only on all ffmpeg versions, and hardware decoding and scaling on
 
 Hardware encoding only example:
 
-`docker run --runtime=nvidia jrottenberg/ffmpeg:2.8-nvidia -i INPUT -c:v nvenc_h264 -preset hq OUTPUT`
+`docker run --runtime=nvidia jrottenberg/ffmpeg:4.4-nvidia -i INPUT -c:v nvenc_h264 -preset hq OUTPUT`
 Full hardware acceleration example:
-`docker run --runtime=nvidia jrottenberg/ffmpeg:4.1-nvidia -hwaccel cuvid -c:v h264_cuvid -i INPUT -vf scale_npp=-1:720 -c:v h264_nvenc -preset slow OUTPUT`
+`docker run --runtime=nvidia jrottenberg/ffmpeg:4.4-nvidia -hwaccel cuvid -c:v h264_cuvid -i INPUT -vf scale_npp=-1:720 -c:v h264_nvenc -preset slow OUTPUT`
 
 ##### See what's inside the beast
 
 ```bash
-docker run -it --entrypoint='bash' jrottenberg/ffmpeg
+docker run -it --entrypoint='bash' jrottenberg/ffmpeg:4.4-ubuntu
 
 for i in ogg amr vorbis theora mp3lame opus vpx xvid fdk x264 x265;do echo $i; find /usr/local/ -name *$i*;done
 ```
@@ -256,18 +259,4 @@ See Dockerfile-env to update a version
 
 ## Contribute
 
-```text
-# Add / fix stuff
-${EDITOR} templates/
-
-# Generates the Dockerfile for all variants
-./update.py
-
-# Test a specific variant
-docker build -t my-build docker-images/VERSION/
-
-# Make sure all variants pass before CI
-find ffmpeg/ -name Dockerfile | xargs dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
-```
-
-Commit the templates files THEN all the generated Dockerfile for a merge request. So it's easier to review the template change.
+See [the contributing guide](CONTRIBUTING.md)

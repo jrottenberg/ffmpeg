@@ -1,40 +1,13 @@
-
-stages:
-  - lint
-  - alpine311
-  - alpine38
-  - centos7
-  - centos8
-  - nvidia1604
-  - nvidia1804
-  - scratch311
-  - scratch38
-  - ubuntu1804
-  - ubuntu2004
-  - vaapi1804
-  - vaapi2004
-
-recent-update-run:
+pre-commit:
   image: python:3
   stage: lint
   script:
-    - ./update.py
-    - git status
-    - git diff-index --quiet HEAD
+    - pip install pre-commit
+    - pre-commit run --all-files --show-diff-on-failure
   artifacts:
     expire_in: 1 days
     paths:
-    - docker-images/
-
-
-linters:
-  image: python:3
-  stage: lint
-  before_script:
-    - pip install -r requirements-dev.txt
-  script:
-    - black .
-    - flake8 .
+      - docker-images/
 
 .docker:
   image: docker:latest
@@ -50,6 +23,5 @@ linters:
   after_script:
     - docker run --rm ${IMAGE} -buildconf
 
-
 include:
-  - local: 'docker-images/gitlab-ci.yml'
+  - local: "docker-images/gitlab-ci.yml"
