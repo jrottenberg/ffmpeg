@@ -560,7 +560,6 @@ RUN  \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
-        --enable-avresample \
         --enable-chromaprint \
         --enable-cuda \
         --enable-cuvid \

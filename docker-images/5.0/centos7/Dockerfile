@@ -569,7 +569,6 @@ RUN  \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
-        --enable-avresample \
         --enable-chromaprint \
         --enable-fontconfig \
         --enable-gpl \
