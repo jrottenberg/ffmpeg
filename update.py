@@ -162,7 +162,6 @@ for version in keep_version:
             "--disable-debug",
             "--disable-doc",
             "--disable-ffplay",
-            "--enable-chromaprint",
             "--enable-fontconfig",
             "--enable-gpl",
             "--enable-libass",
