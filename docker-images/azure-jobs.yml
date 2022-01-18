@@ -8,6 +8,87 @@ jobs:
     maxParallel: 10
     matrix:
 
+      ubuntu1804_5.0:
+        MAJOR_VERSION: 5
+        VERSION:  5.0
+        LONG_VERSION: 5.0
+        VARIANT:  ubuntu1804
+        PARENT: ubuntu
+        ISPARENT:  False
+
+
+      ubuntu2004_5.0:
+        MAJOR_VERSION: 5
+        VERSION:  5.0
+        LONG_VERSION: 5.0
+        VARIANT:  ubuntu2004
+        PARENT: ubuntu
+        ISPARENT:  True
+
+
+      alpine313_5.0:
+        MAJOR_VERSION: 5
+        VERSION:  5.0
+        LONG_VERSION: 5.0
+        VARIANT:  alpine313
+        PARENT: alpine
+        ISPARENT:  True
+
+
+      centos7_5.0:
+        MAJOR_VERSION: 5
+        VERSION:  5.0
+        LONG_VERSION: 5.0
+        VARIANT:  centos7
+        PARENT: centos
+        ISPARENT:  False
+
+
+      centos8_5.0:
+        MAJOR_VERSION: 5
+        VERSION:  5.0
+        LONG_VERSION: 5.0
+        VARIANT:  centos8
+        PARENT: centos
+        ISPARENT:  True
+
+
+      scratch313_5.0:
+        MAJOR_VERSION: 5
+        VERSION:  5.0
+        LONG_VERSION: 5.0
+        VARIANT:  scratch313
+        PARENT: scratch
+        ISPARENT:  True
+
+
+      vaapi1804_5.0:
+        MAJOR_VERSION: 5
+        VERSION:  5.0
+        LONG_VERSION: 5.0
+        VARIANT:  vaapi1804
+        PARENT: vaapi
+        ISPARENT:  False
+
+
+      vaapi2004_5.0:
+        MAJOR_VERSION: 5
+        VERSION:  5.0
+        LONG_VERSION: 5.0
+        VARIANT:  vaapi2004
+        PARENT: vaapi
+        ISPARENT:  True
+
+
+      nvidia2004_5.0:
+        MAJOR_VERSION: 5
+        VERSION:  5.0
+        LONG_VERSION: 5.0
+        VARIANT:  nvidia2004
+        PARENT: nvidia
+        ISPARENT:  True
+
+
       ubuntu1804_4.4.1:
         MAJOR_VERSION: 4
         VERSION:  4.4

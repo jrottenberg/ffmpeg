@@ -162,8 +162,6 @@ for version in keep_version:
             "--disable-debug",
             "--disable-doc",
             "--disable-ffplay",
-            "--enable-avresample",
-            "--enable-chromaprint",
             "--enable-fontconfig",
             "--enable-gpl",
             "--enable-libass",
@@ -225,6 +223,11 @@ for version in keep_version:
             "parent"
         ] == "vaapi":
             FFMPEG_CONFIG_FLAGS.append("--enable-vaapi")
+
+        # libavresample removed on v5, deprecated since v4.0
+        # https://github.com/FFmpeg/FFmpeg/commit/c29038f3041a4080342b2e333c1967d136749c0f
+        if float(version[0]) < 5:
+            FFMPEG_CONFIG_FLAGS.append("--enable-avresample")
 
         if variant["parent"] == "nvidia":
             CFLAGS.append("-I${PREFIX}/include/ffnvcodec")

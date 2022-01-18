@@ -512,21 +512,11 @@ RUN  \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
         tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-avresample   --enable-gpl  --extra-libs=-ldl && \
+        ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
         make ;  make install
 
 
-## chromaprint https://github.com/acoustid/chromaprint
-RUN \
-        echo "Building Chromaprint." && \
-        DIR=/tmp/chromaprint && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sL https://github.com/acoustid/chromaprint/releases/download/v${CHROMAPRINT_VERSION}/chromaprint-${CHROMAPRINT_VERSION}.tar.gz | tar -zx --strip-components=1  && \
-        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=ON . && \
-        make && \
-        make install && \
-        rm -rf ${DIR}
+
 
 
 ## Build ffmpeg https://ffmpeg.org/
@@ -537,7 +527,6 @@ RUN  \
         --disable-doc \
         --disable-ffplay \
         --enable-avresample \
-        --enable-chromaprint \
         --enable-fontconfig \
         --enable-gpl \
         --enable-libaom \
