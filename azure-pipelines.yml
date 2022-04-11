@@ -3,7 +3,7 @@ variables:
   - name: DOCKER
     value: jrottenberg/ffmpeg
   - name: GHCR
-    value: ghcr.io/videotools/ffmpeg
+    value: ghcr.io/jrottenberg/ffmpeg
 
 stages:
   - stage: lint
