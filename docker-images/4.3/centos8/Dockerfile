@@ -7,7 +7,9 @@
 #
 FROM    centos:8 AS base
 
-RUN     dnf -y install libgomp && \
+# Until we move to Rockylinux
+RUN     sed -i '/mirrorlist=/d;s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* && \
+        dnf -y install libgomp && \
         dnf clean all;
 
 
