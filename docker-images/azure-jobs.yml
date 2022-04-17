@@ -89,235 +89,235 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu1804_4.4.1:
+      ubuntu1804_4.4.2:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.1
+        LONG_VERSION: 4.4.2
         VARIANT:  ubuntu1804
         PARENT: ubuntu
         ISPARENT:  False
 
 
-      ubuntu2004_4.4.1:
+      ubuntu2004_4.4.2:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.1
+        LONG_VERSION: 4.4.2
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_4.4.1:
+      alpine313_4.4.2:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.1
+        LONG_VERSION: 4.4.2
         VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
 
-      centos7_4.4.1:
+      centos7_4.4.2:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.1
+        LONG_VERSION: 4.4.2
         VARIANT:  centos7
         PARENT: centos
         ISPARENT:  False
 
 
-      centos8_4.4.1:
+      centos8_4.4.2:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.1
+        LONG_VERSION: 4.4.2
         VARIANT:  centos8
         PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_4.4.1:
+      scratch313_4.4.2:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.1
+        LONG_VERSION: 4.4.2
         VARIANT:  scratch313
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi1804_4.4.1:
+      vaapi1804_4.4.2:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.1
+        LONG_VERSION: 4.4.2
         VARIANT:  vaapi1804
         PARENT: vaapi
         ISPARENT:  False
 
 
-      vaapi2004_4.4.1:
+      vaapi2004_4.4.2:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.1
+        LONG_VERSION: 4.4.2
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.4.1:
+      nvidia2004_4.4.2:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.1
+        LONG_VERSION: 4.4.2
         VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
 
-      ubuntu1804_4.3.3:
+      ubuntu1804_4.3.4:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.3
+        LONG_VERSION: 4.3.4
         VARIANT:  ubuntu1804
         PARENT: ubuntu
         ISPARENT:  False
 
 
-      ubuntu2004_4.3.3:
+      ubuntu2004_4.3.4:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.3
+        LONG_VERSION: 4.3.4
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_4.3.3:
+      alpine313_4.3.4:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.3
+        LONG_VERSION: 4.3.4
         VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
 
-      centos7_4.3.3:
+      centos7_4.3.4:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.3
+        LONG_VERSION: 4.3.4
         VARIANT:  centos7
         PARENT: centos
         ISPARENT:  False
 
 
-      centos8_4.3.3:
+      centos8_4.3.4:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.3
+        LONG_VERSION: 4.3.4
         VARIANT:  centos8
         PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_4.3.3:
+      scratch313_4.3.4:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.3
+        LONG_VERSION: 4.3.4
         VARIANT:  scratch313
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi1804_4.3.3:
+      vaapi1804_4.3.4:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.3
+        LONG_VERSION: 4.3.4
         VARIANT:  vaapi1804
         PARENT: vaapi
         ISPARENT:  False
 
 
-      vaapi2004_4.3.3:
+      vaapi2004_4.3.4:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.3
+        LONG_VERSION: 4.3.4
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.3.3:
+      nvidia2004_4.3.4:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.3
+        LONG_VERSION: 4.3.4
         VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
 
-      ubuntu1804_4.2.5:
+      ubuntu1804_4.2.6:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.5
+        LONG_VERSION: 4.2.6
         VARIANT:  ubuntu1804
         PARENT: ubuntu
         ISPARENT:  False
 
 
-      ubuntu2004_4.2.5:
+      ubuntu2004_4.2.6:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.5
+        LONG_VERSION: 4.2.6
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_4.2.5:
+      alpine313_4.2.6:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.5
+        LONG_VERSION: 4.2.6
         VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
 
-      centos7_4.2.5:
+      centos7_4.2.6:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.5
+        LONG_VERSION: 4.2.6
         VARIANT:  centos7
         PARENT: centos
         ISPARENT:  False
 
 
-      centos8_4.2.5:
+      centos8_4.2.6:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.5
+        LONG_VERSION: 4.2.6
         VARIANT:  centos8
         PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_4.2.5:
+      scratch313_4.2.6:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.5
+        LONG_VERSION: 4.2.6
         VARIANT:  scratch313
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi2004_4.2.5:
+      vaapi2004_4.2.6:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.5
+        LONG_VERSION: 4.2.6
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.2.5:
+      nvidia2004_4.2.6:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.5
+        LONG_VERSION: 4.2.6
         VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
