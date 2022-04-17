@@ -8,7 +8,7 @@ FROM        alpine:3.13 AS build
 
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=4.1.8 \
+ENV         FFMPEG_VERSION=4.1.9 \
     AOM_VERSION=v1.0.0 \
     CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
