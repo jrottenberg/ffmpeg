@@ -656,4 +656,4 @@ jobs:
         ISPARENT:  True
 
   steps:
-  - template: ../templates/azure-steps.yml
+  - template: ../azure-steps.yml
