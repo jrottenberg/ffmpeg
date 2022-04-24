@@ -467,73 +467,73 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu1804_3.4.9:
+      ubuntu1804_3.4.10:
         MAJOR_VERSION: 3
         VERSION:  3.4
-        LONG_VERSION: 3.4.9
+        LONG_VERSION: 3.4.10
         VARIANT:  ubuntu1804
         PARENT: ubuntu
         ISPARENT:  False
 
 
-      ubuntu2004_3.4.9:
+      ubuntu2004_3.4.10:
         MAJOR_VERSION: 3
         VERSION:  3.4
-        LONG_VERSION: 3.4.9
+        LONG_VERSION: 3.4.10
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_3.4.9:
+      alpine313_3.4.10:
         MAJOR_VERSION: 3
         VERSION:  3.4
-        LONG_VERSION: 3.4.9
+        LONG_VERSION: 3.4.10
         VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
 
-      centos7_3.4.9:
+      centos7_3.4.10:
         MAJOR_VERSION: 3
         VERSION:  3.4
-        LONG_VERSION: 3.4.9
+        LONG_VERSION: 3.4.10
         VARIANT:  centos7
         PARENT: centos
         ISPARENT:  False
 
 
-      centos8_3.4.9:
+      centos8_3.4.10:
         MAJOR_VERSION: 3
         VERSION:  3.4
-        LONG_VERSION: 3.4.9
+        LONG_VERSION: 3.4.10
         VARIANT:  centos8
         PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_3.4.9:
+      scratch313_3.4.10:
         MAJOR_VERSION: 3
         VERSION:  3.4
-        LONG_VERSION: 3.4.9
+        LONG_VERSION: 3.4.10
         VARIANT:  scratch313
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi2004_3.4.9:
+      vaapi2004_3.4.10:
         MAJOR_VERSION: 3
         VERSION:  3.4
-        LONG_VERSION: 3.4.9
+        LONG_VERSION: 3.4.10
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_3.4.9:
+      nvidia2004_3.4.10:
         MAJOR_VERSION: 3
         VERSION:  3.4
-        LONG_VERSION: 3.4.9
+        LONG_VERSION: 3.4.10
         VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
@@ -611,46 +611,46 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu2004_3.2.16:
+      ubuntu2004_3.2.17:
         MAJOR_VERSION: 3
         VERSION:  3.2
-        LONG_VERSION: 3.2.16
+        LONG_VERSION: 3.2.17
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_3.2.16:
+      alpine313_3.2.17:
         MAJOR_VERSION: 3
         VERSION:  3.2
-        LONG_VERSION: 3.2.16
+        LONG_VERSION: 3.2.17
         VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
 
-      centos7_3.2.16:
+      centos7_3.2.17:
         MAJOR_VERSION: 3
         VERSION:  3.2
-        LONG_VERSION: 3.2.16
+        LONG_VERSION: 3.2.17
         VARIANT:  centos7
         PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_3.2.16:
+      scratch313_3.2.17:
         MAJOR_VERSION: 3
         VERSION:  3.2
-        LONG_VERSION: 3.2.16
+        LONG_VERSION: 3.2.17
         VARIANT:  scratch313
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi2004_3.2.16:
+      vaapi2004_3.2.17:
         MAJOR_VERSION: 3
         VERSION:  3.2
-        LONG_VERSION: 3.2.16
+        LONG_VERSION: 3.2.17
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
