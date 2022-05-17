@@ -516,7 +516,19 @@ RUN  \
         make ;  make install
 
 
-
+## Patching xpsnr filter into ffmpeg
+## NOTE: This patch is build for ffmpeg 4.4 (files overriding depends on that)
+RUN \
+        echo "Patching xpsnr filter into ffmpeg" && \
+        DIR=/tmp/xpsnr && \
+        FFMPEG_DIR=/tmp/ffmpeg && \
+        git clone https://github.com/fraunhoferhhi/xpsnr.git --branch v1.2 ${DIR} ; \
+        rm ${FFMPEG_DIR}/libavfilter/allfilters.c -f ; \
+        rm ${FFMPEG_DIR}/libavfilter/Makefile -f ; \
+        cp ${DIR}/libavfilter/* ${FFMPEG_DIR}/libavfilter/ ; \
+        cd ${FFMPEG_DIR} ; \
+        ./configure ; \
+        rm -rf ${DIR}
 
 
 ## Build ffmpeg https://ffmpeg.org/
