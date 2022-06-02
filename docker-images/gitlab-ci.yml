@@ -3,6 +3,7 @@ stages:
   - alpine
   - centos
   - nvidia
+  - rockylinux
   - scratch
   - ubuntu
   - vaapi
@@ -106,6 +107,17 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
+5.0.1-rockylinux8:
+  extends: .docker
+  stage: rockylinux
+  variables:
+    MAJOR_VERSION: 5
+    VERSION: "5.0"
+    LONG_VERSION: "5.0.1"
+    VARIANT: rockylinux8
+    PARENT: "rockylinux"
+    ISPARENT: "True"
+
 4.4.2-ubuntu1804:
   extends: .docker
   stage: ubuntu
@@ -203,6 +215,17 @@ stages:
     LONG_VERSION: "4.4.2"
     VARIANT: nvidia2004
     PARENT: "nvidia"
+    ISPARENT: "True"
+
+4.4.2-rockylinux8:
+  extends: .docker
+  stage: rockylinux
+  variables:
+    MAJOR_VERSION: 4
+    VERSION: "4.4"
+    LONG_VERSION: "4.4.2"
+    VARIANT: rockylinux8
+    PARENT: "rockylinux"
     ISPARENT: "True"
 
 4.3.4-ubuntu1804:
@@ -304,6 +327,17 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
+4.3.4-rockylinux8:
+  extends: .docker
+  stage: rockylinux
+  variables:
+    MAJOR_VERSION: 4
+    VERSION: "4.3"
+    LONG_VERSION: "4.3.4"
+    VARIANT: rockylinux8
+    PARENT: "rockylinux"
+    ISPARENT: "True"
+
 4.2.7-ubuntu1804:
   extends: .docker
   stage: ubuntu
@@ -390,6 +424,17 @@ stages:
     LONG_VERSION: "4.2.7"
     VARIANT: nvidia2004
     PARENT: "nvidia"
+    ISPARENT: "True"
+
+4.2.7-rockylinux8:
+  extends: .docker
+  stage: rockylinux
+  variables:
+    MAJOR_VERSION: 4
+    VERSION: "4.2"
+    LONG_VERSION: "4.2.7"
+    VARIANT: rockylinux8
+    PARENT: "rockylinux"
     ISPARENT: "True"
 
 4.1.9-ubuntu1804:
@@ -480,6 +525,17 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
+4.1.9-rockylinux8:
+  extends: .docker
+  stage: rockylinux
+  variables:
+    MAJOR_VERSION: 4
+    VERSION: "4.1"
+    LONG_VERSION: "4.1.9"
+    VARIANT: rockylinux8
+    PARENT: "rockylinux"
+    ISPARENT: "True"
+
 4.0.6-ubuntu1804:
   extends: .docker
   stage: ubuntu
@@ -566,6 +622,17 @@ stages:
     LONG_VERSION: "4.0.6"
     VARIANT: nvidia2004
     PARENT: "nvidia"
+    ISPARENT: "True"
+
+4.0.6-rockylinux8:
+  extends: .docker
+  stage: rockylinux
+  variables:
+    MAJOR_VERSION: 4
+    VERSION: "4.0"
+    LONG_VERSION: "4.0.6"
+    VARIANT: rockylinux8
+    PARENT: "rockylinux"
     ISPARENT: "True"
 
 3.4.11-ubuntu1804:
@@ -656,6 +723,17 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
+3.4.11-rockylinux8:
+  extends: .docker
+  stage: rockylinux
+  variables:
+    MAJOR_VERSION: 3
+    VERSION: "3.4"
+    LONG_VERSION: "3.4.11"
+    VARIANT: rockylinux8
+    PARENT: "rockylinux"
+    ISPARENT: "True"
+
 3.3.9-ubuntu1804:
   extends: .docker
   stage: ubuntu
@@ -744,6 +822,17 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
+3.3.9-rockylinux8:
+  extends: .docker
+  stage: rockylinux
+  variables:
+    MAJOR_VERSION: 3
+    VERSION: "3.3"
+    LONG_VERSION: "3.3.9"
+    VARIANT: rockylinux8
+    PARENT: "rockylinux"
+    ISPARENT: "True"
+
 3.2.18-ubuntu2004:
   extends: .docker
   stage: ubuntu
@@ -797,4 +886,15 @@ stages:
     LONG_VERSION: "3.2.18"
     VARIANT: vaapi2004
     PARENT: "vaapi"
+    ISPARENT: "True"
+
+3.2.18-rockylinux8:
+  extends: .docker
+  stage: rockylinux
+  variables:
+    MAJOR_VERSION: 3
+    VERSION: "3.2"
+    LONG_VERSION: "3.2.18"
+    VARIANT: rockylinux8
+    PARENT: "rockylinux"
     ISPARENT: "True"

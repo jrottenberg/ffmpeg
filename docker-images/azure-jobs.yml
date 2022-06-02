@@ -89,6 +89,15 @@ jobs:
         ISPARENT:  True
 
 
+      rockylinux8_5.0.1:
+        MAJOR_VERSION: 5
+        VERSION:  5.0
+        LONG_VERSION: 5.0.1
+        VARIANT:  rockylinux8
+        PARENT: rockylinux
+        ISPARENT:  True
+
+
       ubuntu1804_4.4.2:
         MAJOR_VERSION: 4
         VERSION:  4.4
@@ -167,6 +176,15 @@ jobs:
         LONG_VERSION: 4.4.2
         VARIANT:  nvidia2004
         PARENT: nvidia
+        ISPARENT:  True
+
+
+      rockylinux8_4.4.2:
+        MAJOR_VERSION: 4
+        VERSION:  4.4
+        LONG_VERSION: 4.4.2
+        VARIANT:  rockylinux8
+        PARENT: rockylinux
         ISPARENT:  True
 
 
@@ -251,6 +269,15 @@ jobs:
         ISPARENT:  True
 
 
+      rockylinux8_4.3.4:
+        MAJOR_VERSION: 4
+        VERSION:  4.3
+        LONG_VERSION: 4.3.4
+        VARIANT:  rockylinux8
+        PARENT: rockylinux
+        ISPARENT:  True
+
+
       ubuntu1804_4.2.7:
         MAJOR_VERSION: 4
         VERSION:  4.2
@@ -320,6 +347,15 @@ jobs:
         LONG_VERSION: 4.2.7
         VARIANT:  nvidia2004
         PARENT: nvidia
+        ISPARENT:  True
+
+
+      rockylinux8_4.2.7:
+        MAJOR_VERSION: 4
+        VERSION:  4.2
+        LONG_VERSION: 4.2.7
+        VARIANT:  rockylinux8
+        PARENT: rockylinux
         ISPARENT:  True
 
 
@@ -395,6 +431,15 @@ jobs:
         ISPARENT:  True
 
 
+      rockylinux8_4.1.9:
+        MAJOR_VERSION: 4
+        VERSION:  4.1
+        LONG_VERSION: 4.1.9
+        VARIANT:  rockylinux8
+        PARENT: rockylinux
+        ISPARENT:  True
+
+
       ubuntu1804_4.0.6:
         MAJOR_VERSION: 4
         VERSION:  4.0
@@ -464,6 +509,15 @@ jobs:
         LONG_VERSION: 4.0.6
         VARIANT:  nvidia2004
         PARENT: nvidia
+        ISPARENT:  True
+
+
+      rockylinux8_4.0.6:
+        MAJOR_VERSION: 4
+        VERSION:  4.0
+        LONG_VERSION: 4.0.6
+        VARIANT:  rockylinux8
+        PARENT: rockylinux
         ISPARENT:  True
 
 
@@ -539,6 +593,15 @@ jobs:
         ISPARENT:  True
 
 
+      rockylinux8_3.4.11:
+        MAJOR_VERSION: 3
+        VERSION:  3.4
+        LONG_VERSION: 3.4.11
+        VARIANT:  rockylinux8
+        PARENT: rockylinux
+        ISPARENT:  True
+
+
       ubuntu1804_3.3.9:
         MAJOR_VERSION: 3
         VERSION:  3.3
@@ -611,6 +674,15 @@ jobs:
         ISPARENT:  True
 
 
+      rockylinux8_3.3.9:
+        MAJOR_VERSION: 3
+        VERSION:  3.3
+        LONG_VERSION: 3.3.9
+        VARIANT:  rockylinux8
+        PARENT: rockylinux
+        ISPARENT:  True
+
+
       ubuntu2004_3.2.18:
         MAJOR_VERSION: 3
         VERSION:  3.2
@@ -653,6 +725,15 @@ jobs:
         LONG_VERSION: 3.2.18
         VARIANT:  vaapi2004
         PARENT: vaapi
+        ISPARENT:  True
+
+
+      rockylinux8_3.2.18:
+        MAJOR_VERSION: 3
+        VERSION:  3.2
+        LONG_VERSION: 3.2.18
+        VARIANT:  rockylinux8
+        PARENT: rockylinux
         ISPARENT:  True
 
   steps:
