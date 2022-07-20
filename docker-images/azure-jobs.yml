@@ -26,11 +26,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_5.0.1:
+      alpine316_5.0.1:
         MAJOR_VERSION: 5
         VERSION:  5.0
         LONG_VERSION: 5.0.1
-        VARIANT:  alpine313
+        VARIANT:  alpine316
         PARENT: alpine
         ISPARENT:  True
 
@@ -53,11 +53,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch313_5.0.1:
+      scratch316_5.0.1:
         MAJOR_VERSION: 5
         VERSION:  5.0
         LONG_VERSION: 5.0.1
-        VARIANT:  scratch313
+        VARIANT:  scratch316
         PARENT: scratch
         ISPARENT:  True
 
@@ -107,11 +107,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_4.4.2:
+      alpine316_4.4.2:
         MAJOR_VERSION: 4
         VERSION:  4.4
         LONG_VERSION: 4.4.2
-        VARIANT:  alpine313
+        VARIANT:  alpine316
         PARENT: alpine
         ISPARENT:  True
 
@@ -134,11 +134,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch313_4.4.2:
+      scratch316_4.4.2:
         MAJOR_VERSION: 4
         VERSION:  4.4
         LONG_VERSION: 4.4.2
-        VARIANT:  scratch313
+        VARIANT:  scratch316
         PARENT: scratch
         ISPARENT:  True
 
@@ -188,11 +188,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_4.3.4:
+      alpine316_4.3.4:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.4
-        VARIANT:  alpine313
+        VARIANT:  alpine316
         PARENT: alpine
         ISPARENT:  True
 
@@ -215,11 +215,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch313_4.3.4:
+      scratch316_4.3.4:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.4
-        VARIANT:  scratch313
+        VARIANT:  scratch316
         PARENT: scratch
         ISPARENT:  True
 
@@ -269,11 +269,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_4.2.7:
+      alpine316_4.2.7:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.7
-        VARIANT:  alpine313
+        VARIANT:  alpine316
         PARENT: alpine
         ISPARENT:  True
 
@@ -296,11 +296,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch313_4.2.7:
+      scratch316_4.2.7:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.7
-        VARIANT:  scratch313
+        VARIANT:  scratch316
         PARENT: scratch
         ISPARENT:  True
 
@@ -341,11 +341,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_4.1.9:
+      alpine316_4.1.9:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.9
-        VARIANT:  alpine313
+        VARIANT:  alpine316
         PARENT: alpine
         ISPARENT:  True
 
@@ -368,11 +368,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch313_4.1.9:
+      scratch316_4.1.9:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.9
-        VARIANT:  scratch313
+        VARIANT:  scratch316
         PARENT: scratch
         ISPARENT:  True
 
@@ -413,11 +413,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_4.0.6:
+      alpine316_4.0.6:
         MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
-        VARIANT:  alpine313
+        VARIANT:  alpine316
         PARENT: alpine
         ISPARENT:  True
 
@@ -440,11 +440,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch313_4.0.6:
+      scratch316_4.0.6:
         MAJOR_VERSION: 4
         VERSION:  4.0
         LONG_VERSION: 4.0.6
-        VARIANT:  scratch313
+        VARIANT:  scratch316
         PARENT: scratch
         ISPARENT:  True
 
@@ -485,11 +485,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_3.4.11:
+      alpine316_3.4.11:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.11
-        VARIANT:  alpine313
+        VARIANT:  alpine316
         PARENT: alpine
         ISPARENT:  True
 
@@ -512,11 +512,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch313_3.4.11:
+      scratch316_3.4.11:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.11
-        VARIANT:  scratch313
+        VARIANT:  scratch316
         PARENT: scratch
         ISPARENT:  True
 
@@ -557,11 +557,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_3.3.9:
+      alpine316_3.3.9:
         MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
-        VARIANT:  alpine313
+        VARIANT:  alpine316
         PARENT: alpine
         ISPARENT:  True
 
@@ -584,11 +584,11 @@ jobs:
         ISPARENT:  True
 
 
-      scratch313_3.3.9:
+      scratch316_3.3.9:
         MAJOR_VERSION: 3
         VERSION:  3.3
         LONG_VERSION: 3.3.9
-        VARIANT:  scratch313
+        VARIANT:  scratch316
         PARENT: scratch
         ISPARENT:  True
 
@@ -620,30 +620,12 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_3.2.18:
-        MAJOR_VERSION: 3
-        VERSION:  3.2
-        LONG_VERSION: 3.2.18
-        VARIANT:  alpine313
-        PARENT: alpine
-        ISPARENT:  True
-
-
       centos7_3.2.18:
         MAJOR_VERSION: 3
         VERSION:  3.2
         LONG_VERSION: 3.2.18
         VARIANT:  centos7
         PARENT: centos
-        ISPARENT:  True
-
-
-      scratch313_3.2.18:
-        MAJOR_VERSION: 3
-        VERSION:  3.2
-        LONG_VERSION: 3.2.18
-        VARIANT:  scratch313
-        PARENT: scratch
         ISPARENT:  True
 
 
