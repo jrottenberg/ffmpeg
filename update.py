@@ -5,9 +5,10 @@ import os
 import re
 import shutil
 from distutils.version import StrictVersion
+from pathlib import Path
 from urllib import request
 
-MIN_VERSION = "2.7"
+MIN_VERSION = "3"
 with open("templates/Dockerfile-env", "r") as tmpfile:
     ENV_CONTENT = tmpfile.read()
 with open("templates/Dockerfile-run", "r") as tmpfile:
@@ -17,7 +18,7 @@ IMAGE_FORMAT_STR = "{0}/Dockerfile".format(DIR_FORMAT_STR)
 TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 
 # https://ffmpeg.org/olddownload.html
-SKIP_VERSIONS = "3.1.11 3.0.12 snapshot"
+SKIP_VERSIONS = "4.0 3.3 3.1 3.0 snapshot"
 VARIANTS = [
     {"name": "ubuntu1804", "parent": "ubuntu"},
     {"name": "ubuntu2004", "parent": "ubuntu"},
@@ -62,7 +63,6 @@ SKIP_VARIANTS = {
     ],
     "3.3": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
     "3.4": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
-    "4.0": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
     "4.1": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
     "4.2": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
 }
@@ -93,8 +93,8 @@ for cur in all_versions:
     if cur < MIN_VERSION:
         break
 
-    if cur in SKIP_VERSIONS:
-        break
+    if get_shorten_version(cur) in SKIP_VERSIONS:
+        continue
     tmp = cur.split(".")
     # Check Minor
     if len(tmp) >= 2 and tmp[1].isdigit() and tmp[1] < last[1]:
@@ -119,6 +119,8 @@ for version in keep_version:
     short_version = get_shorten_version(version)
     major_version = get_major_version(version)
     ver_path = os.path.join("docker-images", short_version)
+    if not Path(ver_path).is_dir():
+        os.makedirs(ver_path)
     for existing_variant in os.listdir(ver_path):
         if existing_variant not in compatible_variants:
             shutil.rmtree(DIR_FORMAT_STR.format(short_version, existing_variant))
