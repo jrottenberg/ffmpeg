@@ -4,9 +4,10 @@
 import os
 import re
 import shutil
-from distutils.version import StrictVersion
-from pathlib import Path
+from packaging.version import Version
 from urllib import request
+from pathlib import Path
+
 
 MIN_VERSION = "3"
 with open("templates/Dockerfile-env", "r") as tmpfile:
@@ -48,7 +49,7 @@ with request.urlopen(FFMPEG_RELEASES) as conn:
 
 parse_re = re.compile(r"ffmpeg-([.0-9]+).tar.bz2.asc</a>\s+")
 all_versions = parse_re.findall(ffmpeg_releases)
-all_versions.sort(key=StrictVersion, reverse=True)
+all_versions.sort(key=Version, reverse=True)
 
 version, all_versions = all_versions[0], all_versions[1:]
 

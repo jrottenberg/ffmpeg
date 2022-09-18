@@ -26,13 +26,13 @@ There are different builds available:
 
 `<version>` can be one of the following:
 - 3.2
-- 3.3
 - 3.4
-- 4.0
 - 4.1
 - 4.2
 - 4.3
 - 4.4
+- 5.0
+- 5.1
 
 Not all combinations are supported and older versions will fade out over time. See the table below for the currently supported combinations.
 
@@ -260,3 +260,19 @@ See Dockerfile-env to update a version
 ## Contribute
 
 See [the contributing guide](CONTRIBUTING.md)
+
+
+## Contributors
+
+Thanks to [all contributors](https://github.com/jrottenberg/ffmpeg/graphs/contributors)
+
+[![jrottenberg/ffmpeg's contributors](https://contrib.rocks/image?repo=jrottenberg/ffmpeg)](https://github.com/jrottenberg/ffmpeg/graphs/contributors)
+
+### GitHub Contributor Over Time
+[![GitHub Contributor Over Time](https://contributor-overtime-api.git-contributor.com/contributors-svg?chart=contributorOverTime&repo=jrottenberg/ffmpeg)](https://git-contributor.com?chart=contributorOverTime&repo=jrottenberg/ffmpeg)
+
+## Stargazers over time
+
+Thanks to our users starring the project
+
+[![Stargazers over time for jrottenberg/ffmpeg](https://starchart.cc/jrottenberg/ffmpeg.svg)](https://starchart.cc/jrottenberg/ffmpeg)
