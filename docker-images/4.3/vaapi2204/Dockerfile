@@ -5,7 +5,7 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:18.04 AS base
+FROM        ubuntu:22.04 AS base
 
 WORKDIR     /tmp/workdir
 
@@ -16,7 +16,7 @@ RUN     apt-get -yqq update && \
 
 FROM base as build
 
-ENV         FFMPEG_VERSION=4.4.2 \
+ENV         FFMPEG_VERSION=4.3.4 \
     AOM_VERSION=v3.4.0 \
     CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
@@ -92,6 +92,7 @@ RUN      buildDeps="autoconf \
                     python \
                     libssl-dev \
                     yasm \
+                    libva-dev \
                     zlib1g-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
@@ -346,14 +347,15 @@ RUN \
 
 RUN \
         DIR=/tmp/aom && \
-        git clone --branch ${AOM_VERSION} --depth 1 https://aomedia.googlesource.com/aom ${DIR} ; \
-        cd ${DIR} ; \
-        rm -rf CMakeCache.txt CMakeFiles ; \
-        mkdir -p ./aom_build ; \
-        cd ./aom_build ; \
-        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 ..; \
-        make ; \
-        make install ; \
+        mkdir -p ${DIR} && \        
+        cd ${DIR} && \
+        curl -sLO https://aomedia.googlesource.com/aom/+archive/${AOM_VERSION}.tar.gz  && \
+        tar -zx -f ${AOM_VERSION}.tar.gz && \
+        mkdir -p ./aom_build && \
+        cd ./aom_build && \
+        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 .. && \
+        make  && \
+        make install && \
         rm -rf ${DIR}
 
 ## libxcb (and supporting libraries) for screen capture https://xcb.freedesktop.org/
@@ -553,6 +555,7 @@ RUN  \
         --enable-postproc \
         --enable-shared \
         --enable-small \
+        --enable-vaapi \
         --enable-version3 \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
@@ -591,6 +594,11 @@ CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
 COPY --from=build /usr/local /usr/local/
+
+RUN \
+	apt-get update -y && \
+	apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver && \
+	rm -rf /var/lib/apt/lists/*
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

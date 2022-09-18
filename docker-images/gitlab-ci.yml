@@ -7,16 +7,16 @@ stages:
   - ubuntu
   - vaapi
 
-5.1.1-ubuntu1804:
+5.1.1-ubuntu2204:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.1"
     LONG_VERSION: "5.1.1"
-    VARIANT: ubuntu1804
+    VARIANT: ubuntu2204
     PARENT: "ubuntu"
-    ISPARENT: "False"
+    ISPARENT: "True"
 
 5.1.1-ubuntu2004:
   extends: .docker
@@ -27,7 +27,7 @@ stages:
     LONG_VERSION: "5.1.1"
     VARIANT: ubuntu2004
     PARENT: "ubuntu"
-    ISPARENT: "True"
+    ISPARENT: "False"
 
 5.1.1-alpine313:
   extends: .docker
@@ -73,16 +73,16 @@ stages:
     PARENT: "scratch"
     ISPARENT: "True"
 
-5.1.1-vaapi1804:
+5.1.1-vaapi2204:
   extends: .docker
   stage: vaapi
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.1"
     LONG_VERSION: "5.1.1"
-    VARIANT: vaapi1804
+    VARIANT: vaapi2204
     PARENT: "vaapi"
-    ISPARENT: "False"
+    ISPARENT: "True"
 
 5.1.1-vaapi2004:
   extends: .docker
@@ -93,7 +93,7 @@ stages:
     LONG_VERSION: "5.1.1"
     VARIANT: vaapi2004
     PARENT: "vaapi"
-    ISPARENT: "True"
+    ISPARENT: "False"
 
 5.1.1-nvidia2004:
   extends: .docker
@@ -106,16 +106,16 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-5.0.1-ubuntu1804:
+5.0.1-ubuntu2204:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.0"
     LONG_VERSION: "5.0.1"
-    VARIANT: ubuntu1804
+    VARIANT: ubuntu2204
     PARENT: "ubuntu"
-    ISPARENT: "False"
+    ISPARENT: "True"
 
 5.0.1-ubuntu2004:
   extends: .docker
@@ -126,7 +126,7 @@ stages:
     LONG_VERSION: "5.0.1"
     VARIANT: ubuntu2004
     PARENT: "ubuntu"
-    ISPARENT: "True"
+    ISPARENT: "False"
 
 5.0.1-alpine313:
   extends: .docker
@@ -172,16 +172,16 @@ stages:
     PARENT: "scratch"
     ISPARENT: "True"
 
-5.0.1-vaapi1804:
+5.0.1-vaapi2204:
   extends: .docker
   stage: vaapi
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.0"
     LONG_VERSION: "5.0.1"
-    VARIANT: vaapi1804
+    VARIANT: vaapi2204
     PARENT: "vaapi"
-    ISPARENT: "False"
+    ISPARENT: "True"
 
 5.0.1-vaapi2004:
   extends: .docker
@@ -192,7 +192,7 @@ stages:
     LONG_VERSION: "5.0.1"
     VARIANT: vaapi2004
     PARENT: "vaapi"
-    ISPARENT: "True"
+    ISPARENT: "False"
 
 5.0.1-nvidia2004:
   extends: .docker
@@ -205,16 +205,16 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-4.4.2-ubuntu1804:
+4.4.2-ubuntu2204:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
     LONG_VERSION: "4.4.2"
-    VARIANT: ubuntu1804
+    VARIANT: ubuntu2204
     PARENT: "ubuntu"
-    ISPARENT: "False"
+    ISPARENT: "True"
 
 4.4.2-ubuntu2004:
   extends: .docker
@@ -225,7 +225,7 @@ stages:
     LONG_VERSION: "4.4.2"
     VARIANT: ubuntu2004
     PARENT: "ubuntu"
-    ISPARENT: "True"
+    ISPARENT: "False"
 
 4.4.2-alpine313:
   extends: .docker
@@ -271,16 +271,16 @@ stages:
     PARENT: "scratch"
     ISPARENT: "True"
 
-4.4.2-vaapi1804:
+4.4.2-vaapi2204:
   extends: .docker
   stage: vaapi
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
     LONG_VERSION: "4.4.2"
-    VARIANT: vaapi1804
+    VARIANT: vaapi2204
     PARENT: "vaapi"
-    ISPARENT: "False"
+    ISPARENT: "True"
 
 4.4.2-vaapi2004:
   extends: .docker
@@ -291,7 +291,7 @@ stages:
     LONG_VERSION: "4.4.2"
     VARIANT: vaapi2004
     PARENT: "vaapi"
-    ISPARENT: "True"
+    ISPARENT: "False"
 
 4.4.2-nvidia2004:
   extends: .docker
@@ -304,16 +304,16 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-4.3.4-ubuntu1804:
+4.3.4-ubuntu2204:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.4"
-    VARIANT: ubuntu1804
+    VARIANT: ubuntu2204
     PARENT: "ubuntu"
-    ISPARENT: "False"
+    ISPARENT: "True"
 
 4.3.4-ubuntu2004:
   extends: .docker
@@ -324,7 +324,7 @@ stages:
     LONG_VERSION: "4.3.4"
     VARIANT: ubuntu2004
     PARENT: "ubuntu"
-    ISPARENT: "True"
+    ISPARENT: "False"
 
 4.3.4-alpine313:
   extends: .docker
@@ -370,16 +370,16 @@ stages:
     PARENT: "scratch"
     ISPARENT: "True"
 
-4.3.4-vaapi1804:
+4.3.4-vaapi2204:
   extends: .docker
   stage: vaapi
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.4"
-    VARIANT: vaapi1804
+    VARIANT: vaapi2204
     PARENT: "vaapi"
-    ISPARENT: "False"
+    ISPARENT: "True"
 
 4.3.4-vaapi2004:
   extends: .docker
@@ -390,7 +390,7 @@ stages:
     LONG_VERSION: "4.3.4"
     VARIANT: vaapi2004
     PARENT: "vaapi"
-    ISPARENT: "True"
+    ISPARENT: "False"
 
 4.3.4-nvidia2004:
   extends: .docker
@@ -403,16 +403,16 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-4.2.7-ubuntu1804:
+4.2.7-ubuntu2204:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.7"
-    VARIANT: ubuntu1804
+    VARIANT: ubuntu2204
     PARENT: "ubuntu"
-    ISPARENT: "False"
+    ISPARENT: "True"
 
 4.2.7-ubuntu2004:
   extends: .docker
@@ -423,7 +423,7 @@ stages:
     LONG_VERSION: "4.2.7"
     VARIANT: ubuntu2004
     PARENT: "ubuntu"
-    ISPARENT: "True"
+    ISPARENT: "False"
 
 4.2.7-alpine313:
   extends: .docker
@@ -491,16 +491,16 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-4.1.9-ubuntu1804:
+4.1.9-ubuntu2204:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.9"
-    VARIANT: ubuntu1804
+    VARIANT: ubuntu2204
     PARENT: "ubuntu"
-    ISPARENT: "False"
+    ISPARENT: "True"
 
 4.1.9-ubuntu2004:
   extends: .docker
@@ -511,7 +511,7 @@ stages:
     LONG_VERSION: "4.1.9"
     VARIANT: ubuntu2004
     PARENT: "ubuntu"
-    ISPARENT: "True"
+    ISPARENT: "False"
 
 4.1.9-alpine313:
   extends: .docker
@@ -579,16 +579,16 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-3.4.11-ubuntu1804:
+3.4.11-ubuntu2204:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.11"
-    VARIANT: ubuntu1804
+    VARIANT: ubuntu2204
     PARENT: "ubuntu"
-    ISPARENT: "False"
+    ISPARENT: "True"
 
 3.4.11-ubuntu2004:
   extends: .docker
@@ -599,7 +599,7 @@ stages:
     LONG_VERSION: "3.4.11"
     VARIANT: ubuntu2004
     PARENT: "ubuntu"
-    ISPARENT: "True"
+    ISPARENT: "False"
 
 3.4.11-alpine313:
   extends: .docker

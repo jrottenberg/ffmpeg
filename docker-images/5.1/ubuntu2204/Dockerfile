@@ -5,7 +5,7 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:18.04 AS base
+FROM        ubuntu:22.04 AS base
 
 WORKDIR     /tmp/workdir
 
@@ -16,7 +16,7 @@ RUN     apt-get -yqq update && \
 
 FROM base as build
 
-ENV         FFMPEG_VERSION=5.0.1 \
+ENV         FFMPEG_VERSION=5.1.1 \
     AOM_VERSION=v3.4.0 \
     CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
@@ -346,14 +346,15 @@ RUN \
 
 RUN \
         DIR=/tmp/aom && \
-        git clone --branch ${AOM_VERSION} --depth 1 https://aomedia.googlesource.com/aom ${DIR} ; \
-        cd ${DIR} ; \
-        rm -rf CMakeCache.txt CMakeFiles ; \
-        mkdir -p ./aom_build ; \
-        cd ./aom_build ; \
-        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 ..; \
-        make ; \
-        make install ; \
+        mkdir -p ${DIR} && \        
+        cd ${DIR} && \
+        curl -sLO https://aomedia.googlesource.com/aom/+archive/${AOM_VERSION}.tar.gz  && \
+        tar -zx -f ${AOM_VERSION}.tar.gz && \
+        mkdir -p ./aom_build && \
+        cd ./aom_build && \
+        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 .. && \
+        make  && \
+        make install && \
         rm -rf ${DIR}
 
 ## libxcb (and supporting libraries) for screen capture https://xcb.freedesktop.org/
