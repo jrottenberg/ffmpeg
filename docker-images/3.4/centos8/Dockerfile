@@ -353,7 +353,7 @@ RUN \
 
 RUN \
         DIR=/tmp/aom && \
-        mkdir -p ${DIR} && \        
+        mkdir -p ${DIR} && \
         cd ${DIR} && \
         curl -sLO https://aomedia.googlesource.com/aom/+archive/${AOM_VERSION}.tar.gz  && \
         tar -zx -f ${AOM_VERSION}.tar.gz && \

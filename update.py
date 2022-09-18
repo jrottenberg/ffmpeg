@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-
-
 import os
 import re
 import shutil
-from packaging.version import Version
-from urllib import request
 from pathlib import Path
+from urllib import request
 
+from packaging.version import Version
 
 MIN_VERSION = "3"
 with open("templates/Dockerfile-env", "r") as tmpfile:

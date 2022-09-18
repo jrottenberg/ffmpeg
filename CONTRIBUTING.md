@@ -24,7 +24,8 @@ Before you open a PR make the change locally and verify it passes pre-commit :
 
 
 ```sh
-pip install pre-commit
+# you'll need python3-packaging
+pip install pre-commit packaging
 pre-commit install # inside the local checkout
 pre-commit run -a # to force a run, but it will execute on commits
 ```
