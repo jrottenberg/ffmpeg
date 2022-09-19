@@ -260,7 +260,7 @@ RUN \
         make install && \
         rm -rf ${DIR}
 
-## libxcb (and supporting libraries) for screen capture https://xcb.freedesktop.org/
+## xorg-macros (and supporting libraries) for screen capture https://xcb.freedesktop.org/
 RUN \
         DIR=/tmp/xorg-macros && \
         mkdir -p ${DIR} && \

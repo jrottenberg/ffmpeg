@@ -36,7 +36,6 @@ RUN     buildDeps="autoconf \
                    openssl-dev \
                    python3 \
                    tar \
-                   xcb-proto \
                    yasm \
                    zlib-dev" && \
         apk  add --update ${buildDeps}

@@ -37,7 +37,6 @@ RUN      buildDeps="autoconf \
                     perl \
                     pkg-config \
                     python3 \
-                    xcb-proto \
                     yasm \
                     zlib1g-dev" && \
         apt-get -yqq update && \

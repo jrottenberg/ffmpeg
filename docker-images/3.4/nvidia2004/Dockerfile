@@ -50,7 +50,7 @@ ENV         FFMPEG_VERSION=3.4.11 \
     LIBSRT_VERSION=1.4.1 \
     LIBVIDSTAB_VERSION=1.1.0 \
     LIBVMAF_VERSION=2.1.1 \
-    LIBXCB_VERSION=1.13.1 \
+    LIBXCB_VERSION=1.15 \
     LIBXML2_VERSION=2.9.12 \
     LIBZMQ_VERSION=4.3.2 \
     OGG_VERSION=1.3.2 \
@@ -64,7 +64,7 @@ ENV         FFMPEG_VERSION=3.4.11 \
     X264_VERSION=20170226-2245-stable \
     X265_VERSION=3.4 \
     XAU_VERSION=1.0.9 \
-    XCBPROTO_VERSION=1.13 \
+    XCBPROTO_VERSION=1.15.1 \
     XORG_MACROS_VERSION=1.19.2 \
     XPROTO_VERSION=7.0.31 \
     XVID_VERSION=1.3.4 \
@@ -384,7 +384,7 @@ RUN \
         make install && \
         rm -rf ${DIR}
 
-## libxcb (and supporting libraries) for screen capture https://xcb.freedesktop.org/
+## xorg-macros (and supporting libraries) for screen capture https://xcb.freedesktop.org/
 RUN \
         DIR=/tmp/xorg-macros && \
         mkdir -p ${DIR} && \
