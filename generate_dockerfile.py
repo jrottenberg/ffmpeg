@@ -51,7 +51,7 @@ def get_major_version(version):
 def main():
 
     gitlabci = ["stages:\n  - lint\n"]
-    azure = []
+    azureci = []
 
     # Get latest release from ffmpeg.org
     with request.urlopen(FFMPEG_RELEASES) as conn:
@@ -140,25 +140,24 @@ def main():
     stage: {variant['parent']}
     variables:
         MAJOR_VERSION: {major_version}
-        VERSION: "{short_version}"
-        LONG_VERSION: "{version}"
+        VERSION: {short_version}
+        LONG_VERSION: {version}
         VARIANT: {variant['name']}
-        PARENT: "{variant['parent']}"
-        ISPARENT: "{is_parent}"
-"""
+        PARENT: {variant['parent']}
+        ISPARENT: {is_parent}"""
             )
 
-            azure.append(
+            azureci.append(
                 f"""
-        {variant["name"]}_{version}:
-            MAJOR_VERSION: {major_version}
-            VERSION:  {short_version}
-            LONG_VERSION: {version}
-            VARIANT:  {variant["name"]}
-            PARENT: {variant["parent"]}
-            ISPARENT:  {is_parent}
-    """
+      {variant["name"]}_{version}:
+        MAJOR_VERSION: {major_version}
+        VERSION: {short_version}
+        LONG_VERSION: {version}
+        VARIANT: {variant["name"]}
+        PARENT: {variant["parent"]}
+        ISPARENT: {is_parent}"""
             )
+
             with open(TEMPLATE_STR.format(variant["name"]), "r") as tmpfile:
                 template = tmpfile.read()
 
@@ -270,10 +269,10 @@ def main():
 
     with open("templates/azure.template", "r") as tmpfile:
         template = tmpfile.read()
-    azure = template.replace("%%VERSIONS%%", "\n".join(azure))
+    azureci = template.replace("%%VERSIONS%%", "\n".join(azureci))
 
     with open("docker-images/azure-jobs.yml", "w") as azurefile:
-        azurefile.write(azure)
+        azurefile.write(azureci)
 
 
 if __name__ == "__main__":
