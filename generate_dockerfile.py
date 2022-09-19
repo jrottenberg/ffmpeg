@@ -144,7 +144,8 @@ def main():
         LONG_VERSION: {version}
         VARIANT: {variant['name']}
         PARENT: {variant['parent']}
-        ISPARENT: {is_parent}"""
+        ISPARENT: {is_parent}
+"""
             )
 
             azureci.append(
@@ -155,7 +156,8 @@ def main():
         LONG_VERSION: {version}
         VARIANT: {variant["name"]}
         PARENT: {variant["parent"]}
-        ISPARENT: {is_parent}"""
+        ISPARENT: {is_parent}
+"""
             )
 
             with open(TEMPLATE_STR.format(variant["name"]), "r") as tmpfile:
