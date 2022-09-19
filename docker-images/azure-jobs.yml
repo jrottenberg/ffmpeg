@@ -15,7 +15,7 @@ jobs:
             VARIANT:  ubuntu2204
             PARENT: ubuntu
             ISPARENT:  True
-    
+
 
         ubuntu2004_5.1.1:
             MAJOR_VERSION: 5
@@ -24,7 +24,7 @@ jobs:
             VARIANT:  ubuntu2004
             PARENT: ubuntu
             ISPARENT:  False
-    
+
 
         alpine313_5.1.1:
             MAJOR_VERSION: 5
@@ -33,7 +33,7 @@ jobs:
             VARIANT:  alpine313
             PARENT: alpine
             ISPARENT:  True
-    
+
 
         centos7_5.1.1:
             MAJOR_VERSION: 5
@@ -42,7 +42,7 @@ jobs:
             VARIANT:  centos7
             PARENT: centos
             ISPARENT:  False
-    
+
 
         centos8_5.1.1:
             MAJOR_VERSION: 5
@@ -51,7 +51,7 @@ jobs:
             VARIANT:  centos8
             PARENT: centos
             ISPARENT:  True
-    
+
 
         scratch313_5.1.1:
             MAJOR_VERSION: 5
@@ -60,7 +60,7 @@ jobs:
             VARIANT:  scratch313
             PARENT: scratch
             ISPARENT:  True
-    
+
 
         vaapi2204_5.1.1:
             MAJOR_VERSION: 5
@@ -69,7 +69,7 @@ jobs:
             VARIANT:  vaapi2204
             PARENT: vaapi
             ISPARENT:  True
-    
+
 
         vaapi2004_5.1.1:
             MAJOR_VERSION: 5
@@ -78,7 +78,7 @@ jobs:
             VARIANT:  vaapi2004
             PARENT: vaapi
             ISPARENT:  False
-    
+
 
         nvidia2004_5.1.1:
             MAJOR_VERSION: 5
@@ -87,7 +87,7 @@ jobs:
             VARIANT:  nvidia2004
             PARENT: nvidia
             ISPARENT:  True
-    
+
 
         ubuntu2204_5.0.1:
             MAJOR_VERSION: 5
@@ -96,7 +96,7 @@ jobs:
             VARIANT:  ubuntu2204
             PARENT: ubuntu
             ISPARENT:  True
-    
+
 
         ubuntu2004_5.0.1:
             MAJOR_VERSION: 5
@@ -105,7 +105,7 @@ jobs:
             VARIANT:  ubuntu2004
             PARENT: ubuntu
             ISPARENT:  False
-    
+
 
         alpine313_5.0.1:
             MAJOR_VERSION: 5
@@ -114,7 +114,7 @@ jobs:
             VARIANT:  alpine313
             PARENT: alpine
             ISPARENT:  True
-    
+
 
         centos7_5.0.1:
             MAJOR_VERSION: 5
@@ -123,7 +123,7 @@ jobs:
             VARIANT:  centos7
             PARENT: centos
             ISPARENT:  False
-    
+
 
         centos8_5.0.1:
             MAJOR_VERSION: 5
@@ -132,7 +132,7 @@ jobs:
             VARIANT:  centos8
             PARENT: centos
             ISPARENT:  True
-    
+
 
         scratch313_5.0.1:
             MAJOR_VERSION: 5
@@ -141,7 +141,7 @@ jobs:
             VARIANT:  scratch313
             PARENT: scratch
             ISPARENT:  True
-    
+
 
         vaapi2204_5.0.1:
             MAJOR_VERSION: 5
@@ -150,7 +150,7 @@ jobs:
             VARIANT:  vaapi2204
             PARENT: vaapi
             ISPARENT:  True
-    
+
 
         vaapi2004_5.0.1:
             MAJOR_VERSION: 5
@@ -159,7 +159,7 @@ jobs:
             VARIANT:  vaapi2004
             PARENT: vaapi
             ISPARENT:  False
-    
+
 
         nvidia2004_5.0.1:
             MAJOR_VERSION: 5
@@ -168,7 +168,7 @@ jobs:
             VARIANT:  nvidia2004
             PARENT: nvidia
             ISPARENT:  True
-    
+
 
         ubuntu2204_4.4.2:
             MAJOR_VERSION: 4
@@ -177,7 +177,7 @@ jobs:
             VARIANT:  ubuntu2204
             PARENT: ubuntu
             ISPARENT:  True
-    
+
 
         ubuntu2004_4.4.2:
             MAJOR_VERSION: 4
@@ -186,7 +186,7 @@ jobs:
             VARIANT:  ubuntu2004
             PARENT: ubuntu
             ISPARENT:  False
-    
+
 
         alpine313_4.4.2:
             MAJOR_VERSION: 4
@@ -195,7 +195,7 @@ jobs:
             VARIANT:  alpine313
             PARENT: alpine
             ISPARENT:  True
-    
+
 
         centos7_4.4.2:
             MAJOR_VERSION: 4
@@ -204,7 +204,7 @@ jobs:
             VARIANT:  centos7
             PARENT: centos
             ISPARENT:  False
-    
+
 
         centos8_4.4.2:
             MAJOR_VERSION: 4
@@ -213,7 +213,7 @@ jobs:
             VARIANT:  centos8
             PARENT: centos
             ISPARENT:  True
-    
+
 
         scratch313_4.4.2:
             MAJOR_VERSION: 4
@@ -222,7 +222,7 @@ jobs:
             VARIANT:  scratch313
             PARENT: scratch
             ISPARENT:  True
-    
+
 
         vaapi2204_4.4.2:
             MAJOR_VERSION: 4
@@ -231,7 +231,7 @@ jobs:
             VARIANT:  vaapi2204
             PARENT: vaapi
             ISPARENT:  True
-    
+
 
         vaapi2004_4.4.2:
             MAJOR_VERSION: 4
@@ -240,7 +240,7 @@ jobs:
             VARIANT:  vaapi2004
             PARENT: vaapi
             ISPARENT:  False
-    
+
 
         nvidia2004_4.4.2:
             MAJOR_VERSION: 4
@@ -249,7 +249,7 @@ jobs:
             VARIANT:  nvidia2004
             PARENT: nvidia
             ISPARENT:  True
-    
+
 
         ubuntu2204_4.3.4:
             MAJOR_VERSION: 4
@@ -258,7 +258,7 @@ jobs:
             VARIANT:  ubuntu2204
             PARENT: ubuntu
             ISPARENT:  True
-    
+
 
         ubuntu2004_4.3.4:
             MAJOR_VERSION: 4
@@ -267,7 +267,7 @@ jobs:
             VARIANT:  ubuntu2004
             PARENT: ubuntu
             ISPARENT:  False
-    
+
 
         alpine313_4.3.4:
             MAJOR_VERSION: 4
@@ -276,7 +276,7 @@ jobs:
             VARIANT:  alpine313
             PARENT: alpine
             ISPARENT:  True
-    
+
 
         centos7_4.3.4:
             MAJOR_VERSION: 4
@@ -285,7 +285,7 @@ jobs:
             VARIANT:  centos7
             PARENT: centos
             ISPARENT:  False
-    
+
 
         centos8_4.3.4:
             MAJOR_VERSION: 4
@@ -294,7 +294,7 @@ jobs:
             VARIANT:  centos8
             PARENT: centos
             ISPARENT:  True
-    
+
 
         scratch313_4.3.4:
             MAJOR_VERSION: 4
@@ -303,7 +303,7 @@ jobs:
             VARIANT:  scratch313
             PARENT: scratch
             ISPARENT:  True
-    
+
 
         vaapi2204_4.3.4:
             MAJOR_VERSION: 4
@@ -312,7 +312,7 @@ jobs:
             VARIANT:  vaapi2204
             PARENT: vaapi
             ISPARENT:  True
-    
+
 
         vaapi2004_4.3.4:
             MAJOR_VERSION: 4
@@ -321,7 +321,7 @@ jobs:
             VARIANT:  vaapi2004
             PARENT: vaapi
             ISPARENT:  False
-    
+
 
         nvidia2004_4.3.4:
             MAJOR_VERSION: 4
@@ -330,7 +330,7 @@ jobs:
             VARIANT:  nvidia2004
             PARENT: nvidia
             ISPARENT:  True
-    
+
 
         ubuntu2204_4.2.7:
             MAJOR_VERSION: 4
@@ -339,7 +339,7 @@ jobs:
             VARIANT:  ubuntu2204
             PARENT: ubuntu
             ISPARENT:  True
-    
+
 
         ubuntu2004_4.2.7:
             MAJOR_VERSION: 4
@@ -348,7 +348,7 @@ jobs:
             VARIANT:  ubuntu2004
             PARENT: ubuntu
             ISPARENT:  False
-    
+
 
         alpine313_4.2.7:
             MAJOR_VERSION: 4
@@ -357,7 +357,7 @@ jobs:
             VARIANT:  alpine313
             PARENT: alpine
             ISPARENT:  True
-    
+
 
         centos7_4.2.7:
             MAJOR_VERSION: 4
@@ -366,7 +366,7 @@ jobs:
             VARIANT:  centos7
             PARENT: centos
             ISPARENT:  False
-    
+
 
         centos8_4.2.7:
             MAJOR_VERSION: 4
@@ -375,7 +375,7 @@ jobs:
             VARIANT:  centos8
             PARENT: centos
             ISPARENT:  True
-    
+
 
         scratch313_4.2.7:
             MAJOR_VERSION: 4
@@ -384,7 +384,7 @@ jobs:
             VARIANT:  scratch313
             PARENT: scratch
             ISPARENT:  True
-    
+
 
         vaapi2004_4.2.7:
             MAJOR_VERSION: 4
@@ -393,7 +393,7 @@ jobs:
             VARIANT:  vaapi2004
             PARENT: vaapi
             ISPARENT:  True
-    
+
 
         nvidia2004_4.2.7:
             MAJOR_VERSION: 4
@@ -402,7 +402,7 @@ jobs:
             VARIANT:  nvidia2004
             PARENT: nvidia
             ISPARENT:  True
-    
+
 
         ubuntu2204_4.1.9:
             MAJOR_VERSION: 4
@@ -411,7 +411,7 @@ jobs:
             VARIANT:  ubuntu2204
             PARENT: ubuntu
             ISPARENT:  True
-    
+
 
         ubuntu2004_4.1.9:
             MAJOR_VERSION: 4
@@ -420,7 +420,7 @@ jobs:
             VARIANT:  ubuntu2004
             PARENT: ubuntu
             ISPARENT:  False
-    
+
 
         alpine313_4.1.9:
             MAJOR_VERSION: 4
@@ -429,7 +429,7 @@ jobs:
             VARIANT:  alpine313
             PARENT: alpine
             ISPARENT:  True
-    
+
 
         centos7_4.1.9:
             MAJOR_VERSION: 4
@@ -438,7 +438,7 @@ jobs:
             VARIANT:  centos7
             PARENT: centos
             ISPARENT:  False
-    
+
 
         centos8_4.1.9:
             MAJOR_VERSION: 4
@@ -447,7 +447,7 @@ jobs:
             VARIANT:  centos8
             PARENT: centos
             ISPARENT:  True
-    
+
 
         scratch313_4.1.9:
             MAJOR_VERSION: 4
@@ -456,7 +456,7 @@ jobs:
             VARIANT:  scratch313
             PARENT: scratch
             ISPARENT:  True
-    
+
 
         vaapi2004_4.1.9:
             MAJOR_VERSION: 4
@@ -465,7 +465,7 @@ jobs:
             VARIANT:  vaapi2004
             PARENT: vaapi
             ISPARENT:  True
-    
+
 
         nvidia2004_4.1.9:
             MAJOR_VERSION: 4
@@ -474,7 +474,7 @@ jobs:
             VARIANT:  nvidia2004
             PARENT: nvidia
             ISPARENT:  True
-    
+
 
         ubuntu2204_3.4.11:
             MAJOR_VERSION: 3
@@ -483,7 +483,7 @@ jobs:
             VARIANT:  ubuntu2204
             PARENT: ubuntu
             ISPARENT:  True
-    
+
 
         ubuntu2004_3.4.11:
             MAJOR_VERSION: 3
@@ -492,7 +492,7 @@ jobs:
             VARIANT:  ubuntu2004
             PARENT: ubuntu
             ISPARENT:  False
-    
+
 
         alpine313_3.4.11:
             MAJOR_VERSION: 3
@@ -501,7 +501,7 @@ jobs:
             VARIANT:  alpine313
             PARENT: alpine
             ISPARENT:  True
-    
+
 
         centos7_3.4.11:
             MAJOR_VERSION: 3
@@ -510,7 +510,7 @@ jobs:
             VARIANT:  centos7
             PARENT: centos
             ISPARENT:  False
-    
+
 
         centos8_3.4.11:
             MAJOR_VERSION: 3
@@ -519,7 +519,7 @@ jobs:
             VARIANT:  centos8
             PARENT: centos
             ISPARENT:  True
-    
+
 
         scratch313_3.4.11:
             MAJOR_VERSION: 3
@@ -528,7 +528,7 @@ jobs:
             VARIANT:  scratch313
             PARENT: scratch
             ISPARENT:  True
-    
+
 
         vaapi2004_3.4.11:
             MAJOR_VERSION: 3
@@ -537,7 +537,7 @@ jobs:
             VARIANT:  vaapi2004
             PARENT: vaapi
             ISPARENT:  True
-    
+
 
         nvidia2004_3.4.11:
             MAJOR_VERSION: 3
@@ -546,7 +546,7 @@ jobs:
             VARIANT:  nvidia2004
             PARENT: nvidia
             ISPARENT:  True
-    
+
 
         ubuntu2004_3.2.18:
             MAJOR_VERSION: 3
@@ -555,7 +555,7 @@ jobs:
             VARIANT:  ubuntu2004
             PARENT: ubuntu
             ISPARENT:  True
-    
+
 
         alpine313_3.2.18:
             MAJOR_VERSION: 3
@@ -564,7 +564,7 @@ jobs:
             VARIANT:  alpine313
             PARENT: alpine
             ISPARENT:  True
-    
+
 
         centos7_3.2.18:
             MAJOR_VERSION: 3
@@ -573,7 +573,7 @@ jobs:
             VARIANT:  centos7
             PARENT: centos
             ISPARENT:  True
-    
+
 
         scratch313_3.2.18:
             MAJOR_VERSION: 3
@@ -582,7 +582,7 @@ jobs:
             VARIANT:  scratch313
             PARENT: scratch
             ISPARENT:  True
-    
+
 
         vaapi2004_3.2.18:
             MAJOR_VERSION: 3
@@ -591,6 +591,6 @@ jobs:
             VARIANT:  vaapi2004
             PARENT: vaapi
             ISPARENT:  True
-    
+
   steps:
   - template: ../azure-steps.yml

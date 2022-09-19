@@ -32,9 +32,6 @@ VARIANTS = [
 FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
 
 
-
-
-
 def get_shorten_version(version):
     if version == "snapshot":
         return version
@@ -51,7 +48,6 @@ def get_major_version(version):
         return f"{major}"
 
 
-
 def main():
 
     gitlabci = ["stages:\n  - lint\n"]
@@ -64,7 +60,6 @@ def main():
     all_parents = sorted(set([sub["parent"] for sub in VARIANTS]))
     for parent in all_parents:
         gitlabci.append(f"  - {parent}\n")
-
 
     parse_re = re.compile(r"ffmpeg-([.0-9]+).tar.bz2.asc</a>\s+")
     all_versions = parse_re.findall(ffmpeg_releases)
@@ -92,8 +87,6 @@ def main():
 
     keep_version.append(version)
 
-
-
     for cur in all_versions:
         if cur < MIN_VERSION:
             break
@@ -119,7 +112,9 @@ def main():
             if version.startswith(k):
                 skip_variants = v
         compatible_variants = [
-            v for v in VARIANTS if skip_variants is None or v["name"] not in skip_variants
+            v
+            for v in VARIANTS
+            if skip_variants is None or v["name"] not in skip_variants
         ]
         short_version = get_shorten_version(version)
         major_version = get_major_version(version)
@@ -132,13 +127,15 @@ def main():
 
         for variant in compatible_variants:
             siblings = [
-                v["name"] for v in compatible_variants if v["parent"] == variant["parent"]
+                v["name"]
+                for v in compatible_variants
+                if v["parent"] == variant["parent"]
             ]
             is_parent = sorted(siblings, reverse=True)[0] == variant["name"]
             dockerfile = IMAGE_FORMAT_STR.format(short_version, variant["name"])
             gitlabci.append(
                 f"""
-    {version}-{variant['name']}:
+{version}-{variant['name']}:
     extends: .docker
     stage: {variant['parent']}
     variables:
@@ -148,7 +145,7 @@ def main():
         VARIANT: {variant['name']}
         PARENT: "{variant['parent']}"
         ISPARENT: "{is_parent}"
-    """
+"""
             )
 
             azure.append(
@@ -268,7 +265,6 @@ def main():
             with open(dockerfile, "w") as dfile:
                 dfile.write(docker_content)
 
-
     with open("docker-images/gitlab-ci.yml", "w") as gitlabcifile:
         gitlabcifile.write("".join(gitlabci))
 
@@ -276,10 +272,9 @@ def main():
         template = tmpfile.read()
     azure = template.replace("%%VERSIONS%%", "\n".join(azure))
 
-
     with open("docker-images/azure-jobs.yml", "w") as azurefile:
         azurefile.write(azure)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     raise SystemExit(main())
