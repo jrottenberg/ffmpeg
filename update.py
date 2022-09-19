@@ -281,5 +281,5 @@ def main():
         azurefile.write(azure)
 
 
-if __name__ == "__main__":
-   exit (main())
+if __name__ == '__main__':
+    raise SystemExit(main())
