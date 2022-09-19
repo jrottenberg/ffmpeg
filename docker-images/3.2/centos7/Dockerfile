@@ -388,7 +388,7 @@ RUN \
         tar -zx -f ${AOM_VERSION}.tar.gz && \
         mkdir -p ./aom_build && \
         cd ./aom_build && \
-        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 .. && \
+        cmake .. -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 -DENABLE_NASM=on -DENABLE_TESTDATA=off -DENABLE_TESTS=off -DENABLE_TOOLS=off && \
         make  && \
         make install && \
         rm -rf ${DIR}
