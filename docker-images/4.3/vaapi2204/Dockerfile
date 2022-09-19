@@ -76,23 +76,23 @@ ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 RUN      buildDeps="autoconf \
                     automake \
+                    bzip2 \
                     cmake \
                     curl \
-                    bzip2 \
-                    libexpat1-dev \
                     g++ \
                     gcc \
                     git \
                     gperf \
+                    libexpat1-dev \
+                    libssl-dev \
                     libtool \
                     make \
                     nasm \
                     perl \
                     pkg-config \
                     python3 \
-                    libssl-dev \
+                    xcb-proto \
                     yasm \
-                    libva-dev \
                     zlib1g-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
