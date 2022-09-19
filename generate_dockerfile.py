@@ -145,8 +145,7 @@ def main():
         VARIANT: {variant['name']}
         PARENT: {variant['parent']}
         ISPARENT: {is_parent}
-"""
-            )
+""")
 
             azureci.append(
                 f"""
@@ -157,8 +156,7 @@ def main():
         VARIANT: {variant["name"]}
         PARENT: {variant["parent"]}
         ISPARENT: {is_parent}
-"""
-            )
+""")
 
             with open(TEMPLATE_STR.format(variant["name"]), "r") as tmpfile:
                 template = tmpfile.read()
