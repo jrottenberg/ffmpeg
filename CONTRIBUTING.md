@@ -24,7 +24,8 @@ Before you open a PR make the change locally and verify it passes pre-commit :
 
 
 ```sh
-pip install pre-commit
+# you'll need python3-packaging
+pip install pre-commit packaging
 pre-commit install # inside the local checkout
 pre-commit run -a # to force a run, but it will execute on commits
 ```
@@ -38,9 +39,9 @@ If you forget and don't have pre-commit configured, the pre-commit step will fai
 
 ```sh
 # Generates the Dockerfile for all variants
-./update.py
+./generate_dockerfile.py
 
-pre-commit run -a # recommanded
+pre-commit run -a # recommended
 
 # Test a specific variant
 docker build -t my-build docker-images/VERSION/

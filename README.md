@@ -5,7 +5,8 @@
 [![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?logo=docker)](https://hub.docker.com/r/jrottenberg/ffmpeg/tags)
 [![Github Container Registry Images](https://img.shields.io/badge/images-automated-blue?logo=github&style=plastic)](https://github.com/jrottenberg/ffmpeg/pkgs/container/ffmpeg)
 [![gitlab pipeline status](https://gitlab.com/jrottenberg/ffmpeg/badges/main/pipeline.svg)](https://gitlab.com/jrottenberg/ffmpeg/commits/main)
-[![Azure Build Status](https://dev.azure.com/video-tools/ffmpeg/_apis/build/status/jrottenberg.ffmpeg)](https://dev.azure.com/video-tools/ffmpeg/_build/latest?definitionId=1)
+[![Build Status](https://dev.azure.com/video-tools/ffmpeg/_apis/build/status/jrottenberg.ffmpeg?branchName=main)](https://dev.azure.com/video-tools/ffmpeg/_build/latest?definitionId=1&branchName=main)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
 
 This project prepares a minimalist Docker image with FFmpeg. It compiles FFmpeg from sources following instructions from the [Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide).
@@ -26,13 +27,13 @@ There are different builds available:
 
 `<version>` can be one of the following:
 - 3.2
-- 3.3
 - 3.4
-- 4.0
 - 4.1
 - 4.2
 - 4.3
 - 4.4
+- 5.0
+- 5.1
 
 Not all combinations are supported and older versions will fade out over time. See the table below for the currently supported combinations.
 
@@ -260,3 +261,19 @@ See Dockerfile-env to update a version
 ## Contribute
 
 See [the contributing guide](CONTRIBUTING.md)
+
+
+## Contributors
+
+Thanks to [all contributors](https://github.com/jrottenberg/ffmpeg/graphs/contributors)
+
+[![jrottenberg/ffmpeg's contributors](https://contrib.rocks/image?repo=jrottenberg/ffmpeg)](https://github.com/jrottenberg/ffmpeg/graphs/contributors)
+
+### GitHub Contributor Over Time
+[![GitHub Contributor Over Time](https://contributor-overtime-api.git-contributor.com/contributors-svg?chart=contributorOverTime&repo=jrottenberg/ffmpeg)](https://git-contributor.com?chart=contributorOverTime&repo=jrottenberg/ffmpeg)
+
+## Stargazers over time
+
+Thanks to our users starring the project
+
+[![Stargazers over time for jrottenberg/ffmpeg](https://starchart.cc/jrottenberg/ffmpeg.svg)](https://starchart.cc/jrottenberg/ffmpeg)

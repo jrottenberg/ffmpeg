@@ -16,7 +16,7 @@ FROM        base AS build
 WORKDIR     /tmp/workdir
 
 ENV         FFMPEG_VERSION=3.4.11 \
-    AOM_VERSION=v1.0.0 \
+    AOM_VERSION=v3.4.0 \
     CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
     FONTCONFIG_VERSION=2.12.4 \
@@ -24,15 +24,21 @@ ENV         FFMPEG_VERSION=3.4.11 \
     FRIBIDI_VERSION=0.19.7 \
     KVAZAAR_VERSION=2.0.0 \
     LAME_VERSION=3.100 \
+    LIBARIBB24_VERSION=1.0.3 \
     LIBASS_VERSION=0.13.7 \
+    LIBBLURAY_VERSION=1.1.2 \
+    LIBPNG_VERSION=1.6.9 \
     LIBPTHREAD_STUBS_VERSION=0.4 \
+    LIBSRT_VERSION=1.4.1 \
     LIBVIDSTAB_VERSION=1.1.0 \
-    LIBXCB_VERSION=1.13.1 \
-    XCBPROTO_VERSION=1.13 \
+    LIBVMAF_VERSION=2.1.1 \
+    LIBXCB_VERSION=1.15 \
+    LIBXML2_VERSION=2.9.12 \
+    LIBZMQ_VERSION=4.3.2 \
     OGG_VERSION=1.3.2 \
     OPENCOREAMR_VERSION=0.1.5 \
-    OPUS_VERSION=1.2 \
     OPENJPEG_VERSION=2.1.2 \
+    OPUS_VERSION=1.2 \
     THEORA_VERSION=1.1.1 \
     VORBIS_VERSION=1.3.5 \
     VPX_VERSION=1.8.0 \
@@ -40,16 +46,10 @@ ENV         FFMPEG_VERSION=3.4.11 \
     X264_VERSION=20170226-2245-stable \
     X265_VERSION=3.4 \
     XAU_VERSION=1.0.9 \
+    XCBPROTO_VERSION=1.15.1 \
     XORG_MACROS_VERSION=1.19.2 \
     XPROTO_VERSION=7.0.31 \
     XVID_VERSION=1.3.4 \
-    LIBXML2_VERSION=2.9.12 \
-    LIBBLURAY_VERSION=1.1.2 \
-    LIBZMQ_VERSION=4.3.2 \
-    LIBSRT_VERSION=1.4.1 \
-    LIBARIBB24_VERSION=1.0.3 \
-    LIBPNG_VERSION=1.6.9 \
-    LIBVMAF_VERSION=2.1.1 \
     SRC=/usr/local
 
 ARG         FREETYPE_SHA256SUM="5eab795ebb23ac77001cfb68b7d4d50b5d6c7469247b0b01b2c953269f658dac freetype-2.10.4.tar.gz"
@@ -382,17 +382,18 @@ RUN \
 
 RUN \
         DIR=/tmp/aom && \
-        git clone --branch ${AOM_VERSION} --depth 1 https://aomedia.googlesource.com/aom ${DIR} ; \
-        cd ${DIR} ; \
-        rm -rf CMakeCache.txt CMakeFiles ; \
-        mkdir -p ./aom_build ; \
-        cd ./aom_build ; \
-        cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 ..; \
-        make ; \
-        make install ; \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://aomedia.googlesource.com/aom/+archive/${AOM_VERSION}.tar.gz  && \
+        tar -zx -f ${AOM_VERSION}.tar.gz && \
+        mkdir -p ./aom_build && \
+        cd ./aom_build && \
+        cmake .. -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 -DENABLE_NASM=on -DENABLE_TESTDATA=off -DENABLE_TESTS=off -DENABLE_TOOLS=off && \
+        make  && \
+        make install && \
         rm -rf ${DIR}
 
-## libxcb (and supporting libraries) for screen capture https://xcb.freedesktop.org/
+## xorg-macros (and supporting libraries) for screen capture https://xcb.freedesktop.org/
 RUN \
         DIR=/tmp/xorg-macros && \
         mkdir -p ${DIR} && \
