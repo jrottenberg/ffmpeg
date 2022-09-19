@@ -39,10 +39,8 @@ repos: # pre-commit autoupdate
       - id: black
         language_version: python3
 
-  - repo: local
+  - repo: https://github.com/jrottenberg/ffmpeg
+    rev: libaom-3.4.0
     hooks:
-      - id: update
-        name: Generate Dockerfiles
-        entry: ./update.py
-        language: python
-        pass_filenames: false
+      - id: generate_dockerfile
+        language_version: python3

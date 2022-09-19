@@ -1,0 +1,6 @@
+- id: generate_dockerfile
+  name: Generate Dockerfile
+  entry: generate_dockerfile
+  language: python
+  require_serial: true
+  always_run: true
