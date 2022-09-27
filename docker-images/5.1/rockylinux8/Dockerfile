@@ -15,7 +15,7 @@ FROM        base AS build
 
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=4.0.6 \
+ENV         FFMPEG_VERSION=5.1.2 \
     AOM_VERSION=v1.0.0 \
     CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
@@ -527,10 +527,10 @@ RUN  \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
-        --enable-avresample \
         --enable-fontconfig \
         --enable-gpl \
         --enable-libaom \
+        --enable-libaribb24 \
         --enable-libass \
         --enable-libbluray \
         --enable-libfdk_aac \
