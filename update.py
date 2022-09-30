@@ -28,6 +28,7 @@ VARIANTS = [
     {"name": "vaapi1804", "parent": "vaapi"},
     {"name": "vaapi2004", "parent": "vaapi"},
     {"name": "nvidia2004", "parent": "nvidia"},
+    {"name": "rockylinux8", "parent": "rockylinux"},
 ]
 FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
 

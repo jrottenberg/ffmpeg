@@ -1,19 +1,21 @@
 # ffmpeg - http://ffmpeg.org/download.html
 #
+# From https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
+#
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
+FROM    rockylinux/rockylinux:8 AS base
 
-FROM        alpine:3.13 AS base
-
-RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.1 libssl1.1 libgomp expat git
+RUN     dnf -y install libgomp && \
+        dnf clean all;
 
 
 FROM        base AS build
 
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=5.1.2 \
+ENV         FFMPEG_VERSION=4.0.6 \
     AOM_VERSION=v1.0.0 \
     CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
@@ -73,28 +75,31 @@ ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 RUN     buildDeps="autoconf \
                    automake \
-                   bash \
-                   binutils \
                    bzip2 \
                    cmake \
-                   coreutils \
-                   curl \
                    diffutils \
-                   expat-dev \
-                   file \
-                   g++ \
+                   expat-devel \
                    gcc \
+                   gcc-c++ \
+                   git \
                    gperf \
                    libtool \
                    make \
                    nasm \
-                   openssl-dev \
+                   perl \
                    python3 \
+                   openssl-devel \
                    tar \
-                   xcb-proto \
                    yasm \
-                   zlib-dev" && \
-        apk add --no-cache --update ${buildDeps}
+                   which \
+                   zlib-devel" && \
+        echo "${SRC}/lib" > /etc/ld.so.conf.d/libc.conf && \
+        dnf --enablerepo=extras install -y epel-release && \
+        dnf update -y && \
+        dnf -y install dnf-plugins-core && \
+        yum config-manager --set-enabled powertools && \
+        dnf install -y ${buildDeps} && \
+        alternatives --set python /usr/bin/python3
 ## libvmaf https://github.com/Netflix/vmaf
 RUN \
         if which meson || false; then \
@@ -522,10 +527,10 @@ RUN  \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
+        --enable-avresample \
         --enable-fontconfig \
         --enable-gpl \
         --enable-libaom \
-        --enable-libaribb24 \
         --enable-libass \
         --enable-libbluray \
         --enable-libfdk_aac \
@@ -567,31 +572,28 @@ RUN  \
         cd tools && \
         make qt-faststart && cp qt-faststart ${PREFIX}/bin/
 
-
 RUN \
-    ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
-    for lib in /usr/local/lib/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
-    cp ${PREFIX}/bin/* /usr/local/bin/ && \
-    cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-    mkdir -p /usr/local/include && \
-    cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-    mkdir -p /usr/local/lib/pkgconfig && \
-    for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-        sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
-    done
+        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib64/ && \
+        for lib in /usr/local/lib64/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
+        cp ${PREFIX}/bin/* /usr/local/bin/ && \
+        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+        LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib ffmpeg -buildconf && \
+        cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
+        mkdir -p /usr/local/lib64/pkgconfig && \
+        for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
+          sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib64/pkgconfig/"${pc##*/}"; \
+        done
 
-### Release Stage
-FROM        base AS release
+FROM        base
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
-ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
+ENV         LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
-COPY --from=build /usr/local /usr/local
+COPY --from=build /usr/local/ /usr/local/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
