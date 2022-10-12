@@ -368,82 +368,82 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu1804_4.2.7:
+      ubuntu1804_4.2.8:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.7
+        LONG_VERSION: 4.2.8
         VARIANT:  ubuntu1804
         PARENT: ubuntu
         ISPARENT:  False
 
 
-      ubuntu2004_4.2.7:
+      ubuntu2004_4.2.8:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.7
+        LONG_VERSION: 4.2.8
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_4.2.7:
+      alpine313_4.2.8:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.7
+        LONG_VERSION: 4.2.8
         VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
 
-      centos7_4.2.7:
+      centos7_4.2.8:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.7
+        LONG_VERSION: 4.2.8
         VARIANT:  centos7
         PARENT: centos
         ISPARENT:  False
 
 
-      centos8_4.2.7:
+      centos8_4.2.8:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.7
+        LONG_VERSION: 4.2.8
         VARIANT:  centos8
         PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_4.2.7:
+      scratch313_4.2.8:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.7
+        LONG_VERSION: 4.2.8
         VARIANT:  scratch313
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi2004_4.2.7:
+      vaapi2004_4.2.8:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.7
+        LONG_VERSION: 4.2.8
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.2.7:
+      nvidia2004_4.2.8:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.7
+        LONG_VERSION: 4.2.8
         VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
 
-      rockylinux8_4.2.7:
+      rockylinux8_4.2.8:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.7
+        LONG_VERSION: 4.2.8
         VARIANT:  rockylinux8
         PARENT: rockylinux
         ISPARENT:  True
