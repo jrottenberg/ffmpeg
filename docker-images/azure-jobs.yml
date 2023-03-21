@@ -8,6 +8,96 @@ jobs:
     maxParallel: 10
     matrix:
 
+      ubuntu1804_6.0:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0
+        VARIANT:  ubuntu1804
+        PARENT: ubuntu
+        ISPARENT:  False
+
+
+      ubuntu2004_6.0:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0
+        VARIANT:  ubuntu2004
+        PARENT: ubuntu
+        ISPARENT:  True
+
+
+      alpine313_6.0:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0
+        VARIANT:  alpine313
+        PARENT: alpine
+        ISPARENT:  True
+
+
+      centos7_6.0:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0
+        VARIANT:  centos7
+        PARENT: centos
+        ISPARENT:  False
+
+
+      centos8_6.0:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0
+        VARIANT:  centos8
+        PARENT: centos
+        ISPARENT:  True
+
+
+      scratch313_6.0:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0
+        VARIANT:  scratch313
+        PARENT: scratch
+        ISPARENT:  True
+
+
+      vaapi1804_6.0:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0
+        VARIANT:  vaapi1804
+        PARENT: vaapi
+        ISPARENT:  False
+
+
+      vaapi2004_6.0:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0
+        VARIANT:  vaapi2004
+        PARENT: vaapi
+        ISPARENT:  True
+
+
+      nvidia2004_6.0:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0
+        VARIANT:  nvidia2004
+        PARENT: nvidia
+        ISPARENT:  True
+
+
+      rockylinux8_6.0:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0
+        VARIANT:  rockylinux8
+        PARENT: rockylinux
+        ISPARENT:  True
+
+
       ubuntu1804_5.1.2:
         MAJOR_VERSION: 5
         VERSION:  5.1
