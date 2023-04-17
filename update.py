@@ -37,6 +37,7 @@ gitlabci = ["stages:\n  - lint\n"]
 azure = []
 
 
+shutil.rmtree("docker-images")
 for parent in all_parents:
     gitlabci.append(f"  - {parent}\n")
 
