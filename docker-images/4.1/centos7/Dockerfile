@@ -15,7 +15,7 @@ FROM        base AS build
 
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=4.1.10 \
+ENV         FFMPEG_VERSION=4.1.11 \
     AOM_VERSION=v1.0.0 \
     CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
@@ -33,12 +33,12 @@ ENV         FFMPEG_VERSION=4.1.10 \
     OPENCOREAMR_VERSION=0.1.5 \
     OPUS_VERSION=1.2 \
     OPENJPEG_VERSION=2.1.2 \
-    THEORA_VERSION=1.1.1 \
+    THEORA_VERSION=master \
     VORBIS_VERSION=1.3.5 \
     VPX_VERSION=1.8.0 \
     WEBP_VERSION=1.0.2 \
     X264_VERSION=20170226-2245-stable \
-    X265_VERSION=3.4 \
+    X265_VERSION=343ac2692c77 \
     XAU_VERSION=1.0.9 \
     XORG_MACROS_VERSION=1.19.2 \
     XPROTO_VERSION=7.0.31 \
@@ -58,7 +58,6 @@ ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a4788
 ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb v1.1.0.tar.gz"
 ARG         OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692 libogg-1.3.2.tar.gz"
 ARG         OPUS_SHA256SUM="77db45a87b51578fbc49555ef1b10926179861d854eb2613207dc79d9ec0a9a9 opus-1.2.tar.gz"
-ARG         THEORA_SHA256SUM="40952956c47811928d1e7922cda3bc1f427eb75680c3c37249c91e949054916b libtheora-1.1.1.tar.gz"
 ARG         VORBIS_SHA256SUM="6efbcecdd3e5dfbf090341b485da9d176eb250d893e3eb378c428a2db38301ce libvorbis-1.3.5.tar.gz"
 ARG         XVID_SHA256SUM="4e9fd62728885855bc5007fe1be58df42e5e274497591fec37249e1052ae316f xvidcore-1.3.4.tar.gz"
 ARG         LIBBLURAY_SHA256SUM="a3dd452239b100dc9da0d01b30e1692693e2a332a7d29917bf84bb10ea7c0b42 libbluray-1.1.2.tar.bz2"
@@ -131,6 +130,22 @@ RUN     buildDeps="autoconf \
         yum history undo $(yum history info | grep 'Transaction ID' | awk -F: '{print$2}' | tr -d ' ') -y && \
         yum autoremove -y
 
+COPY <<EOF /tmp/openjpeg_arm.patch
+--- CMakeLists.txt     2023-09-11 14:49:14.677161012 -0600
++++ CMakeLists.txt     2023-09-11 14:50:35.269952008 -0600
+@@ -26,6 +26,10 @@
+
+ project(${OPENJPEG_NAMESPACE} C)
+
++if(CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" OR CMAKE_SYSTEM_PROCESSOR MATCHES "^aarch64")
++  add_definitions(-DPNG_ARM_NEON_OPT=0)
++endif()
++
+ # Do full dependency headers.
+ include_regular_expression("^.*$")
+
+EOF
+
 ## libvmaf https://github.com/Netflix/vmaf
 RUN \
         if which meson || false; then \
@@ -178,9 +193,9 @@ RUN \
         DIR=/tmp/x265 && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://github.com/videolan/x265/archive/refs/tags/${X265_VERSION}.tar.gz | \
-        tar -zx && \
-        cd x265-${X265_VERSION}/build/linux && \
+        curl -sLO https://bitbucket.org/multicoreware/x265_git/get/${X265_VERSION}.zip && \
+        unzip ${X265_VERSION}.zip && \
+        cd multicoreware-x265_git-${X265_VERSION}/build/linux && \
         sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
         sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh && \
         ./multilib.sh && \
@@ -228,9 +243,9 @@ RUN \
         DIR=/tmp/theora && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
-        echo ${THEORA_SHA256SUM} | sha256sum --check && \
-        tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
+        curl -sL https://gitlab.xiph.org/xiph/theora/-/archive/master/libtheora-${THEORA_VERSION}.tar.gz | \
+        tar -zx --strip-components=1 && \
+        autoreconf -vif && \
         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
         make && \
         make install && \
@@ -301,6 +316,7 @@ RUN \
         cd ${DIR} && \
         curl -sL https://github.com/uclouvain/openjpeg/archive/v${OPENJPEG_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
+        patch -p0 < /tmp/openjpeg_arm.patch && \
         cmake -DBUILD_THIRDPARTY:BOOL=ON -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
         make && \
         make install && \
@@ -410,6 +426,7 @@ RUN \
         cd ${DIR} && \
         curl -sLO https://www.x.org/archive/individual/proto/xproto-${XPROTO_VERSION}.tar.gz && \
         tar -zx --strip-components=1 -f xproto-${XPROTO_VERSION}.tar.gz && \
+        autoreconf -vif && \
         ./configure --srcdir=${DIR} --prefix="${PREFIX}" && \
         make && \
         make install && \

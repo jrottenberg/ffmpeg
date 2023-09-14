@@ -35,6 +35,8 @@ RUN      buildDeps="autoconf \
                     pkg-config \
                     python \
                     libssl-dev \
+                    unzip \
+                    xutils-dev \
                     yasm \
                     zlib1g-dev" && \
         apt-get -yqq update && \
