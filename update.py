@@ -1,23 +1,34 @@
 #!/usr/bin/env python3
 
 
+import json
 import os
-import re
 import shutil
-from distutils.version import StrictVersion
 from urllib import request
 
-MIN_VERSION = "2.7"
+FFMPEG_RELEASES = "https://endoflife.date/api/ffmpeg.json"
+
 with open("templates/Dockerfile-env", "r") as tmpfile:
     ENV_CONTENT = tmpfile.read()
 with open("templates/Dockerfile-run", "r") as tmpfile:
     RUN_CONTENT = tmpfile.read()
+
 DIR_FORMAT_STR = "docker-images/{0}/{1}"
 IMAGE_FORMAT_STR = "{0}/Dockerfile".format(DIR_FORMAT_STR)
 TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 
 # https://ffmpeg.org/olddownload.html
-SKIP_VERSIONS = "3.1.11 3.0.12 snapshot"
+# https://endoflife.date/ffmpeg
+
+with request.urlopen(FFMPEG_RELEASES) as conn:
+    ffmpeg_releases = conn.read().decode("utf-8")
+keep_version = []
+
+for v in json.loads(ffmpeg_releases):
+    if not v["eol"]:
+        keep_version.append(v["latest"])
+
+
 VARIANTS = [
     {"name": "ubuntu1804", "parent": "ubuntu"},
     {"name": "ubuntu2004", "parent": "ubuntu"},
@@ -30,27 +41,15 @@ VARIANTS = [
     {"name": "nvidia2004", "parent": "nvidia"},
     {"name": "rockylinux8", "parent": "rockylinux"},
 ]
-FFMPEG_RELEASES = "https://ffmpeg.org/releases/"
 
 
 all_parents = sorted(set([sub["parent"] for sub in VARIANTS]))
 gitlabci = ["stages:\n  - lint\n"]
 azure = []
 
-
 for parent in all_parents:
     gitlabci.append(f"  - {parent}\n")
 
-
-# Get latest release from ffmpeg.org
-with request.urlopen(FFMPEG_RELEASES) as conn:
-    ffmpeg_releases = conn.read().decode("utf-8")
-
-parse_re = re.compile(r"ffmpeg-([.0-9]+).tar.bz2.asc</a>\s+")
-all_versions = parse_re.findall(ffmpeg_releases)
-all_versions.sort(key=StrictVersion, reverse=True)
-
-version, all_versions = all_versions[0], all_versions[1:]
 
 SKIP_VARIANTS = {
     "3.2": [
@@ -67,11 +66,6 @@ SKIP_VARIANTS = {
     "4.1": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
     "4.2": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
 }
-
-last = version.split(".")
-keep_version = []
-
-keep_version.append(version)
 
 
 def get_shorten_version(version):
@@ -90,22 +84,6 @@ def get_major_version(version):
         return f"{major}"
 
 
-for cur in all_versions:
-    if cur < MIN_VERSION:
-        break
-
-    if cur in SKIP_VERSIONS:
-        break
-    tmp = cur.split(".")
-    # Check Minor
-    if len(tmp) >= 2 and tmp[1].isdigit() and tmp[1] < last[1]:
-        keep_version.append(cur)
-        last = tmp
-    # Check Major
-    elif len(tmp) > 1 and tmp[0].isdigit() and tmp[0] < last[0]:
-        keep_version.append(cur)
-        last = tmp
-
 print("Preparing docker images for ffmpeg versions: ")
 
 for version in keep_version:
@@ -120,6 +98,7 @@ for version in keep_version:
     short_version = get_shorten_version(version)
     major_version = get_major_version(version)
     ver_path = os.path.join("docker-images", short_version)
+    os.makedirs(ver_path, exist_ok=True)
     for existing_variant in os.listdir(ver_path):
         if existing_variant not in compatible_variants:
             shutil.rmtree(DIR_FORMAT_STR.format(short_version, existing_variant))
