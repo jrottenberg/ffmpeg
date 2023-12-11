@@ -26,11 +26,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_6.1:
+      alpine319_6.1:
         MAJOR_VERSION: 6
         VERSION:  6.1
         LONG_VERSION: 6.1
-        VARIANT:  alpine313
+        VARIANT:  alpine319
         PARENT: alpine
         ISPARENT:  True
 
@@ -41,23 +41,14 @@ jobs:
         LONG_VERSION: 6.1
         VARIANT:  centos7
         PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_6.1:
-        MAJOR_VERSION: 6
-        VERSION:  6.1
-        LONG_VERSION: 6.1
-        VARIANT:  centos8
-        PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_6.1:
+      scratch_6.1:
         MAJOR_VERSION: 6
         VERSION:  6.1
         LONG_VERSION: 6.1
-        VARIANT:  scratch313
+        VARIANT:  scratch
         PARENT: scratch
         ISPARENT:  True
 
@@ -116,11 +107,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_6.0.1:
+      alpine319_6.0.1:
         MAJOR_VERSION: 6
         VERSION:  6.0
         LONG_VERSION: 6.0.1
-        VARIANT:  alpine313
+        VARIANT:  alpine319
         PARENT: alpine
         ISPARENT:  True
 
@@ -131,23 +122,14 @@ jobs:
         LONG_VERSION: 6.0.1
         VARIANT:  centos7
         PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_6.0.1:
-        MAJOR_VERSION: 6
-        VERSION:  6.0
-        LONG_VERSION: 6.0.1
-        VARIANT:  centos8
-        PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_6.0.1:
+      scratch_6.0.1:
         MAJOR_VERSION: 6
         VERSION:  6.0
         LONG_VERSION: 6.0.1
-        VARIANT:  scratch313
+        VARIANT:  scratch
         PARENT: scratch
         ISPARENT:  True
 
@@ -206,11 +188,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_5.1.4:
+      alpine319_5.1.4:
         MAJOR_VERSION: 5
         VERSION:  5.1
         LONG_VERSION: 5.1.4
-        VARIANT:  alpine313
+        VARIANT:  alpine319
         PARENT: alpine
         ISPARENT:  True
 
@@ -221,23 +203,14 @@ jobs:
         LONG_VERSION: 5.1.4
         VARIANT:  centos7
         PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_5.1.4:
-        MAJOR_VERSION: 5
-        VERSION:  5.1
-        LONG_VERSION: 5.1.4
-        VARIANT:  centos8
-        PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_5.1.4:
+      scratch_5.1.4:
         MAJOR_VERSION: 5
         VERSION:  5.1
         LONG_VERSION: 5.1.4
-        VARIANT:  scratch313
+        VARIANT:  scratch
         PARENT: scratch
         ISPARENT:  True
 
@@ -296,11 +269,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_4.4.4:
+      alpine319_4.4.4:
         MAJOR_VERSION: 4
         VERSION:  4.4
         LONG_VERSION: 4.4.4
-        VARIANT:  alpine313
+        VARIANT:  alpine319
         PARENT: alpine
         ISPARENT:  True
 
@@ -311,23 +284,14 @@ jobs:
         LONG_VERSION: 4.4.4
         VARIANT:  centos7
         PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_4.4.4:
-        MAJOR_VERSION: 4
-        VERSION:  4.4
-        LONG_VERSION: 4.4.4
-        VARIANT:  centos8
-        PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_4.4.4:
+      scratch_4.4.4:
         MAJOR_VERSION: 4
         VERSION:  4.4
         LONG_VERSION: 4.4.4
-        VARIANT:  scratch313
+        VARIANT:  scratch
         PARENT: scratch
         ISPARENT:  True
 
@@ -386,11 +350,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_4.3.6:
+      alpine319_4.3.6:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.6
-        VARIANT:  alpine313
+        VARIANT:  alpine319
         PARENT: alpine
         ISPARENT:  True
 
@@ -401,23 +365,14 @@ jobs:
         LONG_VERSION: 4.3.6
         VARIANT:  centos7
         PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_4.3.6:
-        MAJOR_VERSION: 4
-        VERSION:  4.3
-        LONG_VERSION: 4.3.6
-        VARIANT:  centos8
-        PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_4.3.6:
+      scratch_4.3.6:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.6
-        VARIANT:  scratch313
+        VARIANT:  scratch
         PARENT: scratch
         ISPARENT:  True
 
@@ -476,11 +431,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_4.2.9:
+      alpine319_4.2.9:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.9
-        VARIANT:  alpine313
+        VARIANT:  alpine319
         PARENT: alpine
         ISPARENT:  True
 
@@ -491,23 +446,14 @@ jobs:
         LONG_VERSION: 4.2.9
         VARIANT:  centos7
         PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_4.2.9:
-        MAJOR_VERSION: 4
-        VERSION:  4.2
-        LONG_VERSION: 4.2.9
-        VARIANT:  centos8
-        PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_4.2.9:
+      scratch_4.2.9:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.9
-        VARIANT:  scratch313
+        VARIANT:  scratch
         PARENT: scratch
         ISPARENT:  True
 
@@ -557,11 +503,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_4.1.11:
+      alpine319_4.1.11:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.11
-        VARIANT:  alpine313
+        VARIANT:  alpine319
         PARENT: alpine
         ISPARENT:  True
 
@@ -572,23 +518,14 @@ jobs:
         LONG_VERSION: 4.1.11
         VARIANT:  centos7
         PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_4.1.11:
-        MAJOR_VERSION: 4
-        VERSION:  4.1
-        LONG_VERSION: 4.1.11
-        VARIANT:  centos8
-        PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_4.1.11:
+      scratch_4.1.11:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.11
-        VARIANT:  scratch313
+        VARIANT:  scratch
         PARENT: scratch
         ISPARENT:  True
 
@@ -638,11 +575,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_3.4.13:
+      alpine319_3.4.13:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.13
-        VARIANT:  alpine313
+        VARIANT:  alpine319
         PARENT: alpine
         ISPARENT:  True
 
@@ -653,23 +590,14 @@ jobs:
         LONG_VERSION: 3.4.13
         VARIANT:  centos7
         PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_3.4.13:
-        MAJOR_VERSION: 3
-        VERSION:  3.4
-        LONG_VERSION: 3.4.13
-        VARIANT:  centos8
-        PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_3.4.13:
+      scratch_3.4.13:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.13
-        VARIANT:  scratch313
+        VARIANT:  scratch
         PARENT: scratch
         ISPARENT:  True
 
@@ -719,11 +647,11 @@ jobs:
         ISPARENT:  True
 
 
-      alpine313_2.8.22:
+      alpine319_2.8.22:
         MAJOR_VERSION: 2
         VERSION:  2.8
         LONG_VERSION: 2.8.22
-        VARIANT:  alpine313
+        VARIANT:  alpine319
         PARENT: alpine
         ISPARENT:  True
 
@@ -734,23 +662,14 @@ jobs:
         LONG_VERSION: 2.8.22
         VARIANT:  centos7
         PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_2.8.22:
-        MAJOR_VERSION: 2
-        VERSION:  2.8
-        LONG_VERSION: 2.8.22
-        VARIANT:  centos8
-        PARENT: centos
         ISPARENT:  True
 
 
-      scratch313_2.8.22:
+      scratch_2.8.22:
         MAJOR_VERSION: 2
         VERSION:  2.8
         LONG_VERSION: 2.8.22
-        VARIANT:  scratch313
+        VARIANT:  scratch
         PARENT: scratch
         ISPARENT:  True
 

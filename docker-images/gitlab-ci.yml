@@ -30,14 +30,14 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-6.1-alpine313:
+6.1-alpine319:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.1"
     LONG_VERSION: "6.1"
-    VARIANT: alpine313
+    VARIANT: alpine319
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -50,27 +50,16 @@ stages:
     LONG_VERSION: "6.1"
     VARIANT: centos7
     PARENT: "centos"
-    ISPARENT: "False"
-
-6.1-centos8:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 6
-    VERSION: "6.1"
-    LONG_VERSION: "6.1"
-    VARIANT: centos8
-    PARENT: "centos"
     ISPARENT: "True"
 
-6.1-scratch313:
+6.1-scratch:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.1"
     LONG_VERSION: "6.1"
-    VARIANT: scratch313
+    VARIANT: scratch
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -140,14 +129,14 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-6.0.1-alpine313:
+6.0.1-alpine319:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.0"
     LONG_VERSION: "6.0.1"
-    VARIANT: alpine313
+    VARIANT: alpine319
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -160,27 +149,16 @@ stages:
     LONG_VERSION: "6.0.1"
     VARIANT: centos7
     PARENT: "centos"
-    ISPARENT: "False"
-
-6.0.1-centos8:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 6
-    VERSION: "6.0"
-    LONG_VERSION: "6.0.1"
-    VARIANT: centos8
-    PARENT: "centos"
     ISPARENT: "True"
 
-6.0.1-scratch313:
+6.0.1-scratch:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.0"
     LONG_VERSION: "6.0.1"
-    VARIANT: scratch313
+    VARIANT: scratch
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -250,14 +228,14 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-5.1.4-alpine313:
+5.1.4-alpine319:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.1"
     LONG_VERSION: "5.1.4"
-    VARIANT: alpine313
+    VARIANT: alpine319
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -270,27 +248,16 @@ stages:
     LONG_VERSION: "5.1.4"
     VARIANT: centos7
     PARENT: "centos"
-    ISPARENT: "False"
-
-5.1.4-centos8:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 5
-    VERSION: "5.1"
-    LONG_VERSION: "5.1.4"
-    VARIANT: centos8
-    PARENT: "centos"
     ISPARENT: "True"
 
-5.1.4-scratch313:
+5.1.4-scratch:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.1"
     LONG_VERSION: "5.1.4"
-    VARIANT: scratch313
+    VARIANT: scratch
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -360,14 +327,14 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.4.4-alpine313:
+4.4.4-alpine319:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
     LONG_VERSION: "4.4.4"
-    VARIANT: alpine313
+    VARIANT: alpine319
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -380,27 +347,16 @@ stages:
     LONG_VERSION: "4.4.4"
     VARIANT: centos7
     PARENT: "centos"
-    ISPARENT: "False"
-
-4.4.4-centos8:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.4"
-    LONG_VERSION: "4.4.4"
-    VARIANT: centos8
-    PARENT: "centos"
     ISPARENT: "True"
 
-4.4.4-scratch313:
+4.4.4-scratch:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
     LONG_VERSION: "4.4.4"
-    VARIANT: scratch313
+    VARIANT: scratch
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -470,14 +426,14 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.3.6-alpine313:
+4.3.6-alpine319:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.6"
-    VARIANT: alpine313
+    VARIANT: alpine319
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -490,27 +446,16 @@ stages:
     LONG_VERSION: "4.3.6"
     VARIANT: centos7
     PARENT: "centos"
-    ISPARENT: "False"
-
-4.3.6-centos8:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.3"
-    LONG_VERSION: "4.3.6"
-    VARIANT: centos8
-    PARENT: "centos"
     ISPARENT: "True"
 
-4.3.6-scratch313:
+4.3.6-scratch:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.6"
-    VARIANT: scratch313
+    VARIANT: scratch
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -580,14 +525,14 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.2.9-alpine313:
+4.2.9-alpine319:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.9"
-    VARIANT: alpine313
+    VARIANT: alpine319
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -600,27 +545,16 @@ stages:
     LONG_VERSION: "4.2.9"
     VARIANT: centos7
     PARENT: "centos"
-    ISPARENT: "False"
-
-4.2.9-centos8:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.2"
-    LONG_VERSION: "4.2.9"
-    VARIANT: centos8
-    PARENT: "centos"
     ISPARENT: "True"
 
-4.2.9-scratch313:
+4.2.9-scratch:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.9"
-    VARIANT: scratch313
+    VARIANT: scratch
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -679,14 +613,14 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.1.11-alpine313:
+4.1.11-alpine319:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.11"
-    VARIANT: alpine313
+    VARIANT: alpine319
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -699,27 +633,16 @@ stages:
     LONG_VERSION: "4.1.11"
     VARIANT: centos7
     PARENT: "centos"
-    ISPARENT: "False"
-
-4.1.11-centos8:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.1"
-    LONG_VERSION: "4.1.11"
-    VARIANT: centos8
-    PARENT: "centos"
     ISPARENT: "True"
 
-4.1.11-scratch313:
+4.1.11-scratch:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.11"
-    VARIANT: scratch313
+    VARIANT: scratch
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -778,14 +701,14 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-3.4.13-alpine313:
+3.4.13-alpine319:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.13"
-    VARIANT: alpine313
+    VARIANT: alpine319
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -798,27 +721,16 @@ stages:
     LONG_VERSION: "3.4.13"
     VARIANT: centos7
     PARENT: "centos"
-    ISPARENT: "False"
-
-3.4.13-centos8:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 3
-    VERSION: "3.4"
-    LONG_VERSION: "3.4.13"
-    VARIANT: centos8
-    PARENT: "centos"
     ISPARENT: "True"
 
-3.4.13-scratch313:
+3.4.13-scratch:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.13"
-    VARIANT: scratch313
+    VARIANT: scratch
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -877,14 +789,14 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-2.8.22-alpine313:
+2.8.22-alpine319:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 2
     VERSION: "2.8"
     LONG_VERSION: "2.8.22"
-    VARIANT: alpine313
+    VARIANT: alpine319
     PARENT: "alpine"
     ISPARENT: "True"
 
@@ -897,27 +809,16 @@ stages:
     LONG_VERSION: "2.8.22"
     VARIANT: centos7
     PARENT: "centos"
-    ISPARENT: "False"
-
-2.8.22-centos8:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 2
-    VERSION: "2.8"
-    LONG_VERSION: "2.8.22"
-    VARIANT: centos8
-    PARENT: "centos"
     ISPARENT: "True"
 
-2.8.22-scratch313:
+2.8.22-scratch:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 2
     VERSION: "2.8"
     LONG_VERSION: "2.8.22"
-    VARIANT: scratch313
+    VARIANT: scratch
     PARENT: "scratch"
     ISPARENT: "True"
 
