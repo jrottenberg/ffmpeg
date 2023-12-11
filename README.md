@@ -260,3 +260,9 @@ See Dockerfile-env to update a version
 ## Contribute
 
 See [the contributing guide](CONTRIBUTING.md)
+
+
+
+## Legal
+
+Those docker images use code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the <a href=http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>LGPLv2.1</a> and their source can be downloaded on <a href=https://github.com/jrottenberg/ffmpeg>github.com/jrottenberg/ffmpeg</a>.
