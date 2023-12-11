@@ -6,7 +6,7 @@
 
 FROM        alpine:3.19 AS base
 
-RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.1 libssl1.1 libgomp expat git
+RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto3 libssl3 libgomp expat git
 
 
 FROM        base AS build
