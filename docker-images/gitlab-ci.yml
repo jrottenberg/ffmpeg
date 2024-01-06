@@ -1,122 +1,65 @@
 stages:
   - lint
   - alpine
-  - centos
   - nvidia
-  - rockylinux
   - scratch
   - ubuntu
   - vaapi
 
-6.1-ubuntu1804:
+6.1.1-ubuntu2004:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.1"
-    LONG_VERSION: "6.1"
-    VARIANT: ubuntu1804
-    PARENT: "ubuntu"
-    ISPARENT: "False"
-
-6.1-ubuntu2004:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 6
-    VERSION: "6.1"
-    LONG_VERSION: "6.1"
+    LONG_VERSION: "6.1.1"
     VARIANT: ubuntu2004
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-6.1-alpine319:
+6.1.1-alpine313:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.1"
-    LONG_VERSION: "6.1"
-    VARIANT: alpine319
+    LONG_VERSION: "6.1.1"
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
-6.1-centos7:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 6
-    VERSION: "6.1"
-    LONG_VERSION: "6.1"
-    VARIANT: centos7
-    PARENT: "centos"
-    ISPARENT: "True"
-
-6.1-scratch:
+6.1.1-scratch313:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.1"
-    LONG_VERSION: "6.1"
-    VARIANT: scratch
+    LONG_VERSION: "6.1.1"
+    VARIANT: scratch313
     PARENT: "scratch"
     ISPARENT: "True"
 
-6.1-vaapi1804:
+6.1.1-vaapi2004:
   extends: .docker
   stage: vaapi
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.1"
-    LONG_VERSION: "6.1"
-    VARIANT: vaapi1804
-    PARENT: "vaapi"
-    ISPARENT: "False"
-
-6.1-vaapi2004:
-  extends: .docker
-  stage: vaapi
-  variables:
-    MAJOR_VERSION: 6
-    VERSION: "6.1"
-    LONG_VERSION: "6.1"
+    LONG_VERSION: "6.1.1"
     VARIANT: vaapi2004
     PARENT: "vaapi"
     ISPARENT: "True"
 
-6.1-nvidia2004:
+6.1.1-nvidia2004:
   extends: .docker
   stage: nvidia
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.1"
-    LONG_VERSION: "6.1"
+    LONG_VERSION: "6.1.1"
     VARIANT: nvidia2004
     PARENT: "nvidia"
     ISPARENT: "True"
-
-6.1-rockylinux8:
-  extends: .docker
-  stage: rockylinux
-  variables:
-    MAJOR_VERSION: 6
-    VERSION: "6.1"
-    LONG_VERSION: "6.1"
-    VARIANT: rockylinux8
-    PARENT: "rockylinux"
-    ISPARENT: "True"
-
-6.0.1-ubuntu1804:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 6
-    VERSION: "6.0"
-    LONG_VERSION: "6.0.1"
-    VARIANT: ubuntu1804
-    PARENT: "ubuntu"
-    ISPARENT: "False"
 
 6.0.1-ubuntu2004:
   extends: .docker
@@ -129,49 +72,27 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-6.0.1-alpine319:
+6.0.1-alpine313:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.0"
     LONG_VERSION: "6.0.1"
-    VARIANT: alpine319
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
-6.0.1-centos7:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 6
-    VERSION: "6.0"
-    LONG_VERSION: "6.0.1"
-    VARIANT: centos7
-    PARENT: "centos"
-    ISPARENT: "True"
-
-6.0.1-scratch:
+6.0.1-scratch313:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.0"
     LONG_VERSION: "6.0.1"
-    VARIANT: scratch
+    VARIANT: scratch313
     PARENT: "scratch"
     ISPARENT: "True"
-
-6.0.1-vaapi1804:
-  extends: .docker
-  stage: vaapi
-  variables:
-    MAJOR_VERSION: 6
-    VERSION: "6.0"
-    LONG_VERSION: "6.0.1"
-    VARIANT: vaapi1804
-    PARENT: "vaapi"
-    ISPARENT: "False"
 
 6.0.1-vaapi2004:
   extends: .docker
@@ -195,28 +116,6 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-6.0.1-rockylinux8:
-  extends: .docker
-  stage: rockylinux
-  variables:
-    MAJOR_VERSION: 6
-    VERSION: "6.0"
-    LONG_VERSION: "6.0.1"
-    VARIANT: rockylinux8
-    PARENT: "rockylinux"
-    ISPARENT: "True"
-
-5.1.4-ubuntu1804:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 5
-    VERSION: "5.1"
-    LONG_VERSION: "5.1.4"
-    VARIANT: ubuntu1804
-    PARENT: "ubuntu"
-    ISPARENT: "False"
-
 5.1.4-ubuntu2004:
   extends: .docker
   stage: ubuntu
@@ -228,49 +127,27 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-5.1.4-alpine319:
+5.1.4-alpine313:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.1"
     LONG_VERSION: "5.1.4"
-    VARIANT: alpine319
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
-5.1.4-centos7:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 5
-    VERSION: "5.1"
-    LONG_VERSION: "5.1.4"
-    VARIANT: centos7
-    PARENT: "centos"
-    ISPARENT: "True"
-
-5.1.4-scratch:
+5.1.4-scratch313:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.1"
     LONG_VERSION: "5.1.4"
-    VARIANT: scratch
+    VARIANT: scratch313
     PARENT: "scratch"
     ISPARENT: "True"
-
-5.1.4-vaapi1804:
-  extends: .docker
-  stage: vaapi
-  variables:
-    MAJOR_VERSION: 5
-    VERSION: "5.1"
-    LONG_VERSION: "5.1.4"
-    VARIANT: vaapi1804
-    PARENT: "vaapi"
-    ISPARENT: "False"
 
 5.1.4-vaapi2004:
   extends: .docker
@@ -294,28 +171,6 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-5.1.4-rockylinux8:
-  extends: .docker
-  stage: rockylinux
-  variables:
-    MAJOR_VERSION: 5
-    VERSION: "5.1"
-    LONG_VERSION: "5.1.4"
-    VARIANT: rockylinux8
-    PARENT: "rockylinux"
-    ISPARENT: "True"
-
-4.4.4-ubuntu1804:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.4"
-    LONG_VERSION: "4.4.4"
-    VARIANT: ubuntu1804
-    PARENT: "ubuntu"
-    ISPARENT: "False"
-
 4.4.4-ubuntu2004:
   extends: .docker
   stage: ubuntu
@@ -327,49 +182,27 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.4.4-alpine319:
+4.4.4-alpine313:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
     LONG_VERSION: "4.4.4"
-    VARIANT: alpine319
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
-4.4.4-centos7:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.4"
-    LONG_VERSION: "4.4.4"
-    VARIANT: centos7
-    PARENT: "centos"
-    ISPARENT: "True"
-
-4.4.4-scratch:
+4.4.4-scratch313:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.4"
     LONG_VERSION: "4.4.4"
-    VARIANT: scratch
+    VARIANT: scratch313
     PARENT: "scratch"
     ISPARENT: "True"
-
-4.4.4-vaapi1804:
-  extends: .docker
-  stage: vaapi
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.4"
-    LONG_VERSION: "4.4.4"
-    VARIANT: vaapi1804
-    PARENT: "vaapi"
-    ISPARENT: "False"
 
 4.4.4-vaapi2004:
   extends: .docker
@@ -393,28 +226,6 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-4.4.4-rockylinux8:
-  extends: .docker
-  stage: rockylinux
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.4"
-    LONG_VERSION: "4.4.4"
-    VARIANT: rockylinux8
-    PARENT: "rockylinux"
-    ISPARENT: "True"
-
-4.3.6-ubuntu1804:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.3"
-    LONG_VERSION: "4.3.6"
-    VARIANT: ubuntu1804
-    PARENT: "ubuntu"
-    ISPARENT: "False"
-
 4.3.6-ubuntu2004:
   extends: .docker
   stage: ubuntu
@@ -426,49 +237,27 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.3.6-alpine319:
+4.3.6-alpine313:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.6"
-    VARIANT: alpine319
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
-4.3.6-centos7:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.3"
-    LONG_VERSION: "4.3.6"
-    VARIANT: centos7
-    PARENT: "centos"
-    ISPARENT: "True"
-
-4.3.6-scratch:
+4.3.6-scratch313:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
     LONG_VERSION: "4.3.6"
-    VARIANT: scratch
+    VARIANT: scratch313
     PARENT: "scratch"
     ISPARENT: "True"
-
-4.3.6-vaapi1804:
-  extends: .docker
-  stage: vaapi
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.3"
-    LONG_VERSION: "4.3.6"
-    VARIANT: vaapi1804
-    PARENT: "vaapi"
-    ISPARENT: "False"
 
 4.3.6-vaapi2004:
   extends: .docker
@@ -492,28 +281,6 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-4.3.6-rockylinux8:
-  extends: .docker
-  stage: rockylinux
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.3"
-    LONG_VERSION: "4.3.6"
-    VARIANT: rockylinux8
-    PARENT: "rockylinux"
-    ISPARENT: "True"
-
-4.2.9-ubuntu1804:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.2"
-    LONG_VERSION: "4.2.9"
-    VARIANT: ubuntu1804
-    PARENT: "ubuntu"
-    ISPARENT: "False"
-
 4.2.9-ubuntu2004:
   extends: .docker
   stage: ubuntu
@@ -525,36 +292,25 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.2.9-alpine319:
+4.2.9-alpine313:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.9"
-    VARIANT: alpine319
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
-4.2.9-centos7:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.2"
-    LONG_VERSION: "4.2.9"
-    VARIANT: centos7
-    PARENT: "centos"
-    ISPARENT: "True"
-
-4.2.9-scratch:
+4.2.9-scratch313:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.2"
     LONG_VERSION: "4.2.9"
-    VARIANT: scratch
+    VARIANT: scratch313
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -580,28 +336,6 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-4.2.9-rockylinux8:
-  extends: .docker
-  stage: rockylinux
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.2"
-    LONG_VERSION: "4.2.9"
-    VARIANT: rockylinux8
-    PARENT: "rockylinux"
-    ISPARENT: "True"
-
-4.1.11-ubuntu1804:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.1"
-    LONG_VERSION: "4.1.11"
-    VARIANT: ubuntu1804
-    PARENT: "ubuntu"
-    ISPARENT: "False"
-
 4.1.11-ubuntu2004:
   extends: .docker
   stage: ubuntu
@@ -613,36 +347,25 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.1.11-alpine319:
+4.1.11-alpine313:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.11"
-    VARIANT: alpine319
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
-4.1.11-centos7:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.1"
-    LONG_VERSION: "4.1.11"
-    VARIANT: centos7
-    PARENT: "centos"
-    ISPARENT: "True"
-
-4.1.11-scratch:
+4.1.11-scratch313:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.1"
     LONG_VERSION: "4.1.11"
-    VARIANT: scratch
+    VARIANT: scratch313
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -668,28 +391,6 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-4.1.11-rockylinux8:
-  extends: .docker
-  stage: rockylinux
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.1"
-    LONG_VERSION: "4.1.11"
-    VARIANT: rockylinux8
-    PARENT: "rockylinux"
-    ISPARENT: "True"
-
-3.4.13-ubuntu1804:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 3
-    VERSION: "3.4"
-    LONG_VERSION: "3.4.13"
-    VARIANT: ubuntu1804
-    PARENT: "ubuntu"
-    ISPARENT: "False"
-
 3.4.13-ubuntu2004:
   extends: .docker
   stage: ubuntu
@@ -701,36 +402,25 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-3.4.13-alpine319:
+3.4.13-alpine313:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.13"
-    VARIANT: alpine319
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
-3.4.13-centos7:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 3
-    VERSION: "3.4"
-    LONG_VERSION: "3.4.13"
-    VARIANT: centos7
-    PARENT: "centos"
-    ISPARENT: "True"
-
-3.4.13-scratch:
+3.4.13-scratch313:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 3
     VERSION: "3.4"
     LONG_VERSION: "3.4.13"
-    VARIANT: scratch
+    VARIANT: scratch313
     PARENT: "scratch"
     ISPARENT: "True"
 
@@ -756,28 +446,6 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-3.4.13-rockylinux8:
-  extends: .docker
-  stage: rockylinux
-  variables:
-    MAJOR_VERSION: 3
-    VERSION: "3.4"
-    LONG_VERSION: "3.4.13"
-    VARIANT: rockylinux8
-    PARENT: "rockylinux"
-    ISPARENT: "True"
-
-2.8.22-ubuntu1804:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 2
-    VERSION: "2.8"
-    LONG_VERSION: "2.8.22"
-    VARIANT: ubuntu1804
-    PARENT: "ubuntu"
-    ISPARENT: "False"
-
 2.8.22-ubuntu2004:
   extends: .docker
   stage: ubuntu
@@ -789,49 +457,27 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-2.8.22-alpine319:
+2.8.22-alpine313:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 2
     VERSION: "2.8"
     LONG_VERSION: "2.8.22"
-    VARIANT: alpine319
+    VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
-2.8.22-centos7:
-  extends: .docker
-  stage: centos
-  variables:
-    MAJOR_VERSION: 2
-    VERSION: "2.8"
-    LONG_VERSION: "2.8.22"
-    VARIANT: centos7
-    PARENT: "centos"
-    ISPARENT: "True"
-
-2.8.22-scratch:
+2.8.22-scratch313:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 2
     VERSION: "2.8"
     LONG_VERSION: "2.8.22"
-    VARIANT: scratch
+    VARIANT: scratch313
     PARENT: "scratch"
     ISPARENT: "True"
-
-2.8.22-vaapi1804:
-  extends: .docker
-  stage: vaapi
-  variables:
-    MAJOR_VERSION: 2
-    VERSION: "2.8"
-    LONG_VERSION: "2.8.22"
-    VARIANT: vaapi1804
-    PARENT: "vaapi"
-    ISPARENT: "False"
 
 2.8.22-vaapi2004:
   extends: .docker
@@ -853,15 +499,4 @@ stages:
     LONG_VERSION: "2.8.22"
     VARIANT: nvidia2004
     PARENT: "nvidia"
-    ISPARENT: "True"
-
-2.8.22-rockylinux8:
-  extends: .docker
-  stage: rockylinux
-  variables:
-    MAJOR_VERSION: 2
-    VERSION: "2.8"
-    LONG_VERSION: "2.8.22"
-    VARIANT: rockylinux8
-    PARENT: "rockylinux"
     ISPARENT: "True"

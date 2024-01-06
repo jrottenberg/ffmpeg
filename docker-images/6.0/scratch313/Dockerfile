@@ -1,39 +1,14 @@
 # ffmpeg - http://ffmpeg.org/download.html
 #
-# From https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
-#
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
 
-FROM    nvidia/cuda:11.4.1-devel-ubuntu20.04 AS devel-base
+FROM        alpine:3.13 AS build
 
-ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
-ENV	    DEBIAN_FRONTEND=nonintercative
 WORKDIR     /tmp/workdir
 
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
-        apt-get autoremove -y && \
-        apt-get clean -y
-
-FROM        nvidia/cuda:11.4.1-runtime-ubuntu20.04 AS runtime-base
-
-ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
-ENV	    DEBIAN_FRONTEND=nonintercative
-WORKDIR     /tmp/workdir
-
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
-        apt-get autoremove -y && \
-        apt-get clean -y
-
-
-FROM  devel-base as build
-
-ENV        NVIDIA_HEADERS_VERSION=11.1.5.0
-
-ENV         FFMPEG_VERSION=6.1.1 \
+ENV         FFMPEG_VERSION=6.0.1 \
     AOM_VERSION=v1.0.0 \
     CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
@@ -91,36 +66,36 @@ ARG         PREFIX=/opt/ffmpeg
 ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 
-RUN      buildDeps="autoconf \
-                    automake \
-                    cmake \
-                    curl \
-                    bzip2 \
-                    libexpat1-dev \
-                    g++ \
-                    gcc \
-                    git \
-                    gperf \
-                    libtool \
-                    make \
-                    nasm \
-                    perl \
-                    pkg-config \
-                    python \
-                    libssl-dev \
-                    yasm \
-                    zlib1g-dev" && \
-        apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ${buildDeps}
-
-RUN \
-	DIR=/tmp/nv-codec-headers && \
-	git clone https://github.com/FFmpeg/nv-codec-headers ${DIR} && \
-	cd ${DIR} && \
-	git checkout n${NVIDIA_HEADERS_VERSION} && \
-	make PREFIX="${PREFIX}" && \
-	make install PREFIX="${PREFIX}" && \
-        rm -rf ${DIR}
+RUN     buildDeps="autoconf \
+                   automake \
+                   bash \
+                   binutils \
+                   bzip2 \
+                   ca-certificates \
+                   cmake \
+                   coreutils \
+                   curl \
+                   diffutils \
+                   expat-dev \
+                   file \
+                   g++ \
+                   gcc \
+                   git \
+                   gperf \
+                   libcrypto1.1 \
+                   libgcc \
+                   libssl1.1 \
+                   libstdc++ \
+                   libtool \
+                   make \
+                   nasm \
+                   openssl-dev \
+                   python3 \
+                   tar \
+                   xcb-proto \
+                   yasm \
+                   zlib-dev" && \
+        apk  add --update ${buildDeps}
 
 ## libvmaf https://github.com/Netflix/vmaf
 RUN \
@@ -549,8 +524,6 @@ RUN  \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
-        --enable-cuda \
-        --enable-cuvid \
         --enable-fontconfig \
         --enable-gpl \
         --enable-libaom \
@@ -561,7 +534,6 @@ RUN  \
         --enable-libfreetype \
         --enable-libkvazaar \
         --enable-libmp3lame \
-        --enable-libnpp \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
         --enable-libopenjpeg \
@@ -578,14 +550,13 @@ RUN  \
         --enable-libxvid \
         --enable-libzmq \
         --enable-nonfree \
-        --enable-nvenc \
         --enable-openssl \
         --enable-postproc \
         --enable-shared \
         --enable-small \
         --enable-version3 \
-        --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/" \
-        --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/" \
+        --extra-cflags="-I${PREFIX}/include" \
+        --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
         --extra-libs=-lpthread \
         --prefix="${PREFIX}" && \
@@ -598,35 +569,26 @@ RUN  \
         cd tools && \
         make qt-faststart && cp qt-faststart ${PREFIX}/bin/
 
-## cleanup
+
 RUN \
-        LD_LIBRARY_PATH="${PREFIX}/lib:${PREFIX}/lib64:${LD_LIBRARY_PATH}" ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
-        for lib in /usr/local/lib/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
-        cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/* /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-        cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-        mkdir -p /usr/local/lib/pkgconfig && \
-        for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-          sed "s:${PREFIX}:/usr/local:g; s:/lib64:/lib:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
-        done
+        mkdir -p /tmp/fakeroot/lib  && \
+        ldd ${PREFIX}/bin/ffmpeg | cut -d ' ' -f 3 | strings | xargs -I R cp R /tmp/fakeroot/lib/ && \
+        for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
+        cp -r ${PREFIX}/bin /tmp/fakeroot/bin/ && \
+        cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/ && \
+        LD_LIBRARY_PATH=/tmp/fakeroot/lib /tmp/fakeroot/bin/ffmpeg -buildconf
 
-
-
-FROM        runtime-base AS release
+### Release Stage
+FROM        scratch AS release
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
 ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 CMD         ["--help"]
-ENTRYPOINT  ["ffmpeg"]
+ENTRYPOINT  ["/bin/ffmpeg"]
 
-# copy only needed files, without copying nvidia dev files
-COPY --from=build /usr/local/bin /usr/local/bin/
-COPY --from=build /usr/local/share /usr/local/share/
-COPY --from=build /usr/local/lib /usr/local/lib/
-COPY --from=build /usr/local/include /usr/local/include/
+COPY --from=build /tmp/fakeroot/ /
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
