@@ -6,7 +6,7 @@
 #
 #
 
-FROM    nvidia/cuda:11.4.1-devel-ubuntu20.04 AS devel-base
+FROM   nvcr.io/nvidia/cuda:11.4.1-devel-ubuntu20.04 AS devel-base
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
 ENV	    DEBIAN_FRONTEND=nonintercative
@@ -17,7 +17,7 @@ RUN     apt-get -yqq update && \
         apt-get autoremove -y && \
         apt-get clean -y
 
-FROM        nvidia/cuda:11.4.1-runtime-ubuntu20.04 AS runtime-base
+FROM      nvcr.io/nvidia/cuda:11.4.1-runtime-ubuntu20.04 AS runtime-base
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
 ENV	    DEBIAN_FRONTEND=nonintercative

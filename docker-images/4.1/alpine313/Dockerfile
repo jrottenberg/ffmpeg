@@ -31,6 +31,7 @@ ENV         FFMPEG_VERSION=4.1.11 \
     OPENCOREAMR_VERSION=0.1.5 \
     OPUS_VERSION=1.2 \
     OPENJPEG_VERSION=2.1.2 \
+    PYTHON=python3 \
     THEORA_VERSION=1.1.1 \
     VORBIS_VERSION=1.3.5 \
     VPX_VERSION=1.8.0 \
@@ -310,10 +311,9 @@ RUN  \
 ## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
 RUN  \
         DIR=/tmp/fontconfig && \
-        mkdir -p ${DIR} && \
+        git clone --branch ${FONTCONFIG_VERSION} --depth 1 https://anongit.freedesktop.org/git/fontconfig ${DIR} && \
         cd ${DIR} && \
-        curl -sLO https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
-        tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
+        ./autogen.sh && \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
         make && \
         make install && \
