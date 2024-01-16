@@ -315,9 +315,10 @@ RUN  \
 ## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
 RUN  \
         DIR=/tmp/fontconfig && \
-        git clone --branch ${FONTCONFIG_VERSION} --depth 1 https://anongit.freedesktop.org/git/fontconfig ${DIR} && \
+        mkdir -p ${DIR} && \
         cd ${DIR} && \
-        ./autogen.sh && \
+        curl -sLO https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/${FONTCONFIG_VERSION}/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
+        tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
         make && \
         make install && \
