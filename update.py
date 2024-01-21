@@ -47,19 +47,12 @@ for parent in all_parents:
 
 
 SKIP_VARIANTS = {
-    "3.2": [
-        "alpine312",
-        "centos8",
-        "nvidia2004",
-        "scratch312",
-        "ubuntu1804",
-        "vaapi1804",
-    ],
-    "3.3": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
-    "3.4": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
-    "4.0": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
-    "4.1": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
-    "4.2": ["alpine38", "nvidia1604", "scratch38", "vaapi1804"],
+    "2.8": ["alpine313", "nvidia2004", "vaapi2004", "scratch313"],
+    "4.2": ["alpine313"],
+    "4.3": ["alpine313", "scratch313"],
+    "5.1": ["scratch313"],
+    "6.0": ["alpine313", "nvidia2004"],
+    "6.1": ["alpine313", "nvidia2004", "scratch313"],
 }
 
 
