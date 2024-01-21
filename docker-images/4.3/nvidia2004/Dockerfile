@@ -9,11 +9,11 @@
 FROM   nvcr.io/nvidia/cuda:11.4.1-devel-ubuntu20.04 AS devel-base
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
-ENV	    DEBIAN_FRONTEND=nonintercative
+ENV	    DEBIAN_FRONTEND=noninteractive
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 python3 && \
         apt-get autoremove -y && \
         apt-get clean -y
 
@@ -34,7 +34,7 @@ FROM  devel-base as build
 ENV        NVIDIA_HEADERS_VERSION=11.1.5.0
 
 ENV         FFMPEG_VERSION=4.3.6 \
-    AOM_VERSION=v1.0.0 \
+    AOM_VERSION=v3.8.1 \
     CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
     FONTCONFIG_VERSION=2.12.4 \
@@ -340,7 +340,8 @@ RUN  \
         DIR=/tmp/fontconfig && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sLO https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \        tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
+        curl -sLO https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
+        tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
         make && \
         make install && \

@@ -9,11 +9,11 @@
 FROM   nvcr.io/nvidia/cuda:11.4.1-devel-ubuntu20.04 AS devel-base
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
-ENV	    DEBIAN_FRONTEND=nonintercative
+ENV	    DEBIAN_FRONTEND=noninteractive
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 python3 && \
         apt-get autoremove -y && \
         apt-get clean -y
 
