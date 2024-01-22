@@ -2,7 +2,7 @@ pre-commit:
   image: python:3
   stage: lint
   script:
-    - pip install pre-commit
+    - pip install pre-commit packaging
     - pre-commit run --all-files --show-diff-on-failure
   artifacts:
     expire_in: 1 days

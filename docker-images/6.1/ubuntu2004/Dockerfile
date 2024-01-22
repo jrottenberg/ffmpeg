@@ -16,7 +16,7 @@ RUN     apt-get -yqq update && \
 
 FROM base as build
 
-ENV         FFMPEG_VERSION=6.0.1 \
+ENV         FFMPEG_VERSION=6.1.1 \
     AOM_VERSION=v3.8.1 \
     CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \

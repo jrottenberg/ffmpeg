@@ -27,8 +27,8 @@ stages:
               key: pre-commit | "4" | .pre-commit-config.yaml | "$(PY)"
               path: $(PRE_COMMIT_HOME)
 
-          - script: python -m pip install --upgrade pre-commit
-            displayName: install pre-commit
+          - script: python -m pip install --upgrade pre-commit packaging
+            displayName: install python deps
           - script: pre-commit run --all-files --show-diff-on-failure
             displayName: run pre-commit
 

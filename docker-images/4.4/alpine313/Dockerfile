@@ -13,8 +13,8 @@ FROM        base AS build
 
 WORKDIR     /tmp/workdir
 
-ENV         FFMPEG_VERSION=4.4.3 \
-    AOM_VERSION=v1.0.0 \
+ENV         FFMPEG_VERSION=4.4.4 \
+    AOM_VERSION=v3.8.1 \
     CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
     FONTCONFIG_VERSION=2.12.4 \
@@ -31,6 +31,7 @@ ENV         FFMPEG_VERSION=4.4.3 \
     OPENCOREAMR_VERSION=0.1.5 \
     OPUS_VERSION=1.2 \
     OPENJPEG_VERSION=2.1.2 \
+    PYTHON=python3 \
     THEORA_VERSION=1.1.1 \
     VORBIS_VERSION=1.3.5 \
     VPX_VERSION=1.8.0 \
@@ -64,7 +65,6 @@ ARG         LIBZMQ_SHA256SUM="02ecc88466ae38cf2c8d79f09cfd2675ba299a439680b64ade
 ARG         LIBARIBB24_SHA256SUM="f61560738926e57f9173510389634d8c06cabedfa857db4b28fb7704707ff128 v1.0.3.tar.gz"
 
 
-ARG         LD_LIBRARY_PATH=/opt/ffmpeg/lib
 ARG         MAKEFLAGS="-j2"
 ARG         PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig"
 ARG         PREFIX=/opt/ffmpeg

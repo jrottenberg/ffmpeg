@@ -16,7 +16,7 @@ RUN     apt-get -yqq update && \
 
 FROM base as build
 
-ENV         FFMPEG_VERSION=6.0.1 \
+ENV         FFMPEG_VERSION=2.8.22 \
     AOM_VERSION=v3.8.1 \
     CHROMAPRINT_VERSION=1.5.0 \
     FDKAAC_VERSION=0.1.5 \
@@ -525,24 +525,19 @@ RUN  \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
+        --enable-avresample \
         --enable-fontconfig \
         --enable-gpl \
-        --enable-libaom \
-        --enable-libaribb24 \
         --enable-libass \
         --enable-libbluray \
         --enable-libfdk_aac \
         --enable-libfreetype \
-        --enable-libkvazaar \
         --enable-libmp3lame \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
-        --enable-libopenjpeg \
         --enable-libopus \
-        --enable-libsrt \
         --enable-libtheora \
         --enable-libvidstab \
-        --enable-libvmaf \
         --enable-libvorbis \
         --enable-libvpx \
         --enable-libwebp \
@@ -560,7 +555,6 @@ RUN  \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
-        --extra-libs=-lpthread \
         --prefix="${PREFIX}" && \
         make clean && \
         make && \

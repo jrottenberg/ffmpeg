@@ -8,912 +8,291 @@ jobs:
     maxParallel: 10
     matrix:
 
-      ubuntu1804_6.0:
+      ubuntu2004_6.1.1:
         MAJOR_VERSION: 6
-        VERSION:  6.0
-        LONG_VERSION: 6.0
-        VARIANT:  ubuntu1804
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
-      ubuntu2004_6.0:
-        MAJOR_VERSION: 6
-        VERSION:  6.0
-        LONG_VERSION: 6.0
+        VERSION:  6.1
+        LONG_VERSION: 6.1.1
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_6.0:
+      vaapi2004_6.1.1:
         MAJOR_VERSION: 6
-        VERSION:  6.0
-        LONG_VERSION: 6.0
-        VARIANT:  alpine313
-        PARENT: alpine
-        ISPARENT:  True
-
-
-      centos7_6.0:
-        MAJOR_VERSION: 6
-        VERSION:  6.0
-        LONG_VERSION: 6.0
-        VARIANT:  centos7
-        PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_6.0:
-        MAJOR_VERSION: 6
-        VERSION:  6.0
-        LONG_VERSION: 6.0
-        VARIANT:  centos8
-        PARENT: centos
-        ISPARENT:  True
-
-
-      scratch313_6.0:
-        MAJOR_VERSION: 6
-        VERSION:  6.0
-        LONG_VERSION: 6.0
-        VARIANT:  scratch313
-        PARENT: scratch
-        ISPARENT:  True
-
-
-      vaapi1804_6.0:
-        MAJOR_VERSION: 6
-        VERSION:  6.0
-        LONG_VERSION: 6.0
-        VARIANT:  vaapi1804
-        PARENT: vaapi
-        ISPARENT:  False
-
-
-      vaapi2004_6.0:
-        MAJOR_VERSION: 6
-        VERSION:  6.0
-        LONG_VERSION: 6.0
+        VERSION:  6.1
+        LONG_VERSION: 6.1.1
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_6.0:
+      ubuntu2004_6.0.1:
         MAJOR_VERSION: 6
         VERSION:  6.0
-        LONG_VERSION: 6.0
-        VARIANT:  nvidia2004
-        PARENT: nvidia
-        ISPARENT:  True
-
-
-      rockylinux8_6.0:
-        MAJOR_VERSION: 6
-        VERSION:  6.0
-        LONG_VERSION: 6.0
-        VARIANT:  rockylinux8
-        PARENT: rockylinux
-        ISPARENT:  True
-
-
-      ubuntu1804_5.1.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.1
-        LONG_VERSION: 5.1.3
-        VARIANT:  ubuntu1804
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
-      ubuntu2004_5.1.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.1
-        LONG_VERSION: 5.1.3
+        LONG_VERSION: 6.0.1
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_5.1.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.1
-        LONG_VERSION: 5.1.3
-        VARIANT:  alpine313
-        PARENT: alpine
-        ISPARENT:  True
-
-
-      centos7_5.1.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.1
-        LONG_VERSION: 5.1.3
-        VARIANT:  centos7
-        PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_5.1.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.1
-        LONG_VERSION: 5.1.3
-        VARIANT:  centos8
-        PARENT: centos
-        ISPARENT:  True
-
-
-      scratch313_5.1.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.1
-        LONG_VERSION: 5.1.3
+      scratch313_6.0.1:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0.1
         VARIANT:  scratch313
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi1804_5.1.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.1
-        LONG_VERSION: 5.1.3
-        VARIANT:  vaapi1804
-        PARENT: vaapi
-        ISPARENT:  False
-
-
-      vaapi2004_5.1.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.1
-        LONG_VERSION: 5.1.3
+      vaapi2004_6.0.1:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0.1
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_5.1.3:
+      ubuntu2004_5.1.4:
         MAJOR_VERSION: 5
         VERSION:  5.1
-        LONG_VERSION: 5.1.3
-        VARIANT:  nvidia2004
-        PARENT: nvidia
-        ISPARENT:  True
-
-
-      rockylinux8_5.1.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.1
-        LONG_VERSION: 5.1.3
-        VARIANT:  rockylinux8
-        PARENT: rockylinux
-        ISPARENT:  True
-
-
-      ubuntu1804_5.0.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.0
-        LONG_VERSION: 5.0.3
-        VARIANT:  ubuntu1804
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
-      ubuntu2004_5.0.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.0
-        LONG_VERSION: 5.0.3
+        LONG_VERSION: 5.1.4
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_5.0.3:
+      alpine313_5.1.4:
         MAJOR_VERSION: 5
-        VERSION:  5.0
-        LONG_VERSION: 5.0.3
+        VERSION:  5.1
+        LONG_VERSION: 5.1.4
         VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
 
-      centos7_5.0.3:
+      vaapi2004_5.1.4:
         MAJOR_VERSION: 5
-        VERSION:  5.0
-        LONG_VERSION: 5.0.3
-        VARIANT:  centos7
-        PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_5.0.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.0
-        LONG_VERSION: 5.0.3
-        VARIANT:  centos8
-        PARENT: centos
-        ISPARENT:  True
-
-
-      scratch313_5.0.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.0
-        LONG_VERSION: 5.0.3
-        VARIANT:  scratch313
-        PARENT: scratch
-        ISPARENT:  True
-
-
-      vaapi1804_5.0.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.0
-        LONG_VERSION: 5.0.3
-        VARIANT:  vaapi1804
-        PARENT: vaapi
-        ISPARENT:  False
-
-
-      vaapi2004_5.0.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.0
-        LONG_VERSION: 5.0.3
+        VERSION:  5.1
+        LONG_VERSION: 5.1.4
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_5.0.3:
+      nvidia2004_5.1.4:
         MAJOR_VERSION: 5
-        VERSION:  5.0
-        LONG_VERSION: 5.0.3
+        VERSION:  5.1
+        LONG_VERSION: 5.1.4
         VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
 
-      rockylinux8_5.0.3:
-        MAJOR_VERSION: 5
-        VERSION:  5.0
-        LONG_VERSION: 5.0.3
-        VARIANT:  rockylinux8
-        PARENT: rockylinux
-        ISPARENT:  True
-
-
-      ubuntu1804_4.4.3:
+      ubuntu2004_4.4.4:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.3
-        VARIANT:  ubuntu1804
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
-      ubuntu2004_4.4.3:
-        MAJOR_VERSION: 4
-        VERSION:  4.4
-        LONG_VERSION: 4.4.3
+        LONG_VERSION: 4.4.4
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_4.4.3:
+      alpine313_4.4.4:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.3
+        LONG_VERSION: 4.4.4
         VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
 
-      centos7_4.4.3:
+      scratch313_4.4.4:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.3
-        VARIANT:  centos7
-        PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_4.4.3:
-        MAJOR_VERSION: 4
-        VERSION:  4.4
-        LONG_VERSION: 4.4.3
-        VARIANT:  centos8
-        PARENT: centos
-        ISPARENT:  True
-
-
-      scratch313_4.4.3:
-        MAJOR_VERSION: 4
-        VERSION:  4.4
-        LONG_VERSION: 4.4.3
+        LONG_VERSION: 4.4.4
         VARIANT:  scratch313
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi1804_4.4.3:
+      vaapi2004_4.4.4:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.3
-        VARIANT:  vaapi1804
-        PARENT: vaapi
-        ISPARENT:  False
-
-
-      vaapi2004_4.4.3:
-        MAJOR_VERSION: 4
-        VERSION:  4.4
-        LONG_VERSION: 4.4.3
+        LONG_VERSION: 4.4.4
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.4.3:
+      nvidia2004_4.4.4:
         MAJOR_VERSION: 4
         VERSION:  4.4
-        LONG_VERSION: 4.4.3
+        LONG_VERSION: 4.4.4
         VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
 
-      rockylinux8_4.4.3:
-        MAJOR_VERSION: 4
-        VERSION:  4.4
-        LONG_VERSION: 4.4.3
-        VARIANT:  rockylinux8
-        PARENT: rockylinux
-        ISPARENT:  True
-
-
-      ubuntu1804_4.3.5:
+      ubuntu2004_4.3.6:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.5
-        VARIANT:  ubuntu1804
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
-      ubuntu2004_4.3.5:
-        MAJOR_VERSION: 4
-        VERSION:  4.3
-        LONG_VERSION: 4.3.5
+        LONG_VERSION: 4.3.6
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_4.3.5:
+      vaapi2004_4.3.6:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.5
-        VARIANT:  alpine313
-        PARENT: alpine
-        ISPARENT:  True
-
-
-      centos7_4.3.5:
-        MAJOR_VERSION: 4
-        VERSION:  4.3
-        LONG_VERSION: 4.3.5
-        VARIANT:  centos7
-        PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_4.3.5:
-        MAJOR_VERSION: 4
-        VERSION:  4.3
-        LONG_VERSION: 4.3.5
-        VARIANT:  centos8
-        PARENT: centos
-        ISPARENT:  True
-
-
-      scratch313_4.3.5:
-        MAJOR_VERSION: 4
-        VERSION:  4.3
-        LONG_VERSION: 4.3.5
-        VARIANT:  scratch313
-        PARENT: scratch
-        ISPARENT:  True
-
-
-      vaapi1804_4.3.5:
-        MAJOR_VERSION: 4
-        VERSION:  4.3
-        LONG_VERSION: 4.3.5
-        VARIANT:  vaapi1804
-        PARENT: vaapi
-        ISPARENT:  False
-
-
-      vaapi2004_4.3.5:
-        MAJOR_VERSION: 4
-        VERSION:  4.3
-        LONG_VERSION: 4.3.5
+        LONG_VERSION: 4.3.6
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.3.5:
+      nvidia2004_4.3.6:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.5
+        LONG_VERSION: 4.3.6
         VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
 
-      rockylinux8_4.3.5:
-        MAJOR_VERSION: 4
-        VERSION:  4.3
-        LONG_VERSION: 4.3.5
-        VARIANT:  rockylinux8
-        PARENT: rockylinux
-        ISPARENT:  True
-
-
-      ubuntu1804_4.2.8:
+      ubuntu2004_4.2.9:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.8
-        VARIANT:  ubuntu1804
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
-      ubuntu2004_4.2.8:
-        MAJOR_VERSION: 4
-        VERSION:  4.2
-        LONG_VERSION: 4.2.8
+        LONG_VERSION: 4.2.9
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_4.2.8:
+      scratch313_4.2.9:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.8
-        VARIANT:  alpine313
-        PARENT: alpine
-        ISPARENT:  True
-
-
-      centos7_4.2.8:
-        MAJOR_VERSION: 4
-        VERSION:  4.2
-        LONG_VERSION: 4.2.8
-        VARIANT:  centos7
-        PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_4.2.8:
-        MAJOR_VERSION: 4
-        VERSION:  4.2
-        LONG_VERSION: 4.2.8
-        VARIANT:  centos8
-        PARENT: centos
-        ISPARENT:  True
-
-
-      scratch313_4.2.8:
-        MAJOR_VERSION: 4
-        VERSION:  4.2
-        LONG_VERSION: 4.2.8
+        LONG_VERSION: 4.2.9
         VARIANT:  scratch313
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi2004_4.2.8:
+      vaapi2004_4.2.9:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.8
+        LONG_VERSION: 4.2.9
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.2.8:
+      nvidia2004_4.2.9:
         MAJOR_VERSION: 4
         VERSION:  4.2
-        LONG_VERSION: 4.2.8
+        LONG_VERSION: 4.2.9
         VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
 
-      rockylinux8_4.2.8:
-        MAJOR_VERSION: 4
-        VERSION:  4.2
-        LONG_VERSION: 4.2.8
-        VARIANT:  rockylinux8
-        PARENT: rockylinux
-        ISPARENT:  True
-
-
-      ubuntu1804_4.1.10:
+      ubuntu2004_4.1.11:
         MAJOR_VERSION: 4
         VERSION:  4.1
-        LONG_VERSION: 4.1.10
-        VARIANT:  ubuntu1804
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
-      ubuntu2004_4.1.10:
-        MAJOR_VERSION: 4
-        VERSION:  4.1
-        LONG_VERSION: 4.1.10
+        LONG_VERSION: 4.1.11
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_4.1.10:
+      alpine313_4.1.11:
         MAJOR_VERSION: 4
         VERSION:  4.1
-        LONG_VERSION: 4.1.10
+        LONG_VERSION: 4.1.11
         VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
 
-      centos7_4.1.10:
+      scratch313_4.1.11:
         MAJOR_VERSION: 4
         VERSION:  4.1
-        LONG_VERSION: 4.1.10
-        VARIANT:  centos7
-        PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_4.1.10:
-        MAJOR_VERSION: 4
-        VERSION:  4.1
-        LONG_VERSION: 4.1.10
-        VARIANT:  centos8
-        PARENT: centos
-        ISPARENT:  True
-
-
-      scratch313_4.1.10:
-        MAJOR_VERSION: 4
-        VERSION:  4.1
-        LONG_VERSION: 4.1.10
+        LONG_VERSION: 4.1.11
         VARIANT:  scratch313
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi2004_4.1.10:
+      vaapi2004_4.1.11:
         MAJOR_VERSION: 4
         VERSION:  4.1
-        LONG_VERSION: 4.1.10
+        LONG_VERSION: 4.1.11
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.1.10:
+      nvidia2004_4.1.11:
         MAJOR_VERSION: 4
         VERSION:  4.1
-        LONG_VERSION: 4.1.10
+        LONG_VERSION: 4.1.11
         VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
 
-      rockylinux8_4.1.10:
-        MAJOR_VERSION: 4
-        VERSION:  4.1
-        LONG_VERSION: 4.1.10
-        VARIANT:  rockylinux8
-        PARENT: rockylinux
-        ISPARENT:  True
-
-
-      ubuntu1804_4.0.6:
-        MAJOR_VERSION: 4
-        VERSION:  4.0
-        LONG_VERSION: 4.0.6
-        VARIANT:  ubuntu1804
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
-      ubuntu2004_4.0.6:
-        MAJOR_VERSION: 4
-        VERSION:  4.0
-        LONG_VERSION: 4.0.6
+      ubuntu2004_3.4.13:
+        MAJOR_VERSION: 3
+        VERSION:  3.4
+        LONG_VERSION: 3.4.13
         VARIANT:  ubuntu2004
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_4.0.6:
-        MAJOR_VERSION: 4
-        VERSION:  4.0
-        LONG_VERSION: 4.0.6
+      alpine313_3.4.13:
+        MAJOR_VERSION: 3
+        VERSION:  3.4
+        LONG_VERSION: 3.4.13
         VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
 
-      centos7_4.0.6:
-        MAJOR_VERSION: 4
-        VERSION:  4.0
-        LONG_VERSION: 4.0.6
-        VARIANT:  centos7
-        PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_4.0.6:
-        MAJOR_VERSION: 4
-        VERSION:  4.0
-        LONG_VERSION: 4.0.6
-        VARIANT:  centos8
-        PARENT: centos
-        ISPARENT:  True
-
-
-      scratch313_4.0.6:
-        MAJOR_VERSION: 4
-        VERSION:  4.0
-        LONG_VERSION: 4.0.6
+      scratch313_3.4.13:
+        MAJOR_VERSION: 3
+        VERSION:  3.4
+        LONG_VERSION: 3.4.13
         VARIANT:  scratch313
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi2004_4.0.6:
-        MAJOR_VERSION: 4
-        VERSION:  4.0
-        LONG_VERSION: 4.0.6
+      vaapi2004_3.4.13:
+        MAJOR_VERSION: 3
+        VERSION:  3.4
+        LONG_VERSION: 3.4.13
         VARIANT:  vaapi2004
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.0.6:
-        MAJOR_VERSION: 4
-        VERSION:  4.0
-        LONG_VERSION: 4.0.6
+      nvidia2004_3.4.13:
+        MAJOR_VERSION: 3
+        VERSION:  3.4
+        LONG_VERSION: 3.4.13
         VARIANT:  nvidia2004
         PARENT: nvidia
         ISPARENT:  True
 
 
-      rockylinux8_4.0.6:
-        MAJOR_VERSION: 4
-        VERSION:  4.0
-        LONG_VERSION: 4.0.6
-        VARIANT:  rockylinux8
-        PARENT: rockylinux
-        ISPARENT:  True
-
-
-      ubuntu1804_3.4.12:
-        MAJOR_VERSION: 3
-        VERSION:  3.4
-        LONG_VERSION: 3.4.12
-        VARIANT:  ubuntu1804
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
-      ubuntu2004_3.4.12:
-        MAJOR_VERSION: 3
-        VERSION:  3.4
-        LONG_VERSION: 3.4.12
+      ubuntu2004_2.8.22:
+        MAJOR_VERSION: 2
+        VERSION:  2.8
+        LONG_VERSION: 2.8.22
         VARIANT:  ubuntu2004
         PARENT: ubuntu
-        ISPARENT:  True
-
-
-      alpine313_3.4.12:
-        MAJOR_VERSION: 3
-        VERSION:  3.4
-        LONG_VERSION: 3.4.12
-        VARIANT:  alpine313
-        PARENT: alpine
-        ISPARENT:  True
-
-
-      centos7_3.4.12:
-        MAJOR_VERSION: 3
-        VERSION:  3.4
-        LONG_VERSION: 3.4.12
-        VARIANT:  centos7
-        PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_3.4.12:
-        MAJOR_VERSION: 3
-        VERSION:  3.4
-        LONG_VERSION: 3.4.12
-        VARIANT:  centos8
-        PARENT: centos
-        ISPARENT:  True
-
-
-      scratch313_3.4.12:
-        MAJOR_VERSION: 3
-        VERSION:  3.4
-        LONG_VERSION: 3.4.12
-        VARIANT:  scratch313
-        PARENT: scratch
-        ISPARENT:  True
-
-
-      vaapi2004_3.4.12:
-        MAJOR_VERSION: 3
-        VERSION:  3.4
-        LONG_VERSION: 3.4.12
-        VARIANT:  vaapi2004
-        PARENT: vaapi
-        ISPARENT:  True
-
-
-      nvidia2004_3.4.12:
-        MAJOR_VERSION: 3
-        VERSION:  3.4
-        LONG_VERSION: 3.4.12
-        VARIANT:  nvidia2004
-        PARENT: nvidia
-        ISPARENT:  True
-
-
-      rockylinux8_3.4.12:
-        MAJOR_VERSION: 3
-        VERSION:  3.4
-        LONG_VERSION: 3.4.12
-        VARIANT:  rockylinux8
-        PARENT: rockylinux
-        ISPARENT:  True
-
-
-      ubuntu1804_3.3.9:
-        MAJOR_VERSION: 3
-        VERSION:  3.3
-        LONG_VERSION: 3.3.9
-        VARIANT:  ubuntu1804
-        PARENT: ubuntu
-        ISPARENT:  False
-
-
-      ubuntu2004_3.3.9:
-        MAJOR_VERSION: 3
-        VERSION:  3.3
-        LONG_VERSION: 3.3.9
-        VARIANT:  ubuntu2004
-        PARENT: ubuntu
-        ISPARENT:  True
-
-
-      alpine313_3.3.9:
-        MAJOR_VERSION: 3
-        VERSION:  3.3
-        LONG_VERSION: 3.3.9
-        VARIANT:  alpine313
-        PARENT: alpine
-        ISPARENT:  True
-
-
-      centos7_3.3.9:
-        MAJOR_VERSION: 3
-        VERSION:  3.3
-        LONG_VERSION: 3.3.9
-        VARIANT:  centos7
-        PARENT: centos
-        ISPARENT:  False
-
-
-      centos8_3.3.9:
-        MAJOR_VERSION: 3
-        VERSION:  3.3
-        LONG_VERSION: 3.3.9
-        VARIANT:  centos8
-        PARENT: centos
-        ISPARENT:  True
-
-
-      scratch313_3.3.9:
-        MAJOR_VERSION: 3
-        VERSION:  3.3
-        LONG_VERSION: 3.3.9
-        VARIANT:  scratch313
-        PARENT: scratch
-        ISPARENT:  True
-
-
-      vaapi2004_3.3.9:
-        MAJOR_VERSION: 3
-        VERSION:  3.3
-        LONG_VERSION: 3.3.9
-        VARIANT:  vaapi2004
-        PARENT: vaapi
-        ISPARENT:  True
-
-
-      nvidia2004_3.3.9:
-        MAJOR_VERSION: 3
-        VERSION:  3.3
-        LONG_VERSION: 3.3.9
-        VARIANT:  nvidia2004
-        PARENT: nvidia
-        ISPARENT:  True
-
-
-      rockylinux8_3.3.9:
-        MAJOR_VERSION: 3
-        VERSION:  3.3
-        LONG_VERSION: 3.3.9
-        VARIANT:  rockylinux8
-        PARENT: rockylinux
-        ISPARENT:  True
-
-
-      ubuntu2004_3.2.19:
-        MAJOR_VERSION: 3
-        VERSION:  3.2
-        LONG_VERSION: 3.2.19
-        VARIANT:  ubuntu2004
-        PARENT: ubuntu
-        ISPARENT:  True
-
-
-      alpine313_3.2.19:
-        MAJOR_VERSION: 3
-        VERSION:  3.2
-        LONG_VERSION: 3.2.19
-        VARIANT:  alpine313
-        PARENT: alpine
-        ISPARENT:  True
-
-
-      centos7_3.2.19:
-        MAJOR_VERSION: 3
-        VERSION:  3.2
-        LONG_VERSION: 3.2.19
-        VARIANT:  centos7
-        PARENT: centos
-        ISPARENT:  True
-
-
-      scratch313_3.2.19:
-        MAJOR_VERSION: 3
-        VERSION:  3.2
-        LONG_VERSION: 3.2.19
-        VARIANT:  scratch313
-        PARENT: scratch
-        ISPARENT:  True
-
-
-      vaapi2004_3.2.19:
-        MAJOR_VERSION: 3
-        VERSION:  3.2
-        LONG_VERSION: 3.2.19
-        VARIANT:  vaapi2004
-        PARENT: vaapi
-        ISPARENT:  True
-
-
-      rockylinux8_3.2.19:
-        MAJOR_VERSION: 3
-        VERSION:  3.2
-        LONG_VERSION: 3.2.19
-        VARIANT:  rockylinux8
-        PARENT: rockylinux
         ISPARENT:  True
 
   steps:
