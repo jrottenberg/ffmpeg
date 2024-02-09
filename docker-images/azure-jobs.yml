@@ -8,29 +8,38 @@ jobs:
     maxParallel: 10
     matrix:
 
-      ubuntu2004_6.1.1:
+      ubuntu2204_6.1.1:
         MAJOR_VERSION: 6
         VERSION:  6.1
         LONG_VERSION: 6.1.1
-        VARIANT:  ubuntu2004
+        VARIANT:  ubuntu2204
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      vaapi2004_6.1.1:
+      vaapi2204_6.1.1:
         MAJOR_VERSION: 6
         VERSION:  6.1
         LONG_VERSION: 6.1.1
-        VARIANT:  vaapi2004
+        VARIANT:  vaapi2204
         PARENT: vaapi
         ISPARENT:  True
 
 
-      ubuntu2004_6.0.1:
+      nvidia2204_6.1.1:
+        MAJOR_VERSION: 6
+        VERSION:  6.1
+        LONG_VERSION: 6.1.1
+        VARIANT:  nvidia2204
+        PARENT: nvidia
+        ISPARENT:  True
+
+
+      ubuntu2204_6.0.1:
         MAJOR_VERSION: 6
         VERSION:  6.0
         LONG_VERSION: 6.0.1
-        VARIANT:  ubuntu2004
+        VARIANT:  ubuntu2204
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -44,20 +53,29 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi2004_6.0.1:
+      vaapi2204_6.0.1:
         MAJOR_VERSION: 6
         VERSION:  6.0
         LONG_VERSION: 6.0.1
-        VARIANT:  vaapi2004
+        VARIANT:  vaapi2204
         PARENT: vaapi
         ISPARENT:  True
 
 
-      ubuntu2004_5.1.4:
+      nvidia2204_6.0.1:
+        MAJOR_VERSION: 6
+        VERSION:  6.0
+        LONG_VERSION: 6.0.1
+        VARIANT:  nvidia2204
+        PARENT: nvidia
+        ISPARENT:  True
+
+
+      ubuntu2204_5.1.4:
         MAJOR_VERSION: 5
         VERSION:  5.1
         LONG_VERSION: 5.1.4
-        VARIANT:  ubuntu2004
+        VARIANT:  ubuntu2204
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -71,29 +89,29 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi2004_5.1.4:
+      vaapi2204_5.1.4:
         MAJOR_VERSION: 5
         VERSION:  5.1
         LONG_VERSION: 5.1.4
-        VARIANT:  vaapi2004
+        VARIANT:  vaapi2204
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_5.1.4:
+      nvidia2204_5.1.4:
         MAJOR_VERSION: 5
         VERSION:  5.1
         LONG_VERSION: 5.1.4
-        VARIANT:  nvidia2004
+        VARIANT:  nvidia2204
         PARENT: nvidia
         ISPARENT:  True
 
 
-      ubuntu2004_4.4.4:
+      ubuntu2204_4.4.4:
         MAJOR_VERSION: 4
         VERSION:  4.4
         LONG_VERSION: 4.4.4
-        VARIANT:  ubuntu2004
+        VARIANT:  ubuntu2204
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -116,56 +134,56 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi2004_4.4.4:
+      vaapi2204_4.4.4:
         MAJOR_VERSION: 4
         VERSION:  4.4
         LONG_VERSION: 4.4.4
-        VARIANT:  vaapi2004
+        VARIANT:  vaapi2204
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.4.4:
+      nvidia2204_4.4.4:
         MAJOR_VERSION: 4
         VERSION:  4.4
         LONG_VERSION: 4.4.4
-        VARIANT:  nvidia2004
+        VARIANT:  nvidia2204
         PARENT: nvidia
         ISPARENT:  True
 
 
-      ubuntu2004_4.3.6:
+      ubuntu2204_4.3.6:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.6
-        VARIANT:  ubuntu2004
+        VARIANT:  ubuntu2204
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      vaapi2004_4.3.6:
+      vaapi2204_4.3.6:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.6
-        VARIANT:  vaapi2004
+        VARIANT:  vaapi2204
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.3.6:
+      nvidia2204_4.3.6:
         MAJOR_VERSION: 4
         VERSION:  4.3
         LONG_VERSION: 4.3.6
-        VARIANT:  nvidia2004
+        VARIANT:  nvidia2204
         PARENT: nvidia
         ISPARENT:  True
 
 
-      ubuntu2004_4.2.9:
+      ubuntu2204_4.2.9:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.9
-        VARIANT:  ubuntu2004
+        VARIANT:  ubuntu2204
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -179,29 +197,29 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi2004_4.2.9:
+      vaapi2204_4.2.9:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.9
-        VARIANT:  vaapi2004
+        VARIANT:  vaapi2204
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.2.9:
+      nvidia2204_4.2.9:
         MAJOR_VERSION: 4
         VERSION:  4.2
         LONG_VERSION: 4.2.9
-        VARIANT:  nvidia2004
+        VARIANT:  nvidia2204
         PARENT: nvidia
         ISPARENT:  True
 
 
-      ubuntu2004_4.1.11:
+      ubuntu2204_4.1.11:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.11
-        VARIANT:  ubuntu2004
+        VARIANT:  ubuntu2204
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -224,29 +242,29 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi2004_4.1.11:
+      vaapi2204_4.1.11:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.11
-        VARIANT:  vaapi2004
+        VARIANT:  vaapi2204
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_4.1.11:
+      nvidia2204_4.1.11:
         MAJOR_VERSION: 4
         VERSION:  4.1
         LONG_VERSION: 4.1.11
-        VARIANT:  nvidia2004
+        VARIANT:  nvidia2204
         PARENT: nvidia
         ISPARENT:  True
 
 
-      ubuntu2004_3.4.13:
+      ubuntu2204_3.4.13:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.13
-        VARIANT:  ubuntu2004
+        VARIANT:  ubuntu2204
         PARENT: ubuntu
         ISPARENT:  True
 
@@ -269,30 +287,48 @@ jobs:
         ISPARENT:  True
 
 
-      vaapi2004_3.4.13:
+      vaapi2204_3.4.13:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.13
-        VARIANT:  vaapi2004
+        VARIANT:  vaapi2204
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2004_3.4.13:
+      nvidia2204_3.4.13:
         MAJOR_VERSION: 3
         VERSION:  3.4
         LONG_VERSION: 3.4.13
-        VARIANT:  nvidia2004
+        VARIANT:  nvidia2204
         PARENT: nvidia
         ISPARENT:  True
 
 
-      ubuntu2004_2.8.22:
+      ubuntu2204_2.8.22:
         MAJOR_VERSION: 2
         VERSION:  2.8
         LONG_VERSION: 2.8.22
-        VARIANT:  ubuntu2004
+        VARIANT:  ubuntu2204
         PARENT: ubuntu
+        ISPARENT:  True
+
+
+      vaapi2204_2.8.22:
+        MAJOR_VERSION: 2
+        VERSION:  2.8
+        LONG_VERSION: 2.8.22
+        VARIANT:  vaapi2204
+        PARENT: vaapi
+        ISPARENT:  True
+
+
+      nvidia2204_2.8.22:
+        MAJOR_VERSION: 2
+        VERSION:  2.8
+        LONG_VERSION: 2.8.22
+        VARIANT:  nvidia2204
+        PARENT: nvidia
         ISPARENT:  True
 
   steps:

@@ -30,11 +30,11 @@ for v in json.loads(ffmpeg_releases):
 
 
 VARIANTS = [
-    {"name": "ubuntu2004", "parent": "ubuntu"},
+    {"name": "ubuntu2204", "parent": "ubuntu"},
     {"name": "alpine313", "parent": "alpine"},
     {"name": "scratch313", "parent": "scratch"},
-    {"name": "vaapi2004", "parent": "vaapi"},
-    {"name": "nvidia2004", "parent": "nvidia"},
+    {"name": "vaapi2204", "parent": "vaapi"},
+    {"name": "nvidia2204", "parent": "nvidia"},
 ]
 
 
