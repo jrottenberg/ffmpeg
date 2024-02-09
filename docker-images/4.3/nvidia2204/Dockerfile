@@ -16,7 +16,7 @@ RUN     apt-get -yqq update && \
         apt-get autoremove -y && \
         apt-get clean -y
 
-FROM      nvcr.io/nvidia/cuda:11.4.1-runtime-ubuntu22.04 AS runtime-base
+FROM  nvcr.io/nvidia/cuda:12.3.1-runtime-ubuntu22.04 AS runtime-base
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
 ENV	    DEBIAN_FRONTEND=nonintercative
