@@ -6,8 +6,7 @@
 #
 #
 
-FROM   nvcr.io/nvidia/cuda:11.4.1-devel-ubuntu22.04 AS devel-base
-
+FROM nvcr.io/nvidia/cuda:12.3.1-devel-ubuntu22.04 AS devel-base
 ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
 ENV	    DEBIAN_FRONTEND=noninteractive
 WORKDIR     /tmp/workdir
