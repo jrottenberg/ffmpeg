@@ -147,7 +147,6 @@ for version in keep_version:
             "--enable-libwebp",
             "--enable-libx264",
             "--enable-libx265",
-            "--enable-libxcb",
             "--enable-libxvid",
             "--enable-libzmq",
             "--enable-nonfree",
