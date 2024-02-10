@@ -92,7 +92,6 @@ RUN      buildDeps="autoconf \
                     nasm \
                     perl \
                     pkg-config \
-                    python \
                     libssl-dev \
                     yasm \
                     libva-dev \
