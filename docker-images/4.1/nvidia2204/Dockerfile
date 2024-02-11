@@ -30,7 +30,7 @@ RUN     apt-get -yqq update && \
 
 FROM  devel-base as build
 
-ENV        NVIDIA_HEADERS_VERSION=12.1.14.0
+ENV        NVIDIA_HEADERS_VERSION=11.1.5.3
 
 ENV         FFMPEG_VERSION=4.1.11 \
     AOM_VERSION=v3.8.1 \
