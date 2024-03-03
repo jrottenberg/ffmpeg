@@ -558,7 +558,6 @@ RUN  \
         --enable-libx264 \
         --enable-libx265 \
         --enable-libxvid \
-        --enable-libzimg \
         --enable-libzmq \
         --enable-nonfree \
         --enable-nvenc \
