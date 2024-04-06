@@ -26,6 +26,8 @@ keep_version = []
 
 for v in json.loads(ffmpeg_releases):
     if not v["eol"]:
+        if "0.0" in v["latest"]:
+            v["latest"] = v["latest"].replace("0.0", "0")
         keep_version.append(v["latest"])
 
 
