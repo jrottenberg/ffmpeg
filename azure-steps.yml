@@ -28,7 +28,7 @@ steps:
         docker push "${GHCR}:${VERSION}-${PARENT}"
         docker push "${GHCR}:${MAJOR_VERSION}-${PARENT}"
       fi
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     displayName: Push docker image
     env:
       DOCKER_PASSWORD: $(docker.password)
