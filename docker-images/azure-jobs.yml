@@ -8,46 +8,46 @@ jobs:
     maxParallel: 10
     matrix:
 
-      ubuntu2204_7.0:
+      ubuntu2204_7.0.1:
         MAJOR_VERSION: 7
         VERSION:  7.0
-        LONG_VERSION: 7.0
+        LONG_VERSION: 7.0.1
         VARIANT:  ubuntu2204
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_7.0:
+      alpine313_7.0.1:
         MAJOR_VERSION: 7
         VERSION:  7.0
-        LONG_VERSION: 7.0
+        LONG_VERSION: 7.0.1
         VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
 
-      scratch313_7.0:
+      scratch313_7.0.1:
         MAJOR_VERSION: 7
         VERSION:  7.0
-        LONG_VERSION: 7.0
+        LONG_VERSION: 7.0.1
         VARIANT:  scratch313
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi2204_7.0:
+      vaapi2204_7.0.1:
         MAJOR_VERSION: 7
         VERSION:  7.0
-        LONG_VERSION: 7.0
+        LONG_VERSION: 7.0.1
         VARIANT:  vaapi2204
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2204_7.0:
+      nvidia2204_7.0.1:
         MAJOR_VERSION: 7
         VERSION:  7.0
-        LONG_VERSION: 7.0
+        LONG_VERSION: 7.0.1
         VARIANT:  nvidia2204
         PARENT: nvidia
         ISPARENT:  True
