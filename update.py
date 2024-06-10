@@ -150,7 +150,6 @@ for version in keep_version:
             "--enable-libx264",
             "--enable-libx265",
             "--enable-libxvid",
-            "--enable-libzimg",
             "--enable-libzmq",
             "--enable-nonfree",
             "--enable-openssl",
@@ -172,6 +171,8 @@ for version in keep_version:
         if version[0:3] != "2.8":
             FFMPEG_CONFIG_FLAGS.append("--enable-libopenjpeg")
             FFMPEG_CONFIG_FLAGS.append("--enable-libkvazaar")
+            FFMPEG_CONFIG_FLAGS.append("--enable-libzimg")
+
         if version == "snapshot" or int(version[0]) > 3:
             FFMPEG_CONFIG_FLAGS.append("--enable-libaom")
             FFMPEG_CONFIG_FLAGS.append("--extra-libs=-lpthread")
