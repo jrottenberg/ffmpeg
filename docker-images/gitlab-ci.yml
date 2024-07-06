@@ -138,46 +138,46 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-5.1.4-ubuntu2204:
+5.1.5-ubuntu2204:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.1"
-    LONG_VERSION: "5.1.4"
+    LONG_VERSION: "5.1.5"
     VARIANT: ubuntu2204
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-5.1.4-alpine313:
+5.1.5-alpine313:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.1"
-    LONG_VERSION: "5.1.4"
+    LONG_VERSION: "5.1.5"
     VARIANT: alpine313
     PARENT: "alpine"
     ISPARENT: "True"
 
-5.1.4-vaapi2204:
+5.1.5-vaapi2204:
   extends: .docker
   stage: vaapi
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.1"
-    LONG_VERSION: "5.1.4"
+    LONG_VERSION: "5.1.5"
     VARIANT: vaapi2204
     PARENT: "vaapi"
     ISPARENT: "True"
 
-5.1.4-nvidia2204:
+5.1.5-nvidia2204:
   extends: .docker
   stage: nvidia
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.1"
-    LONG_VERSION: "5.1.4"
+    LONG_VERSION: "5.1.5"
     VARIANT: nvidia2204
     PARENT: "nvidia"
     ISPARENT: "True"
@@ -237,35 +237,35 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
 
-4.3.6-ubuntu2204:
+4.3.7-ubuntu2204:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
-    LONG_VERSION: "4.3.6"
+    LONG_VERSION: "4.3.7"
     VARIANT: ubuntu2204
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-4.3.6-vaapi2204:
+4.3.7-vaapi2204:
   extends: .docker
   stage: vaapi
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
-    LONG_VERSION: "4.3.6"
+    LONG_VERSION: "4.3.7"
     VARIANT: vaapi2204
     PARENT: "vaapi"
     ISPARENT: "True"
 
-4.3.6-nvidia2204:
+4.3.7-nvidia2204:
   extends: .docker
   stage: nvidia
   variables:
     MAJOR_VERSION: 4
     VERSION: "4.3"
-    LONG_VERSION: "4.3.6"
+    LONG_VERSION: "4.3.7"
     VARIANT: nvidia2204
     PARENT: "nvidia"
     ISPARENT: "True"
