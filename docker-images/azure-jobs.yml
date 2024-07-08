@@ -116,37 +116,37 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu2204_5.1.4:
+      ubuntu2204_5.1.5:
         MAJOR_VERSION: 5
         VERSION:  5.1
-        LONG_VERSION: 5.1.4
+        LONG_VERSION: 5.1.5
         VARIANT:  ubuntu2204
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      alpine313_5.1.4:
+      alpine313_5.1.5:
         MAJOR_VERSION: 5
         VERSION:  5.1
-        LONG_VERSION: 5.1.4
+        LONG_VERSION: 5.1.5
         VARIANT:  alpine313
         PARENT: alpine
         ISPARENT:  True
 
 
-      vaapi2204_5.1.4:
+      vaapi2204_5.1.5:
         MAJOR_VERSION: 5
         VERSION:  5.1
-        LONG_VERSION: 5.1.4
+        LONG_VERSION: 5.1.5
         VARIANT:  vaapi2204
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2204_5.1.4:
+      nvidia2204_5.1.5:
         MAJOR_VERSION: 5
         VERSION:  5.1
-        LONG_VERSION: 5.1.4
+        LONG_VERSION: 5.1.5
         VARIANT:  nvidia2204
         PARENT: nvidia
         ISPARENT:  True
@@ -197,28 +197,28 @@ jobs:
         ISPARENT:  True
 
 
-      ubuntu2204_4.3.6:
+      ubuntu2204_4.3.7:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.6
+        LONG_VERSION: 4.3.7
         VARIANT:  ubuntu2204
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      vaapi2204_4.3.6:
+      vaapi2204_4.3.7:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.6
+        LONG_VERSION: 4.3.7
         VARIANT:  vaapi2204
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2204_4.3.6:
+      nvidia2204_4.3.7:
         MAJOR_VERSION: 4
         VERSION:  4.3
-        LONG_VERSION: 4.3.6
+        LONG_VERSION: 4.3.7
         VARIANT:  nvidia2204
         PARENT: nvidia
         ISPARENT:  True
