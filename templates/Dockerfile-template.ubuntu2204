@@ -36,7 +36,6 @@ RUN      buildDeps="autoconf \
                     nasm \
                     perl \
                     pkg-config \
-                    python \
                     libssl-dev \
                     yasm \
                     zlib1g-dev" && \
