@@ -40,7 +40,7 @@ If you forget and don't have pre-commit configured, the pre-commit step will fai
 # Generates the Dockerfile for all variants
 ./update.py
 
-pre-commit run -a # recommanded
+pre-commit run -a # recommended
 
 # Test a specific variant
 docker build -t my-build docker-images/VERSION/
