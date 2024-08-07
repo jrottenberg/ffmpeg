@@ -5,7 +5,7 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:20.04 AS base
+FROM        ubuntu:22.04 AS base
 
 WORKDIR     /tmp/workdir
 
@@ -93,7 +93,6 @@ RUN      buildDeps="autoconf \
                     nasm \
                     perl \
                     pkg-config \
-                    python \
                     libssl-dev \
                     yasm \
                     zlib1g-dev" && \
