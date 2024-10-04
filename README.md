@@ -24,25 +24,22 @@ There are different builds available:
   - ubuntu based vaapi images `ffmpeg:<version>-vaapi1804` or `ffmpeg:<version>-vaapi2004` (old versions with `ffmpeg:<version>-vaapi1804`, `ffmpeg:<version>-nvidia1604`)
 
 `<version>` can be one of the following:
-- 3.2
-- 3.3
-- 3.4
-- 4.0
-- 4.1
-- 4.2
-- 4.3
+- 7.1
+- 7.0
+- 6.1
+- 5.1
 - 4.4
-
-
-
-
+- 4.3
+- 4.2
+- 3.4
+- 2.8
 
 
 ### Generate list of recent images
 
 You can use the following command to generate a list of current images:
 ```bash
-$ curl --silent https://hub.docker.com/v2/repositories/jrottenberg/ffmpeg/tags/?page_size=500 | jq -cr ".results|sort_by(.name)|reverse[]|.sz=(.full_size/1048576|floor|tostring+\"mb\")|[.name,( (20-(.name|length))*\" \" ),.sz,( (8-(.sz|length))*\" \"),.last_updated[:10]]|@text|gsub(\"[,\\\"\\\]\\\[]\";null)"
+$ curl --silent 'https://hub.docker.com/v2/repositories/jrottenberg/ffmpeg/tags/?page_size=500' | jq -cr ".results|sort_by(.name)|reverse[]|.sz=(.full_size/1048576|floor|tostring+\"mb\")|[.name,( (20-(.name|length))*\" \" ),.sz,( (8-(.sz|length))*\" \"),.last_updated[:10]]|@text|gsub(\"[,\\\"\\\]\\\[]\";null)"
 ```
 
 If you want to compare the one you have locally, use the following command:
@@ -55,61 +52,18 @@ Please use [Github issues](https://github.com/jrottenberg/ffmpeg/issues/new) to 
 ## Test
 
 ```bash
-ffmpeg version N-98740-ga72d529 Copyright (c) 2000-2020 the FFmpeg developers
-  built with gcc 7 (Ubuntu 7.5.0-3ubuntu1~18.04)
-  configuration: --disable-debug --disable-doc --disable-ffplay --enable-shared --enable-avresample --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-gpl --enable-libass --enable-fontconfig --enable-libfreetype --enable-libvidstab --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libxcb --enable-libx265 --enable-libxvid --enable-libx264 --enable-nonfree --enable-openssl --enable-libfdk_aac --enable-postproc --enable-small --enable-version3 --enable-libbluray --enable-libzmq --extra-libs=-ldl --prefix=/opt/ffmpeg --enable-libopenjpeg --enable-libkvazaar --enable-libaom --extra-libs=-lpthread --enable-libsrt --enable-libaribb24 --enable-vaapi --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib
-  libavutil      56. 58.100 / 56. 58.100
-  libavcodec     58.100.100 / 58.100.100
-  libavformat    58. 51.100 / 58. 51.100
-  libavdevice    58. 11.101 / 58. 11.101
-  libavfilter     7. 87.100 /  7. 87.100
-  libavresample   4.  0.  0 /  4.  0.  0
-  libswscale      5.  8.100 /  5.  8.100
-  libswresample   3.  8.100 /  3.  8.100
-  libpostproc    55.  8.100 / 55.  8.100
-
-  configuration:
-    --disable-debug
-    --disable-doc
-    --disable-ffplay
-    --enable-shared
-    --enable-avresample
-    --enable-libopencore-amrnb
-    --enable-libopencore-amrwb
-    --enable-gpl
-    --enable-libass
-    --enable-fontconfig
-    --enable-libfreetype
-    --enable-libvidstab
-    --enable-libmp3lame
-    --enable-libopus
-    --enable-libtheora
-    --enable-libvorbis
-    --enable-libvpx
-    --enable-libwebp
-    --enable-libxcb
-    --enable-libx265
-    --enable-libxvid
-    --enable-libx264
-    --enable-nonfree
-    --enable-openssl
-    --enable-libfdk_aac
-    --enable-postproc
-    --enable-small
-    --enable-version3
-    --enable-libbluray
-    --enable-libzmq
-    --extra-libs=-ldl
-    --prefix=/opt/ffmpeg
-    --enable-libopenjpeg
-    --enable-libkvazaar
-    --enable-libaom
-    --extra-libs=-lpthread
-    --enable-libsrt
-    --enable-libaribb24
-    --enable-vaapi
-    --extra-cflags=-I/opt/ffmpeg/include
-    --extra-ldflags=-L/opt/ffmpeg/lib
+> docker run -it jrottenberg/ffmpeg:7.0.2-alpine313 -version
+ffmpeg version 7.0.2 Copyright (c) 2000-2024 the FFmpeg developers
+built with gcc 10.2.1 (Alpine 10.2.1_pre1) 20201203
+configuration: --disable-debug --disable-doc --disable-ffplay --enable-fontconfig --enable-gpl --enable-libaom --enable-libaribb24 --enable-libass --enable-libbluray --enable-libfdk_aac --enable-libfreetype --enable-libkvazaar --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libopus --enable-libsrt --enable-libtheora --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxvid --enable-libzimg --enable-libzmq --enable-nonfree --enable-openssl --enable-postproc --enable-shared --enable-small --enable-version3 --extra-cflags=-I/opt/ffmpeg/include --extra-ldflags=-L/opt/ffmpeg/lib --extra-libs=-ldl --extra-libs=-lpthread --prefix=/opt/ffmpeg
+libavutil      59.  8.100 / 59.  8.100
+libavcodec     61.  3.100 / 61.  3.100
+libavformat    61.  1.100 / 61.  1.100
+libavdevice    61.  1.100 / 61.  1.100
+libavfilter    10.  1.100 / 10.  1.100
+libswscale      8.  1.100 /  8.  1.100
+libswresample   5.  1.100 /  5.  1.100
+libpostproc    58.  1.100 / 58.  1.100
 ```
 
 Capture output from the container to the host running the command
