@@ -5,9 +5,13 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:20.04 AS base
+#  1 warning found (use docker --debug to expand):
+#  - FromAsCasing: 'as' and 'FROM' keywords' casing do not match (line 19)
+FROM        ubuntu:24.10 AS base
 
 WORKDIR     /tmp/workdir
+
+# liblcms2-dev  libtiff-dev libpng-dev libz-dev
 
 RUN     apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
@@ -36,7 +40,7 @@ RUN      buildDeps="autoconf \
                     nasm \
                     perl \
                     pkg-config \
-                    python \
+                    python3 \
                     libssl-dev \
                     yasm \
                     zlib1g-dev" && \

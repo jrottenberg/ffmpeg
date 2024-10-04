@@ -44,6 +44,8 @@ pre-commit run -a # recommended
 
 # Test a specific variant
 docker build -t my-build docker-images/VERSION/
+# example
+./update.py; docker build --no-cache -t 7.1-ubuntu docker-images/7.1/ubuntu2404
 
 # Make sure all variants pass before CI
 find ffmpeg/ -name Dockerfile | xargs dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
