@@ -88,7 +88,7 @@ def version_or_greater(target_major, target_minor, build_version):
     return False
 
 
-def read_ffmpeg_template_content_based_on_version(build_version, env_or_run="env"):
+def read_ffmpeg_template(build_version, env_or_run="env"):
     """if the version is 7.1 or later then use the updated ffmpeg templates"""
     updated_templates = version_or_greater(7, 1, build_version)
     if updated_templates:
@@ -102,8 +102,8 @@ def read_ffmpeg_template_content_based_on_version(build_version, env_or_run="env
 for version in keep_version:
     print(version)
 
-    ENV_CONTENT = read_ffmpeg_template_content_based_on_version(version, "env")
-    RUN_CONTENT = read_ffmpeg_template_content_based_on_version(version, "run")
+    ENV_CONTENT = read_ffmpeg_template(version, "env")
+    RUN_CONTENT = read_ffmpeg_template(version, "run")
 
     skip_variants = None
     for k, v in SKIP_VARIANTS.items():
