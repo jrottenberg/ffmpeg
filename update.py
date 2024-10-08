@@ -24,7 +24,7 @@ with request.urlopen(FFMPEG_RELEASES) as conn:
     ffmpeg_releases = conn.read().decode("utf-8")
 keep_version = []
 
-skip_cycle = ['6.1', '5.1', '4.4', '4.3', '4.2', '3.4', '2.8']
+skip_cycle = ["6.1", "5.1", "4.4", "4.3", "4.2", "3.4", "2.8"]
 # skip_cycle = []
 for v in json.loads(ffmpeg_releases):
     if not v["eol"] and not v["cycle"] in skip_cycle:
@@ -54,7 +54,7 @@ SKIP_VARIANTS = {
     "2.8": ["alpine313", "nvidia2004", "vaapi2004", "scratch313", "ubuntu2404"],
     "4.2": ["alpine313", "ubuntu2404"],
     "4.3": ["alpine313", "scratch313", "ubuntu2404"],
-    "5.1": ["scratch313", "ubuntu2404" ],
+    "5.1": ["scratch313", "ubuntu2404"],
     "6.0": ["alpine313", "nvidia2004", "ubuntu2404"],
     "6.1": ["alpine313", "nvidia2004", "scratch313", "ubuntu2404"],
     "7.0": ["alpine313", "nvidia2004", "scratch313"],
