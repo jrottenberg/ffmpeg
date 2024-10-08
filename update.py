@@ -79,29 +79,30 @@ def get_major_version(version):
 
 print("Preparing docker images for ffmpeg versions: ")
 
+def version_number_greater_than(major, minor, current_version):
+    major_number = int(current_version.split(".")[0])
+    minor_number = int(current_version.split(".")[1])
+    if major_number > major:
+        return True
+    elif major_number == major and minor_number >= minor:
+        return True
+    return False
+
+def read_ffmpeg_template_content_based_on_version(current_version, env_or_run="env"):
+    """ if the version is 7.1 or later then use the updated ffmpeg templates """
+    updated_templates = version_number_greater_than(7, 1, current_version)
+    if updated_templates:
+        with open(f"templates/Dockerfile-{env_or_run}-ffmpeg-7.1-plus", "r") as tmpfile:
+            return tmpfile.read()
+    else:
+        with open(f"templates/Dockerfile-{env_or_run}", "r") as tmpfile:
+            return tmpfile.read()
+
 for version in keep_version:
     print(version)
-    # if the version is 7 or greater then use the ffmepeg-7 template
-    # this gives us the ability to update libs without breaking all of the older versions
-    use_updated_ffmpeg_templates = False
-    major_number = int(version.split(".")[0])
-    minor_number = int(version.split(".")[1])
-    if major_number > 7:
-        use_updated_ffmpeg_templates = True
-    elif major_number == 7 and minor_number >= 1:
-        use_updated_ffmpeg_templates = True
 
-    if use_updated_ffmpeg_templates:
-        with open(f"templates/Dockerfile-env-ffmpeg-7.1-plus", "r") as tmpfile:
-            ENV_CONTENT = tmpfile.read()
-        with open(f"templates/Dockerfile-run-ffmpeg-7.1-plus", "r") as tmpfile:
-            RUN_CONTENT = tmpfile.read()
-    else:
-        # Set the default env/run environments ( for older builds )
-        with open("templates/Dockerfile-env", "r") as tmpfile:
-            ENV_CONTENT = tmpfile.read()
-        with open("templates/Dockerfile-run", "r") as tmpfile:
-            RUN_CONTENT = tmpfile.read()
+    ENV_CONTENT = read_ffmpeg_template_content_based_on_version(version, "env")
+    RUN_CONTENT = read_ffmpeg_template_content_based_on_version(version, "run")
 
     skip_variants = None
     for k, v in SKIP_VARIANTS.items():
