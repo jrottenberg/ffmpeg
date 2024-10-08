@@ -8,6 +8,7 @@ from urllib import request
 
 FFMPEG_RELEASES = "https://endoflife.date/api/ffmpeg.json"
 
+# Set the default env/run environments ( for older builds )
 with open("templates/Dockerfile-env", "r") as tmpfile:
     ENV_CONTENT = tmpfile.read()
 with open("templates/Dockerfile-run", "r") as tmpfile:
@@ -24,16 +25,17 @@ with request.urlopen(FFMPEG_RELEASES) as conn:
     ffmpeg_releases = conn.read().decode("utf-8")
 keep_version = []
 
-skip_cycle = ["6.1", "5.1", "4.4", "4.3", "4.2", "3.4", "2.8"]
-# skip_cycle = []
+# When building locally ( and trying to keep the docker-images folder clean'ish )
+# it might be useful to skip some of the older versions
+skip_ffmpeg_cycle = ["7.0.2", "6.1", "5.1", "4.4", "4.3", "4.2", "3.4", "2.8"]
+# skip_ffmpeg_cycle = []
 for v in json.loads(ffmpeg_releases):
-    if not v["eol"] and not v["cycle"] in skip_cycle:
+    if not v["eol"] and not v["cycle"] in skip_ffmpeg_cycle:
         if "0.0" in v["latest"]:
             v["latest"] = v["latest"].replace("0.0", "0")
         keep_version.append(v["latest"])
 
 VARIANTS = [
-    {"name": "ubuntu2204", "parent": "ubuntu"},
     {"name": "ubuntu2404", "parent": "ubuntu"},
     {"name": "alpine313", "parent": "alpine"},
     {"name": "scratch313", "parent": "scratch"},
@@ -57,8 +59,7 @@ SKIP_VARIANTS = {
     "5.1": ["scratch313", "ubuntu2404"],
     "6.0": ["alpine313", "nvidia2004", "ubuntu2404"],
     "6.1": ["alpine313", "nvidia2004", "scratch313", "ubuntu2404"],
-    "7.0": ["alpine313", "nvidia2004", "scratch313"],
-    "7.1": ["alpine313", "nvidia2204", "scratch313", "vaapi2204", "ubuntu2204"],
+    "7.1": ["alpine313", "nvidia2204", "scratch313", "vaapi2204"],
 }
 
 
@@ -82,6 +83,15 @@ print("Preparing docker images for ffmpeg versions: ")
 
 for version in keep_version:
     print(version)
+    # if the version is 7 or greater then use the ffmepeg-7 template
+    # this gives us the ability to update libs without breaking all of the older versions
+    major_number = int(version.split(".")[0])
+    if major_number >= 7:
+        with open(f"templates/Dockerfile-env-env-ffmpeg-7", "r") as tmpfile:
+            ENV_CONTENT = tmpfile.read()
+        with open(f"templates/Dockerfile-run-ffmpeg-7", "r") as tmpfile:
+            RUN_CONTENT = tmpfile.read()
+
     skip_variants = None
     for k, v in SKIP_VARIANTS.items():
         if version.startswith(k):

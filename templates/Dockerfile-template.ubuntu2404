@@ -5,9 +5,6 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-
-# FROM        ubuntu:24.10 as base
-# Ubuntu 24.04 LTS (Noble Numbat)
 FROM        ubuntu:24.04 as base
 
 WORKDIR     /tmp/workdir
