@@ -8,6 +8,15 @@ jobs:
     maxParallel: 10
     matrix:
 
+      ubuntu2404_7.1:
+        MAJOR_VERSION: 7
+        VERSION:  7.1
+        LONG_VERSION: 7.1
+        VARIANT:  ubuntu2404
+        PARENT: ubuntu
+        ISPARENT:  True
+
+
       ubuntu2204_7.0.2:
         MAJOR_VERSION: 7
         VERSION:  7.0

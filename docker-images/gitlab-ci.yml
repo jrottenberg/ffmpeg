@@ -6,6 +6,17 @@ stages:
   - ubuntu
   - vaapi
 
+7.1-ubuntu2404:
+  extends: .docker
+  stage: ubuntu
+  variables:
+    MAJOR_VERSION: 7
+    VERSION: "7.1"
+    LONG_VERSION: "7.1"
+    VARIANT: ubuntu2404
+    PARENT: "ubuntu"
+    ISPARENT: "True"
+
 7.0.2-ubuntu2204:
   extends: .docker
   stage: ubuntu

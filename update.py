@@ -8,12 +8,6 @@ from urllib import request
 
 FFMPEG_RELEASES = "https://endoflife.date/api/ffmpeg.json"
 
-# Set the default env/run environments ( for older builds )
-with open("templates/Dockerfile-env", "r") as tmpfile:
-    ENV_CONTENT = tmpfile.read()
-with open("templates/Dockerfile-run", "r") as tmpfile:
-    RUN_CONTENT = tmpfile.read()
-
 DIR_FORMAT_STR = "docker-images/{0}/{1}"
 IMAGE_FORMAT_STR = "{0}/Dockerfile".format(DIR_FORMAT_STR)
 TEMPLATE_STR = "templates/Dockerfile-template.{0}"
@@ -27,8 +21,8 @@ keep_version = []
 
 # When building locally ( and trying to keep the docker-images folder clean'ish )
 # it might be useful to skip some of the older versions
-skip_ffmpeg_cycle = ["7.0.2", "6.1", "5.1", "4.4", "4.3", "4.2", "3.4", "2.8"]
-# skip_ffmpeg_cycle = []
+# skip_ffmpeg_cycle = ["7.0.2", "6.1", "5.1", "4.4", "4.3", "4.2", "3.4", "2.8"]
+skip_ffmpeg_cycle = []
 for v in json.loads(ffmpeg_releases):
     if not v["eol"] and not v["cycle"] in skip_ffmpeg_cycle:
         if "0.0" in v["latest"]:
@@ -37,6 +31,7 @@ for v in json.loads(ffmpeg_releases):
 
 VARIANTS = [
     {"name": "ubuntu2404", "parent": "ubuntu"},
+    {"name": "ubuntu2204", "parent": "ubuntu"},
     {"name": "alpine313", "parent": "alpine"},
     {"name": "scratch313", "parent": "scratch"},
     {"name": "vaapi2204", "parent": "vaapi"},
@@ -54,12 +49,15 @@ for parent in all_parents:
 
 SKIP_VARIANTS = {
     "2.8": ["alpine313", "nvidia2004", "vaapi2004", "scratch313", "ubuntu2404"],
+    "3.4": ["ubuntu2404"],
     "4.2": ["alpine313", "ubuntu2404"],
     "4.3": ["alpine313", "scratch313", "ubuntu2404"],
+    "4.4": ["ubuntu2404"],
     "5.1": ["scratch313", "ubuntu2404"],
     "6.0": ["alpine313", "nvidia2004", "ubuntu2404"],
     "6.1": ["alpine313", "nvidia2004", "scratch313", "ubuntu2404"],
-    "7.1": ["alpine313", "nvidia2204", "scratch313", "vaapi2204"],
+    "7.0": ["nvidia2004", "vaapi2004", "ubuntu2404"],
+    "7.1": ["alpine313", "nvidia2204", "scratch313", "vaapi2204", "ubuntu2204"],
 }
 
 
@@ -85,11 +83,24 @@ for version in keep_version:
     print(version)
     # if the version is 7 or greater then use the ffmepeg-7 template
     # this gives us the ability to update libs without breaking all of the older versions
+    use_updated_ffmpeg_templates = False
     major_number = int(version.split(".")[0])
-    if major_number >= 7:
-        with open(f"templates/Dockerfile-env-env-ffmpeg-7", "r") as tmpfile:
+    minor_number = int(version.split(".")[1])
+    if major_number > 7:
+        use_updated_ffmpeg_templates = True
+    elif major_number == 7 and minor_number >= 1:
+        use_updated_ffmpeg_templates = True
+
+    if use_updated_ffmpeg_templates:
+        with open(f"templates/Dockerfile-env-ffmpeg-7.1-plus", "r") as tmpfile:
             ENV_CONTENT = tmpfile.read()
-        with open(f"templates/Dockerfile-run-ffmpeg-7", "r") as tmpfile:
+        with open(f"templates/Dockerfile-run-ffmpeg-7.1-plus", "r") as tmpfile:
+            RUN_CONTENT = tmpfile.read()
+    else:
+        # Set the default env/run environments ( for older builds )
+        with open("templates/Dockerfile-env", "r") as tmpfile:
+            ENV_CONTENT = tmpfile.read()
+        with open("templates/Dockerfile-run", "r") as tmpfile:
             RUN_CONTENT = tmpfile.read()
 
     skip_variants = None
