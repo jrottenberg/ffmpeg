@@ -19,12 +19,8 @@ with request.urlopen(FFMPEG_RELEASES) as conn:
     ffmpeg_releases = conn.read().decode("utf-8")
 keep_version = []
 
-# When building locally ( and trying to keep the docker-images folder clean'ish )
-# it might be useful to skip some of the older versions
-# skip_ffmpeg_cycle = ["7.0.2", "6.1", "5.1", "4.4", "4.3", "4.2", "3.4", "2.8"]
-skip_ffmpeg_cycle = []
 for v in json.loads(ffmpeg_releases):
-    if not v["eol"] and not v["cycle"] in skip_ffmpeg_cycle:
+    if not v["eol"]:
         if "0.0" in v["latest"]:
             v["latest"] = v["latest"].replace("0.0", "0")
         keep_version.append(v["latest"])
@@ -79,24 +75,29 @@ def get_major_version(version):
 
 print("Preparing docker images for ffmpeg versions: ")
 
-def version_number_greater_than(major, minor, current_version):
-    major_number = int(current_version.split(".")[0])
-    minor_number = int(current_version.split(".")[1])
-    if major_number > major:
+
+def version_or_greater(target_major, target_minor, build_version):
+    """if the build_version is equal to or greater than the
+    target_major and target_minor then return True"""
+    build_major_number = int(build_version.split(".")[0])
+    build_minor_number = int(build_version.split(".")[1])
+    if build_major_number > target_major:
         return True
-    elif major_number == major and minor_number >= minor:
+    elif build_major_number == target_major and build_minor_number >= target_minor:
         return True
     return False
 
-def read_ffmpeg_template_content_based_on_version(current_version, env_or_run="env"):
-    """ if the version is 7.1 or later then use the updated ffmpeg templates """
-    updated_templates = version_number_greater_than(7, 1, current_version)
+
+def read_ffmpeg_template_content_based_on_version(build_version, env_or_run="env"):
+    """if the version is 7.1 or later then use the updated ffmpeg templates"""
+    updated_templates = version_or_greater(7, 1, build_version)
     if updated_templates:
         with open(f"templates/Dockerfile-{env_or_run}-ffmpeg-7.1-plus", "r") as tmpfile:
             return tmpfile.read()
     else:
         with open(f"templates/Dockerfile-{env_or_run}", "r") as tmpfile:
             return tmpfile.read()
+
 
 for version in keep_version:
     print(version)
