@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-
+import datetime
 import json
 import os
 import shutil
@@ -12,8 +12,31 @@ DIR_FORMAT_STR = "docker-images/{0}/{1}"
 IMAGE_FORMAT_STR = "{0}/Dockerfile".format(DIR_FORMAT_STR)
 TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 
+def is_too_old(date_str, years=3):
+  """Checks if the given date string is more than x years old.
+
+  Args:
+    date_str: The date string in the format "YYYY-MM-DD".
+
+  Returns:
+    True if the date is more than x years old, False otherwise.
+  """
+
+  date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+  # Calculate the difference between the date and today
+  diff = datetime.datetime.now() - date_obj
+
+  # Check if the difference is more than x years
+  return diff.days > (years * 365)
+
 # https://ffmpeg.org/olddownload.html
 # https://endoflife.date/ffmpeg
+# use the endoflife.date API to get the latest versions
+# ALSO: don't include versions that are more than x years old (default is currently 3)
+# this creates all sorts of problems is the end of life is giving us ffmpeg versions that are 9 years old.
+# this creates a lib version's and os versions nightmare to maintain. Limiting the versions to a few years
+# old greatly simplifies the maintenance of the images.
+YEARS = 3
 
 with request.urlopen(FFMPEG_RELEASES) as conn:
     ffmpeg_releases = conn.read().decode("utf-8")
@@ -23,14 +46,15 @@ for v in json.loads(ffmpeg_releases):
     if not v["eol"]:
         if "0.0" in v["latest"]:
             v["latest"] = v["latest"].replace("0.0", "0")
-        keep_version.append(v["latest"])
+        release_date = v["releaseDate"]
+        if not is_too_old(release_date, years=YEARS):
+            keep_version.append(v["latest"])
 
 VARIANTS = [
     {"name": "ubuntu2404", "parent": "ubuntu"},
-    {"name": "ubuntu2204", "parent": "ubuntu"},
-    {"name": "alpine313", "parent": "alpine"},
-    {"name": "scratch313", "parent": "scratch"},
-    {"name": "vaapi2204", "parent": "vaapi"},
+    {"name": "alpine320", "parent": "alpine"},
+    {"name": "scratch320", "parent": "scratch"},
+    {"name": "vaapi2404", "parent": "vaapi"},
     {"name": "nvidia2204", "parent": "nvidia"},
 ]
 
@@ -44,17 +68,18 @@ for parent in all_parents:
 
 
 SKIP_VARIANTS = {
-    "2.8": ["alpine313", "nvidia2004", "vaapi2004", "scratch313", "ubuntu2404"],
-    "3.4": ["ubuntu2404"],
-    "4.2": ["alpine313", "ubuntu2404"],
-    "4.3": ["alpine313", "scratch313", "ubuntu2404"],
-    "4.4": ["ubuntu2404"],
-    "5.1": ["scratch313", "ubuntu2404"],
-    "6.0": ["alpine313", "nvidia2004", "ubuntu2404"],
-    "6.1": ["alpine313", "nvidia2004", "scratch313", "ubuntu2404"],
-    "7.0": ["nvidia2004", "vaapi2004", "ubuntu2404"],
-    "7.1": ["alpine313", "nvidia2204", "scratch313", "vaapi2204", "ubuntu2204"],
+    # "2.8": ["alpine313", "nvidia2004", "vaapi2004", "scratch313", "ubuntu2404"],
+    # "3.4": ["ubuntu2404"],
+    # "4.2": ["alpine313", "ubuntu2404"],
+    # "4.3": ["alpine313", "scratch313", "ubuntu2404"],
+    # "4.4": ["ubuntu2404"],
+    # "5.1": ["scratch313", "ubuntu2404"],
+    # "6.0": ["alpine313", "nvidia2004", "ubuntu2404"],
+    # "6.1": ["alpine313", "nvidia2004", "scratch313", "ubuntu2404"],
+    # "7.0": ["nvidia2004", "vaapi2004", "ubuntu2404"],
+    # "7.1": ["alpine313", "nvidia2204", "scratch313", "vaapi2204", "ubuntu2204"],
 }
+
 
 
 def get_shorten_version(version):
@@ -73,30 +98,31 @@ def get_major_version(version):
         return f"{major}"
 
 
-print("Preparing docker images for ffmpeg versions: ")
 
-
-def version_or_greater(target_major, target_minor, build_version):
-    """if the build_version is equal to or greater than the
-    target_major and target_minor then return True"""
-    build_major_number = int(build_version.split(".")[0])
-    build_minor_number = int(build_version.split(".")[1])
-    if build_major_number > target_major:
-        return True
-    elif build_major_number == target_major and build_minor_number >= target_minor:
-        return True
-    return False
+# def version_or_greater(target_major, target_minor, build_version):
+#     """if the build_version is equal to or greater than the
+#     target_major and target_minor then return True"""
+#     build_major_number = int(build_version.split(".")[0])
+#     build_minor_number = int(build_version.split(".")[1])
+#     if build_major_number > target_major:
+#         return True
+#     elif build_major_number == target_major and build_minor_number >= target_minor:
+#         return True
+#     return False
 
 
 def read_ffmpeg_template(build_version, env_or_run="env"):
     """if the version is 7.1 or later then use the updated ffmpeg templates"""
-    updated_templates = version_or_greater(7, 1, build_version)
-    if updated_templates:
-        with open(f"templates/Dockerfile-{env_or_run}-ffmpeg-7.1-plus", "r") as tmpfile:
-            return tmpfile.read()
-    else:
-        with open(f"templates/Dockerfile-{env_or_run}", "r") as tmpfile:
-            return tmpfile.read()
+    # updated_templates = version_or_greater(7, 1, build_version)
+    # if updated_templates:
+    #     with open(f"templates/Dockerfile-{env_or_run}-ffmpeg-7.1-plus", "r") as tmpfile:
+    #         return tmpfile.read()
+    # else:
+    with open(f"templates/Dockerfile-{env_or_run}", "r") as tmpfile:
+        return tmpfile.read()
+
+
+print("Preparing docker images for ffmpeg versions: ")
 
 
 for version in keep_version:

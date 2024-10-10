@@ -47,27 +47,27 @@ ENV         FFMPEG_VERSION=5.1.6 \
     LIBXCB_VERSION=1.13.1 \
     XCBPROTO_VERSION=1.13 \
     OGG_VERSION=1.3.2 \
-    OPENCOREAMR_VERSION=0.1.5 \
+    OPENCOREAMR_VERSION=0.1.6 \
     OPUS_VERSION=1.2 \
-    OPENJPEG_VERSION=2.1.2 \
+    OPENJPEG_VERSION=2.5.2 \
     PYTHON=python3 \
     THEORA_VERSION=1.1.1 \
     VORBIS_VERSION=1.3.5 \
     VPX_VERSION=1.8.0 \
     WEBP_VERSION=1.0.2 \
-    X264_VERSION=20170226-2245-stable \
-    X265_VERSION=3.4 \
+    X264_VERSION=20191217-2245-stable \
+    X265_VERSION=4.0 \
     XAU_VERSION=1.0.9 \
     XORG_MACROS_VERSION=1.19.2 \
     XPROTO_VERSION=7.0.31 \
-    XVID_VERSION=1.3.4 \
+    XVID_VERSION=1.3.7 \
     LIBXML2_VERSION=2.9.12 \
     LIBBLURAY_VERSION=1.1.2 \
-    LIBZMQ_VERSION=4.3.2 \
-    LIBSRT_VERSION=1.4.1 \
+    LIBZMQ_VERSION=4.3.5 \
+    LIBSRT_VERSION=1.5.3 \
     LIBARIBB24_VERSION=1.0.3 \
     LIBPNG_VERSION=1.6.9 \
-    LIBVMAF_VERSION=2.1.1 \
+    LIBVMAF_VERSION=2.3.1 \
     ZIMG_VERSION=3.0.5 \
     SRC=/usr/local
 
@@ -79,9 +79,7 @@ ARG         OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd4101
 ARG         OPUS_SHA256SUM="77db45a87b51578fbc49555ef1b10926179861d854eb2613207dc79d9ec0a9a9 opus-1.2.tar.gz"
 ARG         THEORA_SHA256SUM="40952956c47811928d1e7922cda3bc1f427eb75680c3c37249c91e949054916b libtheora-1.1.1.tar.gz"
 ARG         VORBIS_SHA256SUM="6efbcecdd3e5dfbf090341b485da9d176eb250d893e3eb378c428a2db38301ce libvorbis-1.3.5.tar.gz"
-ARG         XVID_SHA256SUM="4e9fd62728885855bc5007fe1be58df42e5e274497591fec37249e1052ae316f xvidcore-1.3.4.tar.gz"
 ARG         LIBBLURAY_SHA256SUM="a3dd452239b100dc9da0d01b30e1692693e2a332a7d29917bf84bb10ea7c0b42 libbluray-1.1.2.tar.bz2"
-ARG         LIBZMQ_SHA256SUM="02ecc88466ae38cf2c8d79f09cfd2675ba299a439680b64ade733e26a349edeb v4.3.2.tar.gz"
 ARG         LIBARIBB24_SHA256SUM="f61560738926e57f9173510389634d8c06cabedfa857db4b28fb7704707ff128 v1.0.3.tar.gz"
 
 
@@ -169,9 +167,9 @@ RUN \
         DIR=/tmp/x265 && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://github.com/videolan/x265/archive/refs/tags/${X265_VERSION}.tar.gz | \
+        curl -sL http://ftp.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz | \
         tar -zx && \
-        cd x265-${X265_VERSION}/build/linux && \
+        cd x265_${X265_VERSION}/build/linux && \
         sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
         sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh && \
         ./multilib.sh && \
@@ -215,6 +213,7 @@ RUN \
         make install && \
         rm -rf ${DIR}
 ### libtheora http://www.theora.org/
+#             https://stackoverflow.com/questions/4810996/how-to-resolve-configure-guessing-build-type-failure
 RUN \
         DIR=/tmp/theora && \
         mkdir -p ${DIR} && \
@@ -222,6 +221,7 @@ RUN \
         curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
         echo ${THEORA_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
+        cp /usr/share/misc/config.guess . && \
         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
         make && \
         make install && \
@@ -240,7 +240,7 @@ RUN \
         rm -rf ${DIR}
 ### libwebp https://developers.google.com/speed/webp/
 RUN \
-        DIR=/tmp/vebp && \
+        DIR=/tmp/webp && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
         curl -sL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${WEBP_VERSION}.tar.gz | \
@@ -265,8 +265,7 @@ RUN \
         DIR=/tmp/xvid && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sLO http://downloads.xvid.org/downloads/xvidcore-${XVID_VERSION}.tar.gz && \
-        echo ${XVID_SHA256SUM} | sha256sum --check && \
+        curl -sLO https://downloads.xvid.com/downloads/xvidcore-${XVID_VERSION}.tar.gz && \
         tar -zx -f xvidcore-${XVID_VERSION}.tar.gz && \
         cd xvidcore/build/generic && \
         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" && \
@@ -290,9 +289,10 @@ RUN \
         DIR=/tmp/openjpeg && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://github.com/uclouvain/openjpeg/archive/v${OPENJPEG_VERSION}.tar.gz | \
+        curl -sL https://github.com/uclouvain/openjpeg/archive/refs/tags/v${OPENJPEG_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
-        cmake -DBUILD_THIRDPARTY:BOOL=ON -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
+        # cmake -DBUILD_THIRDPARTY:BOOL=ON -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
         make && \
         make install && \
         rm -rf ${DIR}
@@ -401,6 +401,7 @@ RUN \
         cd ${DIR} && \
         curl -sLO https://www.x.org/archive/individual/proto/xproto-${XPROTO_VERSION}.tar.gz && \
         tar -zx --strip-components=1 -f xproto-${XPROTO_VERSION}.tar.gz && \
+        cp /usr/share/misc/config.guess . && \
         ./configure --srcdir=${DIR} --prefix="${PREFIX}" && \
         make && \
         make install && \
@@ -459,9 +460,8 @@ RUN \
         DIR=/tmp/libzmq && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sLO https://github.com/zeromq/libzmq/archive/v${LIBZMQ_VERSION}.tar.gz && \
-        echo ${LIBZMQ_SHA256SUM} | sha256sum --check && \
-        tar -xz --strip-components=1 -f v${LIBZMQ_VERSION}.tar.gz && \
+        curl -sLO https://github.com/zeromq/libzmq/releases/download/v${LIBZMQ_VERSION}/zeromq-${LIBZMQ_VERSION}.tar.gz && \
+        tar -xz --strip-components=1 -f zeromq-${LIBZMQ_VERSION}.tar.gz && \
         ./autogen.sh && \
         ./configure --prefix="${PREFIX}" && \
         make && \
@@ -474,7 +474,7 @@ RUN \
         DIR=/tmp/srt && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sLO https://github.com/Haivision/srt/archive/v${LIBSRT_VERSION}.tar.gz && \
+        curl -sLO https://github.com/Haivision/srt/archive/refs/tags/v${LIBSRT_VERSION}.tar.gz && \
         tar -xz --strip-components=1 -f v${LIBSRT_VERSION}.tar.gz && \
         cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" . && \
         make && \
