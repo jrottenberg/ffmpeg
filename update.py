@@ -12,51 +12,50 @@ DIR_FORMAT_STR = "docker-images/{0}/{1}"
 IMAGE_FORMAT_STR = "{0}/Dockerfile".format(DIR_FORMAT_STR)
 TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 
-def is_too_old(date_str, years=3):
-  """Checks if the given date string is more than x years old.
+# https://ffmpeg.org/olddownload.html
+# https://endoflife.date/ffmpeg
+# We use the endoflife.date API to find the most recent ffmpeg versions. 
+# However, to simplify image maintenance, we only consider versions 
+# released within the last YEARS years (currently set to 3).
+# Including very old versions (like those over 9 years old) can lead to 
+# compatibility issues with different library and operating system versions. 
+# By focusing on recent versions, we keep things manageable.
+# Note: the older builds will be preserved in the the docker hub registry.
+RELEASED_YEARS_AGO = 3
 
-  Args:
-    date_str: The date string in the format "YYYY-MM-DD".
-
-  Returns:
-    True if the date is more than x years old, False otherwise.
-  """
-
+def is_too_old(date_str, years):
   date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
-  # Calculate the difference between the date and today
   diff = datetime.datetime.now() - date_obj
-
   # Check if the difference is more than x years
   return diff.days > (years * 365)
 
-# https://ffmpeg.org/olddownload.html
-# https://endoflife.date/ffmpeg
-# use the endoflife.date API to get the latest versions
-# ALSO: don't include versions that are more than x years old (default is currently 3)
-# this creates all sorts of problems is the end of life is giving us ffmpeg versions that are 9 years old.
-# this creates a lib version's and os versions nightmare to maintain. Limiting the versions to a few years
-# old greatly simplifies the maintenance of the images.
-YEARS = 3
+def get_eol_versions():
+    keep_version = []
+    with request.urlopen(FFMPEG_RELEASES) as conn:
+        ffmpeg_releases = conn.read().decode("utf-8")
 
-with request.urlopen(FFMPEG_RELEASES) as conn:
-    ffmpeg_releases = conn.read().decode("utf-8")
-keep_version = []
+    for v in json.loads(ffmpeg_releases):
+        if not v["eol"]:
+            if "0.0" in v["latest"]:
+                v["latest"] = v["latest"].replace("0.0", "0")
+            release_date = v["releaseDate"]
+            if not is_too_old(release_date, years=RELEASED_YEARS_AGO):
+                keep_version.append(v["latest"])
+    return keep_version
 
-for v in json.loads(ffmpeg_releases):
-    if not v["eol"]:
-        if "0.0" in v["latest"]:
-            v["latest"] = v["latest"].replace("0.0", "0")
-        release_date = v["releaseDate"]
-        if not is_too_old(release_date, years=YEARS):
-            keep_version.append(v["latest"])
-
+keep_version = get_eol_versions()
+print("The following versions of ffmpeg is still supported:")
+for version in keep_version:
+    print(version)
 VARIANTS = [
     {"name": "ubuntu2404", "parent": "ubuntu"},
     {"name": "alpine320", "parent": "alpine"},
     {"name": "scratch320", "parent": "scratch"},
+    # Video Acceleration API (VAAPI) https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI
     {"name": "vaapi2404", "parent": "vaapi"},
     {"name": "nvidia2204", "parent": "nvidia"},
 ]
+current_variant_names = [v["name"] for v in VARIANTS]
 
 
 all_parents = sorted(set([sub["parent"] for sub in VARIANTS]))
@@ -66,20 +65,20 @@ azure = []
 for parent in all_parents:
     gitlabci.append(f"  - {parent}\n")
 
-
+# Note: Skip variants and the is_too_old() check, work together to  allow us to skip building things
+#       Skip variants allow us to skip some variants for specific versions
+#       is_too_old() check allow us to skip versions that are too old
 SKIP_VARIANTS = {
-    # "2.8": ["alpine313", "nvidia2004", "vaapi2004", "scratch313", "ubuntu2404"],
-    # "3.4": ["ubuntu2404"],
-    # "4.2": ["alpine313", "ubuntu2404"],
-    # "4.3": ["alpine313", "scratch313", "ubuntu2404"],
-    # "4.4": ["ubuntu2404"],
-    # "5.1": ["scratch313", "ubuntu2404"],
-    # "6.0": ["alpine313", "nvidia2004", "ubuntu2404"],
-    # "6.1": ["alpine313", "nvidia2004", "scratch313", "ubuntu2404"],
-    # "7.0": ["nvidia2004", "vaapi2004", "ubuntu2404"],
-    # "7.1": ["alpine313", "nvidia2204", "scratch313", "vaapi2204", "ubuntu2204"],
+    "2.8": ["nvidia2204", "vaapi2204"] + [v["name"] for v in VARIANTS],
+    "3.4": ["alpine313", "nvidia2204", "scratch313", "vaapi2204"] + [v["name"] for v in VARIANTS],
+    "4.2": ["alpine313", "ubuntu2404"] + [v["name"] for v in VARIANTS],
+    "4.3": ["nvidia2204", "vaapi2204"] + [v["name"] for v in VARIANTS],
+    "4.4": ["alpine313", "nvidia2204", "scratch313"] + [v["name"] for v in VARIANTS],
+    "5.1": [],
+    "6.1": [],
+    "7.0": [],
+    "7.1": [],
 }
-
 
 
 def get_shorten_version(version):
@@ -111,14 +110,16 @@ def get_major_version(version):
 #     return False
 
 
-def read_ffmpeg_template(build_version, env_or_run="env"):
-    """if the version is 7.1 or later then use the updated ffmpeg templates"""
-    # updated_templates = version_or_greater(7, 1, build_version)
-    # if updated_templates:
-    #     with open(f"templates/Dockerfile-{env_or_run}-ffmpeg-7.1-plus", "r") as tmpfile:
-    #         return tmpfile.read()
-    # else:
-    with open(f"templates/Dockerfile-{env_or_run}", "r") as tmpfile:
+def read_ffmpeg_template(variant_name, env_or_run="env"):
+    """ Read the ffmpeg template file and return the content """
+    if variant_name == "scratch":
+        distro_name = "alpine-scratch"
+    elif variant_name == "alpine":
+        distro_name = "alpine"
+    else:
+        distro_name = "ubuntu"
+
+    with open(f"templates/Dockerfile-{env_or_run}-{distro_name}", "r") as tmpfile:
         return tmpfile.read()
 
 
@@ -126,11 +127,6 @@ print("Preparing docker images for ffmpeg versions: ")
 
 
 for version in keep_version:
-    print(version)
-
-    ENV_CONTENT = read_ffmpeg_template(version, "env")
-    RUN_CONTENT = read_ffmpeg_template(version, "run")
-
     skip_variants = None
     for k, v in SKIP_VARIANTS.items():
         if version.startswith(k):
@@ -138,6 +134,7 @@ for version in keep_version:
     compatible_variants = [
         v for v in VARIANTS if skip_variants is None or v["name"] not in skip_variants
     ]
+
     short_version = get_shorten_version(version)
     major_version = get_major_version(version)
     ver_path = os.path.join("docker-images", short_version)
@@ -145,8 +142,14 @@ for version in keep_version:
     for existing_variant in os.listdir(ver_path):
         if existing_variant not in compatible_variants:
             shutil.rmtree(DIR_FORMAT_STR.format(short_version, existing_variant))
-
+    
+    print(f"Preparing Dockerfile for ffmpeg-{version}")
     for variant in compatible_variants:
+        print(f"{' '*25}{version}-{variant['name']}")
+
+        ENV_CONTENT = read_ffmpeg_template(variant["parent"], "env")
+        RUN_CONTENT = read_ffmpeg_template(variant["parent"], "run")
+
         siblings = [
             v["name"] for v in compatible_variants if v["parent"] == variant["parent"]
         ]

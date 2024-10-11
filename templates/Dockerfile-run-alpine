@@ -1,0 +1,99 @@
+## libvmaf https://github.com/Netflix/vmaf
+RUN \
+        if which meson || false; then \
+        echo "Building VMAF." && \
+        DIR=/tmp/vmaf && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/Netflix/vmaf/archive/v${LIBVMAF_VERSION}.tar.gz && \
+        tar -xz --strip-components=1 -f v${LIBVMAF_VERSION}.tar.gz && \
+        cd /tmp/vmaf/libvmaf && \
+        meson build --buildtype release --prefix=${PREFIX} && \
+        ninja -vC build && \
+        ninja -vC build install && \
+        mkdir -p ${PREFIX}/share/model/ && \
+        cp -r /tmp/vmaf/model/* ${PREFIX}/share/model/ && \
+        rm -rf ${DIR}; \
+        else \
+        echo "VMAF skipped."; \
+        fi
+
+## kvazaar https://github.com/ultravideo/kvazaar
+RUN \
+        DIR=/tmp/kvazaar && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/ultravideo/kvazaar/archive/v${KVAZAAR_VERSION}.tar.gz && \
+        tar -zx --strip-components=1 -f v${KVAZAAR_VERSION}.tar.gz && \
+        ./autogen.sh && \
+        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+# libevent && libevent-dev has usr/lib/libevent_pthreads ???
+RUN \
+        DIR=/tmp/libpthread-stubs && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://xcb.freedesktop.org/dist/libpthread-stubs-${LIBPTHREAD_STUBS_VERSION}.tar.gz && \
+        tar -zx --strip-components=1 -f libpthread-stubs-${LIBPTHREAD_STUBS_VERSION}.tar.gz && \
+        ./configure --prefix="${PREFIX}" && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+
+## libbluray - Requires libxml, freetype, and fontconfig
+RUN \
+        DIR=/tmp/libbluray && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://download.videolan.org/pub/videolan/libbluray/${LIBBLURAY_VERSION}/libbluray-${LIBBLURAY_VERSION}.tar.bz2 && \
+        echo ${LIBBLURAY_SHA256SUM} | sha256sum --check && \
+        tar -jx --strip-components=1 -f libbluray-${LIBBLURAY_VERSION}.tar.bz2 && \
+        ./configure --prefix="${PREFIX}" --disable-examples --disable-bdjava-jar --disable-static --enable-shared && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+## libaribb24
+RUN \
+        DIR=/tmp/b24 && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO https://github.com/nkoriyama/aribb24/archive/v${LIBARIBB24_VERSION}.tar.gz && \
+        echo ${LIBARIBB24_SHA256SUM} | sha256sum --check && \
+        tar -xz --strip-components=1 -f v${LIBARIBB24_VERSION}.tar.gz && \
+       
+        autoreconf -fiv && \
+        ./configure CFLAGS="-I${PREFIX}/include -fPIC" --prefix="${PREFIX}" && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
+
+## Download ffmpeg https://ffmpeg.org/
+RUN  \
+        DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
+        curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
+        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
+        ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
+        make ;  make install
+
+
+
+
+
+# ## Build ffmpeg https://ffmpeg.org/
+RUN  \
+        DIR=/tmp/ffmpeg && cd ${DIR} && \
+        ./configure \
+        %%FFMPEG_CONFIG_FLAGS%% && \
+        make clean && \
+        make && \
+        make install && \
+        make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
+        make distclean && \
+        hash -r && \
+        cd tools && \
+        make qt-faststart && cp qt-faststart ${PREFIX}/bin/

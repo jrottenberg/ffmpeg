@@ -24,15 +24,15 @@ There are different builds available:
   - ubuntu based vaapi images `ffmpeg:<version>-vaapi1804` or `ffmpeg:<version>-vaapi2004` (old versions with `ffmpeg:<version>-vaapi1804`, `ffmpeg:<version>-nvidia1604`)
 
 `<version>` can be one of the following:
-- 3.2
-- 3.3
+- 2.8
 - 3.4
-- 4.0
-- 4.1
 - 4.2
 - 4.3
 - 4.4
-
+- 5.1
+- 6.1
+- 7.0
+- 7.1
 
 
 

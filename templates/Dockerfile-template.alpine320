@@ -6,14 +6,94 @@
 
 FROM        alpine:3.20 as base
 
-RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.1 libssl1.1 libgomp expat git
-
+RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates openssl expat git
 
 FROM        base AS build
 
 WORKDIR     /tmp/workdir
 
 ENV         %%ENV%%
+
+RUN         libDeps="libgomp \
+                    # https://github.com/zeromq/libzmq/
+                    zeromq \
+                    # https://sourceforge.net/projects/opencore-amr/
+                    opencore-amr \ 
+                    # https://www.xiph.org/ogg/
+                    libogg \
+                    libogg-static \
+                    # libtheora http://www.theora.org/
+                    libtheora \
+                    libtheora-static \
+                    # http://www.videolan.org/developers/x264.html
+                    x264 \
+                    x264-libs \
+                    # http://x265.org/
+                    x265 \
+                    x265-libs \
+                    # https://www.opus-codec.org/
+                    opus \
+                    opus-tools \
+                    # https://xiph.org/vorbis/
+                    libvorbis \
+                    libvorbis-static \
+                    # https://www.webmproject.org/code/
+                    libvpx \
+                    libvpx-utils \
+                    # https://developers.google.com/speed/webp/
+                    libwebp \
+                    libwebp-dev \
+                    libwebp-static \
+                    libwebp-tools \
+                    # http://lame.sourceforge.net/
+                    lame \
+                    lame-libs \
+                    # https://www.xvid.com/
+                    xvidcore \
+                    xvidcore-static \
+                    # https://github.com/mstorsjo/fdk-aac
+                    fdk-aac \
+                    # https://github.com/uclouvain/openjpeg
+                    openjpeg \
+                    openjpeg-tools \
+                    # https://www.freetype.org/
+                    freetype \
+                    freetype-static \
+                    # https://github.com/georgmartius/vid.stab
+                    vidstab \
+                    ## https://www.fribidi.org/
+                    fribidi \
+                    fribidi-static \
+                    # fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
+                    fontconfig \
+                    fontconfig-static \
+                    # https://github.com/libass/libass
+                    libass \
+                    # https://aomedia.googlesource.com/aom
+                    aom \ 
+                    aom-libs \
+                    # https://xcb.freedesktop.org/
+                    # https://www.x.org/archive//individual/util/util-macros-
+                    util-macros \
+                    # https://www.x.org/archive/individual/proto/xproto-
+                    xorgproto \
+                    # https://www.x.org/archive/individual/lib/libXau-
+                    libxau \
+                    # https://github.com/GNOME/libxml2/
+                    libxml2 \
+                    libxml2-static \
+                    libxml2-utils \
+                    # https://github.com/Haivision/srt
+                    libsrt \
+                    libsrt-progs \
+                    # https://git.code.sf.net/p/libpng/code
+                    libpng \
+                    libpng-static \
+                    libpng-utils \
+                    # https://github.com/sekrit-twc/zimg
+                    zimg" && \
+            apk add --no-cache --update ${libDeps}
+
 
 RUN     buildDeps="autoconf \
                    automake \
@@ -37,13 +117,42 @@ RUN     buildDeps="autoconf \
                    tar \
                    xcb-proto \
                    yasm \
-                   zlib-dev" && \
+                   zlib-dev \
+                   zeromq-dev \
+                   alpine-sdk \
+                   freetype-dev \
+                   opencore-amr-dev \
+                   libpng-dev \
+                   x264-dev \
+                   x265-dev \
+                   opus-dev \
+                   libvorbis-dev \
+                   libogg-dev \
+                   libtheora-dev \
+                   libvpx-dev \
+                   libwebp-dev \
+                   lame-dev \
+                   xvidcore-dev \
+                   fdk-aac-dev \
+                   openjpeg-dev \
+                   freetype-dev \
+                   vidstab-dev \
+                   fribidi-dev \
+                   fontconfig-dev \
+                   libass-dev \
+                   aom-dev \
+                   libxau-dev \
+                   libxml2-dev \
+                   libsrt-dev \
+                   libpng-dev \
+                   zimg-dev \
+                   linux-headers" && \
         apk add --no-cache --update ${buildDeps}
 %%RUN%%
 
 RUN \
     ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
-    for lib in /usr/local/lib/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
+    for lib in /usr/local/lib/*.so.*; do ln -sf "${lib##*/}" "${lib%%.so.*}".so; done && \
     cp ${PREFIX}/bin/* /usr/local/bin/ && \
     cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
     LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
