@@ -172,13 +172,8 @@ for version in keep_version:
         )
         with open(TEMPLATE_STR.format(variant["name"].replace('-edge', '')), "r") as tmpfile:
             template = tmpfile.read()
---disable-debug --disable-doc --disable-ffplay --enable-shared --enable-gpl --extra-libs=-ldl
         FFMPEG_CONFIG_FLAGS = [
-            "--disable-debug",
-            "--disable-doc",
-            "--disable-ffplay",
             "--enable-fontconfig",
-            "--enable-gpl",
             "--enable-libass",
             "--enable-libbluray",
             "--enable-libfreetype",
@@ -199,10 +194,8 @@ for version in keep_version:
             "--enable-nonfree",
             "--enable-openssl",
             "--enable-postproc",
-            "--enable-shared",
             "--enable-small",
             "--enable-version3",
-            "--extra-libs=-ldl",
             '--prefix="${PREFIX}"',
         ]
         CFLAGS = [
@@ -264,6 +257,12 @@ for version in keep_version:
             FFMPEG_CONFIG_FLAGS.append("--enable-libdav1d")
         else: # for older versions
             FFMPEG_CONFIG_FLAGS.append("--enable-libfdk_aac") # this was likely misstyped before
+            FFMPEG_CONFIG_FLAGS.append("--disable-debug")
+            FFMPEG_CONFIG_FLAGS.append("--disable-doc")
+            FFMPEG_CONFIG_FLAGS.append("--disable-ffplay")
+            FFMPEG_CONFIG_FLAGS.append("--enable-shared")
+            FFMPEG_CONFIG_FLAGS.append("--enable-gpl")
+            FFMPEG_CONFIG_FLAGS.append("--extra-libs=-ldl")
 
         if "ubuntu" in variant["parent"] and float(version[0:3]) >= 5.1:
             CFLAGS.append("-I/usr/include/x86_64-linux-gnu")

@@ -73,7 +73,7 @@ You can use the following command to generate a list of current images:
 $ python3 -mvenv .venv
 $ source .venv/bin/activate
 $ pip install requests
-$ python3 ./generate_list_of_recent_images.py > list_of_recent_images.txt
+$ python3 ./generate-list-of-recent-images.py > list_of_recent_images.txt
 $ deactivate
 $ rm -rf .venv
 $ less list_of_recent_images.txt
