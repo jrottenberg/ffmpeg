@@ -14,20 +14,19 @@ TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 
 # https://ffmpeg.org/olddownload.html
 # https://endoflife.date/ffmpeg
-# We use the endoflife.date API to find the most recent ffmpeg versions. 
-# However, to simplify image maintenance, we only consider versions 
-# released within the last YEARS years (currently set to 3).
-# Including very old versions (like those over 9 years old) can lead to 
-# compatibility issues with different library and operating system versions. 
-# By focusing on recent versions, we keep things manageable.
+# We use the endoflife.date API to find the most recent ffmpeg versions. However, 
+# to simplify image maintenance, we only consider versions released within the 
+# last YEARS years (currently set to 3). Including very older versions compatibility 
+# issues with different libraries and operating system versions. By focusing on 
+# recent versions, we keep things manageable. 
 # Note: the older builds will be preserved in the the docker hub registry.
 RELEASED_YEARS_AGO = 3
 
 def is_too_old(date_str, years):
-  date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
-  diff = datetime.datetime.now() - date_obj
-  # Check if the difference is more than x years
-  return diff.days > (years * 365)
+    date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+    diff = datetime.datetime.now() - date_obj
+    # Check if the difference is more than x years
+    return diff.days > (years * 365)
 
 def get_eol_versions():
     keep_version = []
@@ -49,6 +48,7 @@ for version in keep_version:
     print(version)
 VARIANTS = [
     {"name": "ubuntu2404", "parent": "ubuntu"},
+    {"name": "ubuntu2404-edge", "parent": "ubuntu-edge"},
     {"name": "alpine320", "parent": "alpine"},
     {"name": "scratch320", "parent": "scratch"},
     # Video Acceleration API (VAAPI) https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI
@@ -97,25 +97,14 @@ def get_major_version(version):
         return f"{major}"
 
 
-
-# def version_or_greater(target_major, target_minor, build_version):
-#     """if the build_version is equal to or greater than the
-#     target_major and target_minor then return True"""
-#     build_major_number = int(build_version.split(".")[0])
-#     build_minor_number = int(build_version.split(".")[1])
-#     if build_major_number > target_major:
-#         return True
-#     elif build_major_number == target_major and build_minor_number >= target_minor:
-#         return True
-#     return False
-
-
 def read_ffmpeg_template(variant_name, env_or_run="env"):
     """ Read the ffmpeg template file and return the content """
     if variant_name == "scratch":
         distro_name = "alpine-scratch"
     elif variant_name == "alpine":
         distro_name = "alpine"
+    elif variant_name == "ubuntu-edge":
+        distro_name = "ubuntu-edge"
     else:
         distro_name = "ubuntu"
 
@@ -181,9 +170,9 @@ for version in keep_version:
         ISPARENT:  {is_parent}
 """
         )
-        with open(TEMPLATE_STR.format(variant["name"]), "r") as tmpfile:
+        with open(TEMPLATE_STR.format(variant["name"].replace('-edge', '')), "r") as tmpfile:
             template = tmpfile.read()
-
+--disable-debug --disable-doc --disable-ffplay --enable-shared --enable-gpl --extra-libs=-ldl
         FFMPEG_CONFIG_FLAGS = [
             "--disable-debug",
             "--disable-doc",
@@ -192,7 +181,6 @@ for version in keep_version:
             "--enable-gpl",
             "--enable-libass",
             "--enable-libbluray",
-            "--enable-libfdk_aac",
             "--enable-libfreetype",
             "--enable-libmp3lame",
             "--enable-libopencore-amrnb",
@@ -265,6 +253,22 @@ for version in keep_version:
                 FFMPEG_CONFIG_FLAGS.append("--enable-cuda")
                 FFMPEG_CONFIG_FLAGS.append("--enable-cuvid")
                 FFMPEG_CONFIG_FLAGS.append("--enable-libnpp")
+
+        if variant["parent"] in ["ubuntu", "alpine", "scratch"] and float(version[0:3]) >= 5.1:
+            # from https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#FFmpeg
+            FFMPEG_CONFIG_FLAGS.append("--extra-libs=-lm") # add math library
+            FFMPEG_CONFIG_FLAGS.append("--ld=g++") # use g++ as linker
+            # FFMPEG_CONFIG_FLAGS.append("--enable-gnutls")
+            FFMPEG_CONFIG_FLAGS.append("--enable-libfdk-aac")
+            FFMPEG_CONFIG_FLAGS.append("--enable-libsvtav1")
+            FFMPEG_CONFIG_FLAGS.append("--enable-libdav1d")
+        else: # for older versions
+            FFMPEG_CONFIG_FLAGS.append("--enable-libfdk_aac") # this was likely misstyped before
+
+        if "ubuntu" in variant["parent"] and float(version[0:3]) >= 5.1:
+            CFLAGS.append("-I/usr/include/x86_64-linux-gnu")
+            LDFLAGS.append("-L/usr/lib/x86_64-linux-gnu")
+
         cflags = '--extra-cflags="{0}"'.format(" ".join(CFLAGS))
         ldflags = '--extra-ldflags="{0}"'.format(" ".join(LDFLAGS))
         FFMPEG_CONFIG_FLAGS.append(cflags)

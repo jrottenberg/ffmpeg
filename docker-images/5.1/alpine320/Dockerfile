@@ -8,7 +8,7 @@ FROM        alpine:3.20 as base
 
 RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates openssl expat git
 
-FROM        base AS build
+FROM        base as build
 
 WORKDIR     /tmp/workdir
 
@@ -72,29 +72,38 @@ ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 RUN         libDeps="libgomp \
                     # https://github.com/zeromq/libzmq/
                     zeromq \
+                    zeromq-dev \
                     # https://sourceforge.net/projects/opencore-amr/
-                    opencore-amr \ 
+                    opencore-amr \
+                    opencore-amr-dev \
                     # https://www.xiph.org/ogg/
                     libogg \
                     libogg-static \
+                    libogg-dev \
                     # libtheora http://www.theora.org/
                     libtheora \
                     libtheora-static \
+                    libtheora-dev \
                     # http://www.videolan.org/developers/x264.html
                     x264 \
                     x264-libs \
+                    x264-dev \
                     # http://x265.org/
                     x265 \
                     x265-libs \
+                    x265-dev \
                     # https://www.opus-codec.org/
                     opus \
                     opus-tools \
+                    opus-dev \
                     # https://xiph.org/vorbis/
                     libvorbis \
                     libvorbis-static \
+                    libvorbis-dev \
                     # https://www.webmproject.org/code/
                     libvpx \
                     libvpx-utils \
+                    libvpx-dev \
                     # https://developers.google.com/speed/webp/
                     libwebp \
                     libwebp-dev \
@@ -103,30 +112,40 @@ RUN         libDeps="libgomp \
                     # http://lame.sourceforge.net/
                     lame \
                     lame-libs \
+                    lame-dev \
                     # https://www.xvid.com/
                     xvidcore \
                     xvidcore-static \
+                    xvidcore-dev \
                     # https://github.com/mstorsjo/fdk-aac
                     fdk-aac \
+                    fdk-aac-dev \
                     # https://github.com/uclouvain/openjpeg
                     openjpeg \
                     openjpeg-tools \
+                    openjpeg-dev \
                     # https://www.freetype.org/
                     freetype \
                     freetype-static \
+                    freetype-dev \
                     # https://github.com/georgmartius/vid.stab
                     vidstab \
+                    vidstab-dev \
                     ## https://www.fribidi.org/
                     fribidi \
                     fribidi-static \
+                    fribidi-dev \
                     # fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
                     fontconfig \
                     fontconfig-static \
+                    fontconfig-dev \
                     # https://github.com/libass/libass
                     libass \
+                    libass-dev \
                     # https://aomedia.googlesource.com/aom
                     aom \ 
                     aom-libs \
+                    aom-dev \
                     # https://xcb.freedesktop.org/
                     # https://www.x.org/archive//individual/util/util-macros-
                     util-macros \
@@ -134,19 +153,24 @@ RUN         libDeps="libgomp \
                     xorgproto \
                     # https://www.x.org/archive/individual/lib/libXau-
                     libxau \
+                    libxau-dev \
                     # https://github.com/GNOME/libxml2/
                     libxml2 \
                     libxml2-static \
                     libxml2-utils \
+                    libxml2-dev \
                     # https://github.com/Haivision/srt
                     libsrt \
                     libsrt-progs \
+                    libsrt-dev \
                     # https://git.code.sf.net/p/libpng/code
                     libpng \
                     libpng-static \
                     libpng-utils \
+                    libpng-dev \
                     # https://github.com/sekrit-twc/zimg
-                    zimg" && \
+                    zimg \
+                    zimg-dev" && \
             apk add --no-cache --update ${libDeps}
 
 
@@ -173,34 +197,7 @@ RUN     buildDeps="autoconf \
                    xcb-proto \
                    yasm \
                    zlib-dev \
-                   zeromq-dev \
                    alpine-sdk \
-                   freetype-dev \
-                   opencore-amr-dev \
-                   libpng-dev \
-                   x264-dev \
-                   x265-dev \
-                   opus-dev \
-                   libvorbis-dev \
-                   libogg-dev \
-                   libtheora-dev \
-                   libvpx-dev \
-                   libwebp-dev \
-                   lame-dev \
-                   xvidcore-dev \
-                   fdk-aac-dev \
-                   openjpeg-dev \
-                   freetype-dev \
-                   vidstab-dev \
-                   fribidi-dev \
-                   fontconfig-dev \
-                   libass-dev \
-                   aom-dev \
-                   libxau-dev \
-                   libxml2-dev \
-                   libsrt-dev \
-                   libpng-dev \
-                   zimg-dev \
                    linux-headers" && \
         apk add --no-cache --update ${buildDeps}
 ## libvmaf https://github.com/Netflix/vmaf
@@ -302,7 +299,8 @@ RUN  \
         --enable-libaribb24 \
         --enable-libass \
         --enable-libbluray \
-        --enable-libfdk_aac \
+        --enable-libdav1d \
+        --enable-libfdk-aac \
         --enable-libfreetype \
         --enable-libkvazaar \
         --enable-libmp3lame \
@@ -311,6 +309,7 @@ RUN  \
         --enable-libopenjpeg \
         --enable-libopus \
         --enable-libsrt \
+        --enable-libsvtav1 \
         --enable-libtheora \
         --enable-libvidstab \
         --enable-libvorbis \
@@ -330,7 +329,9 @@ RUN  \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
         --extra-libs=-ldl \
+        --extra-libs=-lm \
         --extra-libs=-lpthread \
+        --ld=g++ \
         --prefix="${PREFIX}" && \
         make clean && \
         make && \
@@ -356,7 +357,7 @@ RUN \
     done
 
 ### Release Stage
-FROM        base AS release
+FROM        base as release
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
@@ -366,6 +367,3 @@ CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
 COPY --from=build /usr/local /usr/local
-
-# Let's make sure the app built correctly
-# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

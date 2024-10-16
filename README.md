@@ -14,35 +14,69 @@ You can install the latest build of this image by running `docker pull jrottenbe
 
 This image can be used as a base for an encoding farm.
 
-## Builds
+## Builds / Avaliabvle Docker Containers
 
 There are different builds available:
+Below is a table that provides examples for the nomenclature:
+
+`ffmpeg-<version>-<os variant and version>`
+
+| image name | OS ver | ffmpeg ver | variant | description 
+| --- | --- | --- | --- | --- | 
+| ffmpeg-7.1-ubuntu2404 | 24.04 | 7.1 | [ubuntu](https://releases.ubuntu.com/) | external libraries are installed from os packages, and ffmpeg is built from source. See [Ubunu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. | 
+| ffmpeg-7.0-ubuntu2404-edge | 24.04 | 7.0 | [ubuntu](https://releases.ubuntu.com/) | libs and ffmpeg are built from source. See [Ubunu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. |
+| ffmpeg-6.1-vaapi2404 | 24.04 | 6.1 | [ubuntu](https://releases.ubuntu.com/) | like: `ubuntu2404` but enables: [Video Acceleration API (VAAPI)](https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI) in ffmpeg |
+| ffmpeg-5.1-nvidia2204-edge | 22.04 | 5.1 | [ubuntu](https://releases.ubuntu.com/) | Built w/ [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled |
+| ffmpeg-7.1-alpine320 | 3.20 | 7.1 | [alpine](https://alpinelinux.org/releases/) | vendor libs, but ffmpeg is built from source |
+| ffmpeg-7.0-scratch | 3.20 | 7.0 | [alpine](https://alpinelinux.org/releases/) | vendor libs, and ffmpeg are built from source. Also we make the distro as small as possible by not installing any packages in base and striping symbols of installed libs |
+
+ffmpeg `<version>` can be one of the following: `5.1`, `6.1`, `7.0`, `7.1` with the above table.
+
+Note: I changed the ffmpeg version number in the table above as an example of how this works. Probably best to stick with the latest ffmpeg.
+
+
+<details><summary>Here are some additional older builds</summary>
+
 - alpine based images `ffmpeg:<version>-alpine` or `ffmpeg:<version>-alpine313`  (old versions with `ffmpeg:<version>-alpine312` , `ffmpeg:<version>-alpine311`)
   - alpine based scratch images `ffmpeg:<version>-scratch` or `ffmpeg:<version>-scratch313`   (old versions with `ffmpeg:<version>-scratch312` , `ffmpeg:<version>-scratch311`)
 - ubuntu based images `ffmpeg:<version>-ubuntu` or `ffmpeg:<version>-ubuntu2004` (old versions with `ffmpeg:<version>-ubuntu1804` , `ffmpeg:<version>-ubuntu1604`)
   - ubuntu based nvidia images `ffmpeg:<version>-nvidia` or `ffmpeg:<version>-nvidia2004` (old versions with `ffmpeg:<version>-nvidia1804`, `ffmpeg:<version>-nvidia1604`)
   - ubuntu based vaapi images `ffmpeg:<version>-vaapi1804` or `ffmpeg:<version>-vaapi2004` (old versions with `ffmpeg:<version>-vaapi1804`, `ffmpeg:<version>-nvidia1604`)
 
-`<version>` can be one of the following:
-- 2.8
-- 3.4
-- 4.2
-- 4.3
-- 4.4
-- 5.1
-- 6.1
-- 7.0
-- 7.1
+</details>
 
+### Philosophy behind the different builds
 
+**ubuntu2404**
+We chose Ubuntu 24.04 because it is the LTS ( Long Term Support ) build of Ubuntu.
+We used the ffmpeg support libraries from the Ubuntu distrobution where possible. Example: we use 'libx264-dev' as the package to install. We do not tie it to a version. This way when its time to update from 24.04 to 26.04 we can simply update the base Docker template for ubuntu. This will make updating the OS easier as time goes on.
 
+**ubuntu2404-edge**
+This image is just like the above `ubuntu2404` container image, except we build all of the ffmpeg support libraries. This is in the spirit of the original intent of this project `jrottenberg/ffmpeg` alltogether. Building everything that ffmpeg needs, and ffmpeg itself from source. This gives us the most control over all of the details of release. The drawback of this is that its much harder to keep updated. The thought process of having both 'Ubuntu-2404' and 'Ubuntu-2404-edge' is that it makes updating the OS easier over time.
 
+**vaapi2404** 
+ This release is like also `ubuntu2404` but enables: [Video Acceleration API (VAAPI)](https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI) when building ffmpeg
+ 
+**nvidia2204-edge**
+ This release is like also `ubuntu2404` but enables: [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled 
 
-### Generate list of recent images
+**alpine320**
+[alpine](https://alpinelinux.org/releases/) uses the os vendor libs, but ffmpeg is built from source.
+
+**scratch** 
+Scratch is also an [alpine](https://alpinelinux.org/releases/) image. We build the vendor libs, and ffmpeg from source. Also we make the distro as small as possible by not installing any packages in base and striping symbols of installed libs.
+
+### Generate list of recent Docker Container Images
 
 You can use the following command to generate a list of current images:
 ```bash
-$ curl --silent https://hub.docker.com/v2/repositories/jrottenberg/ffmpeg/tags/?page_size=500 | jq -cr ".results|sort_by(.name)|reverse[]|.sz=(.full_size/1048576|floor|tostring+\"mb\")|[.name,( (20-(.name|length))*\" \" ),.sz,( (8-(.sz|length))*\" \"),.last_updated[:10]]|@text|gsub(\"[,\\\"\\\]\\\[]\";null)"
+$ python3 -mvenv .venv
+$ source .venv/bin/activate
+$ pip install requests
+$ python3 ./generate_list_of_recent_images.py > list_of_recent_images.txt
+$ deactivate
+$ rm -rf .venv
+$ less list_of_recent_images.txt
 ```
 
 If you want to compare the one you have locally, use the following command:
@@ -218,8 +252,7 @@ Full hardware acceleration example:
 ##### See what's inside the beast
 
 ```bash
-docker run -it --entrypoint='bash' jrottenberg/ffmpeg:4.4-ubuntu
-
+docker run -it --entrypoint='bash' jrottenberg/ffmpeg:7.1-ubuntu2404
 for i in ogg amr vorbis theora mp3lame opus vpx xvid fdk x264 x265;do echo $i; find /usr/local/ -name *$i*;done
 ```
 

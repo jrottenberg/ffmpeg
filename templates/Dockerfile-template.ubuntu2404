@@ -5,16 +5,16 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:24.04 as base
+FROM        ubuntu:24.04 AS base
 
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 && \
+        apt-get install -yq --no-install-recommends ca-certificates openssl expat libgomp1 && \
         apt-get autoremove -y && \
         apt-get clean -y
 
-FROM base as build
+FROM base AS build
 
 ENV         %%ENV%%
 
@@ -23,30 +23,42 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN      buildDeps="autoconf \
                     automake \
                     cmake \
+                    build-essential \
+                    texinfo \
                     curl \
+                    wget \
                     bzip2 \
                     libexpat1-dev \
-                    g++ \
                     gcc \
                     git \
+                    git-core \
                     gperf \
                     libtool \
                     make \
                     meson \
+                    ninja-build \
                     nasm \
                     perl \
                     pkg-config \
                     python3 \
-                    libssl-dev \
                     yasm \
-                    zlib1g-dev" && \
+                    zlib1g-dev \
+                    libfreetype6-dev \
+                    libgnutls28-dev \
+                    libsdl2-dev \
+                    libva-dev \
+                    libvdpau-dev \
+                    libnuma-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
+
 %%RUN%%
+
+
 ## cleanup
 RUN \
-        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
-        for lib in /usr/local/lib/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
+        ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/ && \
+        for lib in /usr/local/lib/*.so.*; do ln -sf "${lib##*/}" "${lib%%.so.*}".so; done && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
         LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
@@ -57,6 +69,7 @@ RUN \
         done
 
 FROM        base AS release
+
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
@@ -66,6 +79,3 @@ CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
 COPY --from=build /usr/local /usr/local/
-
-# Let's make sure the app built correctly
-# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

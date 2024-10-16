@@ -10,12 +10,13 @@ WORKDIR     /tmp/workdir
 
 ENV         %%ENV%%
 
+RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates openssl expat git libgomp
+
 RUN     buildDeps="autoconf \
                    automake \
                    bash \
                    binutils \
                    bzip2 \
-                   ca-certificates \
                    cmake \
                    coreutils \
                    curl \
@@ -24,12 +25,7 @@ RUN     buildDeps="autoconf \
                    file \
                    g++ \
                    gcc \
-                   git \
                    gperf \
-                   libcrypto1.1 \
-                   libgcc \
-                   libssl1.1 \
-                   libstdc++ \
                    libtool \
                    make \
                    nasm \
@@ -38,8 +34,12 @@ RUN     buildDeps="autoconf \
                    tar \
                    xcb-proto \
                    yasm \
-                   zlib-dev" && \
-        apk  add --update ${buildDeps}
+                   zlib-dev \
+                   alpine-sdk \
+                   linux-headers" && \
+        apk add --no-cache --update ${buildDeps}
+
+#RUN     apk add --no-cache --update meson samuri
 
 %%RUN%%
 
@@ -52,7 +52,7 @@ RUN \
         LD_LIBRARY_PATH=/tmp/fakeroot/lib /tmp/fakeroot/bin/ffmpeg -buildconf
 
 ### Release Stage
-FROM        scratch AS release
+FROM        scratch as release
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
@@ -62,6 +62,3 @@ CMD         ["--help"]
 ENTRYPOINT  ["/bin/ffmpeg"]
 
 COPY --from=build /tmp/fakeroot/ /
-
-# Let's make sure the app built correctly
-# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
