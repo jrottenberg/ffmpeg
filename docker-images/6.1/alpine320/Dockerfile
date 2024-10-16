@@ -290,11 +290,7 @@ RUN  \
 RUN  \
         DIR=/tmp/ffmpeg && cd ${DIR} && \
         ./configure \
-        --disable-debug \
-        --disable-doc \
-        --disable-ffplay \
         --enable-fontconfig \
-        --enable-gpl \
         --enable-libaom \
         --enable-libaribb24 \
         --enable-libass \
@@ -323,12 +319,10 @@ RUN  \
         --enable-nonfree \
         --enable-openssl \
         --enable-postproc \
-        --enable-shared \
         --enable-small \
         --enable-version3 \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" \
-        --extra-libs=-ldl \
         --extra-libs=-lm \
         --extra-libs=-lpthread \
         --ld=g++ \

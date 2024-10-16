@@ -117,7 +117,6 @@ ARG PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/
 
 ARG PREFIX="/opt/ffmpeg"
 ARG LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
-# ARG LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/usr/lib:/usr/lib/x86_64-linux-gnu/"
 
 
 RUN      buildDeps="autoconf \

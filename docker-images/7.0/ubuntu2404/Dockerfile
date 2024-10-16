@@ -101,7 +101,6 @@ ARG PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/
 
 ARG PREFIX="/opt/ffmpeg"
 ARG LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
-# ARG LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/usr/lib:/usr/lib/x86_64-linux-gnu/"
 
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -137,9 +136,6 @@ RUN      buildDeps="autoconf \
                     libnuma-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
-
-# a strategy for debuging 
-# https://stackoverflow.com/a/69014668/1184492
 
 RUN \
         echo "Installing dependencies..." && \
@@ -210,11 +206,7 @@ RUN  \
         DIR=/tmp/ffmpeg && cd ${DIR} && \
         export PKG_CONFIG_PATH=${PKG_CONFIG_PATH} && \
         ./configure  \
-        --disable-debug \
-        --disable-doc \
-        --disable-ffplay \
         --enable-fontconfig \
-        --enable-gpl \
         --enable-libaom \
         --enable-libaribb24 \
         --enable-libass \
@@ -244,12 +236,10 @@ RUN  \
         --enable-nonfree \
         --enable-openssl \
         --enable-postproc \
-        --enable-shared \
         --enable-small \
         --enable-version3 \
         --extra-cflags="-I${PREFIX}/include -I/usr/include/x86_64-linux-gnu" \
         --extra-ldflags="-L${PREFIX}/lib -L/usr/lib/x86_64-linux-gnu" \
-        --extra-libs=-ldl \
         --extra-libs=-lm \
         --extra-libs=-lpthread \
         --ld=g++ \

@@ -108,9 +108,6 @@ RUN      buildDeps="autoconf \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
 
-# a strategy for debuging 
-# https://stackoverflow.com/a/69014668/1184492
-
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 # opencore-amr: from source
 RUN \
