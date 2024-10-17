@@ -5,20 +5,23 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:24.04 AS base
+# Stage 1: Build
+FROM       ubuntu:24.04 AS builder
+
 
 WORKDIR     /tmp/workdir
-
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates openssl expat libgomp1 && \
-        apt-get autoremove -y && \
-        apt-get clean -y
-
-FROM base AS build
 
 ENV         %%ENV%%
 
 ARG DEBIAN_FRONTEND=noninteractive
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates openssl expat libgomp1
+#        apt-get autoremove -y && \
+#        apt-get clean -y
+
+# FROM base AS build
+
+
 
 RUN      buildDeps="autoconf \
                     automake \
@@ -56,7 +59,7 @@ RUN      buildDeps="autoconf \
 
 
 ## cleanup
-# This is used for both the source and packages version ( be robust about looking for libs to copy ) \
+# This is used for both the source and packages version ( be robust about looking for libs to copy )
 RUN \
         if ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | grep -q . ; then \
                 ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/; \
@@ -74,7 +77,11 @@ RUN \
           sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
         done
 
-FROM        base AS release
+# FROM        base AS release
+
+# # Stage 2: Final Image
+FROM ubuntu:24.04
+COPY --from=builder /usr/local /usr/local/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
@@ -84,4 +91,3 @@ ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
-COPY --from=build /usr/local /usr/local/

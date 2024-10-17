@@ -275,15 +275,18 @@ RUN \
 
 ## libsvtav1 https://gitlab.com/AOMediaCodec/SVT-AV1.git
 #            https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#libsvtav1
+# RUN \
+#         echo "Installing dependencies libpng" && \
+#         apt-get install -yq libsvtav1enc-dev
+
 RUN \
         echo "Building SVT-AV1 v${SVTAV1_VERSION}" && \
         DIR=/tmp/libsvtav1 && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sLO https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v${SVTAV1_VERSION}/SVT-AV1-v${SVTAV1_VERSION}.tar.gz | \
-        tar -zx --strip-components=1 && \
-        mkdir -p SVT-AV1/build && \
-        cd SVT-AV1/build && \
+        curl -sLO https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v${SVTAV1_VERSION}/SVT-AV1-v${SVTAV1_VERSION}.tar.gz && \
+        tar -zx --strip-components=1 -f SVT-AV1-v${SVTAV1_VERSION}.tar.gz && \
+        cd Build && \
         cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${PREFIX}"  -DCMAKE_BUILD_TYPE=Release -DBUILD_DEC=OFF -DBUILD_SHARED_LIBS=OFF ..; \
         make ; \
         make install ; \
@@ -439,19 +442,24 @@ RUN \
 
 ### libtheora http://www.theora.org/ ( xiph )
 #             https://stackoverflow.com/questions/4810996/how-to-resolve-configure-guessing-build-type-failure
-# RUN \
-#         echo "Building libtheora-${THEORA_VERSION}" && \
-#         DIR=/tmp/theora && \
-#         mkdir -p ${DIR} && \
-#         cd ${DIR} && \
-#         curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
-#         echo ${THEORA_SHA256SUM} | sha256sum --check && \
-#         tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
-#         cp /usr/share/misc/config.guess . && \
-#         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
-#         make && \
-#         make install && \
-#         rm -rf ${DIR}
+RUN \
+        echo "Building libtheora-${THEORA_VERSION}" && \
+        DIR=/tmp/theora && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
+        echo ${THEORA_SHA256SUM} | sha256sum --check && \
+        tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
+        # add sym link for sdl-config
+        # ln -s /usr/bin/sdl2-config /usr/bin/sdl-config && \
+        # currently build does not find sdl-config, and thus no playback support is enabled (probably exacly, the way it was before)
+        # Note: consider installing doxygen so that the api documentation is built
+        #       right now, I did not, so we can keep everything small.
+        # disable examples to advoid the libjpeg sizeof error still in the example code.
+        ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared --disable-examples && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
 
 ## libsrt https://github.com/Haivision/srt
 # RUN \
@@ -520,19 +528,16 @@ RUN  \
 
 
 ## Build ffmpeg https://ffmpeg.org/
-# RUN  \
-#         echo "Building (final) ffmpeg-${FFMPEG_VERSION}" && \
-#         DIR=/tmp/ffmpeg && cd ${DIR} && \
-#         ./configure \
-#         %%FFMPEG_CONFIG_FLAGS%% && \
-#         make clean && \
-#         make && \
-#         make install && \
-#         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
-#         make distclean && \
-#         hash -r && \
-#         cd tools && \
-#         make qt-faststart && cp qt-faststart ${PREFIX}/bin/
-
-
-# Status: commented out theoara and ffmpeg build steps
+RUN  \
+        echo "Building (final) ffmpeg-${FFMPEG_VERSION}" && \
+        DIR=/tmp/ffmpeg && cd ${DIR} && \
+        export PKG_CONFIG_PATH=${PKG_CONFIG_PATH} && \
+        ./configure \
+        %%FFMPEG_CONFIG_FLAGS%% && \
+        make && \
+        make install && \
+        make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
+        make distclean && \
+        hash -r && \
+        cd tools && \
+        make qt-faststart && cp qt-faststart ${PREFIX}/bin/

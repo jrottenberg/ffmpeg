@@ -5,16 +5,11 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:24.04 AS base
+# Stage 1: Build
+FROM       ubuntu:24.04 AS builder
+
 
 WORKDIR     /tmp/workdir
-
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates openssl expat libgomp1 && \
-        apt-get autoremove -y && \
-        apt-get clean -y
-
-FROM base AS build
 
 ENV         FFMPEG_VERSION=6.1.2 \
     AOM_VERSION=v3.10.0 \
@@ -69,12 +64,20 @@ ARG         LIBARIBB24_SHA256SUM="f61560738926e57f9173510389634d8c06cabedfa857db
 
 
 ARG         MAKEFLAGS="-j2"
-ARG         PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig"
+ARG         PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
 ARG         PREFIX="/opt/ffmpeg"
 ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 
 ARG DEBIAN_FRONTEND=noninteractive
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates openssl expat libgomp1
+#        apt-get autoremove -y && \
+#        apt-get clean -y
+
+# FROM base AS build
+
+
 
 RUN      buildDeps="autoconf \
                     automake \
@@ -385,15 +388,18 @@ RUN \
 
 ## libsvtav1 https://gitlab.com/AOMediaCodec/SVT-AV1.git
 #            https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#libsvtav1
+# RUN \
+#         echo "Installing dependencies libpng" && \
+#         apt-get install -yq libsvtav1enc-dev
+
 RUN \
         echo "Building SVT-AV1 v${SVTAV1_VERSION}" && \
         DIR=/tmp/libsvtav1 && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sLO https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v${SVTAV1_VERSION}/SVT-AV1-v${SVTAV1_VERSION}.tar.gz | \
-        tar -zx --strip-components=1 && \
-        mkdir -p SVT-AV1/build && \
-        cd SVT-AV1/build && \
+        curl -sLO https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v${SVTAV1_VERSION}/SVT-AV1-v${SVTAV1_VERSION}.tar.gz && \
+        tar -zx --strip-components=1 -f SVT-AV1-v${SVTAV1_VERSION}.tar.gz && \
+        cd Build && \
         cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${PREFIX}"  -DCMAKE_BUILD_TYPE=Release -DBUILD_DEC=OFF -DBUILD_SHARED_LIBS=OFF ..; \
         make ; \
         make install ; \
@@ -549,19 +555,24 @@ RUN \
 
 ### libtheora http://www.theora.org/ ( xiph )
 #             https://stackoverflow.com/questions/4810996/how-to-resolve-configure-guessing-build-type-failure
-# RUN \
-#         echo "Building libtheora-${THEORA_VERSION}" && \
-#         DIR=/tmp/theora && \
-#         mkdir -p ${DIR} && \
-#         cd ${DIR} && \
-#         curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
-#         echo ${THEORA_SHA256SUM} | sha256sum --check && \
-#         tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
-#         cp /usr/share/misc/config.guess . && \
-#         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
-#         make && \
-#         make install && \
-#         rm -rf ${DIR}
+RUN \
+        echo "Building libtheora-${THEORA_VERSION}" && \
+        DIR=/tmp/theora && \
+        mkdir -p ${DIR} && \
+        cd ${DIR} && \
+        curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
+        echo ${THEORA_SHA256SUM} | sha256sum --check && \
+        tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
+        # add sym link for sdl-config
+        # ln -s /usr/bin/sdl2-config /usr/bin/sdl-config && \
+        # currently build does not find sdl-config, and thus no playback support is enabled (probably exacly, the way it was before)
+        # Note: consider installing doxygen so that the api documentation is built
+        #       right now, I did not, so we can keep everything small.
+        # disable examples to advoid the libjpeg sizeof error still in the example code.
+        ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared --disable-examples && \
+        make && \
+        make install && \
+        rm -rf ${DIR}
 
 ## libsrt https://github.com/Haivision/srt
 # RUN \
@@ -630,11 +641,12 @@ RUN  \
 
 
 ## Build ffmpeg https://ffmpeg.org/
-# RUN  \
-#         echo "Building (final) ffmpeg-${FFMPEG_VERSION}" && \
-#         DIR=/tmp/ffmpeg && cd ${DIR} && \
-#         ./configure \
-#         --disable-debug \
+RUN  \
+        echo "Building (final) ffmpeg-${FFMPEG_VERSION}" && \
+        DIR=/tmp/ffmpeg && cd ${DIR} && \
+        export PKG_CONFIG_PATH=${PKG_CONFIG_PATH} && \
+        ./configure \
+        --disable-debug \
         --disable-doc \
         --disable-ffplay \
         --enable-fontconfig \
@@ -673,23 +685,19 @@ RUN  \
         --extra-ldflags="-L${PREFIX}/lib -L/usr/lib/x86_64-linux-gnu" \
         --extra-libs=-ldl \
         --extra-libs=-lpthread \
-        --prefix="${PREFIX}" | tee /root/ffmpeg-configure.log && \
-#         make clean && \
-#         make && \
-#         make install && \
-#         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
-#         make distclean && \
-#         hash -r && \
-#         cd tools && \
-#         make qt-faststart && cp qt-faststart ${PREFIX}/bin/
-
-
-# Status: commented out theoara and ffmpeg build steps
+        --prefix="${PREFIX}" && \
+        make && \
+        make install && \
+        make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
+        make distclean && \
+        hash -r && \
+        cd tools && \
+        make qt-faststart && cp qt-faststart ${PREFIX}/bin/
 
 
 
 ## cleanup
-# This is used for both the source and packages version ( be robust about looking for libs to copy ) \
+# This is used for both the source and packages version ( be robust about looking for libs to copy )
 RUN \
         if ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | grep -q . ; then \
                 ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/; \
@@ -707,7 +715,11 @@ RUN \
           sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
         done
 
-FROM        base AS release
+# FROM        base AS release
+
+# # Stage 2: Final Image
+FROM ubuntu:24.04
+COPY --from=builder /usr/local /usr/local/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
@@ -717,4 +729,3 @@ ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
-COPY --from=build /usr/local /usr/local/

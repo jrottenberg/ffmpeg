@@ -277,8 +277,6 @@ for version in keep_version:
         FFMPEG_CONFIG_FLAGS.sort()
 
         COMBINED_CONFIG_FLAGS = " \\\n        ".join(FFMPEG_CONFIG_FLAGS)
-        # add | tee /root//ffmpeg-configure.log to the end of the configure command
-        COMBINED_CONFIG_FLAGS += ' | tee /root/ffmpeg-configure.log'
         run_content = RUN_CONTENT.replace(
             "%%FFMPEG_CONFIG_FLAGS%%", COMBINED_CONFIG_FLAGS
         )

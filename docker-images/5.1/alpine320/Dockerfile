@@ -332,7 +332,7 @@ RUN  \
         --extra-libs=-lm \
         --extra-libs=-lpthread \
         --ld=g++ \
-        --prefix="${PREFIX}" | tee /root/ffmpeg-configure.log && \
+        --prefix="${PREFIX}" && \
         make clean && \
         make && \
         make install && \

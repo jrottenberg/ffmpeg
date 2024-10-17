@@ -5,16 +5,11 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:24.04 AS base
+# Stage 1: Build
+FROM       ubuntu:24.04 AS builder
+
 
 WORKDIR     /tmp/workdir
-
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates openssl expat libgomp1 && \
-        apt-get autoremove -y && \
-        apt-get clean -y
-
-FROM base AS build
 
 ENV         FFMPEG_VERSION=6.1.2 \
     KVAZAAR_VERSION=2.3.1 \
@@ -62,39 +57,50 @@ ENV         FFMPEG_VERSION=6.1.2 \
 ##       libsrt - https://github.com/Haivision/srt
 ##                Secure Reliable Transport UDP streaming library
 ##                multiple flavors (OpenSSL flavour) and ( GnuTLS flavour)
-ARG OPENCORE_PKGS="libopencore-amrnb-dev libopencore-amrwb-dev"
-ARG X264_PKGS="libx264-dev"
-ARG X265_PKGS="libx265-dev libnuma-dev"
-ARG OGG_PKGS="libogg-dev"
-ARG OPUS_PKGS="libopus-dev"
-ARG VORBIS_PKGS="libvorbis-dev"
-ARG VPX_PKGS="libvpx-dev"
-ARG WEBP_PKGS="libwebp-dev"
-ARG MP3LAME_PKGS="libmp3lame-dev"
-ARG XVIDCORE_PKGS="libxvidcore-dev"
-ARG FDKAAC_PKGS="libfdk-aac-dev"
-ARG OPENJP_PKGS="libopenjp2-7-dev"
+ARG OPENCORE_PKGS="libopencore-amrnb-dev libopencore-amrnb0 libopencore-amrwb-dev libopencore-amrwb0"
+ARG X264_PKGS="libx264-164 libx264-dev"
+ARG X265_PKGS="libnuma1 libx265-199 libx265-dev"
+# libnuma-dev
+ARG OGG_PKGS="libogg-dev libogg0"
+ARG OPUS_PKGS="libopus-dev libopus0"
+ARG VORBIS_PKGS="libvorbis-dev libvorbis0a libvorbisenc2 libvorbisfile3"
+ARG VPX_PKGS="libvpx-dev libvpx9"
+ARG WEBP_PKGS="libsharpyuv-dev libsharpyuv0 libwebp-dev libwebp7 libwebpdecoder3 libwebpdemux2 libwebpmux3"
+ARG MP3LAME_PKGS="libmp3lame-dev libmp3lame0"
+ARG XVIDCORE_PKGS="libxvidcore-dev libxvidcore4"
+ARG FDKAAC_PKGS="libfdk-aac-dev libfdk-aac2"
+ARG OPENJP_PKGS="libopenjp2-7 libopenjp2-7-dev"
+# bzip2-doc fontconfig-config fonts-dejavu-core fonts-dejavu-mono libaom3 libbrotli-dev 
+# libbrotli1 libbsd0 libbz2-dev libc-dev-bin libc-devtools libc6-dev libcrypt-dev libde265-0 
+# libdeflate0 libfontconfig1 libfreetype6 libgd3 libheif-plugin-aomdec
+# libheif-plugin-aomenc libheif-plugin-libde265 libheif1 libjbig0 libjpeg-turbo8 
+# libjpeg8 liblerc4 libpng-dev libpng-tools libpng16-16t64 libsharpyuv0 libtiff6 
+#  libwebp7 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxpm4 linux-libc-dev 
+# manpages manpages-dev rpcsvc-proto zlib1g-dev
 ARG FREETYPE_PKGS="libfreetype6-dev"
-ARG VIDSTAB_PKGS="libvidstab-dev"
-ARG FRIBIDI_PKGS="libfribidi-dev"
-ARG FONTCONFIG_PKGS="libfontconfig-dev fontconfig-config"
-ARG LIBASS_PKGS="libass-dev"
-ARG AOM_PKGS="libaom-dev"
-ARG SVTAV1_PKGS="libsvtav1-dev libsvtav1enc-dev libsvtav1dec-dev"
-ARG DAV1D_PKGS="libdav1d-dev"
-ARG XORG_MACROS_PKGS="libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev"
-ARG XPROTO_PKGS="x11proto-core-dev"
-ARG XAU_PKGS="libxau-dev"
-ARG PTHREAS_STUBS_PKGS="libpthread-stubs0-dev"
-ARG XML2_PKGS="libxml2-dev"
-ARG BLURAY_PKGS="libbluray-dev"
-ARG ZMQ_PKGS="libzmq3-dev"
-ARG PNG_PKGS="libpng-dev"
+ARG FONTCONFIG_PKGS="libfontconfig-dev libfontconfig1 fontconfig-config fontconfig-config fonts-dejavu-core fonts-dejavu-mono" 
+ARG VIDSTAB_PKGS="libvidstab-dev libvidstab1.1"
+ARG FRIBIDI_PKGS="libfribidi-dev libfribidi0"
+# libass-dev wanted to install a boat-load of packages
+ARG LIBASS_PKGS="libass-dev libass9"
+ARG AOM_PKGS="libaom-dev libaom3"
+ARG SVTAV1_PKGS="libsvtav1-dev libsvtav1enc-dev libsvtav1enc1d1 libsvtav1dec-dev libsvtav1dec0"
+ARG DAV1D_PKGS="libdav1d-dev libdav1d7"
+# LIBDRM_PKGS picks ups some of the XORG_MACROS_PKGS as well
+ARG XORG_MACROS_PKGS="libxcb-shm0-dev libxcb-shm0 libxcb-xfixes0 libxcb-xfixes0-dev"
+ARG XPROTO_PKGS="x11proto-core-dev x11proto-dev"
+ARG XAU_PKGS="libxau-dev libxau6"
+ARG PTHREADS_STUBS_PKGS="libpthread-stubs0-dev"
+ARG XML2_PKGS="libxml2-dev libxml2"
+ARG BLURAY_PKGS="libbluray-dev libbluray2"
+ARG ZMQ_PKGS="libzmq3-dev libzmq5"
+# libpng-tools
+ARG PNG_PKGS="libpng-dev libpng16-16t64"
 ARG ARIBB24_PKGS="libaribb24-dev"
-ARG ZIMG_PKGS="libzimg-dev"
-ARG THEORA_PKGS="libtheora-dev"
-ARG SRT_PKGS="libssl-dev libsrt-openssl-dev"
-ARG LIBDRM_PKGS="libdrm-dev libdrm2 libxcb1-dev libxcb1"
+ARG ZIMG_PKGS="libzimg-dev libzimg2"
+ARG THEORA_PKGS="libtheora-dev libtheora0"
+ARG SRT_PKGS="libssl-dev libsrt-openssl-dev libsrt1.5-openssl"
+ARG LIBDRM_PKGS="libbsd0 libdrm-dev libdrm2 libxcb1-dev libxcb1"
 
 ARG MAKEFLAGS="-j2"
 ARG PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
@@ -104,6 +110,14 @@ ARG LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 
 ARG DEBIAN_FRONTEND=noninteractive
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates openssl expat libgomp1
+#        apt-get autoremove -y && \
+#        apt-get clean -y
+
+# FROM base AS build
+
+
 
 RUN      buildDeps="autoconf \
                     automake \
@@ -139,7 +153,7 @@ RUN      buildDeps="autoconf \
 
 RUN \
         echo "Installing dependencies..." && \
-        apt-get install -yq ${OPENCORE_PKGS} ${X264_PKGS} ${X265_PKGS} ${OGG_PKGS} ${OPUS_PKGS} ${VORBIS_PKGS} ${VPX_PKGS} ${WEBP_PKGS} ${MP3LAME_PKGS} ${XVIDCORE_PKGS} ${FDKAAC_PKGS} ${OPENJP_PKGS} ${FREETYPE_PKGS} ${VIDSTAB_PKGS} ${FRIBIDI_PKGS} ${FONTCONFIG_PKGS} ${LIBASS_PKGS} ${AOM_PKGS} ${SVTAV1_PKGS} ${DAV1D_PKGS} ${XORG_MACROS_PKGS} ${XPROTO_PKGS} ${XAU_PKGS} ${PTHREAS_STUBS_PKGS} ${XML2_PKGS} ${BLURAY_PKGS} ${ZMQ_PKGS} ${PNG_PKGS} ${ARIBB24_PKGS} ${ZIMG_PKGS} ${THEORA_PKGS} ${SRT_PKGS} ${LIBDRM_PKGS}
+        apt-get install -yq --no-install-recommends ${OPENCORE_PKGS} ${X264_PKGS} ${X265_PKGS} ${OGG_PKGS} ${OPUS_PKGS} ${VORBIS_PKGS} ${VPX_PKGS} ${WEBP_PKGS} ${MP3LAME_PKGS} ${XVIDCORE_PKGS} ${FDKAAC_PKGS} ${OPENJP_PKGS} ${FREETYPE_PKGS} ${VIDSTAB_PKGS} ${FRIBIDI_PKGS} ${FONTCONFIG_PKGS} ${LIBASS_PKGS} ${AOM_PKGS} ${SVTAV1_PKGS} ${DAV1D_PKGS} ${XORG_MACROS_PKGS} ${XPROTO_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${BLURAY_PKGS} ${ZMQ_PKGS} ${PNG_PKGS} ${ARIBB24_PKGS} ${ZIMG_PKGS} ${THEORA_PKGS} ${SRT_PKGS} ${LIBDRM_PKGS}
 
         # apt install libdrm-dev
 
@@ -222,8 +236,6 @@ RUN  \
 # --enable-version3
 RUN  \
         echo "Building (final detailed configure) ffmpeg-${FFMPEG_VERSION}" && \
-        echo "PKG_CONFIG_PATH=${PKG_CONFIG_PATH}" && \
-        dpkg -l |grep srt && \
         DIR=/tmp/ffmpeg && cd ${DIR} && \
         export PKG_CONFIG_PATH=${PKG_CONFIG_PATH} && \
         ./configure  \
@@ -270,8 +282,7 @@ RUN  \
         --extra-libs=-lm \
         --extra-libs=-lpthread \
         --ld=g++ \
-        --prefix="${PREFIX}" | tee /root/ffmpeg-configure.log && \
-        # make clean && \
+        --prefix="${PREFIX}" && \
         make && \
         make install && \
         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
@@ -284,7 +295,7 @@ RUN  \
 
 
 ## cleanup
-# This is used for both the source and packages version ( be robust about looking for libs to copy ) \
+# This is used for both the source and packages version ( be robust about looking for libs to copy )
 RUN \
         if ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | grep -q . ; then \
                 ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/; \
@@ -302,7 +313,11 @@ RUN \
           sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
         done
 
-FROM        base AS release
+# FROM        base AS release
+
+# # Stage 2: Final Image
+FROM ubuntu:24.04
+COPY --from=builder /usr/local /usr/local/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
@@ -312,4 +327,3 @@ ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
-COPY --from=build /usr/local /usr/local/
