@@ -199,19 +199,40 @@ RUN \
         echo "VMAF skipped."; \
         fi
 
+#### Do we really need to build ffmpeg twice? seems silly 
 
 ## Download ffmpeg https://ffmpeg.org/
 RUN  \
         echo "Building (intial configure) ffmpeg-${FFMPEG_VERSION}" && \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
-        make ;  make install
+        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
+#         ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
+#         make ;  make install
 
 
 
 # ## Build ffmpeg https://ffmpeg.org/
+# Here is a list of things that we enable in the ffmpeg build: that are not in the 
+# track configuration guide: https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#FFmpeg
+# --enable-fontconfig
+# --enable-libaribb24
+# --enable-libbluray
+# --enable-libkvazaar
+# --enable-libopencore-amrnb
+# --enable-libopencore-amrwb
+# --enable-libopenjpeg
+# --enable-libsrt
+# --enable-libtheora
+# --enable-libvmaf
+# --enable-libwebp
+# --enable-libxvid
+# --enable-libzimg
+# --enable-libzmq
+# --enable-openssl
+# --enable-postproc
+# --enable-small
+# --enable-version3
 RUN  \
         echo "Building (final detailed configure) ffmpeg-${FFMPEG_VERSION}" && \
         echo "PKG_CONFIG_PATH=${PKG_CONFIG_PATH}" && \
@@ -261,8 +282,8 @@ RUN  \
         --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/" \
         --extra-libs=-ldl \
         --extra-libs=-lpthread \
-        --prefix="${PREFIX}" && \
-        make clean && \
+        --prefix="${PREFIX}" | tee /root/ffmpeg-configure.log && \
+        # make clean && \
         make && \
         make install && \
         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \

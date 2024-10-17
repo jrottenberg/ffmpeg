@@ -14,7 +14,7 @@ RUN     apt-get -yqq update && \
         apt-get autoremove -y && \
         apt-get clean -y
 
-FROM base AS build
+# FROM base AS build
 
 ENV         FFMPEG_VERSION=7.1 \
     AOM_VERSION=v3.10.0 \
@@ -549,24 +549,25 @@ RUN \
 
 ### libtheora http://www.theora.org/ ( xiph )
 #             https://stackoverflow.com/questions/4810996/how-to-resolve-configure-guessing-build-type-failure
-RUN \
-        echo "Building libtheora-${THEORA_VERSION}" && \
-        DIR=/tmp/theora && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
-        echo ${THEORA_SHA256SUM} | sha256sum --check && \
-        tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
-        cp /usr/share/misc/config.guess . && \
-        ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
-        make && \
-        make install && \
-        rm -rf ${DIR}
+# RUN \
+#         echo "Building libtheora-${THEORA_VERSION}" && \
+#         DIR=/tmp/theora && \
+#         mkdir -p ${DIR} && \
+#         cd ${DIR} && \
+#         curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
+#         echo ${THEORA_SHA256SUM} | sha256sum --check && \
+#         tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
+#         cp /usr/share/misc/config.guess . && \
+#         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
+#         make && \
+#         make install && \
+#         rm -rf ${DIR}
 
 ## libsrt https://github.com/Haivision/srt
 # RUN \
 #         echo "installing libsrt-dev with debian package: Secure Reliable Transport UDP streaming library (OpenSSL flavour)" && \
-#         apt-get install -yq libsrt1.5-openssl
+#         apt-get install -yq libsrt1.5-openssl 
+# libsrt-openssl-dev
 RUN \
         echo "Adding libssl-dev for libsrt build" && \
         apt-get install -yq --no-install-recommends libssl-dev 
@@ -622,83 +623,91 @@ RUN  \
         echo "Building (intial) ffmpeg-${FFMPEG_VERSION}" && \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
-        make ;  make install
+        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
+#         ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
+#         make ;  make install
 
 
 
 ## Build ffmpeg https://ffmpeg.org/
-RUN  \
-        echo "Building (final) ffmpeg-${FFMPEG_VERSION}" && \
-        DIR=/tmp/ffmpeg && cd ${DIR} && \
-        ./configure \
-        --disable-debug \
-        --disable-doc \
-        --disable-ffplay \
-        --enable-fontconfig \
-        --enable-gpl \
-        --enable-libaom \
-        --enable-libaribb24 \
-        --enable-libass \
-        --enable-libbluray \
-        --enable-libfdk_aac \
-        --enable-libfreetype \
-        --enable-libkvazaar \
-        --enable-libmp3lame \
-        --enable-libopencore-amrnb \
-        --enable-libopencore-amrwb \
-        --enable-libopenjpeg \
-        --enable-libopus \
-        --enable-libsrt \
-        --enable-libtheora \
-        --enable-libvidstab \
-        --enable-libvmaf \
-        --enable-libvorbis \
-        --enable-libvpx \
-        --enable-libwebp \
-        --enable-libx264 \
-        --enable-libx265 \
-        --enable-libxvid \
-        --enable-libzimg \
-        --enable-libzmq \
-        --enable-nonfree \
-        --enable-openssl \
-        --enable-postproc \
-        --enable-shared \
-        --enable-small \
-        --enable-version3 \
-        --extra-cflags="-I${PREFIX}/include -I/usr/include/x86_64-linux-gnu" \
-        --extra-ldflags="-L${PREFIX}/lib -L/usr/lib/x86_64-linux-gnu" \
-        --extra-libs=-ldl \
-        --extra-libs=-lpthread \
-        --prefix="${PREFIX}" && \
-        make clean && \
-        make && \
-        make install && \
-        make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
-        make distclean && \
-        hash -r && \
-        cd tools && \
-        make qt-faststart && cp qt-faststart ${PREFIX}/bin/
+# RUN  \
+#         echo "Building (final) ffmpeg-${FFMPEG_VERSION}" && \
+#         DIR=/tmp/ffmpeg && cd ${DIR} && \
+#         ./configure \
+#         --disable-debug \
+        # --disable-doc \
+        # --disable-ffplay \
+        # --enable-fontconfig \
+        # --enable-gpl \
+        # --enable-libaom \
+        # --enable-libaribb24 \
+        # --enable-libass \
+        # --enable-libbluray \
+        # --enable-libfdk_aac \
+        # --enable-libfreetype \
+        # --enable-libkvazaar \
+        # --enable-libmp3lame \
+        # --enable-libopencore-amrnb \
+        # --enable-libopencore-amrwb \
+        # --enable-libopenjpeg \
+        # --enable-libopus \
+        # --enable-libsrt \
+        # --enable-libtheora \
+        # --enable-libvidstab \
+        # --enable-libvmaf \
+        # --enable-libvorbis \
+        # --enable-libvpx \
+        # --enable-libwebp \
+        # --enable-libx264 \
+        # --enable-libx265 \
+        # --enable-libxvid \
+        # --enable-libzimg \
+        # --enable-libzmq \
+        # --enable-nonfree \
+        # --enable-openssl \
+        # --enable-postproc \
+        # --enable-shared \
+        # --enable-small \
+        # --enable-version3 \
+        # --extra-cflags="-I${PREFIX}/include -I/usr/include/x86_64-linux-gnu" \
+        # --extra-ldflags="-L${PREFIX}/lib -L/usr/lib/x86_64-linux-gnu" \
+        # --extra-libs=-ldl \
+        # --extra-libs=-lpthread \
+        # --prefix="${PREFIX}" | tee /root/ffmpeg-configure.log && \
+#         make clean && \
+#         make && \
+#         make install && \
+#         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
+#         make distclean && \
+#         hash -r && \
+#         cd tools && \
+#         make qt-faststart && cp qt-faststart ${PREFIX}/bin/
 
+
+# Status: commented out theoara and ffmpeg build steps
 
 
 
 ## cleanup
-RUN \
-        ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/ && \
-        for lib in /usr/local/lib/*.so.*; do ln -sf "${lib##*/}" "${lib%%.so.*}".so; done && \
-        cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-        cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-        mkdir -p /usr/local/lib/pkgconfig && \
-        for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-          sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
-        done
+# This is used for both the source and packages version ( be robust about looking for libs to copy ) \
+# RUN \
+#         if ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | grep -q . ; then \
+#                 ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/; \
+#         fi && \
+#         if ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | grep -q . ; then \
+#                 ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/; \
+#         fi && \
+#         for lib in /usr/local/lib/*.so.*; do ln -sf "${lib##*/}" "${lib%%.so.*}".so; done && \
+#         cp ${PREFIX}/bin/* /usr/local/bin/ && \
+#         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+#         LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
+#         cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
+#         mkdir -p /usr/local/lib/pkgconfig && \
+#         for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc  ${PREFIX}/lib/pkgconfig/kvazaar.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
+#           sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
+#         done
 
-FROM        base AS release
+# FROM        base AS release
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
@@ -708,4 +717,4 @@ ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
-COPY --from=build /usr/local /usr/local/
+# COPY --from=build /usr/local /usr/local/

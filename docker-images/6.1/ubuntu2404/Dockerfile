@@ -186,19 +186,40 @@ RUN \
         echo "VMAF skipped."; \
         fi
 
+#### Do we really need to build ffmpeg twice? seems silly 
 
 ## Download ffmpeg https://ffmpeg.org/
 RUN  \
         echo "Building (intial configure) ffmpeg-${FFMPEG_VERSION}" && \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
-        make ;  make install
+        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
+#         ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
+#         make ;  make install
 
 
 
 # ## Build ffmpeg https://ffmpeg.org/
+# Here is a list of things that we enable in the ffmpeg build: that are not in the 
+# track configuration guide: https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#FFmpeg
+# --enable-fontconfig
+# --enable-libaribb24
+# --enable-libbluray
+# --enable-libkvazaar
+# --enable-libopencore-amrnb
+# --enable-libopencore-amrwb
+# --enable-libopenjpeg
+# --enable-libsrt
+# --enable-libtheora
+# --enable-libvmaf
+# --enable-libwebp
+# --enable-libxvid
+# --enable-libzimg
+# --enable-libzmq
+# --enable-openssl
+# --enable-postproc
+# --enable-small
+# --enable-version3
 RUN  \
         echo "Building (final detailed configure) ffmpeg-${FFMPEG_VERSION}" && \
         echo "PKG_CONFIG_PATH=${PKG_CONFIG_PATH}" && \
@@ -206,7 +227,11 @@ RUN  \
         DIR=/tmp/ffmpeg && cd ${DIR} && \
         export PKG_CONFIG_PATH=${PKG_CONFIG_PATH} && \
         ./configure  \
+        --disable-debug \
+        --disable-doc \
+        --disable-ffplay \
         --enable-fontconfig \
+        --enable-gpl \
         --enable-libaom \
         --enable-libaribb24 \
         --enable-libass \
@@ -236,15 +261,17 @@ RUN  \
         --enable-nonfree \
         --enable-openssl \
         --enable-postproc \
+        --enable-shared \
         --enable-small \
         --enable-version3 \
         --extra-cflags="-I${PREFIX}/include -I/usr/include/x86_64-linux-gnu" \
         --extra-ldflags="-L${PREFIX}/lib -L/usr/lib/x86_64-linux-gnu" \
+        --extra-libs=-ldl \
         --extra-libs=-lm \
         --extra-libs=-lpthread \
         --ld=g++ \
-        --prefix="${PREFIX}" && \
-        make clean && \
+        --prefix="${PREFIX}" | tee /root/ffmpeg-configure.log && \
+        # make clean && \
         make && \
         make install && \
         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
@@ -257,15 +284,21 @@ RUN  \
 
 
 ## cleanup
+# This is used for both the source and packages version ( be robust about looking for libs to copy ) \
 RUN \
-        ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/ && \
+        if ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | grep -q . ; then \
+                ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/; \
+        fi && \
+        if ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | grep -q . ; then \
+                ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/; \
+        fi && \
         for lib in /usr/local/lib/*.so.*; do ln -sf "${lib##*/}" "${lib%%.so.*}".so; done && \
         cp ${PREFIX}/bin/* /usr/local/bin/ && \
         cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
         LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
         cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
         mkdir -p /usr/local/lib/pkgconfig && \
-        for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
+        for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc  ${PREFIX}/lib/pkgconfig/kvazaar.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
           sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
         done
 

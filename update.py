@@ -172,7 +172,15 @@ for version in keep_version:
         )
         with open(TEMPLATE_STR.format(variant["name"].replace('-edge', '')), "r") as tmpfile:
             template = tmpfile.read()
+        # Note: the debug, doc, ffplay, -ldl, gpl. ( the first 6 flags) are prebuilt in Docker-run-ubuntu template
+        #       To prevent conflicts
         FFMPEG_CONFIG_FLAGS = [
+            "--disable-debug",
+            "--disable-doc",
+            "--disable-ffplay",
+            "--enable-shared",
+            "--extra-libs=-ldl",
+            "--enable-gpl",
             "--enable-fontconfig",
             "--enable-libass",
             "--enable-libbluray",
@@ -257,12 +265,6 @@ for version in keep_version:
             FFMPEG_CONFIG_FLAGS.append("--enable-libdav1d")
         else: # for older versions
             FFMPEG_CONFIG_FLAGS.append("--enable-libfdk_aac") # this was likely misstyped before
-            FFMPEG_CONFIG_FLAGS.append("--disable-debug")
-            FFMPEG_CONFIG_FLAGS.append("--disable-doc")
-            FFMPEG_CONFIG_FLAGS.append("--disable-ffplay")
-            FFMPEG_CONFIG_FLAGS.append("--enable-shared")
-            FFMPEG_CONFIG_FLAGS.append("--enable-gpl")
-            FFMPEG_CONFIG_FLAGS.append("--extra-libs=-ldl")
 
         if "ubuntu" in variant["parent"] and float(version[0:3]) >= 5.1:
             CFLAGS.append("-I/usr/include/x86_64-linux-gnu")
@@ -275,7 +277,8 @@ for version in keep_version:
         FFMPEG_CONFIG_FLAGS.sort()
 
         COMBINED_CONFIG_FLAGS = " \\\n        ".join(FFMPEG_CONFIG_FLAGS)
-
+        # add | tee /root//ffmpeg-configure.log to the end of the configure command
+        COMBINED_CONFIG_FLAGS += ' | tee /root/ffmpeg-configure.log'
         run_content = RUN_CONTENT.replace(
             "%%FFMPEG_CONFIG_FLAGS%%", COMBINED_CONFIG_FLAGS
         )

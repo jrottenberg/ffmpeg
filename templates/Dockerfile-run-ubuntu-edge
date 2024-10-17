@@ -439,24 +439,25 @@ RUN \
 
 ### libtheora http://www.theora.org/ ( xiph )
 #             https://stackoverflow.com/questions/4810996/how-to-resolve-configure-guessing-build-type-failure
-RUN \
-        echo "Building libtheora-${THEORA_VERSION}" && \
-        DIR=/tmp/theora && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
-        echo ${THEORA_SHA256SUM} | sha256sum --check && \
-        tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
-        cp /usr/share/misc/config.guess . && \
-        ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
-        make && \
-        make install && \
-        rm -rf ${DIR}
+# RUN \
+#         echo "Building libtheora-${THEORA_VERSION}" && \
+#         DIR=/tmp/theora && \
+#         mkdir -p ${DIR} && \
+#         cd ${DIR} && \
+#         curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
+#         echo ${THEORA_SHA256SUM} | sha256sum --check && \
+#         tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
+#         cp /usr/share/misc/config.guess . && \
+#         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
+#         make && \
+#         make install && \
+#         rm -rf ${DIR}
 
 ## libsrt https://github.com/Haivision/srt
 # RUN \
 #         echo "installing libsrt-dev with debian package: Secure Reliable Transport UDP streaming library (OpenSSL flavour)" && \
-#         apt-get install -yq libsrt1.5-openssl
+#         apt-get install -yq libsrt1.5-openssl 
+# libsrt-openssl-dev
 RUN \
         echo "Adding libssl-dev for libsrt build" && \
         apt-get install -yq --no-install-recommends libssl-dev 
@@ -512,24 +513,26 @@ RUN  \
         echo "Building (intial) ffmpeg-${FFMPEG_VERSION}" && \
         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
-        make ;  make install
+        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
+#         ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
+#         make ;  make install
 
 
 
 ## Build ffmpeg https://ffmpeg.org/
-RUN  \
-        echo "Building (final) ffmpeg-${FFMPEG_VERSION}" && \
-        DIR=/tmp/ffmpeg && cd ${DIR} && \
-        ./configure \
-        %%FFMPEG_CONFIG_FLAGS%% && \
-        make clean && \
-        make && \
-        make install && \
-        make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
-        make distclean && \
-        hash -r && \
-        cd tools && \
-        make qt-faststart && cp qt-faststart ${PREFIX}/bin/
+# RUN  \
+#         echo "Building (final) ffmpeg-${FFMPEG_VERSION}" && \
+#         DIR=/tmp/ffmpeg && cd ${DIR} && \
+#         ./configure \
+#         %%FFMPEG_CONFIG_FLAGS%% && \
+#         make clean && \
+#         make && \
+#         make install && \
+#         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
+#         make distclean && \
+#         hash -r && \
+#         cd tools && \
+#         make qt-faststart && cp qt-faststart ${PREFIX}/bin/
 
+
+# Status: commented out theoara and ffmpeg build steps
