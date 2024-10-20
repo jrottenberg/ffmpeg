@@ -130,7 +130,7 @@ for version in keep_version:
     os.makedirs(ver_path, exist_ok=True)
     for existing_variant in os.listdir(ver_path):
         if existing_variant not in compatible_variants:
-            shutil.rmtree(DIR_FORMAT_STR.format(short_version, existing_variant))
+            shutil.rmtree(DIR_FORMAT_STR.format(short_version, existing_variant), ignore_errors=True)
     
     print(f"Preparing Dockerfile for ffmpeg-{version}")
     for variant in compatible_variants:
@@ -284,12 +284,17 @@ for version in keep_version:
         docker_content = template.replace("%%ENV%%", env_content)
         docker_content = docker_content.replace("%%RUN%%", run_content)
 
-        d = os.path.dirname(dockerfile)
-        if not os.path.exists(d):
-            os.makedirs(d)
+        ddir = os.path.dirname(dockerfile)
+        if not os.path.exists(ddir):
+            os.makedirs(ddir)
 
         with open(dockerfile, "w") as dfile:
             dfile.write(docker_content)
+        
+        if variant['name'] == "ubuntu2404-edge":
+            shutil.copy("generate-source-of-truth-ffmpeg-versions.py", ddir)
+            shutil.copy("download_tarballs.sh", ddir)
+            shutil.copy("build_source.sh", ddir)
 
 
 with open("docker-images/gitlab-ci.yml", "w") as gitlabcifile:
@@ -302,3 +307,4 @@ azure = template.replace("%%VERSIONS%%", "\n".join(azure))
 
 with open("docker-images/azure-jobs.yml", "w") as azurefile:
     azurefile.write(azure)
+

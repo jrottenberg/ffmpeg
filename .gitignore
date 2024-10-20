@@ -1,4 +1,6 @@
 list_of_recent_images.txt
+generated_build_manifest.json
+generated_versions_table.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

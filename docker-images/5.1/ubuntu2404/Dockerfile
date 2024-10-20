@@ -11,6 +11,10 @@ FROM       ubuntu:24.04 AS builder
 
 WORKDIR     /tmp/workdir
 
+COPY generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
+COPY download_tarballs.sh /tmp/workdir
+COPY build_source.sh /tmp/workdir
+
 ENV         FFMPEG_VERSION=5.1.6 \
     KVAZAAR_VERSION=2.3.1 \
     LIBVMAF_VERSION=3.0.0
@@ -111,12 +115,9 @@ ARG LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates openssl expat libgomp1
-#        apt-get autoremove -y && \
-#        apt-get clean -y
-
-# FROM base AS build
-
+        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree && \
+        chmod +x /tmp/workdir/download_tarballs.sh && \
+        chmod +x /tmp/workdir/build_source.sh
 
 
 RUN      buildDeps="autoconf \
@@ -147,9 +148,12 @@ RUN      buildDeps="autoconf \
                     libsdl2-dev \
                     libva-dev \
                     libvdpau-dev \
-                    libnuma-dev" && \
-        apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ${buildDeps}
+                    libnuma-dev \
+                    openssl \
+                    expat \
+                    libgomp1" && \
+        apt-get -yqq update 
+#        apt-get install -yq --no-install-recommends ${buildDeps}
 
 RUN \
         echo "Installing dependencies..." && \
@@ -312,8 +316,6 @@ RUN \
         for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc  ${PREFIX}/lib/pkgconfig/kvazaar.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
           sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
         done
-
-# FROM        base AS release
 
 # # Stage 2: Final Image
 FROM ubuntu:24.04
