@@ -67,6 +67,8 @@ THEORA = {"version": "1.1.1", "release_date": "2010-01-25"}
 LIBVMAF = {"version": "3.0.0", "release_date": "2023-12-07"}
 
 # Library details, Source of truth
+# TODO: store this in a yaml confiuration file ( would probably be better )
+# flake8: noqa E501
 LIBRARIES = OrderedDict(
     [
         (
@@ -609,21 +611,29 @@ LIBRARIES = OrderedDict(
                 },
             },
         ),
-        # ("ffmpeg", {
-        #     "link": "http://ffmpeg.org/",
-        #     "version": FFMPEG["version"],
-        #     "version_link": "http://ffmpeg.org/releases/",
-        #     "release_date": FFMPEG["release_date"],
-        #     "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
-        #     "license_link": "https://ffmpeg.org/legal.html",
-        #     "build_info": {
-        #         "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG['version']}.tar.bz2",
-        #         "build_dir": "/tmp/ffmpeg",
-        #         "tarball_name": f"ffmpeg-{FFMPEG['version']}.tar.bz2"
-        #     }
-        # }),
+        (
+            "ffmpeg",
+            {
+                "link": "http://ffmpeg.org/",
+                "version": FFMPEG["version"],
+                "version_link": "http://ffmpeg.org/releases/",
+                "release_date": FFMPEG["release_date"],
+                "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
+                "license_link": "https://ffmpeg.org/legal.html",
+                "build_info": {
+                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG['version']}.tar.bz2",
+                    "build_dir": "/tmp/ffmpeg",
+                    "tarball_name": f"ffmpeg-{FFMPEG['version']}.tar.bz2",
+                },
+            },
+        ),
     ]
 )
+# come back to this problem, I think yaml configuration is better.
+# with open('libraries.json', 'r') as f:
+#     data = json.load(f)
+#     order_list = data['build_order']
+#     LIBRARIES = OrderedDict((key, data['libraries'][key]) for key in order_list)
 
 
 def generate_library_table(filename):
