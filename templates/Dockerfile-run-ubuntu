@@ -47,7 +47,7 @@ RUN \
         echo "VMAF skipped."; \
         fi
 
-#### Do we really need to build ffmpeg twice? seems silly 
+#### Do we really need to build ffmpeg twice? seems silly
 
 ## Download ffmpeg https://ffmpeg.org/
 RUN  \
@@ -61,7 +61,7 @@ RUN  \
 
 
 # ## Build ffmpeg https://ffmpeg.org/
-# Here is a list of things that we enable in the ffmpeg build: that are not in the 
+# Here is a list of things that we enable in the ffmpeg build: that are not in the
 # track configuration guide: https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#FFmpeg
 # --enable-fontconfig
 # --enable-libaribb24
@@ -94,4 +94,3 @@ RUN  \
         hash -r && \
         cd tools && \
         make qt-faststart && cp qt-faststart ${PREFIX}/bin/
-

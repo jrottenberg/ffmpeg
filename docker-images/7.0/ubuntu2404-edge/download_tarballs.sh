@@ -55,22 +55,22 @@ download_tarballs() {
 	local libs=( $librariesRaw )
     echo "Downloading (${#libs[@]} libraries)..."
     for i in "${!libs[@]}"; do
-        echo "Downloading ${libs[$i]}..."
+        # echo "Downloading ${libs[$i]}..."
         lib_name=${libs[$i]}
         # use double quotes around '${lib_name}', so Bash will expand the value.
         build_dir=$(jq -r '.[] | select(.library_name == "'${lib_name}'") | .build_dir' $manifestJsonFile)
         download_url=$(jq -r '.[] | select(.library_name == "'${lib_name}'") | .download_url' $manifestJsonFile)
         tarball_name=$(jq -r '.[] | select(.library_name == "'${lib_name}'") | .tarball_name' $manifestJsonFile)
-        echo "${build_dir} ${tarball_name} ${download_url}"
+        echo "Downloading: ${download_url} to: ${build_dir} ${tarball_name}"
         if [ -z "$build_dir" ] || [ -z "$download_url" ] || [ -z "$tarball_name" ]; then
             echo "Error: build_dir, download_url, or tarball_name is empty"
             exit 1
         fi
-        # does the directory exist? if not make it 
+        # does the directory exist? if not make it
         if [ ! -d "$build_dir" ]; then
             mkdir -p "$build_dir"
         fi
-        # if the tarball_file does not exhist then download it 
+        # if the tarball_file does not exhist then download it
         if [ ! -f "$build_dir/$tarball_name" ]; then
             echo "$build_dir/$tarball_name does not exist, downloading now..."
             cd "$build_dir"

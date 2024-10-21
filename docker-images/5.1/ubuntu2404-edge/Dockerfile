@@ -15,56 +15,7 @@ COPY generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
 COPY download_tarballs.sh /tmp/workdir
 COPY build_source.sh /tmp/workdir
 
-ENV         FFMPEG_VERSION=5.1.6 \
-    AOM_VERSION=v3.10.0 \
-    SVTAV1_VERSION=2.2.1 \
-    CHROMAPRINT_VERSION=1.5.0 \
-    FDKAAC_VERSION=2.0.3 \
-    FONTCONFIG_VERSION=2.12.4 \
-    FREETYPE_VERSION=2.10.4 \
-    FRIBIDI_VERSION=0.19.7 \
-    KVAZAAR_VERSION=2.0.0 \
-    LAME_VERSION=3.100 \
-    LIBASS_VERSION=0.13.7 \
-    LIBPTHREAD_STUBS_VERSION=0.4 \
-    LIBVIDSTAB_VERSION=1.1.0 \
-    LIBXCB_VERSION=1.13.1 \
-    XCBPROTO_VERSION=1.13 \
-    OGG_VERSION=1.3.5 \
-    OPENCOREAMR_VERSION=0.1.6 \
-    OPUS_VERSION=1.5.2 \
-    OPENJPEG_VERSION=2.5.2 \
-    PYTHON=python3 \
-    THEORA_VERSION=1.1.1 \
-    VORBIS_VERSION=1.3.7 \
-    VPX_VERSION=1.14.1 \
-    WEBP_VERSION=1.4.0 \
-    X264_VERSION=20191217-2245-stable \
-    X265_VERSION=4.0 \
-    XAU_VERSION=1.0.9 \
-    XORG_MACROS_VERSION=1.19.2 \
-    XPROTO_VERSION=7.0.31 \
-    XVID_VERSION=1.3.7 \
-    LIBXML2_VERSION=2.9.12 \
-    LIBBLURAY_VERSION=1.1.2 \
-    LIBZMQ_VERSION=4.3.5 \
-    LIBSRT_VERSION=1.5.3 \
-    LIBARIBB24_VERSION=1.0.3 \
-    LIBPNG_VERSION=1.6.9 \
-    LIBVMAF_VERSION=3.0.0 \
-    ZIMG_VERSION=3.0.5 \
-    SRC=/usr/local
-
-ARG         FREETYPE_SHA256SUM="5eab795ebb23ac77001cfb68b7d4d50b5d6c7469247b0b01b2c953269f658dac freetype-2.10.4.tar.gz"
-ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8 0.19.7.tar.gz"
-ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a47889315526adbafd7 0.13.7.tar.gz"
-ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb v1.1.0.tar.gz"
-# ARG         OGG_SHA256SUM="0eb4b4b9420a0f51db142ba3f9c64b333f826532dc0f48c6410ae51f4799b664 libogg-1.3.4.tar.gz"
-ARG         OPUS_SHA256SUM="65c1d2f78b9f2fb20082c38cbe47c951ad5839345876e46941612ee87f9a7ce1 opus-1.5.2.tar.gz"
-ARG         THEORA_SHA256SUM="40952956c47811928d1e7922cda3bc1f427eb75680c3c37249c91e949054916b libtheora-1.1.1.tar.gz"
-ARG         VORBIS_SHA256SUM="0e982409a9c3fc82ee06e08205b1355e5c6aa4c36bca58146ef399621b0ce5ab libvorbis-1.3.7.tar.gz"
-ARG         LIBBLURAY_SHA256SUM="a3dd452239b100dc9da0d01b30e1692693e2a332a7d29917bf84bb10ea7c0b42 libbluray-1.1.2.tar.bz2"
-ARG         LIBARIBB24_SHA256SUM="f61560738926e57f9173510389634d8c06cabedfa857db4b28fb7704707ff128 v1.0.3.tar.gz"
+ENV         FFMPEG_VERSION=5.1.6
 
 ARG         MAKEFLAGS="-j2"
 ARG         PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
@@ -74,9 +25,10 @@ ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree && \
+        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file && \
         chmod +x /tmp/workdir/download_tarballs.sh && \
         chmod +x /tmp/workdir/build_source.sh
+
 
 
 RUN      buildDeps="autoconf \
@@ -86,6 +38,7 @@ RUN      buildDeps="autoconf \
                     texinfo \
                     curl \
                     wget \
+                    tar \
                     bzip2 \
                     libexpat1-dev \
                     gcc \
@@ -108,71 +61,16 @@ RUN      buildDeps="autoconf \
                     libva-dev \
                     libvdpau-dev \
                     libnuma-dev \
+                    libdav1d-dev \
                     openssl \
+                    libssl-dev \
                     expat \
                     libgomp1" && \
-        apt-get -yqq update 
-#        apt-get install -yq --no-install-recommends ${buildDeps}
-
-# Download all of the dependencies on the first pass
-# there is no point in waiting for all of the build time cpu, if we can't download everything we need to continue
-# SHELL ["/bin/bash", "-c"]
-
-# Define library URLs as individual environment variables
-# ENV OPENCORE_AMR_URL="https://sourceforge.net/projects/opencore-amr/files/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz"
-# ENV X264_URL="https://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2"
-# ENV X265_URL="http://ftp.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz"
-# ... (define environment variables for all libraries)
-
-# RUN \
-#   echo "Downloading all of the libraries" && \
-#   DIR=/tmp && \
-#   mkdir -p "${DIR}"; cd "${DIR}" && \
-#   for LIB in "${OPENCORE_AMR_URL}" "${X264_URL}" "${X265_URL}"; do echo "$LIB"; done
-
-#   curl -sLO --retry 5 
-# RUN \ 
-#         echo "Downloading all of the libraries" && \
-#         DIR=/tmp && \
-#         mkdir -p ${DIR}; cd ${DIR} && \
-#         curl -LO --retry 5 https://sourceforge.net/projects/opencore-amr/files/opencore-amr/opencore-amr-${OPENCOREAMR_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-${X264_VERSION}.tar.bz2 \
-#         curl -LO --retry 5 http://ftp.videolan.org/pub/videolan/x265/x265_${X265_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://downloads.xiph.org/releases/ogg/libogg-${OGG_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://github.com/xiph/opus/releases/download/v${OPUS_VERSION}/opus-${OPUS_VERSION}.tar.gz \
-#         curl -LO --retry 5 http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://chromium.googlesource.com/webm/libvpx.git/+archive/v${VPX_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${WEBP_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://sourceforge.net/projects/lame/files/lame/${LAME_VERSION}/lame-${LAME_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://downloads.xvid.com/downloads/xvidcore-${XVID_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://github.com/mstorsjo/fdk-aac/archive/refs/tags/v${FDKAAC_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://github.com/uclouvain/openjpeg/archive/refs/tags/v${OPENJPEG_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://github.com/georgmartius/vid.stab/archive/v${LIBVIDSTAB_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://github.com/fribidi/fribidi/archive/${FRIBIDI_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 \
-#         curl -LO --retry 5 https://github.com/libass/libass/archive/${LIBASS_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://github.com/ultravideo/kvazaar/releases/download/v${KVAZAAR_VERSION}/kvazaar-${KVAZAAR_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v${SVTAV1_VERSION}/SVT-AV1-v${SVTAV1_VERSION}.tar.gz \
-#         # curl -LO --retry 5 https://code.videolan.org/videolan/dav1d/-/archive/${DAV1D_VERSION}/dav1d-${DAV1D_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://www.x.org/releases/individual/util/util-macros-${XORG_MACROS_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://www.x.org/releases/individual/proto/xproto-${XPROTO_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://www.x.org/releases/individual/lib/libXau-${XAU_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://www.x.org/releases/individual/lib/libpthread-stubs-${LIBPTHREAD_STUBS_VERSION}.tar.gz \
-#         curl -LO --retry 5 ftp://xmlsoft.org/libxml2/libxml2-${LIBXML2_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://download.videolan.org/pub/videolan/libbluray/${LIBBLURAY_VERSION}/libbluray-${LIBBLURAY_VERSION}.tar.bz2 \
-#         curl -LO --retry 5 https://github.com/zeromq/libzmq/releases/download/v${LIBZMQ_VERSION}/zeromq-${LIBZMQ_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://github.com/nkoriyama/aribb24/archive/v${LIBARIBB24_VERSION}.tar.gz -o aribb24-v${LIBARIBB24_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://github.com/sekrit-twc/zimg/archive/release-${ZIMG_VERSION}.tar.gz \
-#         curl -LO --retry 5 http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.bz2 \
-#         curl -LO --retry 5 https://github.com/Haivision/srt/archive/refs/tags/v${LIBSRT_VERSION}.tar.gz -o srt-v${LIBSRT_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://github.com/Netflix/vmaf/archive/refs/tags/v${LIBVMAF_VERSION}.tar.gz -o vmaf-v${LIBVMAF_VERSION}.tar.gz \
-#         curl -LO --retry 5 https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2
-
+        apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ${buildDeps}
 
 RUN \
         python3 /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --mode manifest --output generated_build_manifest.json
-
 
 RUN \
         /tmp/workdir/download_tarballs.sh
@@ -449,7 +347,7 @@ RUN \
 #         make && \
 #         make install && \
 #         rm -rf ${DIR}
-# # lib aom 
+# # lib aom
 # # https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#libaom
 # RUN \
 #         echo "Building aom-${AOM_VERSION}" && \
@@ -654,13 +552,13 @@ RUN \
 # ## libsrt https://github.com/Haivision/srt
 # # RUN \
 # #         echo "installing libsrt-dev with debian package: Secure Reliable Transport UDP streaming library (OpenSSL flavour)" && \
-# #         apt-get install -yq libsrt1.5-openssl 
+# #         apt-get install -yq libsrt1.5-openssl
 # # libsrt-openssl-dev
 # RUN \
 #         echo "Adding libssl-dev for libsrt build" && \
-#         apt-get install -yq --no-install-recommends libssl-dev 
+#         apt-get install -yq --no-install-recommends libssl-dev
 #         # Note: we can get the config error
-#         #       GnuTLS('libgnutls28-dev') and OpenSSL('libssl-dev') must not be enabled at the same time, 
+#         #       GnuTLS('libgnutls28-dev') and OpenSSL('libssl-dev') must not be enabled at the same time,
 #         #       from a previous build
 #         #       so we add libssl-dev and later in the build
 
@@ -764,4 +662,3 @@ ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
-

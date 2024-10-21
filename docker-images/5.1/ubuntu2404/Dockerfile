@@ -47,14 +47,14 @@ ENV         FFMPEG_VERSION=5.1.6 \
 ##              - https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#libdav1d
 ##  util-macros - (x.org) (and supporting libraries) for screen capture https://xcb.freedesktop.org/
 ##       xproto - (x.org)
-##       libXau - 
+##       libXau -
 ##   libpthread - libpthread-stubs
 ##      libxml2 - for libbluray
 ##    libbluray - Requires libxml, freetype, and fontconfig
 ##       libzmq - https://github.com/zeromq/libzmq/
 ##                this one pulls in a bunch of dependencies
 ##       libpng - this one also pulls in a bunch of stuff
-##   libaribb24 - 
+##   libaribb24 -
 ##         zimg - https://github.com/sekrit-twc/zimg
 ##    libtheora - http://www.theora.org/ ( xiph )
 ##              - https://stackoverflow.com/questions/4810996/how-to-resolve-configure-guessing-build-type-failure
@@ -74,15 +74,15 @@ ARG MP3LAME_PKGS="libmp3lame-dev libmp3lame0"
 ARG XVIDCORE_PKGS="libxvidcore-dev libxvidcore4"
 ARG FDKAAC_PKGS="libfdk-aac-dev libfdk-aac2"
 ARG OPENJP_PKGS="libopenjp2-7 libopenjp2-7-dev"
-# bzip2-doc fontconfig-config fonts-dejavu-core fonts-dejavu-mono libaom3 libbrotli-dev 
-# libbrotli1 libbsd0 libbz2-dev libc-dev-bin libc-devtools libc6-dev libcrypt-dev libde265-0 
+# bzip2-doc fontconfig-config fonts-dejavu-core fonts-dejavu-mono libaom3 libbrotli-dev
+# libbrotli1 libbsd0 libbz2-dev libc-dev-bin libc-devtools libc6-dev libcrypt-dev libde265-0
 # libdeflate0 libfontconfig1 libfreetype6 libgd3 libheif-plugin-aomdec
-# libheif-plugin-aomenc libheif-plugin-libde265 libheif1 libjbig0 libjpeg-turbo8 
-# libjpeg8 liblerc4 libpng-dev libpng-tools libpng16-16t64 libsharpyuv0 libtiff6 
-#  libwebp7 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxpm4 linux-libc-dev 
+# libheif-plugin-aomenc libheif-plugin-libde265 libheif1 libjbig0 libjpeg-turbo8
+# libjpeg8 liblerc4 libpng-dev libpng-tools libpng16-16t64 libsharpyuv0 libtiff6
+#  libwebp7 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxpm4 linux-libc-dev
 # manpages manpages-dev rpcsvc-proto zlib1g-dev
 ARG FREETYPE_PKGS="libfreetype6-dev"
-ARG FONTCONFIG_PKGS="libfontconfig-dev libfontconfig1 fontconfig-config fontconfig-config fonts-dejavu-core fonts-dejavu-mono" 
+ARG FONTCONFIG_PKGS="libfontconfig-dev libfontconfig1 fontconfig-config fontconfig-config fonts-dejavu-core fonts-dejavu-mono"
 ARG VIDSTAB_PKGS="libvidstab-dev libvidstab1.1"
 ARG FRIBIDI_PKGS="libfribidi-dev libfribidi0"
 # libass-dev wanted to install a boat-load of packages
@@ -115,9 +115,10 @@ ARG LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree && \
+        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file && \
         chmod +x /tmp/workdir/download_tarballs.sh && \
         chmod +x /tmp/workdir/build_source.sh
+
 
 
 RUN      buildDeps="autoconf \
@@ -127,6 +128,7 @@ RUN      buildDeps="autoconf \
                     texinfo \
                     curl \
                     wget \
+                    tar \
                     bzip2 \
                     libexpat1-dev \
                     gcc \
@@ -149,11 +151,13 @@ RUN      buildDeps="autoconf \
                     libva-dev \
                     libvdpau-dev \
                     libnuma-dev \
+                    libdav1d-dev \
                     openssl \
+                    libssl-dev \
                     expat \
                     libgomp1" && \
-        apt-get -yqq update 
-#        apt-get install -yq --no-install-recommends ${buildDeps}
+        apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ${buildDeps}
 
 RUN \
         echo "Installing dependencies..." && \
@@ -204,7 +208,7 @@ RUN \
         echo "VMAF skipped."; \
         fi
 
-#### Do we really need to build ffmpeg twice? seems silly 
+#### Do we really need to build ffmpeg twice? seems silly
 
 ## Download ffmpeg https://ffmpeg.org/
 RUN  \
@@ -218,7 +222,7 @@ RUN  \
 
 
 # ## Build ffmpeg https://ffmpeg.org/
-# Here is a list of things that we enable in the ffmpeg build: that are not in the 
+# Here is a list of things that we enable in the ffmpeg build: that are not in the
 # track configuration guide: https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#FFmpeg
 # --enable-fontconfig
 # --enable-libaribb24
@@ -297,7 +301,6 @@ RUN  \
 
 
 
-
 ## cleanup
 # This is used for both the source and packages version ( be robust about looking for libs to copy )
 RUN \
@@ -328,4 +331,3 @@ ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
-

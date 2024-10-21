@@ -14,19 +14,21 @@ TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 
 # https://ffmpeg.org/olddownload.html
 # https://endoflife.date/ffmpeg
-# We use the endoflife.date API to find the most recent ffmpeg versions. However, 
-# to simplify image maintenance, we only consider versions released within the 
-# last YEARS years (currently set to 3). Including very older versions compatibility 
-# issues with different libraries and operating system versions. By focusing on 
-# recent versions, we keep things manageable. 
+# We use the endoflife.date API to find the most recent ffmpeg versions. However,
+# to simplify image maintenance, we only consider versions released within the
+# last YEARS years (currently set to 3). Including very older versions compatibility
+# issues with different libraries and operating system versions. By focusing on
+# recent versions, we keep things manageable.
 # Note: the older builds will be preserved in the the docker hub registry.
 RELEASED_YEARS_AGO = 3
 
+
 def is_too_old(date_str, years):
-    date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+    date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d")
     diff = datetime.datetime.now() - date_obj
     # Check if the difference is more than x years
     return diff.days > (years * 365)
+
 
 def get_eol_versions():
     keep_version = []
@@ -41,6 +43,7 @@ def get_eol_versions():
             if not is_too_old(release_date, years=RELEASED_YEARS_AGO):
                 keep_version.append(v["latest"])
     return keep_version
+
 
 keep_version = get_eol_versions()
 print("The following versions of ffmpeg is still supported:")
@@ -65,12 +68,13 @@ azure = []
 for parent in all_parents:
     gitlabci.append(f"  - {parent}\n")
 
-# Note: Skip variants and the is_too_old() check, work together to  allow us to skip building things
+# Note: Skip variants and the is_too_old(), work together to allow us to skip things
 #       Skip variants allow us to skip some variants for specific versions
 #       is_too_old() check allow us to skip versions that are too old
 SKIP_VARIANTS = {
     "2.8": ["nvidia2204", "vaapi2204"] + [v["name"] for v in VARIANTS],
-    "3.4": ["alpine313", "nvidia2204", "scratch313", "vaapi2204"] + [v["name"] for v in VARIANTS],
+    "3.4": ["alpine313", "nvidia2204", "scratch313", "vaapi2204"]
+    + [v["name"] for v in VARIANTS],
     "4.2": ["alpine313", "ubuntu2404"] + [v["name"] for v in VARIANTS],
     "4.3": ["nvidia2204", "vaapi2204"] + [v["name"] for v in VARIANTS],
     "4.4": ["alpine313", "nvidia2204", "scratch313"] + [v["name"] for v in VARIANTS],
@@ -98,7 +102,7 @@ def get_major_version(version):
 
 
 def read_ffmpeg_template(variant_name, env_or_run="env"):
-    """ Read the ffmpeg template file and return the content """
+    """Read the ffmpeg template file and return the content"""
     if variant_name == "scratch":
         distro_name = "alpine-scratch"
     elif variant_name == "alpine":
@@ -130,8 +134,11 @@ for version in keep_version:
     os.makedirs(ver_path, exist_ok=True)
     for existing_variant in os.listdir(ver_path):
         if existing_variant not in compatible_variants:
-            shutil.rmtree(DIR_FORMAT_STR.format(short_version, existing_variant), ignore_errors=True)
-    
+            shutil.rmtree(
+                DIR_FORMAT_STR.format(short_version, existing_variant),
+                ignore_errors=True,
+            )
+
     print(f"Preparing Dockerfile for ffmpeg-{version}")
     for variant in compatible_variants:
         print(f"{' '*25}{version}-{variant['name']}")
@@ -170,10 +177,14 @@ for version in keep_version:
         ISPARENT:  {is_parent}
 """
         )
-        with open(TEMPLATE_STR.format(variant["name"].replace('-edge', '')), "r") as tmpfile:
+        with open(
+            TEMPLATE_STR.format(variant["name"].replace("-edge", "")), "r"
+        ) as tmpfile:
             template = tmpfile.read()
-        # Note: the debug, doc, ffplay, -ldl, gpl. ( the first 6 flags) are prebuilt in Docker-run-ubuntu template
-        #       To prevent conflicts
+        # Note: the debug, doc, ffplay, shared, -ldl, gpl. ( the first 6 flags) are
+        #       prebuilt in Docker-run-ubuntu template to prevent conflicts
+        # Note2: I took that out ( no need to build ffmpeg twice anymore )
+        # Note3: Droping some notes here, in needs to come back.
         FFMPEG_CONFIG_FLAGS = [
             "--disable-debug",
             "--disable-doc",
@@ -255,16 +266,21 @@ for version in keep_version:
                 FFMPEG_CONFIG_FLAGS.append("--enable-cuvid")
                 FFMPEG_CONFIG_FLAGS.append("--enable-libnpp")
 
-        if variant["parent"] in ["ubuntu", "alpine", "scratch"] and float(version[0:3]) >= 5.1:
+        if (
+            variant["parent"] in ["ubuntu", "alpine", "scratch"]
+            and float(version[0:3]) >= 5.1
+        ):
             # from https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#FFmpeg
-            FFMPEG_CONFIG_FLAGS.append("--extra-libs=-lm") # add math library
-            FFMPEG_CONFIG_FLAGS.append("--ld=g++") # use g++ as linker
+            FFMPEG_CONFIG_FLAGS.append("--extra-libs=-lm")  # add math library
+            FFMPEG_CONFIG_FLAGS.append("--ld=g++")  # use g++ as linker
             # FFMPEG_CONFIG_FLAGS.append("--enable-gnutls")
             FFMPEG_CONFIG_FLAGS.append("--enable-libfdk-aac")
             FFMPEG_CONFIG_FLAGS.append("--enable-libsvtav1")
             FFMPEG_CONFIG_FLAGS.append("--enable-libdav1d")
-        else: # for older versions
-            FFMPEG_CONFIG_FLAGS.append("--enable-libfdk_aac") # this was likely misstyped before
+        else:  # for older versions
+            FFMPEG_CONFIG_FLAGS.append(
+                "--enable-libfdk_aac"
+            )  # this was likely misstyped before
 
         if "ubuntu" in variant["parent"] and float(version[0:3]) >= 5.1:
             CFLAGS.append("-I/usr/include/x86_64-linux-gnu")
@@ -290,11 +306,19 @@ for version in keep_version:
 
         with open(dockerfile, "w") as dfile:
             dfile.write(docker_content)
-        
-        if variant['name'] == "ubuntu2404-edge":
+
+        if variant["name"] == "ubuntu2404-edge":
             shutil.copy("generate-source-of-truth-ffmpeg-versions.py", ddir)
             shutil.copy("download_tarballs.sh", ddir)
-            shutil.copy("build_source.sh", ddir)
+            # for build_source.sh, we are not going to just copy the file, we are going
+            # to replace the FFMPEG_CONFIG_FLAGS
+            with open("build_source.sh", "r") as tmpfile:
+                template = tmpfile.read()
+                build_source_content = template.replace(
+                    "%%FFMPEG_CONFIG_FLAGS%%", COMBINED_CONFIG_FLAGS
+                )
+            with open(f"{ddir}/build_source.sh", "w") as buildfile:
+                buildfile.write(build_source_content)
 
 
 with open("docker-images/gitlab-ci.yml", "w") as gitlabcifile:
@@ -307,4 +331,3 @@ azure = template.replace("%%VERSIONS%%", "\n".join(azure))
 
 with open("docker-images/azure-jobs.yml", "w") as azurefile:
     azurefile.write(azure)
-

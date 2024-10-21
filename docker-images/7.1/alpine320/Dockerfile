@@ -143,7 +143,7 @@ RUN         libDeps="libgomp \
                     libass \
                     libass-dev \
                     # https://aomedia.googlesource.com/aom
-                    aom \ 
+                    aom \
                     aom-libs \
                     aom-dev \
                     # https://xcb.freedesktop.org/
@@ -267,7 +267,7 @@ RUN \
         curl -sLO https://github.com/nkoriyama/aribb24/archive/v${LIBARIBB24_VERSION}.tar.gz && \
         echo ${LIBARIBB24_SHA256SUM} | sha256sum --check && \
         tar -xz --strip-components=1 -f v${LIBARIBB24_VERSION}.tar.gz && \
-       
+
         autoreconf -fiv && \
         ./configure CFLAGS="-I${PREFIX}/include -fPIC" --prefix="${PREFIX}" && \
         make && \

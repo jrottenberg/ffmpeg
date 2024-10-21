@@ -10,7 +10,7 @@ RUN \
         apt-get install -yq libx264-dev
 
 ### x265 http://x265.org/ ( videolan )
-RUN \ 
+RUN \
         echo "installing x265 with debian packages" && \
         apt-get install -yq libx265-dev libnuma-dev
 
@@ -66,7 +66,7 @@ RUN \
 
 ## freetype https://www.freetype.org/
 # make sure to pass in --no-install-recommends for this one its globbie
-RUN \ 
+RUN \
         echo "installing libfreetype6-dev with debian packages" && \
         apt-get install -yq --no-install-recommends libfreetype6-dev libfreetype6
 
@@ -90,7 +90,7 @@ RUN \
         echo "installing libass-dev with debian packages" && \
         apt-get install -yq libass-dev
 
-# lib aom 
+# lib aom
 # https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#libaom
 RUN \
         echo "installing libaom-dev with debian packages" && \
@@ -125,7 +125,7 @@ RUN \
         apt-get install -yq libxau-dev
 
 ## libpthread-stubs
-RUN \ 
+RUN \
         echo "installing libpthread-stubs0-dev with debian packages" && \
         apt-get install -yq libpthread-stubs0-dev
 
@@ -148,7 +148,7 @@ RUN \
 
 ## libpng
 # also pulls in a bunch of stuff
-RUN \ 
+RUN \
         echo "installing libpng-dev with debian packages" && \
         apt-get install -yq libpng-dev
 
@@ -269,4 +269,3 @@ RUN  \
 #         echo "ffmpeg build log end" \
 #         echo "look at the environement" \
 #         env
-

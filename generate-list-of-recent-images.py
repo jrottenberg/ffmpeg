@@ -1,5 +1,6 @@
-import requests
 import json
+
+import requests
 
 """
 To run this script you need the requests library. You can install it with pip:
@@ -15,11 +16,13 @@ $ rm -rf .venv
 you will now have a file called list_of_recent_images.txt with the list of images
 """
 
+
 def make_api_request(page, page_size):
     url = "https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/tags"
     params = {"page": page, "page_size": page_size}
     response = requests.get(url, params=params)
     return response.json()
+
 
 def process_data(data):
     data = json.loads(data)
@@ -32,8 +35,11 @@ def process_data(data):
             last_updated = item["last_updated"][:10]
             # print("-" * 50)
             # print(json.dumps(item, indent=4))
-            print(f"{item['name']}{name_padding}{size_mb}mb{size_padding}{last_updated}")
+            print(
+                f"{item['name']}{name_padding}{size_mb}mb{size_padding}{last_updated}"
+            )
             # print(f'{item["last_updater_username"]}')
+
 
 def main():
     page = 1
@@ -50,6 +56,7 @@ def main():
         page += 1
 
     process_data(json.dumps(data))
+
 
 if __name__ == "__main__":
     main()

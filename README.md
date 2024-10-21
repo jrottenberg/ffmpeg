@@ -21,9 +21,9 @@ Below is a table that provides examples for the nomenclature:
 
 `ffmpeg-<version>-<os variant and version>`
 
-| image name | OS ver | ffmpeg ver | variant | description 
-| --- | --- | --- | --- | --- | 
-| ffmpeg-7.1-ubuntu2404 | 24.04 | 7.1 | [ubuntu](https://releases.ubuntu.com/) | external libraries are installed from os packages, and ffmpeg is built from source. See [Ubunu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. | 
+| image name | OS ver | ffmpeg ver | variant | description
+| --- | --- | --- | --- | --- |
+| ffmpeg-7.1-ubuntu2404 | 24.04 | 7.1 | [ubuntu](https://releases.ubuntu.com/) | external libraries are installed from os packages, and ffmpeg is built from source. See [Ubunu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. |
 | ffmpeg-7.0-ubuntu2404-edge | 24.04 | 7.0 | [ubuntu](https://releases.ubuntu.com/) | libs and ffmpeg are built from source. See [Ubunu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. |
 | ffmpeg-6.1-vaapi2404 | 24.04 | 6.1 | [ubuntu](https://releases.ubuntu.com/) | like: `ubuntu2404` but enables: [Video Acceleration API (VAAPI)](https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI) in ffmpeg |
 | ffmpeg-5.1-nvidia2204-edge | 22.04 | 5.1 | [ubuntu](https://releases.ubuntu.com/) | Built w/ [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled |
@@ -54,16 +54,16 @@ We used the ffmpeg support libraries from the Ubuntu distrobution where possible
 **ubuntu2404-edge**
 This image is just like the above `ubuntu2404` container image, except we build all of the ffmpeg support libraries. This is in the spirit of the original intent of this project `jrottenberg/ffmpeg` alltogether. Building everything that ffmpeg needs, and ffmpeg itself from source. This gives us the most control over all of the details of release. The drawback of this is that its much harder to keep updated. The thought process of having both 'Ubuntu-2404' and 'Ubuntu-2404-edge' is that it makes updating the OS easier over time.
 
-**vaapi2404** 
+**vaapi2404**
  This release is like also `ubuntu2404` but enables: [Video Acceleration API (VAAPI)](https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI) when building ffmpeg
- 
+
 **nvidia2204-edge**
- This release is like also `ubuntu2404` but enables: [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled 
+ This release is like also `ubuntu2404` but enables: [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled
 
 **alpine320**
 [alpine](https://alpinelinux.org/releases/) uses the os vendor libs, but ffmpeg is built from source.
 
-**scratch** 
+**scratch**
 Scratch is also an [alpine](https://alpinelinux.org/releases/) image. We build the vendor libs, and ffmpeg from source. Also we make the distro as small as possible by not installing any packages in base and striping symbols of installed libs.
 
 ### Generate list of recent Docker Container Images
