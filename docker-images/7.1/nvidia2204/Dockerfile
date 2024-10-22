@@ -32,9 +32,11 @@ FROM  devel-base as build
 
 ENV        NVIDIA_HEADERS_VERSION=11.1.5.3
 
-ENV         FFMPEG_VERSION=7.1 \
-    KVAZAAR_VERSION=2.3.1 \
-    LIBVMAF_VERSION=3.0.0
+ENV         ENV FFMPEG_VERSION=7.1
+
+# FFMPEG_VERSION=% % FFMPEG_VERSION % % \
+#    KVAZAAR_VERSION=2.3.1 \
+#    LIBVMAF_VERSION=3.0.0
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
@@ -123,11 +125,10 @@ ARG THEORA_PKGS="libtheora-dev libtheora0"
 ARG SRT_PKGS="libssl-dev libsrt-openssl-dev libsrt1.5-openssl"
 ARG LIBDRM_PKGS="libbsd0 libdrm-dev libdrm2 libxcb1-dev libxcb1"
 
-ARG MAKEFLAGS="-j2"
-ARG PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
-
-ARG PREFIX="/opt/ffmpeg"
-ARG LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
+ENV MAKEFLAGS="-j2"
+ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
+ENV PREFIX="/opt/ffmpeg"
+ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 
 RUN      buildDeps="autoconf \
@@ -167,138 +168,26 @@ RUN \
 
         # apt install libdrm-dev
 
-## kvazaar https://github.com/ultravideo/kvazaar
-RUN \
-        echo "Building kvazaar-${KVAZAAR_VERSION}" && \
-        DIR=/tmp/kvazaar && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sLO https://github.com/ultravideo/kvazaar/releases/download/v${KVAZAAR_VERSION}/kvazaar-${KVAZAAR_VERSION}.tar.gz && \
-        tar -zx --strip-components=1 -f kvazaar-${KVAZAAR_VERSION}.tar.gz && \
-        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
-        make && \
-        make install && \
-        rm -rf ${DIR}
-
-## libvmaf https://github.com/Netflix/vmaf
+        ## libvmaf https://github.com/Netflix/vmaf
 RUN \
         echo "Adding g++ for VMAF build" && \
         apt-get install -yq g++
 
-# https://github.com/Netflix/vmaf/issues/788
+# Note: pass '--library-list lib1,lib2,lib3 for more control.
+#       Here we have 3 libs that we have to build from source
 RUN \
-        if which meson || false; then \
-        echo "Building VMAF v${LIBVMAF_VERSION}" && \
-        DIR=/tmp/vmaf && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sLO https://github.com/Netflix/vmaf/archive/refs/tags/v${LIBVMAF_VERSION}.tar.gz && \
-        tar -xz --strip-components=1 -f v${LIBVMAF_VERSION}.tar.gz && \
-        ls -al && \
-        mkdir ./libvmaf/build && \
-        cd ./libvmaf/build && \
-        meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static .. --prefix "${PREFIX}" && \
-        ninja && \
-        ninja install && \
-        # meson build --buildtype release --prefix=${PREFIX} && \
-        # ninja -vC build && \
-        # ninja -vC build install && \
-        mkdir -p ${PREFIX}/share/model/ && \
-        cp -r /tmp/vmaf/model/* ${PREFIX}/share/model/ && \
-        rm -rf ${DIR}; \
-        else \
-        echo "VMAF skipped."; \
-        fi
+        /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf,ffmpeg
 
-#### Do we really need to build ffmpeg twice? seems silly
+## when  debugging you can pass in || true to the end of the next 3 commands
+## to keep the build going even if one of the steps fails
+RUN \
+        /tmp/workdir/download_tarballs.sh || true
 
-## Download ffmpeg https://ffmpeg.org/
-RUN  \
-        echo "Building (intial configure) ffmpeg-${FFMPEG_VERSION}" && \
-        DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
-        curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
-#         ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
-#         make ;  make install
+RUN \
+        /tmp/workdir/build_source.sh || true
 
-
-
-# ## Build ffmpeg https://ffmpeg.org/
-# Here is a list of things that we enable in the ffmpeg build: that are not in the
-# track configuration guide: https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#FFmpeg
-# --enable-fontconfig
-# --enable-libaribb24
-# --enable-libbluray
-# --enable-libkvazaar
-# --enable-libopencore-amrnb
-# --enable-libopencore-amrwb
-# --enable-libopenjpeg
-# --enable-libsrt
-# --enable-libtheora
-# --enable-libvmaf
-# --enable-libwebp
-# --enable-libxvid
-# --enable-libzimg
-# --enable-libzmq
-# --enable-openssl
-# --enable-postproc
-# --enable-small
-# --enable-version3
-RUN  \
-        echo "Building (final detailed configure) ffmpeg-${FFMPEG_VERSION}" && \
-        DIR=/tmp/ffmpeg && cd ${DIR} && \
-        export PKG_CONFIG_PATH=${PKG_CONFIG_PATH} && \
-        ./configure  \
-        --disable-debug \
-        --disable-doc \
-        --disable-ffplay \
-        --enable-cuda \
-        --enable-cuvid \
-        --enable-fontconfig \
-        --enable-gpl \
-        --enable-libaom \
-        --enable-libaribb24 \
-        --enable-libass \
-        --enable-libbluray \
-        --enable-libfdk_aac \
-        --enable-libfreetype \
-        --enable-libkvazaar \
-        --enable-libmp3lame \
-        --enable-libnpp \
-        --enable-libopencore-amrnb \
-        --enable-libopencore-amrwb \
-        --enable-libopenjpeg \
-        --enable-libopus \
-        --enable-libsrt \
-        --enable-libtheora \
-        --enable-libvidstab \
-        --enable-libvorbis \
-        --enable-libvpx \
-        --enable-libwebp \
-        --enable-libx264 \
-        --enable-libx265 \
-        --enable-libxvid \
-        --enable-libzimg \
-        --enable-libzmq \
-        --enable-nonfree \
-        --enable-nvenc \
-        --enable-openssl \
-        --enable-postproc \
-        --enable-shared \
-        --enable-small \
-        --enable-version3 \
-        --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/" \
-        --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/" \
-        --extra-libs=-ldl \
-        --extra-libs=-lpthread \
-        --prefix="${PREFIX}" && \
-        make && \
-        make install && \
-        make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
-        make distclean && \
-        hash -r && \
-        cd tools && \
-        make qt-faststart && cp qt-faststart ${PREFIX}/bin/
+RUN \
+        /tmp/workdir/install_ffmpeg.sh || true
 
 ## cleanup
 RUN \

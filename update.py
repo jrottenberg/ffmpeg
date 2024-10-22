@@ -109,6 +109,8 @@ def read_ffmpeg_template(variant_name, env_or_run="env"):
         distro_name = "alpine"
     elif variant_name == "ubuntu-edge":
         distro_name = "ubuntu-edge"
+    elif variant_name == "ubuntu-debug":
+        distro_name = "ubuntu-debug"
     else:
         distro_name = "ubuntu"
 
@@ -177,9 +179,11 @@ for version in keep_version:
         ISPARENT:  {is_parent}
 """
         )
-        with open(
-            TEMPLATE_STR.format(variant["name"].replace("-edge", "")), "r"
-        ) as tmpfile:
+        # with open(
+        #     TEMPLATE_STR.format(variant["name"].replace("-edge", "")), "r"
+        # ) as tmpfile:
+        #     template = tmpfile.read()
+        with open(TEMPLATE_STR.format(variant["name"]), "r") as tmpfile:
             template = tmpfile.read()
         # Note: the debug, doc, ffplay, shared, -ldl, gpl. ( the first 6 flags) are
         #       prebuilt in Docker-run-ubuntu template to prevent conflicts
@@ -307,18 +311,23 @@ for version in keep_version:
         with open(dockerfile, "w") as dfile:
             dfile.write(docker_content)
 
-        if variant["name"] == "ubuntu2404-edge":
-            shutil.copy("generate-source-of-truth-ffmpeg-versions.py", ddir)
-            shutil.copy("download_tarballs.sh", ddir)
-            # for build_source.sh, we are not going to just copy the file, we are going
-            # to replace the FFMPEG_CONFIG_FLAGS
-            with open("build_source.sh", "r") as tmpfile:
-                template = tmpfile.read()
-                build_source_content = template.replace(
-                    "%%FFMPEG_CONFIG_FLAGS%%", COMBINED_CONFIG_FLAGS
-                )
-            with open(f"{ddir}/build_source.sh", "w") as buildfile:
-                buildfile.write(build_source_content)
+        # These 4 files are  used this for everything as even the packaged
+        # builds require building ffmpeg.
+        shutil.copy("generate-source-of-truth-ffmpeg-versions.py", ddir)
+        shutil.copy("download_tarballs.sh", ddir)
+        shutil.copy("install_ffmpeg.sh", ddir)
+        # for build_source.sh, we are not going to just copy the file, we are going
+        # to replace the FFMPEG_CONFIG_FLAGS
+        with open("build_source.sh", "r") as tmpfile:
+            template = tmpfile.read()
+            build_source_content = template.replace(
+                "%%FFMPEG_CONFIG_FLAGS%%", COMBINED_CONFIG_FLAGS
+            )
+        with open(f"{ddir}/build_source.sh", "w") as buildfile:
+            buildfile.write(build_source_content)
+
+        # if variant["name"] == "ubuntu2404":
+        #     shutil.copy("install_ffmpeg.sh", ddir)
 
 
 with open("docker-images/gitlab-ci.yml", "w") as gitlabcifile:

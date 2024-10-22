@@ -1,32 +1,14 @@
 #!/usr/bin/env bash
 
+# Stop execution on any error
+# Note: we can override this in the Dockerfile RUN command with an || true.
+#       this is useful for debugging
+set -e
+
 manifestJsonFile="/tmp/workdir/generated_build_manifest.json"
-manifestJsonVersionsFile="/tmp/workdir/generated_build_manifest_versions.json"
+manifestJsonVersionsFile="/tmp/workdir/generated_build_versions_manifest.json"
 
-extract_tarball() {
-    local tarball_name=$1
-    # grab the extension of the tarball
-    local extension="${tarball_name##*.}"
-    # tar extraction args: -z, -j, -J, --lzma  Compress archive with gzip/bzip2/xz/lzma
-    if [ "$extension" == "gz" ]; then
-        tar -zx --strip-components=1 -f ${tarball_name}
-    elif [ "$extension" == "bz2" ]; then
-        tar -jx --strip-components=1 -f ${tarball_name}
-    elif [ "$extension" == "zx" ]; then
-        tar -Jx --strip-components=1 -f ${tarball_name}
-    else
-        echo "Error while extract_tarball, got an unknown extension: $extension"
-    fi
-}
-
-# read_data_from_manifest() {
-#     local lib_name=$1
-#     local data=$(jq -r '.[] | select(.library_name == "'$lib_name'")' $manifestJsonFile)
-#     local build_dir=$(echo "$data" | jq -r '.build_dir')
-#     local tarball_name=$(echo "$data" | jq -r '.tarball_name')
-#     echo "$build_dir $tarball_name"
-# }
-
+######################### Callback build functions #########################
 build_libopencore-amr() {
     ./configure --prefix="${PREFIX}" --enable-shared && \
     make && \
@@ -42,13 +24,9 @@ build_libx264() {
 build_libx265() {
     cd build/linux && \
     sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
-    sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh && \
+    sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh
     ./multilib.sh && \
-    make -C 8bit install && \
-    rm -rf ${DIR}
-    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DENABLE_SHARED=on -DENABLE_PIC=on . && \
-    make && \
-    make install
+    make -C 8bit install
 }
 
 build_libogg() {
@@ -71,7 +49,7 @@ build_libvorbis() {
 
 build_libvpx() {
     ./configure --prefix="${PREFIX}" --enable-vp8 --enable-vp9 --enable-vp9-highbitdepth --enable-pic --enable-shared \
-    --disable-debug --disable-examples --disable-docs --disable-install-bins  && \
+        --disable-debug --disable-examples --disable-docs --disable-install-bins && \
     make && \
     make install
 }
@@ -96,7 +74,7 @@ build_libxvid() {
 
 build_libfdk-aac() {
     autoreconf -fiv && \
-    ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}" && \
+    ./configure --prefix="${PREFIX}" --disable-shared && \
     make && \
     make install
 }
@@ -141,29 +119,38 @@ build_libass() {
 }
 
 build_kvazaar() {
-    ./autogen.sh && \
+    # ./autogen.sh && \
     ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
     make && \
     make install
 }
 
 # aom is a git clone ( to get source, so not in the loop using the callback function)
-build_aom(){
-    local dir = "/tmp/aom"
+build_aom() {
+    local data=$(jq -r '.[] | select(.library_name == "aom")' $manifestJsonFile)
+    local dir=$(echo "$data" | jq -r '.build_dir')
     local aom_version=$(jq -r '.["aom"]' $manifestJsonVersionsFile)  # Access value with key "aom"
-    echo "Building aom-${aom_version}"
-    git clone --branch ${aom_version} --depth 1 https://aomedia.googlesource.com/aom ${dir} ; \
-    cd ${dir} ; \
-    mkdir -p ./aom_build ; \
-    cd ./aom_build ; \
-    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 -DENABLE_NASM=on ..; \
+    if [ -n "$aom_version" ] && [[ "$aom_version" != "null" ]]; then
+        echo "Building [aom-${aom_version}] in [${dir}]"
+    else
+        echo "Error: aom version is empty or unset"
+        if [[ "$continue_on_build_failure" == false ]]; then
+            exit 1
+        fi
+    fi
+    version="v${aom_version}"
+    git clone --branch ${version} --depth 1 https://aomedia.googlesource.com/aom ${dir} && \
+    cd ${dir} && \
+    mkdir -p ./aom_build && \
+    cd ./aom_build && \
+    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 -DENABLE_NASM=on .. && \
     make && \
     make install
 }
 
 build_libsvtav1() {
     cd Build && \
-    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${PREFIX}"  -DCMAKE_BUILD_TYPE=Release -DBUILD_DEC=OFF -DBUILD_SHARED_LIBS=OFF ..; \
+    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=Release -DBUILD_DEC=OFF -DBUILD_SHARED_LIBS=OFF .. \
     make && \
     make install
 }
@@ -214,14 +201,13 @@ build_libzmq() {
     ./autogen.sh && \
     ./configure --prefix="${PREFIX}" && \
     make && \
-    make check && \
     make install
 }
 
 # another special, code clone situation ( actually currently using the tarball build approach )
 build_libpng() {
     local dir = "/tmp/png"
-    local libpng_version=$(jq -r '.["libpng"]' $manifestJsonVersionsFile)  # Access value with key "libpng"
+    # local libpng_version=$(jq -r '.["libpng"]' $manifestJsonVersionsFile)  # Access value with key "libpng"
     # git clone https://git.code.sf.net/p/libpng/code ${dir} -b v${libpng_version} --depth 1 && \
     ./autogen.sh && \
     ./configure --prefix="${PREFIX}" && \
@@ -265,12 +251,33 @@ build_libsrt() {
 build_libvmaf() {
     mkdir ./libvmaf/build && \
     cd ./libvmaf/build && \
-    meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static .. --prefix "${PREFIX}" && \
+    meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static --prefix "${PREFIX}" .. && \
     ninja && \
     ninja install
 }
 
 build_ffmpeg() {
+    # Here is a list of things that we enable in the ffmpeg build: that are not in the
+    # track configuration guide: https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#FFmpeg
+    # --enable-fontconfig
+    # --enable-libaribb24
+    # --enable-libbluray
+    # --enable-libkvazaar
+    # --enable-libopencore-amrnb
+    # --enable-libopencore-amrwb
+    # --enable-libopenjpeg
+    # --enable-libsrt
+    # --enable-libtheora
+    # --enable-libvmaf
+    # --enable-libwebp
+    # --enable-libxvid
+    # --enable-libzimg
+    # --enable-libzmq
+    # --enable-openssl
+    # --enable-postproc
+    # --enable-small
+    # --enable-version3
+
     # export PKG_CONFIG_PATH=${PKG_CONFIG_PATH}
     ./configure --disable-debug \
         --disable-doc \
@@ -319,7 +326,22 @@ build_ffmpeg() {
     hash -r && \
     cd tools && \
     make qt-faststart && cp qt-faststart ${PREFIX}/bin/
-
+}
+######################### Helper functions #########################
+extract_tarball() {
+    local tarball_name=$1
+    # grab the extension of the tarball
+    local extension="${tarball_name##*.}"
+    # tar extraction args: -z, -j, -J, --lzma  Compress archive with gzip/bzip2/xz/lzma
+    if [ "$extension" == "gz" ]; then
+        tar -zx --strip-components=1 -f ${tarball_name}
+    elif [ "$extension" == "bz2" ]; then
+        tar -jx --strip-components=1 -f ${tarball_name}
+    elif [ "$extension" == "zx" ]; then
+        tar -Jx --strip-components=1 -f ${tarball_name}
+    else
+        echo "Error while extract_tarball, got an unknown extension: $extension"
+    fi
 }
 
 
@@ -330,6 +352,7 @@ build_support_libraries() {
         lib_name=${libs[$i]}
         # handle the clone source case's ( there are only two )
         if [ "$lib_name" == "libsvtav1" ]; then
+            echo "-------------------- Running callback: build_aom --------------------"
             echo "Building 'aom' before we build $lib_name"
             build_aom
         fi
@@ -343,7 +366,7 @@ build_support_libraries() {
         tarball_name=$(echo "$data" | jq -r '.tarball_name')
         sha256sum=$(echo "$data" | jq -r '.sha256sum')
 
-        echo "Building $lib_name: in [${build_dir}] from [$tarball_name] source"
+        echo "Building $lib_name: from ${build_dir}/$tarball_name]"
         cd $build_dir
         extract_tarball $tarball_name
         if [ -n "$sha256sum" ] && [[ "$sha256sum" != "null" ]]; then
@@ -352,6 +375,7 @@ build_support_libraries() {
         fi
         # make a callback function to build the library
         # if anything fails, we will exit with a non-zero status
+        echo "-------------------- Running callback: build_${lib_name} --------------------"
         build_${lib_name} ${build_dir}
     done
 }

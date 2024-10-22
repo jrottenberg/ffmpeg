@@ -8,16 +8,19 @@
 # Stage 1: Build
 FROM       ubuntu:24.04 AS builder
 
-
 WORKDIR     /tmp/workdir
 
 COPY generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
 COPY download_tarballs.sh /tmp/workdir
 COPY build_source.sh /tmp/workdir
+COPY install_ffmpeg.sh /tmp/workdir
 
-ENV         FFMPEG_VERSION=7.1 \
-    KVAZAAR_VERSION=2.3.1 \
-    LIBVMAF_VERSION=3.0.0
+
+ENV FFMPEG_VERSION=7.1
+
+# FFMPEG_VERSION=% % FFMPEG_VERSION % % \
+#    KVAZAAR_VERSION=2.3.1 \
+#    LIBVMAF_VERSION=3.0.0
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
@@ -106,20 +109,19 @@ ARG THEORA_PKGS="libtheora-dev libtheora0"
 ARG SRT_PKGS="libssl-dev libsrt-openssl-dev libsrt1.5-openssl"
 ARG LIBDRM_PKGS="libbsd0 libdrm-dev libdrm2 libxcb1-dev libxcb1"
 
-ARG MAKEFLAGS="-j2"
-ARG PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
-
-ARG PREFIX="/opt/ffmpeg"
-ARG LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
+ENV MAKEFLAGS="-j2"
+ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
+ENV PREFIX="/opt/ffmpeg"
+ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN     apt-get -yqq update && \
         apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file && \
+        chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
         chmod +x /tmp/workdir/download_tarballs.sh && \
-        chmod +x /tmp/workdir/build_source.sh
-
-
+        chmod +x /tmp/workdir/build_source.sh && \
+        chmod +x /tmp/workdir/install_ffmpeg.sh
 
 RUN      buildDeps="autoconf \
                     automake \
@@ -165,162 +167,30 @@ RUN \
 
         # apt install libdrm-dev
 
-## kvazaar https://github.com/ultravideo/kvazaar
-RUN \
-        echo "Building kvazaar-${KVAZAAR_VERSION}" && \
-        DIR=/tmp/kvazaar && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sLO https://github.com/ultravideo/kvazaar/releases/download/v${KVAZAAR_VERSION}/kvazaar-${KVAZAAR_VERSION}.tar.gz && \
-        tar -zx --strip-components=1 -f kvazaar-${KVAZAAR_VERSION}.tar.gz && \
-        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
-        make && \
-        make install && \
-        rm -rf ${DIR}
-
-## libvmaf https://github.com/Netflix/vmaf
+        ## libvmaf https://github.com/Netflix/vmaf
 RUN \
         echo "Adding g++ for VMAF build" && \
         apt-get install -yq g++
 
-# https://github.com/Netflix/vmaf/issues/788
+# Note: pass '--library-list lib1,lib2,lib3 for more control.
+#       Here we have 3 libs that we have to build from source
 RUN \
-        if which meson || false; then \
-        echo "Building VMAF v${LIBVMAF_VERSION}" && \
-        DIR=/tmp/vmaf && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sLO https://github.com/Netflix/vmaf/archive/refs/tags/v${LIBVMAF_VERSION}.tar.gz && \
-        tar -xz --strip-components=1 -f v${LIBVMAF_VERSION}.tar.gz && \
-        ls -al && \
-        mkdir ./libvmaf/build && \
-        cd ./libvmaf/build && \
-        meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static .. --prefix "${PREFIX}" && \
-        ninja && \
-        ninja install && \
-        # meson build --buildtype release --prefix=${PREFIX} && \
-        # ninja -vC build && \
-        # ninja -vC build install && \
-        mkdir -p ${PREFIX}/share/model/ && \
-        cp -r /tmp/vmaf/model/* ${PREFIX}/share/model/ && \
-        rm -rf ${DIR}; \
-        else \
-        echo "VMAF skipped."; \
-        fi
+        /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf,ffmpeg
 
-#### Do we really need to build ffmpeg twice? seems silly
-
-## Download ffmpeg https://ffmpeg.org/
-RUN  \
-        echo "Building (intial configure) ffmpeg-${FFMPEG_VERSION}" && \
-        DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
-        curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
-#         ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
-#         make ;  make install
-
-
-
-# ## Build ffmpeg https://ffmpeg.org/
-# Here is a list of things that we enable in the ffmpeg build: that are not in the
-# track configuration guide: https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#FFmpeg
-# --enable-fontconfig
-# --enable-libaribb24
-# --enable-libbluray
-# --enable-libkvazaar
-# --enable-libopencore-amrnb
-# --enable-libopencore-amrwb
-# --enable-libopenjpeg
-# --enable-libsrt
-# --enable-libtheora
-# --enable-libvmaf
-# --enable-libwebp
-# --enable-libxvid
-# --enable-libzimg
-# --enable-libzmq
-# --enable-openssl
-# --enable-postproc
-# --enable-small
-# --enable-version3
-RUN  \
-        echo "Building (final detailed configure) ffmpeg-${FFMPEG_VERSION}" && \
-        DIR=/tmp/ffmpeg && cd ${DIR} && \
-        export PKG_CONFIG_PATH=${PKG_CONFIG_PATH} && \
-        ./configure  \
-        --disable-debug \
-        --disable-doc \
-        --disable-ffplay \
-        --enable-fontconfig \
-        --enable-gpl \
-        --enable-libaom \
-        --enable-libaribb24 \
-        --enable-libass \
-        --enable-libbluray \
-        --enable-libdav1d \
-        --enable-libfdk-aac \
-        --enable-libfreetype \
-        --enable-libkvazaar \
-        --enable-libmp3lame \
-        --enable-libopencore-amrnb \
-        --enable-libopencore-amrwb \
-        --enable-libopenjpeg \
-        --enable-libopus \
-        --enable-libsrt \
-        --enable-libsvtav1 \
-        --enable-libtheora \
-        --enable-libvidstab \
-        --enable-libvmaf \
-        --enable-libvorbis \
-        --enable-libvpx \
-        --enable-libwebp \
-        --enable-libx264 \
-        --enable-libx265 \
-        --enable-libxvid \
-        --enable-libzimg \
-        --enable-libzmq \
-        --enable-nonfree \
-        --enable-openssl \
-        --enable-postproc \
-        --enable-shared \
-        --enable-small \
-        --enable-version3 \
-        --extra-cflags="-I${PREFIX}/include -I/usr/include/x86_64-linux-gnu" \
-        --extra-ldflags="-L${PREFIX}/lib -L/usr/lib/x86_64-linux-gnu" \
-        --extra-libs=-ldl \
-        --extra-libs=-lm \
-        --extra-libs=-lpthread \
-        --ld=g++ \
-        --prefix="${PREFIX}" && \
-        make && \
-        make install && \
-        make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
-        make distclean && \
-        hash -r && \
-        cd tools && \
-        make qt-faststart && cp qt-faststart ${PREFIX}/bin/
-
-
-
-## cleanup
-# This is used for both the source and packages version ( be robust about looking for libs to copy )
+## when  debugging you can pass in || true to the end of the next 3 commands
+## to keep the build going even if one of the steps fails
 RUN \
-        if ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | grep -q . ; then \
-                ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/; \
-        fi && \
-        if ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | grep -q . ; then \
-                ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/; \
-        fi && \
-        for lib in /usr/local/lib/*.so.*; do ln -sf "${lib##*/}" "${lib%%.so.*}".so; done && \
-        cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-        cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-        mkdir -p /usr/local/lib/pkgconfig && \
-        for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc  ${PREFIX}/lib/pkgconfig/kvazaar.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-          sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
-        done
+        /tmp/workdir/download_tarballs.sh || true
 
-# # Stage 2: Final Image
+RUN \
+        /tmp/workdir/build_source.sh || true
+
+RUN \
+        /tmp/workdir/install_ffmpeg.sh || true
+
+
+
+# Stage 2: Final Image ( shrink the size back down )
 FROM ubuntu:24.04
 COPY --from=builder /usr/local /usr/local/
 

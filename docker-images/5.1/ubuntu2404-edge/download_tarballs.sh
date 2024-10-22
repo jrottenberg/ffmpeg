@@ -18,6 +18,14 @@ report_on_failed_downloads() {
         local data=$(jq -r '.[] | select(.library_name == "'${lib_name}'")' $manifestJsonFile)
         build_dir=$(echo "$data" | jq -r '.build_dir')
         tarball_name=$(echo "$data" | jq -r '.tarball_name')
+        # if tarball_name does not exist, then it could be a source repo build
+        # just check the directory
+        if [ -z "$tarball_name" ]; then
+            if [ ! -d "$build_dir" ]; then
+                echo "Error: $build_dir does not exist"
+                ((count++))
+            fi
+        fi
         if [ ! -f "$build_dir/$tarball_name" ]; then
             echo "Error: $build_dir/$tarball_name does not exist"
             ((count++))
@@ -36,6 +44,13 @@ actual_number_of_downloads_completed() {
         local data=$(jq -r '.[] | select(.library_name == "'${lib_name}'")' $manifestJsonFile)
         build_dir=$(echo "$data" | jq -r '.build_dir')
         tarball_name=$(echo "$data" | jq -r '.tarball_name')
+        # if tarball_name does not exist, then it could be a source repo build
+        # just check the directory
+        if [[ -z "$tarball_name" || "$tarball_name" == "null" ]]; then
+            if [ -d "$build_dir" ]; then
+                ((count++))
+            fi
+        fi
         if [ -f "$build_dir/$tarball_name" ]; then
             ((count++))
         fi
@@ -61,14 +76,24 @@ download_tarballs() {
         build_dir=$(jq -r '.[] | select(.library_name == "'${lib_name}'") | .build_dir' $manifestJsonFile)
         download_url=$(jq -r '.[] | select(.library_name == "'${lib_name}'") | .download_url' $manifestJsonFile)
         tarball_name=$(jq -r '.[] | select(.library_name == "'${lib_name}'") | .tarball_name' $manifestJsonFile)
+        if [ -z "$build_dir" ]; then
+            echo "Error: build_dir, is empty"
+            exit 1
+        fi
+
+        # does the directory exist? if not make it
+        if [ ! -d "$build_dir" ]; then
+            mkdir -p "$build_dir"
+        fi
+        # handle edge case for source repo builds (git clone )
+        if [[ -z "$tarball_name" || -z "$download_url" || "$tarball_name" == "null" || "$download_url" == "null" ]]; then
+            echo "Warning: tarball_name, or download_url is empty or unset (ok in a source repo build)"
+            continue
+        fi
         echo "Downloading: ${download_url} to: ${build_dir} ${tarball_name}"
         if [ -z "$build_dir" ] || [ -z "$download_url" ] || [ -z "$tarball_name" ]; then
             echo "Error: build_dir, download_url, or tarball_name is empty"
             exit 1
-        fi
-        # does the directory exist? if not make it
-        if [ ! -d "$build_dir" ]; then
-            mkdir -p "$build_dir"
         fi
         # if the tarball_file does not exhist then download it
         if [ ! -f "$build_dir/$tarball_name" ]; then

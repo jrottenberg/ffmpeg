@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+import argparse
 import json
 import sys
 from collections import OrderedDict
@@ -684,7 +687,7 @@ def generate_library_table(filename):
         sys.stdout.flush()
 
 
-def generate_versions_manifest(output_file):
+def generate_versions_manifest(output_file, ffmpeg_libraries=[]):
     """
     Generates a 'generated_build_versions_manifest.json' file containing library version information.
 
@@ -694,7 +697,10 @@ def generate_versions_manifest(output_file):
     """
 
     manifest_data = {}
-    for library_name, library_info in LIBRARIES.items():
+    if not ffmpeg_libraries:
+        ffmpeg_libraries = LIBRARIES.keys()
+    for library_name in ffmpeg_libraries:
+        library_info = LIBRARIES.get(library_name, {})
         manifest_data[library_name] = library_info.get("version", "")
 
     with open(output_file, "w") as f:
@@ -703,7 +709,7 @@ def generate_versions_manifest(output_file):
         sys.stdout.flush()
 
 
-def generate_build_manifest(output_file):
+def generate_build_manifest(output_file, ffmpeg_libraries=[]):
     """
     Generates a 'generated_build_manifest.json' file containing library download information.
 
@@ -713,25 +719,30 @@ def generate_build_manifest(output_file):
     """
 
     manifest_data = []
-    for library_name, library_info in LIBRARIES.items():
+    if not ffmpeg_libraries:
+        ffmpeg_libraries = LIBRARIES.keys()
+    for library_name in ffmpeg_libraries:
+        library_info = LIBRARIES.get(library_name, {})
         build_info = library_info.get("build_info", {})
         download_url = build_info.get("download_link", "")
         build_dir = build_info.get("build_dir", "")
         tarball_name = build_info.get("tarball_name", "")
         sha256sum = build_info.get("sha256sum", "")
 
-        if not all([download_url, build_dir, tarball_name]):
+        if not all([build_dir]):
             print(
-                f"Warning: Missing information for {library_name} in build manifest generation."
+                f"Warning: Missing 'build_dir' information for {library_name} in build manifest generation."
             )
             continue
 
         data = {
             "library_name": library_name,
-            "download_url": download_url,
             "build_dir": build_dir,
-            "tarball_name": tarball_name,
         }
+        if download_url and tarball_name:
+            data["download_url"] = download_url
+            data["tarball_name"] = tarball_name
+
         if sha256sum:
             data["sha256sum"] = sha256sum
         manifest_data.append(data)
@@ -742,6 +753,10 @@ def generate_build_manifest(output_file):
         sys.stdout.flush()
 
 
+def list_of_strings(arg):
+    return arg.split(",")
+
+
 def main():
     """
     Handles three modes:
@@ -750,45 +765,17 @@ def main():
      3. Generate build manifest
     """
 
-    import argparse
-
     parser = argparse.ArgumentParser(description="FFmpeg Library Information Script")
-    # Add a new choice for generating both files
-    parser.add_argument(
-        "--mode",
-        choices=["both", "table", "manifest"],
-        default="both",
-        help="Choose the mode: 'both' for both files, 'table' for library table, 'manifest' for build manifest",
-    )
-    parser.add_argument(
-        "--output",
-        type=str,
-        default="generated_versions_table.md",
-        help="Specify the output file for the library table (default: generated_versions_table.md)",
-    )
-
+    parser.add_argument("--library-list", type=list_of_strings, default=[])
     args = parser.parse_args()
+
+    default_versions_table = "generated_versions_table.md"
     default_generated_json_file = "generated_build_manifest.json"
     default_generated_versions_json = "generated_build_versions_manifest.json"
 
-    if args.mode == "both":
-        generate_library_table(args.output)
-        generate_build_manifest(default_generated_json_file)
-        generate_versions_manifest(default_generated_versions_json)
-
-    elif args.mode == "table":
-        generate_library_table(args.output)
-
-    elif args.mode == "manifest":
-        if args.output.endswith(".json"):
-            json_file = args.output
-        else:
-            json_file = default_generated_json_file
-        generate_build_manifest(json_file)
-        generate_versions_manifest(default_generated_versions_json)
-
-    else:
-        print(f"Invalid mode: {args.mode}")
+    generate_library_table(default_versions_table)
+    generate_build_manifest(default_generated_json_file, args.library_list)
+    generate_versions_manifest(default_generated_versions_json, args.library_list)
 
 
 if __name__ == "__main__":

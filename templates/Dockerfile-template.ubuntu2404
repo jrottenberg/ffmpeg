@@ -8,22 +8,23 @@
 # Stage 1: Build
 FROM       ubuntu:24.04 AS builder
 
-
 WORKDIR     /tmp/workdir
 
 COPY generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
 COPY download_tarballs.sh /tmp/workdir
 COPY build_source.sh /tmp/workdir
+COPY install_ffmpeg.sh /tmp/workdir
 
-ENV         %%ENV%%
+
+%%ENV%%
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN     apt-get -yqq update && \
         apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file && \
+        chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
         chmod +x /tmp/workdir/download_tarballs.sh && \
-        chmod +x /tmp/workdir/build_source.sh
-
-
+        chmod +x /tmp/workdir/build_source.sh && \
+        chmod +x /tmp/workdir/install_ffmpeg.sh
 
 RUN      buildDeps="autoconf \
                     automake \
@@ -66,26 +67,7 @@ RUN      buildDeps="autoconf \
 %%RUN%%
 
 
-## cleanup
-# This is used for both the source and packages version ( be robust about looking for libs to copy )
-RUN \
-        if ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | grep -q . ; then \
-                ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/; \
-        fi && \
-        if ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | grep -q . ; then \
-                ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/; \
-        fi && \
-        for lib in /usr/local/lib/*.so.*; do ln -sf "${lib##*/}" "${lib%%.so.*}".so; done && \
-        cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-        cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-        mkdir -p /usr/local/lib/pkgconfig && \
-        for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc  ${PREFIX}/lib/pkgconfig/kvazaar.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-          sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
-        done
-
-# # Stage 2: Final Image
+# Stage 2: Final Image ( shrink the size back down )
 FROM ubuntu:24.04
 COPY --from=builder /usr/local /usr/local/
 

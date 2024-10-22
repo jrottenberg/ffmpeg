@@ -1,6 +1,8 @@
-FFMPEG_VERSION=%%FFMPEG_VERSION%% \
-    KVAZAAR_VERSION=2.3.1 \
-    LIBVMAF_VERSION=3.0.0
+ENV FFMPEG_VERSION=%%FFMPEG_VERSION%%
+
+# FFMPEG_VERSION=% % FFMPEG_VERSION % % \
+#    KVAZAAR_VERSION=2.3.1 \
+#    LIBVMAF_VERSION=3.0.0
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
@@ -89,8 +91,7 @@ ARG THEORA_PKGS="libtheora-dev libtheora0"
 ARG SRT_PKGS="libssl-dev libsrt-openssl-dev libsrt1.5-openssl"
 ARG LIBDRM_PKGS="libbsd0 libdrm-dev libdrm2 libxcb1-dev libxcb1"
 
-ARG MAKEFLAGS="-j2"
-ARG PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
-
-ARG PREFIX="/opt/ffmpeg"
-ARG LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
+ENV MAKEFLAGS="-j2"
+ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
+ENV PREFIX="/opt/ffmpeg"
+ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
