@@ -62,14 +62,14 @@ stages:
     PARENT: "vaapi"
     ISPARENT: "True"
 
-7.1-nvidia2204:
+7.1-nvidia2404:
   extends: .docker
   stage: nvidia
   variables:
     MAJOR_VERSION: 7
     VERSION: "7.1"
     LONG_VERSION: "7.1"
-    VARIANT: nvidia2204
+    VARIANT: nvidia2404
     PARENT: "nvidia"
     ISPARENT: "True"
 
@@ -128,14 +128,14 @@ stages:
     PARENT: "vaapi"
     ISPARENT: "True"
 
-7.0.2-nvidia2204:
+7.0.2-nvidia2404:
   extends: .docker
   stage: nvidia
   variables:
     MAJOR_VERSION: 7
     VERSION: "7.0"
     LONG_VERSION: "7.0.2"
-    VARIANT: nvidia2204
+    VARIANT: nvidia2404
     PARENT: "nvidia"
     ISPARENT: "True"
 
@@ -194,14 +194,14 @@ stages:
     PARENT: "vaapi"
     ISPARENT: "True"
 
-6.1.2-nvidia2204:
+6.1.2-nvidia2404:
   extends: .docker
   stage: nvidia
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.1"
     LONG_VERSION: "6.1.2"
-    VARIANT: nvidia2204
+    VARIANT: nvidia2404
     PARENT: "nvidia"
     ISPARENT: "True"
 
@@ -260,13 +260,13 @@ stages:
     PARENT: "vaapi"
     ISPARENT: "True"
 
-5.1.6-nvidia2204:
+5.1.6-nvidia2404:
   extends: .docker
   stage: nvidia
   variables:
     MAJOR_VERSION: 5
     VERSION: "5.1"
     LONG_VERSION: "5.1.6"
-    VARIANT: nvidia2204
+    VARIANT: nvidia2404
     PARENT: "nvidia"
     ISPARENT: "True"

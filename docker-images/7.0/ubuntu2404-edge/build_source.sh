@@ -10,48 +10,84 @@ manifestJsonVersionsFile="/tmp/workdir/generated_build_versions_manifest.json"
 
 ######################### Callback build functions #########################
 build_libopencore-amr() {
-    ./configure --prefix="${PREFIX}" --enable-shared && \
-    make && \
+    ./configure --prefix="${PREFIX}" --enable-shared
+    make
     make install
 }
 
 build_libx264() {
-    ./configure --prefix="${PREFIX}" --enable-shared --enable-pic --disable-cli && \
-    make && \
+    ./configure --prefix="${PREFIX}" --enable-shared --enable-pic --disable-cli
+    make
     make install
 }
 
 build_libx265() {
-    cd build/linux && \
-    sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh && \
+    cd build/linux
+    sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh
     sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh
-    ./multilib.sh && \
+    ./multilib.sh
     make -C 8bit install
 }
 
 build_libogg() {
-    ./configure --prefix="${PREFIX}" --enable-shared && \
-    make && \
+    ./configure --prefix="${PREFIX}" --enable-shared
+    make
     make install
 }
 
 build_libopus() {
-    ./configure --prefix="${PREFIX}" --enable-shared && \
-    make && \
+    ./configure --prefix="${PREFIX}" --enable-shared
+    make
     make install
 }
 
 build_libvorbis() {
-    ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
-    make && \
+    ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared
+    make
     make install
+    # https://gitlab.xiph.org/xiph/vorbis
+    # cmake -G YOUR-PROJECT-GENERATOR -DBUILD_SHARED_LIBS=1 -DCMAKE_INSTALL_PREFIX="${PREFIX}" .
+    # make
+    # make install
 }
 
 build_libvpx() {
-    ./configure --prefix="${PREFIX}" --enable-vp8 --enable-vp9 --enable-vp9-highbitdepth --enable-pic --enable-shared \
-        --disable-debug --disable-examples --disable-docs --disable-install-bins && \
-    make && \
+    # local dir=${1}
+    # mkdir -p build; cd build && \
+    # ./configure --prefix="${PREFIX}" --enable-vp8 --enable-vp9 --enable-vp9-highbitdepth --enable-pic --enable-shared \
+    #     --disable-debug --disable-examples --disable-docs --disable-install-bins .. && \
+    # ./configure  --prefix="${PREFIX}" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm &&
+    # cd ${dir}
+    # pwd
+    # ./configure  --prefix="${PREFIX}" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --enable-pic --enable-shared --as=yasm
+    # make
+    # make install
+
+    # cd ~/ffmpeg_sources && \
+    # git -C libvpx pull 2> /dev/null || git clone --depth 1 https://chromium.googlesource.com/webm/libvpx.git && \
+    # cd libvpx && \
+    # PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm && \
+    # PATH="$HOME/bin:$PATH" make && \
+    # make install
+
+    local data=$(jq -r '.[] | select(.library_name == "libvpx")' $manifestJsonFile)
+    local dir=$(echo "$data" | jq -r '.build_dir')
+    local vpx_version=$(jq -r '.["libvpx"]' $manifestJsonVersionsFile)
+    if [ -n "$vpx_version" ] && [[ "$vpx_version" != "null" ]]; then
+        echo "Building [libvpx-${vpx_version}] in [${dir}]"
+    else
+        echo "Error: libvpx version is empty or unset"
+    fi
+    version="v${vpx_version}"
+    git -C libvpx pull 2> /dev/null || git clone --branch ${version} --depth 1 https://chromium.googlesource.com/webm/libvpx.git
+    cd libvpx
+    pwd
+    ./configure  --prefix="${PREFIX}" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --enable-pic --enable-shared --as=yasm
+    make
     make install
+
+
+
 }
 
 build_libwebp() {
@@ -67,15 +103,19 @@ build_libmp3lame() {
 }
 
 build_libxvid() {
-    ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" && \
-    make && \
+    # read doc/INSTALL
+    cd build/generic
+    ./configure --help
+    echo "Now guess"
+    ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin --enable-shared"
+    make
     make install
 }
 
 build_libfdk-aac() {
     autoreconf -fiv && \
-    ./configure --prefix="${PREFIX}" --disable-shared && \
-    make && \
+    ./configure --prefix="${PREFIX}" --enable-shared
+    make
     make install
 }
 
@@ -98,10 +138,11 @@ build_libvidstab() {
 }
 
 build_fribidi() {
-    sed -i 's/^SUBDIRS =.*/SUBDIRS=gen.tab charset lib bin/' Makefile.am && \
-    ./bootstrap --no-config --auto && \
-    ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
-    make -j1 && \
+    # Currently broken, need to fix
+    # sed -i 's/^SUBDIRS =.*/SUBDIRS=gen.tab charset lib bin/' Makefile.am
+    # ./bootstrap --no-config --auto
+    ./configure --prefix="${PREFIX}" --disable-static --enable-shared
+    make -j1
     make install
 }
 
@@ -134,9 +175,6 @@ build_aom() {
         echo "Building [aom-${aom_version}] in [${dir}]"
     else
         echo "Error: aom version is empty or unset"
-        if [[ "$continue_on_build_failure" == false ]]; then
-            exit 1
-        fi
     fi
     version="v${aom_version}"
     git clone --branch ${version} --depth 1 https://aomedia.googlesource.com/aom ${dir} && \
@@ -164,8 +202,7 @@ build_xorg-macros() {
 
 build_xproto() {
     dir=${1}
-    # I don't think we need the config.guess anymore
-    # cp /usr/share/misc/config.guess . && \
+    cp /usr/share/misc/config.guess . && \
     ./configure --srcdir=${dir} --prefix="${PREFIX}" && \
     make && \
     make install
@@ -229,6 +266,7 @@ build_zimg() {
     make install
 }
 
+# Dependancy on libogg
 build_libtheora() {
     # add sym link for sdl-config
     # ln -s /usr/bin/sdl2-config /usr/bin/sdl-config && \
@@ -236,8 +274,9 @@ build_libtheora() {
     # Note: consider installing doxygen so that the api documentation is built
     #       right now, I did not, so we can keep everything small.
     # disable examples to advoid the libjpeg sizeof error still in the example code.
-    ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared --disable-examples && \
-    make && \
+    cp /usr/share/misc/config.guess .
+    ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared --disable-examples
+    make
     make install
 }
 
@@ -249,10 +288,11 @@ build_libsrt() {
 }
 
 build_libvmaf() {
-    mkdir ./libvmaf/build && \
-    cd ./libvmaf/build && \
-    meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static --prefix "${PREFIX}" .. && \
-    ninja && \
+    mkdir ./libvmaf/build
+    cd ./libvmaf/build
+    # meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static --prefix "${PREFIX}" .. && \
+    meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=shared --prefix "${PREFIX}" ..
+    ninja
     ninja install
 }
 
@@ -366,7 +406,7 @@ build_support_libraries() {
         tarball_name=$(echo "$data" | jq -r '.tarball_name')
         sha256sum=$(echo "$data" | jq -r '.sha256sum')
 
-        echo "Building $lib_name: from ${build_dir}/$tarball_name]"
+        echo "Building $lib_name: from ${build_dir}/$tarball_name"
         cd $build_dir
         extract_tarball $tarball_name
         if [ -n "$sha256sum" ] && [[ "$sha256sum" != "null" ]]; then
@@ -377,6 +417,9 @@ build_support_libraries() {
         # if anything fails, we will exit with a non-zero status
         echo "-------------------- Running callback: build_${lib_name} --------------------"
         build_${lib_name} ${build_dir}
+        echo "Finished building $lib_name removing build directory [${build_dir}]"
+        cd /tmp/workdir
+        rm -rf $build_dir
     done
 }
 

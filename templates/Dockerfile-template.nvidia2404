@@ -8,8 +8,6 @@
 # Stage 1: Build ( https://hub.docker.com/r/nvidia/cuda )
 FROM nvidia/cuda:12.6.2-devel-ubuntu24.04 AS builder
 
-# FROM nvcr.io/nvidia/cuda:12.3.1-devel-ubuntu22.04 AS devel-base
-
 ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
 ENV	    DEBIAN_FRONTEND=noninteractive
 
@@ -21,7 +19,11 @@ COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
 
 
+ENV        NVIDIA_HEADERS_VERSION=11.1.5.3
+
 ENV         %%ENV%%
+
+# Note: I don't think we need 'ca-certificates'
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN     apt-get -yqq update && \
@@ -65,15 +67,39 @@ RUN      buildDeps="autoconf \
                     openssl \
                     libssl-dev \
                     expat \
-                    libgomp1" && \
+                    libgomp1 \
+                    ca-certificates \
+                    libxcb-shape0-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
+
+# I think 'g++' is gonna get picked up in the run
+
+RUN \
+	DIR=/tmp/nv-codec-headers && \
+	git clone https://github.com/FFmpeg/nv-codec-headers ${DIR} && \
+	cd ${DIR} && \
+	git checkout n${NVIDIA_HEADERS_VERSION} && \
+	make PREFIX="${PREFIX}" && \
+	make install PREFIX="${PREFIX}" && \
+        rm -rf ${DIR}
 
 %%RUN%%
 
 
 # Stage 2: Final Image ( shrink the size back down )
-FROM ubuntu:24.04
+FROM nvidia/cuda:12.6.2-devel-ubuntu24.04 AS runtime
+
+ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
+ENV	    DEBIAN_FRONTEND=nonintercative
+WORKDIR     /tmp/workdir
+
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
+        apt-get autoremove -y && \
+        apt-get clean -y
+
+
 COPY --from=builder /usr/local /usr/local/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \

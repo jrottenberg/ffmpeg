@@ -7,6 +7,7 @@
 #
 # Stage 1: Build
 FROM       ubuntu:24.04 AS builder
+# FROM jsheffie/ffmpeg-devel:1.0 AS builder
 
 WORKDIR     /tmp/workdir
 
@@ -110,14 +111,15 @@ ARG SRT_PKGS="libssl-dev libsrt-openssl-dev libsrt1.5-openssl"
 ARG LIBDRM_PKGS="libbsd0 libdrm-dev libdrm2 libxcb1-dev libxcb1"
 
 ENV MAKEFLAGS="-j2"
-ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
+ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
 ENV PREFIX="/opt/ffmpeg"
-ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
+ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"
 
 
 ARG DEBIAN_FRONTEND=noninteractive
+
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file && \
+        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim && \
         chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
         chmod +x /tmp/workdir/download_tarballs.sh && \
         chmod +x /tmp/workdir/build_source.sh && \
@@ -174,19 +176,15 @@ RUN \
 
 # Note: pass '--library-list lib1,lib2,lib3 for more control.
 #       Here we have 3 libs that we have to build from source
-RUN \
-        /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf,ffmpeg
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf,ffmpeg
 
 ## when  debugging you can pass in || true to the end of the next 3 commands
 ## to keep the build going even if one of the steps fails
-RUN \
-        /tmp/workdir/download_tarballs.sh || true
+RUN /tmp/workdir/download_tarballs.sh
 
-RUN \
-        /tmp/workdir/build_source.sh || true
+RUN /tmp/workdir/build_source.sh
 
-RUN \
-        /tmp/workdir/install_ffmpeg.sh || true
+RUN /tmp/workdir/install_ffmpeg.sh
 
 
 

@@ -159,7 +159,7 @@ LIBRARIES = OrderedDict(
             },
         ),
         (
-            "libvoribs",
+            "libvorbis",
             {
                 "link": "https://xiph.org/vorbis/",
                 "version": VORBIS["version"],
@@ -186,9 +186,9 @@ LIBRARIES = OrderedDict(
                 "license_name": "BSD-style license",
                 "license_link": "https://github.com/webmproject/libvpx/blob/master/LICENSE",
                 "build_info": {
-                    "download_link": f"https://chromium.googlesource.com/webm/libvpx.git/+archive/v{VPX['version']}.tar.gz",
-                    "build_dir": "/tmp/vpx",
-                    "tarball_name": f"vpx-v{VPX['version']}.tar.gz",
+                    # "download_link": f"https://chromium.googlesource.com/webm/libvpx/+archive/v{VPX['version']}.tar.gz",
+                    "build_dir": "/tmp/libvpx",
+                    # "tarball_name": f"libvpx-v{VPX['version']}.tar.gz",
                 },
             },
         ),
@@ -320,6 +320,7 @@ LIBRARIES = OrderedDict(
                     "download_link": f"https://github.com/fribidi/fribidi/archive/refs/tags/v{LIBFRIDIBI['version']}.tar.gz",
                     "build_dir": "/tmp/fribidi",
                     "tarball_name": f"fribidi-{LIBFRIDIBI['version']}.tar.gz",
+                    "using_source_build": False,
                     # "sha256sum": "3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8 fribidi-{LIBFRIDIBI['version']}.tar.gz"
                 },
             },
@@ -353,6 +354,7 @@ LIBRARIES = OrderedDict(
                     "download_link": f"https://github.com/libass/libass/releases/download/{LIBASS['version']}/libass-{LIBASS['version']}.tar.gz",
                     "build_dir": "/tmp/libass",
                     "tarball_name": f"libass-{LIBASS['version']}.tar.gz",
+                    "using_source_build": False,
                 },
             },
         ),
@@ -415,6 +417,7 @@ LIBRARIES = OrderedDict(
                     "download_link": f"https://www.x.org/releases/individual/util/util-macros-{XORG_MACROS['version']}.tar.xz",
                     "build_dir": "/tmp/xorg-macros",
                     "tarball_name": f"util-macros-{XORG_MACROS['version']}.tar.xz",
+                    "using_source_build": False,
                 },
             },
         ),
@@ -447,6 +450,7 @@ LIBRARIES = OrderedDict(
                     "download_link": f"https://www.x.org/releases/individual/lib/libXau-{XAU['version']}.tar.xz",
                     "build_dir": "/tmp/libXau",
                     "tarball_name": f"libXau-{XAU['version']}.tar.xz",
+                    "using_source_build": False,
                 },
             },
         ),
@@ -463,6 +467,7 @@ LIBRARIES = OrderedDict(
                     "download_link": f"https://www.x.org/releases/individual/lib/libpthread-stubs-{PTHREAD_STUBS['version']}.tar.xz",
                     "build_dir": "/tmp/libpthread-stubs",
                     "tarball_name": f"libpthread-stubs-{PTHREAD_STUBS['version']}.tar.xz",
+                    "using_source_build": False,
                 },
             },
         ),
@@ -479,6 +484,7 @@ LIBRARIES = OrderedDict(
                     "download_link": f"https://gitlab.gnome.org/GNOME/libxml2/-/archive/v{LIBXML2['version']}/libxml2-v{LIBXML2['version']}.tar.gz",
                     "build_dir": "/tmp/libxml2",
                     "tarball_name": f"libxml2-{LIBXML2['version']}.tar.gz",
+                    "using_source_build": False,
                 },
             },
         ),
@@ -530,6 +536,7 @@ LIBRARIES = OrderedDict(
                     "download_link": f"https://download.sourceforge.net/libpng/libpng-{LIBPNG['version']}.tar.xz",
                     "build_dir": "/tmp/libpng",
                     "tarball_name": f"libpng-{LIBPNG['version']}.tar.xz",
+                    "using_source_build": False,
                 },
             },
         ),
@@ -680,9 +687,12 @@ def generate_library_table(filename):
             checksum = v["build_info"].get("sha256sum", "")
             has_checksum = "Yes" if checksum else "No"
 
-            f.write(
-                f"| {libname} | {libversion} | {v.get('release_date', '')} | {download_source} | {has_checksum} | {license} |\n"
-            )
+            using_source_build = v["build_info"].get("using_source_build", True)
+            # if we are not using the source build then do not display it in the table.
+            if using_source_build:
+                f.write(
+                    f"| {libname} | {libversion} | {v.get('release_date', '')} | {download_source} | {has_checksum} | {license} |\n"
+                )
         print(f"Library table generated: {filename}")
         sys.stdout.flush()
 

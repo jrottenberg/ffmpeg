@@ -56,7 +56,7 @@ VARIANTS = [
     {"name": "scratch320", "parent": "scratch"},
     # Video Acceleration API (VAAPI) https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI
     {"name": "vaapi2404", "parent": "vaapi"},
-    {"name": "nvidia2204", "parent": "nvidia"},
+    {"name": "nvidia2404", "parent": "nvidia"},
 ]
 current_variant_names = [v["name"] for v in VARIANTS]
 
@@ -311,7 +311,7 @@ for version in keep_version:
         with open(dockerfile, "w") as dfile:
             dfile.write(docker_content)
 
-        # These 4 files are  used this for everything as even the packaged
+        # These 4 files are used this for everything as even the packaged
         # builds require building ffmpeg.
         shutil.copy("generate-source-of-truth-ffmpeg-versions.py", ddir)
         shutil.copy("download_tarballs.sh", ddir)
@@ -325,9 +325,6 @@ for version in keep_version:
             )
         with open(f"{ddir}/build_source.sh", "w") as buildfile:
             buildfile.write(build_source_content)
-
-        # if variant["name"] == "ubuntu2404":
-        #     shutil.copy("install_ffmpeg.sh", ddir)
 
 
 with open("docker-images/gitlab-ci.yml", "w") as gitlabcifile:

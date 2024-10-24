@@ -5,34 +5,23 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
+# Stage 1: Build ( https://hub.docker.com/r/nvidia/cuda )
+FROM nvidia/cuda:12.6.2-devel-ubuntu24.04 AS builder
 
-FROM nvcr.io/nvidia/cuda:12.3.1-devel-ubuntu22.04 AS devel-base
 ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
 ENV	    DEBIAN_FRONTEND=noninteractive
+
 WORKDIR     /tmp/workdir
 
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 python3 && \
-        apt-get autoremove -y && \
-        apt-get clean -y
+COPY generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
+COPY download_tarballs.sh /tmp/workdir
+COPY build_source.sh /tmp/workdir
+COPY install_ffmpeg.sh /tmp/workdir
 
-FROM  nvcr.io/nvidia/cuda:12.3.1-runtime-ubuntu22.04 AS runtime-base
-
-ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
-ENV	    DEBIAN_FRONTEND=nonintercative
-WORKDIR     /tmp/workdir
-
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
-        apt-get autoremove -y && \
-        apt-get clean -y
-
-
-FROM  devel-base as build
 
 ENV        NVIDIA_HEADERS_VERSION=11.1.5.3
 
-ENV         ENV FFMPEG_VERSION=5.1.6
+ENV         ENV FFMPEG_VERSION=7.0.2
 
 # FFMPEG_VERSION=% % FFMPEG_VERSION % % \
 #    KVAZAAR_VERSION=2.3.1 \
@@ -126,32 +115,62 @@ ARG SRT_PKGS="libssl-dev libsrt-openssl-dev libsrt1.5-openssl"
 ARG LIBDRM_PKGS="libbsd0 libdrm-dev libdrm2 libxcb1-dev libxcb1"
 
 ENV MAKEFLAGS="-j2"
-ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
+ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
 ENV PREFIX="/opt/ffmpeg"
-ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
+ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"
 
+
+# Note: I don't think we need 'ca-certificates'
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file && \
+        chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
+        chmod +x /tmp/workdir/download_tarballs.sh && \
+        chmod +x /tmp/workdir/build_source.sh && \
+        chmod +x /tmp/workdir/install_ffmpeg.sh
 
 RUN      buildDeps="autoconf \
                     automake \
                     cmake \
+                    build-essential \
+                    texinfo \
                     curl \
+                    wget \
+                    tar \
                     bzip2 \
                     libexpat1-dev \
-                    g++ \
                     gcc \
                     git \
+                    git-core \
                     gperf \
                     libtool \
                     make \
+                    meson \
+                    ninja-build \
                     nasm \
                     perl \
                     pkg-config \
                     python3 \
-                    libssl-dev \
                     yasm \
-                    zlib1g-dev" && \
+                    zlib1g-dev \
+                    libfreetype6-dev \
+                    libgnutls28-dev \
+                    libsdl2-dev \
+                    libva-dev \
+                    libvdpau-dev \
+                    libnuma-dev \
+                    libdav1d-dev \
+                    openssl \
+                    libssl-dev \
+                    expat \
+                    libgomp1 \
+                    ca-certificates \
+                    libxcb-shape0-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
+
+# I think 'g++' is gonna get picked up in the run
 
 RUN \
 	DIR=/tmp/nv-codec-headers && \
@@ -175,36 +194,33 @@ RUN \
 
 # Note: pass '--library-list lib1,lib2,lib3 for more control.
 #       Here we have 3 libs that we have to build from source
-RUN \
-        /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf,ffmpeg
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf,ffmpeg
 
 ## when  debugging you can pass in || true to the end of the next 3 commands
 ## to keep the build going even if one of the steps fails
-RUN \
-        /tmp/workdir/download_tarballs.sh || true
+RUN /tmp/workdir/download_tarballs.sh
 
-RUN \
-        /tmp/workdir/build_source.sh || true
+RUN /tmp/workdir/build_source.sh
 
-RUN \
-        /tmp/workdir/install_ffmpeg.sh || true
-
-## cleanup
-RUN \
-        LD_LIBRARY_PATH="${PREFIX}/lib:${PREFIX}/lib64:${LD_LIBRARY_PATH}" ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
-        for lib in /usr/local/lib/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
-        cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/* /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-        cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-        mkdir -p /usr/local/lib/pkgconfig && \
-        for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-          sed "s:${PREFIX}:/usr/local:g; s:/lib64:/lib:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
-        done
+RUN /tmp/workdir/install_ffmpeg.sh
 
 
 
-FROM        runtime-base AS release
+# Stage 2: Final Image ( shrink the size back down )
+FROM nvidia/cuda:12.6.2-devel-ubuntu24.04 AS runtime
+
+ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
+ENV	    DEBIAN_FRONTEND=nonintercative
+WORKDIR     /tmp/workdir
+
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
+        apt-get autoremove -y && \
+        apt-get clean -y
+
+
+COPY --from=builder /usr/local /usr/local/
+
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
@@ -212,12 +228,3 @@ ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
-
-# copy only needed files, without copying nvidia dev files
-COPY --from=build /usr/local/bin /usr/local/bin/
-COPY --from=build /usr/local/share /usr/local/share/
-COPY --from=build /usr/local/lib /usr/local/lib/
-COPY --from=build /usr/local/include /usr/local/include/
-
-# Let's make sure the app built correctly
-# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
