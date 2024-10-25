@@ -62,7 +62,15 @@ RUN     buildDeps="autoconf \
                    libass \
                    libass-dev\
                    # https://www.x.org/archive/individual/proto/
-                   xorgproto" && \
+                   xorgproto \
+                   # https://git.code.sf.net/p/libpng/code
+                   libpng \
+                   libpng-static \
+                   libpng-utils \
+                   libpng-dev\
+                   dav1d \
+                   libdav1d \
+                   dav1d-dev" && \
         apk add --no-cache --update ${buildDeps}
 
 #RUN     apk add --no-cache --update meson samuri

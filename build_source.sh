@@ -8,6 +8,16 @@ set -e
 manifestJsonFile="/tmp/workdir/generated_build_manifest.json"
 manifestJsonVersionsFile="/tmp/workdir/generated_build_versions_manifest.json"
 
+OS_NAME=$(uname -s)
+is_ubuntu=false
+is_alpine=false
+if [[ "$OS_NAME" == "Linux" ]]; then
+    if grep -q "Ubuntu" /etc/os-release; then
+        is_ubuntu=true
+    elif grep -q "Alpine Linux" /etc/alpine-release; then
+        is_alpine=true
+    fi
+fi
 ######################### Callback build functions #########################
 build_libopencore-amr() {
     ./configure --prefix="${PREFIX}" --enable-shared
@@ -279,7 +289,9 @@ build_libtheora() {
     # Note: consider installing doxygen so that the api documentation is built
     #       right now, I did not, so we can keep everything small.
     # disable examples to advoid the libjpeg sizeof error still in the example code.
-    cp /usr/share/misc/config.guess .
+    if [ "$is_ubuntu" = true ]; then
+        cp /usr/share/misc/config.guess .
+    fi
     ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared --disable-examples
     make
     make install

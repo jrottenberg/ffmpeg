@@ -20,6 +20,17 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+OS_NAME=$(uname -s)
+is_ubuntu=false
+is_alpine=false
+if [[ "$OS_NAME" == "Linux" ]]; then
+    if grep -q "Ubuntu" /etc/os-release; then
+        is_ubuntu=true
+    elif grep -q "Alpine Linux" /etc/alpine-release; then
+        is_alpine=true
+    fi
+fi
+
 install_ffmpeg() {
     ## cleanup
     # This is used for both the source and packages version ( be robust about looking for libs to copy )
@@ -68,6 +79,12 @@ install_ffmpeg() {
     # Strip libraries if requested
     if $strip_libs; then
         for lib in /usr/local/lib/*.so.*; do
+            strip --strip-all "$lib"
+        done
+    fi
+    if $is_alpine && $strip_libs; then
+        for lib in /usr/lib/*.so.*; do
+            # some of the support libs in the alpine build are are here
             strip --strip-all "$lib"
         done
     fi

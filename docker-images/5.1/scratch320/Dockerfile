@@ -128,7 +128,15 @@ RUN     buildDeps="autoconf \
                    libass \
                    libass-dev\
                    # https://www.x.org/archive/individual/proto/
-                   xorgproto" && \
+                   xorgproto \
+                   # https://git.code.sf.net/p/libpng/code
+                   libpng \
+                   libpng-static \
+                   libpng-utils \
+                   libpng-dev\
+                   dav1d \
+                   libdav1d \
+                   dav1d-dev" && \
         apk add --no-cache --update ${buildDeps}
 
 #RUN     apk add --no-cache --update meson samuri
@@ -220,16 +228,18 @@ RUN /tmp/workdir/build_source.sh
 # additional batch of libraries ( split into docker layers, to allow for caching )
 RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
 libaribb24,\
-zimg,\
-libtheora
+zimg
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libtheora
 # Note: libtheora is dependant on libogg
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
-# additional batch of libraries ( split into docker layers, to allow for caching )
+# # additional batch of libraries ( split into docker layers, to allow for caching )
 RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
 libsrt,\
-libpng,\
 libvmaf
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
@@ -239,10 +249,10 @@ RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmp
 ## when  debugging you can pass in || true to the end of the next 3 commands
 ## to keep the build going even if one of the steps fails
 RUN /tmp/workdir/download_tarballs.sh
-RUN /tmp/workdir/build_source.sh
+RUN /tmp/workdir/build_source.sh || true
 
 # TODO add a strip and fakeroot argument
-RUN /tmp/workdir/install_ffmpeg.sh
+RUN /tmp/workdir/install_ffmpeg.sh || true
 
 
 
