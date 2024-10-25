@@ -7,7 +7,6 @@
 #
 # Stage 1: Build
 FROM       ubuntu:24.04 AS builder
-# FROM jsheffie/ffmpeg-devel:1.0 AS builder
 
 WORKDIR     /tmp/workdir
 
@@ -18,10 +17,6 @@ COPY install_ffmpeg.sh /tmp/workdir
 
 
 ENV FFMPEG_VERSION=7.1
-
-# FFMPEG_VERSION=% % FFMPEG_VERSION % % \
-#    KVAZAAR_VERSION=2.3.1 \
-#    LIBVMAF_VERSION=3.0.0
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
@@ -112,6 +107,7 @@ ARG LIBDRM_PKGS="libbsd0 libdrm-dev libdrm2 libxcb1-dev libxcb1"
 
 ENV MAKEFLAGS="-j2"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
+
 ENV PREFIX="/opt/ffmpeg"
 ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"
 
@@ -169,27 +165,30 @@ RUN \
 
         # apt install libdrm-dev
 
-        ## libvmaf https://github.com/Netflix/vmaf
+## libvmaf https://github.com/Netflix/vmaf
+## https://github.com/Netflix/vmaf/issues/788#issuecomment-756098059
 RUN \
         echo "Adding g++ for VMAF build" && \
         apt-get install -yq g++
 
 # Note: pass '--library-list lib1,lib2,lib3 for more control.
 #       Here we have 3 libs that we have to build from source
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf,ffmpeg
-
-## when  debugging you can pass in || true to the end of the next 3 commands
-## to keep the build going even if one of the steps fails
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf
 RUN /tmp/workdir/download_tarballs.sh
-
 RUN /tmp/workdir/build_source.sh
 
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+## when  debugging you can pass in || true to the end of the command
+## to keep the build going even if one of the steps fails
 RUN /tmp/workdir/install_ffmpeg.sh
 
 
 
 # Stage 2: Final Image ( shrink the size back down )
-FROM ubuntu:24.04
+FROM ubuntu:24.04 AS runtime
 COPY --from=builder /usr/local /usr/local/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \

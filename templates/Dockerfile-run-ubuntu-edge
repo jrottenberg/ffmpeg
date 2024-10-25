@@ -10,7 +10,8 @@
 
 RUN \
         echo "Installing dependencies..." && \
-        apt-get install -yq --no-install-recommends ${FRIBIDI_PKGS} ${LIBASS_PKGS} ${XORG_MACROS_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${PNG_PKGS}
+        apt-get install -yq --no-install-recommends ${FRIBIDI_PKGS} ${LIBASS_PKGS} ${XORG_MACROS_PKGS} ${XAU_PKGS} ${XML2_PKGS} ${PNG_PKGS}
+        # apt-get install -yq --no-install-recommends ${FRIBIDI_PKGS} ${LIBASS_PKGS} ${XORG_MACROS_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${PNG_PKGS}
 
 
 # First batch of libraries ( split into docker layers, to allow for caching )
@@ -34,7 +35,7 @@ RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
 # additional batch of libraries ( split into docker layers, to allow for caching )
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libxvid
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libxvid,libpthread-stubs
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 

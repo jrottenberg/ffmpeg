@@ -7,7 +7,6 @@
 #
 # Stage 1: Build
 FROM       ubuntu:24.04 AS builder
-# FROM jsheffie/ffmpeg-devel:1.0 AS builder
 
 WORKDIR     /tmp/workdir
 
@@ -70,7 +69,7 @@ RUN      buildDeps="autoconf \
 
 
 # Stage 2: Final Image ( shrink the size back down )
-FROM ubuntu:24.04
+FROM ubuntu:24.04 AS runtime
 COPY --from=builder /usr/local /usr/local/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \

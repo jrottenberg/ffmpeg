@@ -2,7 +2,7 @@
 
 # Stop execution on any error
 # Note: we can override this in the Dockerfile RUN command with an || true.
-#       this is useful for debugging
+#       which is useful for debugging
 set -e
 
 manifestJsonFile="/tmp/workdir/generated_build_manifest.json"
@@ -85,9 +85,6 @@ build_libvpx() {
     ./configure  --prefix="${PREFIX}" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --enable-pic --enable-shared --as=yasm
     make
     make install
-
-
-
 }
 
 build_libwebp() {
@@ -184,6 +181,14 @@ build_aom() {
     cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 -DENABLE_NASM=on .. && \
     make && \
     make install
+}
+
+build_nvidia-codec-headers() {
+    local dir=${1}
+	# git clone https://github.com/FFmpeg/nv-codec-headers ${dir}
+	# git checkout n${NVIDIA_HEADERS_VERSION}
+	make PREFIX="${PREFIX}"
+	make install PREFIX="${PREFIX}"
 }
 
 build_libsvtav1() {
@@ -288,10 +293,11 @@ build_libsrt() {
 }
 
 build_libvmaf() {
+    # https://github.com/Netflix/vmaf/issues/788#issuecomment-756098059
     mkdir ./libvmaf/build
     cd ./libvmaf/build
-    # meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static --prefix "${PREFIX}" .. && \
-    meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=shared --prefix "${PREFIX}" ..
+    meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static --prefix "${PREFIX}" .. && \
+    # meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=shared --prefix "${PREFIX}" ..
     ninja
     ninja install
 }
@@ -356,8 +362,9 @@ build_ffmpeg() {
         --enable-shared \
         --enable-small \
         --enable-version3 \
-        --extra-cflags="-I${PREFIX}/include" \
-        --extra-ldflags="-L${PREFIX}/lib" \
+        --extra-cflags="-I${PREFIX}/include -I/usr/include/x86_64-linux-gnu" \
+        --extra-ldflags="-L${PREFIX}/lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib" \
+        --extra-ldflags=-L/opt/ffmpeg/lib/x86_64-linux-gnu \
         --extra-libs=-ldl \
         --extra-libs=-lm \
         --extra-libs=-lpthread \
@@ -381,7 +388,7 @@ extract_tarball() {
         tar -zx --strip-components=1 -f ${tarball_name}
     elif [ "$extension" == "bz2" ]; then
         tar -jx --strip-components=1 -f ${tarball_name}
-    elif [ "$extension" == "zx" ]; then
+    elif [ "$extension" == "xz" ]; then
         tar -Jx --strip-components=1 -f ${tarball_name}
     else
         echo "Error while extract_tarball, got an unknown extension: $extension"
@@ -395,15 +402,10 @@ build_support_libraries() {
     for i in "${!libs[@]}"; do
         lib_name=${libs[$i]}
         # handle the clone source case's ( there are only two )
-        if [ "$lib_name" == "libsvtav1" ]; then
-            echo "-------------------- Running callback: build_aom --------------------"
-            echo "Building 'aom' before we build $lib_name"
-            build_aom
-        fi
-        # currently using the tarball approach for libpng
-        # if [ "$lib_name" == "libaribb24" ]; then
-        #     echo "Building 'libpng' before we build $lib_name"
-        #     build_libpng
+        # if [ "$lib_name" == "libsvtav1" ]; then
+        #     echo "-------------------- Running callback: build_aom --------------------"
+        #     echo "Building 'aom' before we build $lib_name"
+        #     build_aom
         # fi
         local data=$(jq -r '.[] | select(.library_name == "'${lib_name}'")' $manifestJsonFile)
         build_dir=$(echo "$data" | jq -r '.build_dir')

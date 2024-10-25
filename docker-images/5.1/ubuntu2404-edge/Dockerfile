@@ -7,7 +7,6 @@
 #
 # Stage 1: Build
 FROM       ubuntu:24.04 AS builder
-# FROM jsheffie/ffmpeg-devel:1.0 AS builder
 
 WORKDIR     /tmp/workdir
 
@@ -15,6 +14,7 @@ COPY generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
 COPY download_tarballs.sh /tmp/workdir
 COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
+
 
 ENV FFMPEG_VERSION=5.1.6
 
@@ -35,15 +35,12 @@ ARG PNG_PKGS="libpng-dev libpng16-16t64"
 
 ENV MAKEFLAGS="-j2"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
+
 ENV PREFIX="/opt/ffmpeg"
 ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"
 
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN     chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
-        chmod +x /tmp/workdir/download_tarballs.sh && \
-        chmod +x /tmp/workdir/build_source.sh && \
-        chmod +x /tmp/workdir/install_ffmpeg.sh
 
 RUN     apt-get -yqq update && \
         apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim && \
@@ -103,7 +100,8 @@ RUN      buildDeps="autoconf \
 
 RUN \
         echo "Installing dependencies..." && \
-        apt-get install -yq --no-install-recommends ${FRIBIDI_PKGS} ${LIBASS_PKGS} ${XORG_MACROS_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${PNG_PKGS}
+        apt-get install -yq --no-install-recommends ${FRIBIDI_PKGS} ${LIBASS_PKGS} ${XORG_MACROS_PKGS} ${XAU_PKGS} ${XML2_PKGS} ${PNG_PKGS}
+        # apt-get install -yq --no-install-recommends ${FRIBIDI_PKGS} ${LIBASS_PKGS} ${XORG_MACROS_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${PNG_PKGS}
 
 
 # First batch of libraries ( split into docker layers, to allow for caching )
@@ -127,7 +125,7 @@ RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
 # additional batch of libraries ( split into docker layers, to allow for caching )
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libxvid
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libxvid,libpthread-stubs
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
@@ -198,7 +196,8 @@ RUN /tmp/workdir/install_ffmpeg.sh
 
 
 # Stage 2: Final Image ( shrink the size back down )
-FROM ubuntu:24.04
+FROM ubuntu:24.04 AS runtime
+
 COPY --from=builder /usr/local /usr/local/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \

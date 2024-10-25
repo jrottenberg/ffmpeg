@@ -8,7 +8,7 @@
 # Stage 1: Build ( https://hub.docker.com/r/nvidia/cuda )
 FROM nvidia/cuda:12.6.2-devel-ubuntu24.04 AS builder
 
-ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
+ENV	    NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
 ENV	    DEBIAN_FRONTEND=noninteractive
 
 WORKDIR     /tmp/workdir
@@ -18,14 +18,9 @@ COPY download_tarballs.sh /tmp/workdir
 COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
 
-
-ENV        NVIDIA_HEADERS_VERSION=11.1.5.3
-
 ENV         ENV FFMPEG_VERSION=5.1.6
 
-# FFMPEG_VERSION=% % FFMPEG_VERSION % % \
-#    KVAZAAR_VERSION=2.3.1 \
-#    LIBVMAF_VERSION=3.0.0
+ENV NVIDIA_HEADERS_VERSION=11.1.5.3
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
@@ -116,15 +111,15 @@ ARG LIBDRM_PKGS="libbsd0 libdrm-dev libdrm2 libxcb1-dev libxcb1"
 
 ENV MAKEFLAGS="-j2"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
+
 ENV PREFIX="/opt/ffmpeg"
 ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"
 
 
 # Note: I don't think we need 'ca-certificates'
-
 ARG DEBIAN_FRONTEND=noninteractive
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file && \
+        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim && \
         chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
         chmod +x /tmp/workdir/download_tarballs.sh && \
         chmod +x /tmp/workdir/build_source.sh && \
@@ -166,20 +161,10 @@ RUN      buildDeps="autoconf \
                     expat \
                     libgomp1 \
                     ca-certificates \
-                    libxcb-shape0-dev" && \
+                    libxcb-shape0-dev \
+                    libavformat-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
-
-# I think 'g++' is gonna get picked up in the run
-
-RUN \
-	DIR=/tmp/nv-codec-headers && \
-	git clone https://github.com/FFmpeg/nv-codec-headers ${DIR} && \
-	cd ${DIR} && \
-	git checkout n${NVIDIA_HEADERS_VERSION} && \
-	make PREFIX="${PREFIX}" && \
-	make install PREFIX="${PREFIX}" && \
-        rm -rf ${DIR}
 
 RUN \
         echo "Installing dependencies..." && \
@@ -187,29 +172,48 @@ RUN \
 
         # apt install libdrm-dev
 
-        ## libvmaf https://github.com/Netflix/vmaf
+## libvmaf https://github.com/Netflix/vmaf
+## https://github.com/Netflix/vmaf/issues/788#issuecomment-756098059
 RUN \
         echo "Adding g++ for VMAF build" && \
         apt-get install -yq g++
 
 # Note: pass '--library-list lib1,lib2,lib3 for more control.
 #       Here we have 3 libs that we have to build from source
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf,ffmpeg
-
-## when  debugging you can pass in || true to the end of the next 3 commands
-## to keep the build going even if one of the steps fails
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf
 RUN /tmp/workdir/download_tarballs.sh
-
 RUN /tmp/workdir/build_source.sh
 
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list nvidia-codec-headers
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+## when  debugging you can pass in || true to the end of the command
+## to keep the build going even if one of the steps fails
 RUN /tmp/workdir/install_ffmpeg.sh
 
 
 
 # Stage 2: Final Image ( shrink the size back down )
-FROM nvidia/cuda:12.6.2-devel-ubuntu24.04 AS runtime
+# FROM nvidia/cuda:12.6.2-runtime-ubuntu24.04
+FROM nvidia/cuda:12.6.2-base-ubuntu24.04 AS runtime
+# We used to use runtime, but I switched us to base, as it is significantly-smaller.
+# (~ 80Megs ) base: Includes the CUDA runtime (cudart)
+# (~ 1.4Gigs) runtime: Builds on the base and includes the CUDA math libraries⁠, and NCCL⁠.
+# (~ 4 Gigs ) devel: Builds on the runtime and includes headers, development tools for building CUDA images.
 
-ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
+# COPY --from=builder /usr/local /usr/local/
+# copy only needed files, without copying nvidia dev files
+COPY --from=builder /usr/local/bin /usr/local/bin/
+COPY --from=builder /usr/local/share /usr/local/share/
+COPY --from=builder /usr/local/lib /usr/local/lib/
+COPY --from=builder /usr/local/include /usr/local/include/
+
+ENV	    NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
 ENV	    DEBIAN_FRONTEND=nonintercative
 WORKDIR     /tmp/workdir
 
@@ -217,9 +221,6 @@ RUN     apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
         apt-get autoremove -y && \
         apt-get clean -y
-
-
-COPY --from=builder /usr/local /usr/local/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg

@@ -109,8 +109,10 @@ def read_ffmpeg_template(variant_name, env_or_run="env"):
         distro_name = "alpine"
     elif variant_name == "ubuntu-edge":
         distro_name = "ubuntu-edge"
-    elif variant_name == "ubuntu-debug":
-        distro_name = "ubuntu-debug"
+    elif variant_name == "nvidia":
+        distro_name = "nvidia"
+    elif variant_name == "vaapi":
+        distro_name = "vaapi"
     else:
         distro_name = "ubuntu"
 
@@ -270,13 +272,27 @@ for version in keep_version:
                 FFMPEG_CONFIG_FLAGS.append("--enable-cuvid")
                 FFMPEG_CONFIG_FLAGS.append("--enable-libnpp")
 
-        if (
-            variant["parent"] in ["ubuntu", "alpine", "scratch"]
-            and float(version[0:3]) >= 5.1
-        ):
+        if float(version[0:3]) >= 5.1:
             # from https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#FFmpeg
             FFMPEG_CONFIG_FLAGS.append("--extra-libs=-lm")  # add math library
             FFMPEG_CONFIG_FLAGS.append("--ld=g++")  # use g++ as linker
+
+            # DELETE NEXT 5 LINES when everything works
+            # --extra-cflags="-I/usr/local/include -I/usr/lib/include" \
+            # --extra-cxxflags="-I/usr/local/include -I/usr/lib/include" \
+            # --extra-ldflags="-L/usr/local/lib" \
+            # --extra-ldflags="-L/usr/local/lib64 -L/usr/lib -L/usr/lib64" \
+            # FFMPEG_CONFIG_FLAGS.append("--extra-ldflags=-L/usr/local/lib \
+            # -L/usr/local/lib64 -L/usr/lib -L/usr/lib64")
+
+            # Some shenagians to get libvmaf to build with static linking
+            FFMPEG_CONFIG_FLAGS.append(
+                "--extra-ldflags=-L/opt/ffmpeg/lib/x86_64-linux-gnu"
+            )
+
+            # --ld=g++ or --ld=clang++ when configuring ffmpeg
+            # FFMPEG_CONFIG_FLAGS.append("--pkg-config-flags='--static'")
+            # FFMPEG_CONFIG_FLAGS.append("--enable-static")
             # FFMPEG_CONFIG_FLAGS.append("--enable-gnutls")
             FFMPEG_CONFIG_FLAGS.append("--enable-libfdk-aac")
             FFMPEG_CONFIG_FLAGS.append("--enable-libsvtav1")
@@ -286,9 +302,11 @@ for version in keep_version:
                 "--enable-libfdk_aac"
             )  # this was likely misstyped before
 
-        if "ubuntu" in variant["parent"] and float(version[0:3]) >= 5.1:
+        # if "ubuntu" in variant["parent"] and float(version[0:3]) >= 5.1:
+        if float(version[0:3]) >= 5.1:
             CFLAGS.append("-I/usr/include/x86_64-linux-gnu")
             LDFLAGS.append("-L/usr/lib/x86_64-linux-gnu")
+            LDFLAGS.append("-L/usr/lib")  # for alpine ( but probably fine for all)
 
         cflags = '--extra-cflags="{0}"'.format(" ".join(CFLAGS))
         ldflags = '--extra-ldflags="{0}"'.format(" ".join(LDFLAGS))

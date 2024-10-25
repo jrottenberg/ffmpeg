@@ -8,7 +8,7 @@
 # Stage 1: Build ( https://hub.docker.com/r/nvidia/cuda )
 FROM nvidia/cuda:12.6.2-devel-ubuntu24.04 AS builder
 
-ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
+ENV	    NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
 ENV	    DEBIAN_FRONTEND=noninteractive
 
 WORKDIR     /tmp/workdir
@@ -18,16 +18,12 @@ COPY download_tarballs.sh /tmp/workdir
 COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
 
-
-ENV        NVIDIA_HEADERS_VERSION=11.1.5.3
-
 ENV         %%ENV%%
 
 # Note: I don't think we need 'ca-certificates'
-
 ARG DEBIAN_FRONTEND=noninteractive
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file && \
+        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim && \
         chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
         chmod +x /tmp/workdir/download_tarballs.sh && \
         chmod +x /tmp/workdir/build_source.sh && \
@@ -69,28 +65,30 @@ RUN      buildDeps="autoconf \
                     expat \
                     libgomp1 \
                     ca-certificates \
-                    libxcb-shape0-dev" && \
+                    libxcb-shape0-dev \
+                    libavformat-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
-
-# I think 'g++' is gonna get picked up in the run
-
-RUN \
-	DIR=/tmp/nv-codec-headers && \
-	git clone https://github.com/FFmpeg/nv-codec-headers ${DIR} && \
-	cd ${DIR} && \
-	git checkout n${NVIDIA_HEADERS_VERSION} && \
-	make PREFIX="${PREFIX}" && \
-	make install PREFIX="${PREFIX}" && \
-        rm -rf ${DIR}
 
 %%RUN%%
 
 
 # Stage 2: Final Image ( shrink the size back down )
-FROM nvidia/cuda:12.6.2-devel-ubuntu24.04 AS runtime
+# FROM nvidia/cuda:12.6.2-runtime-ubuntu24.04
+FROM nvidia/cuda:12.6.2-base-ubuntu24.04 AS runtime
+# We used to use runtime, but I switched us to base, as it is significantly-smaller.
+# (~ 80Megs ) base: Includes the CUDA runtime (cudart)
+# (~ 1.4Gigs) runtime: Builds on the base and includes the CUDA math libraries⁠, and NCCL⁠.
+# (~ 4 Gigs ) devel: Builds on the runtime and includes headers, development tools for building CUDA images.
 
-ENV	    NVIDIA_DRIVER_CAPABILITIES compute,utility,video
+# COPY --from=builder /usr/local /usr/local/
+# copy only needed files, without copying nvidia dev files
+COPY --from=builder /usr/local/bin /usr/local/bin/
+COPY --from=builder /usr/local/share /usr/local/share/
+COPY --from=builder /usr/local/lib /usr/local/lib/
+COPY --from=builder /usr/local/include /usr/local/include/
+
+ENV	    NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
 ENV	    DEBIAN_FRONTEND=nonintercative
 WORKDIR     /tmp/workdir
 
@@ -98,9 +96,6 @@ RUN     apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
         apt-get autoremove -y && \
         apt-get clean -y
-
-
-COPY --from=builder /usr/local /usr/local/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg

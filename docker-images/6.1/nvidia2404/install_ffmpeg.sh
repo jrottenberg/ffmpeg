@@ -1,20 +1,28 @@
 #!/bin/bash
 
-continue_on_build_failure=false
+# Stop execution on any error
+# Note: we can override this in the Dockerfile RUN command with an || true.
+#       which is useful for debugging
+set -e
+strip_libs=false
 
-# Check if the argument is provided and set the flag accordingly
-if [[ "$#" -eq 1 && "$1" == "--continue-on-build-failure" ]]; then
-    continue_on_build_failure=true
-fi
+# Parse command-line arguments
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --strip)
+      strip_libs=true
+      shift 1
+      ;;
+    *)
+      echo "Unknown option: $1"
+      exit 1
+      ;;
+  esac
+done
 
 install_ffmpeg() {
     ## cleanup
     # This is used for both the source and packages version ( be robust about looking for libs to copy )
-    if [[ "$continue_on_build_failure" == true && ! -f "${PREFIX}/bin/ffmpeg" ]]; then
-        echo "WARNING: ffmpeg not found in ${PREFIX}/bin"
-        return 0
-    fi
-
     if [ ! -f ${PREFIX}/bin/ffmpeg ]; then
         echo "ERROR: ffmpeg not found in ${PREFIX}/bin"
         exit 1
@@ -22,6 +30,10 @@ install_ffmpeg() {
     # Check if ffmpeg library is linked to x86_64-linux-gnu and copy it to /usr/local/lib
     if ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | grep -q . ; then
         ldd ${PREFIX}/bin/ffmpeg | grep x86_64-linux-gnu | cut -d ' ' -f 3 | xargs -i cp -p {} /usr/local/lib/
+    fi
+    # some nvidia libs are in the cuda targets directory
+    if [[ -d /usr/local/cuda/targets/x86_64-linux/lib/ ]]; then
+        cp -p /usr/local/cuda/targets/x86_64-linux/lib/libnpp* /usr/local/lib
     fi
 
     # Check if ffmpeg library is linked to opt/ffmpeg and copy it to /usr/local/lib
@@ -39,18 +51,26 @@ install_ffmpeg() {
     cp -r ${PREFIX}/share/ffmpeg /usr/local/share/
 
     # Build configuration and copy include directories
-    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
+    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
     cp -rp ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include
 
     # Create pkgconfig directory and copy and modify pkgconfig files
     mkdir -p /usr/local/lib/pkgconfig
-    for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/kvazaar.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do
+    for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/kvazaar.pc ${PREFIX}/lib/pkgconfig/libsw*.pc ${PREFIX}/lib/x86_64-linux-gnu/pkgconfig/libvmaf*; do
         if [[ -f "$pc" ]]; then
-            sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"
+            # sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"
+            sed "s:${PREFIX}:/usr/local:g; s:/lib64:/lib:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
         else
             echo "Warning: File '$pc' not found."
         fi
     done
+
+    # Strip libraries if requested
+    if $strip_libs; then
+        for lib in /usr/local/lib/*.so.*; do
+            strip --strip-all "$lib"
+        done
+    fi
 }
 
 install_ffmpeg

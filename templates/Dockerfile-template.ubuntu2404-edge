@@ -7,7 +7,6 @@
 #
 # Stage 1: Build
 FROM       ubuntu:24.04 AS builder
-# FROM jsheffie/ffmpeg-devel:1.0 AS builder
 
 WORKDIR     /tmp/workdir
 
@@ -16,13 +15,10 @@ COPY download_tarballs.sh /tmp/workdir
 COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
 
+
 %%ENV%%
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN     chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
-        chmod +x /tmp/workdir/download_tarballs.sh && \
-        chmod +x /tmp/workdir/build_source.sh && \
-        chmod +x /tmp/workdir/install_ffmpeg.sh
 
 RUN     apt-get -yqq update && \
         apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim && \
@@ -74,7 +70,8 @@ RUN      buildDeps="autoconf \
 
 
 # Stage 2: Final Image ( shrink the size back down )
-FROM ubuntu:24.04
+FROM ubuntu:24.04 AS runtime
+
 COPY --from=builder /usr/local /usr/local/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \

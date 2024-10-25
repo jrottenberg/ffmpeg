@@ -1,5 +1,7 @@
 ENV FFMPEG_VERSION=%%FFMPEG_VERSION%%
 
+ENV NVIDIA_HEADERS_VERSION=11.1.5.3
+
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
 ##         x265 - http://x265.org/ ( videolan )

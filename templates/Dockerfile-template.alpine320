@@ -4,13 +4,21 @@
 #
 #
 
-FROM        alpine:3.20 as base
+FROM        alpine:3.20 AS builder
 
-RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates openssl expat git
-
-FROM        base as build
+RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates openssl expat git less tree file vim bash
 
 WORKDIR     /tmp/workdir
+
+COPY        generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
+COPY        download_tarballs.sh /tmp/workdir
+COPY        build_source.sh /tmp/workdir
+COPY        install_ffmpeg.sh /tmp/workdir
+
+RUN         chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
+            chmod +x /tmp/workdir/download_tarballs.sh && \
+            chmod +x /tmp/workdir/build_source.sh && \
+            chmod +x /tmp/workdir/install_ffmpeg.sh
 
 ENV         %%ENV%%
 
@@ -115,7 +123,14 @@ RUN         libDeps="libgomp \
                     libpng-dev \
                     # https://github.com/sekrit-twc/zimg
                     zimg \
-                    zimg-dev" && \
+                    zimg-dev \
+                    dav1d \
+                    libdav1d \
+                    dav1d-dev \
+                    svt-av1 \
+                    svt-av1-dev \
+                    libSvtAv1Enc \
+                    libSvtAv1Dec" && \
             apk add --no-cache --update ${libDeps}
 
 
@@ -127,6 +142,8 @@ RUN     buildDeps="autoconf \
                    cmake \
                    coreutils \
                    curl \
+                   wget \
+                   jq \
                    diffutils \
                    expat-dev \
                    file \
@@ -135,10 +152,13 @@ RUN     buildDeps="autoconf \
                    gperf \
                    libtool \
                    make \
+                   meson \
+                   ninja-build \
                    nasm \
                    openssl-dev \
                    python3 \
                    tar \
+                   xz \
                    xcb-proto \
                    yasm \
                    zlib-dev \
@@ -147,21 +167,24 @@ RUN     buildDeps="autoconf \
         apk add --no-cache --update ${buildDeps}
 %%RUN%%
 
-RUN \
-    ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
-    for lib in /usr/local/lib/*.so.*; do ln -sf "${lib##*/}" "${lib%%.so.*}".so; done && \
-    cp ${PREFIX}/bin/* /usr/local/bin/ && \
-    cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-    mkdir -p /usr/local/include && \
-    cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-    mkdir -p /usr/local/lib/pkgconfig && \
-    for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-        sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
-    done
+# RUN \
+#     ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
+#     for lib in /usr/local/lib/*.so.*; do ln -sf "${lib##*/}" "${lib%%.so.*}".so; done && \
+#     cp ${PREFIX}/bin/* /usr/local/bin/ && \
+#     cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
+#     LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
+#     mkdir -p /usr/local/include && \
+#     cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
+#     mkdir -p /usr/local/lib/pkgconfig && \
+#     for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
+#         sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
+#     done
 
 ### Release Stage
-FROM        base as release
+# FROM        alpine:3.20 AS release
+# RUN         apk add --no-cache --update bash less tree file vim
+# COPY        --from=builder /usr/local /usr/local
+
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
@@ -169,5 +192,3 @@ ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
-
-COPY --from=build /usr/local /usr/local

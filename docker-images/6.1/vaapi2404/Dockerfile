@@ -5,22 +5,18 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:24.04 as base
+# Stage 1: Build
+FROM       ubuntu:24.04 AS builder
 
 WORKDIR     /tmp/workdir
 
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates openssl expat libgomp1 && \
-        apt-get autoremove -y && \
-        apt-get clean -y
+COPY generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
+COPY download_tarballs.sh /tmp/workdir
+COPY build_source.sh /tmp/workdir
+COPY install_ffmpeg.sh /tmp/workdir
 
-FROM base as build
 
-ENV         ENV FFMPEG_VERSION=6.1.2
-
-# FFMPEG_VERSION=% % FFMPEG_VERSION % % \
-#    KVAZAAR_VERSION=2.3.1 \
-#    LIBVMAF_VERSION=3.0.0
+ENV FFMPEG_VERSION=6.1.2
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
@@ -111,71 +107,95 @@ ARG LIBDRM_PKGS="libbsd0 libdrm-dev libdrm2 libxcb1-dev libxcb1"
 
 ENV MAKEFLAGS="-j2"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
+
 ENV PREFIX="/opt/ffmpeg"
 ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"
 
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+# Before autoremove and clean: Image was 217.01MB
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim && \
+        chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
+        chmod +x /tmp/workdir/download_tarballs.sh && \
+        chmod +x /tmp/workdir/build_source.sh && \
+        chmod +x /tmp/workdir/install_ffmpeg.sh
+
 RUN      buildDeps="autoconf \
                     automake \
                     cmake \
+                    build-essential \
+                    texinfo \
                     curl \
+                    wget \
+                    tar \
                     bzip2 \
                     libexpat1-dev \
-                    g++ \
                     gcc \
                     git \
+                    git-core \
                     gperf \
                     libtool \
                     make \
                     meson \
+                    ninja-build \
                     nasm \
                     perl \
                     pkg-config \
-                    libssl-dev \
+                    python3 \
                     yasm \
+                    zlib1g-dev \
+                    libfreetype6-dev \
+                    libgnutls28-dev \
+                    libsdl2-dev \
                     libva-dev \
-                    zlib1g-dev" && \
+                    libvdpau-dev \
+                    libnuma-dev \
+                    libdav1d-dev \
+                    openssl \
+                    libssl-dev \
+                    expat \
+                    libgomp1" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
+
 RUN \
         echo "Installing dependencies..." && \
         apt-get install -yq --no-install-recommends ${OPENCORE_PKGS} ${X264_PKGS} ${X265_PKGS} ${OGG_PKGS} ${OPUS_PKGS} ${VORBIS_PKGS} ${VPX_PKGS} ${WEBP_PKGS} ${MP3LAME_PKGS} ${XVIDCORE_PKGS} ${FDKAAC_PKGS} ${OPENJP_PKGS} ${FREETYPE_PKGS} ${VIDSTAB_PKGS} ${FRIBIDI_PKGS} ${FONTCONFIG_PKGS} ${LIBASS_PKGS} ${AOM_PKGS} ${SVTAV1_PKGS} ${DAV1D_PKGS} ${XORG_MACROS_PKGS} ${XPROTO_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${BLURAY_PKGS} ${ZMQ_PKGS} ${PNG_PKGS} ${ARIBB24_PKGS} ${ZIMG_PKGS} ${THEORA_PKGS} ${SRT_PKGS} ${LIBDRM_PKGS}
 
+RUN \
+	apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver
+
         # apt install libdrm-dev
 
-        ## libvmaf https://github.com/Netflix/vmaf
+## libvmaf https://github.com/Netflix/vmaf
+## https://github.com/Netflix/vmaf/issues/788#issuecomment-756098059
 RUN \
         echo "Adding g++ for VMAF build" && \
         apt-get install -yq g++
 
 # Note: pass '--library-list lib1,lib2,lib3 for more control.
 #       Here we have 3 libs that we have to build from source
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf,ffmpeg
-
-## when  debugging you can pass in || true to the end of the next 3 commands
-## to keep the build going even if one of the steps fails
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf
 RUN /tmp/workdir/download_tarballs.sh
-
 RUN /tmp/workdir/build_source.sh
 
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+
+## when  debugging you can pass in || true to the end of the command
+## to keep the build going even if one of the steps fails
 RUN /tmp/workdir/install_ffmpeg.sh
 
-## cleanup
-RUN \
-        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
-        for lib in /usr/local/lib/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
-        cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-        cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-        mkdir -p /usr/local/lib/pkgconfig && \
-        for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-          sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
-        done
 
-FROM        base AS release
+
+# Stage 2: Final Image ( shrink the size back down )
+FROM ubuntu:24.04
+COPY --from=builder /usr/local /usr/local/
+
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
@@ -183,13 +203,3 @@ ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
-
-COPY --from=build /usr/local /usr/local/
-
-RUN \
-	apt-get update -y && \
-	apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver && \
-	rm -rf /var/lib/apt/lists/*
-
-# Let's make sure the app built correctly
-# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output

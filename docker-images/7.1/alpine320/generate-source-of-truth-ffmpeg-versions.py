@@ -51,6 +51,7 @@ FONTCONFIG = {"version": "2.15.0", "release_date": "2023-12-22"}
 LIBASS = {"version": "0.17.3", "release_date": "2024-07-02"}
 KVAAZAAR = {"version": "2.3.1", "release_date": "2024-04-10"}
 AOM = {"version": "3.10.0", "release_date": "2024-08-01"}
+NV_CODEC = {"version": "12.2.72.0", "release_date": "2024-03-31"}
 SVTAV1 = {"version": "2.2.1", "release_date": "2024-08-01"}
 XORG_MACROS = {"version": "1.20.1", "release_date": "2024-04-16"}
 XPROTO = {"version": "7.0.31", "release_date": "2016-09-23"}
@@ -389,6 +390,23 @@ LIBRARIES = OrderedDict(
             },
         ),
         (
+            "nvidia-codec-headers",
+            {
+                "link": "https://github.com/FFmpeg/nv-codec-headers",
+                "version": NV_CODEC["version"],
+                "version_link": "",
+                "release_date": NV_CODEC["release_date"],
+                "license_name": "",
+                "license_link": "",
+                "build_info": {
+                    "download_link": f"https://github.com/FFmpeg/nv-codec-headers/releases/download/n{NV_CODEC['version']}/nv-codec-headers-{NV_CODEC['version']}.tar.gz",
+                    # "download_link": f"https://github.com/FFmpeg/nv-codec-headers/archive/refs/tags/n{NV_CODEC['version']}.tar.gz",
+                    "build_dir": "/tmp/nv-codec-headers",
+                    "tarball_name": f"nv-codec-headers-{NV_CODEC['version']}.tar.gz",
+                },
+            },
+        ),
+        (
             "libsvtav1",
             {
                 "link": "https://gitlab.com/AOMediaCodec/SVT-AV1",
@@ -467,7 +485,7 @@ LIBRARIES = OrderedDict(
                     "download_link": f"https://www.x.org/releases/individual/lib/libpthread-stubs-{PTHREAD_STUBS['version']}.tar.xz",
                     "build_dir": "/tmp/libpthread-stubs",
                     "tarball_name": f"libpthread-stubs-{PTHREAD_STUBS['version']}.tar.xz",
-                    "using_source_build": False,
+                    # "using_source_build": False,
                 },
             },
         ),

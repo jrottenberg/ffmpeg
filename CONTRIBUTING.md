@@ -66,21 +66,28 @@ $ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-ubuntu2404
 $ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-edge-desktop-build:latest
 ```
 
--  7.1-nvidia2204 ( the older LTS one )
-
-```sh
-$ ./update.py; time docker build --no-cache --platform linux/amd64 -t ffmpeg-7.1-nvidia2204-desktop-build docker-images/7.1/nvidia2204
-```
-
 - 7.1-nvidia2404
 
 ```sh
-$ ./update.py; time docker build --no-cache --platform linux/amd64 -t ffmpeg-7.1-nvidia2404-desktop-build docker-images/7.1/nvidia2404
+$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-nvidia2404-desktop-build docker-images/7.1/nvidia2404
+$ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-nvidia2404-desktop-build:latest
 ```
+
+- vaapi2404
 ```sh
-$ ./update.py; docker build --no-cache --platform linux/amd64 -t ffmpeg-5.1-alpine320-desktop-build docker-images/5.1/alpine320
-$ ./update.py; time docker build --no-cache --platform linux/amd64 -t ffmpeg-7.1-scratch320-desktop-build docker-images/7.1/scratch320
-$ ./update.py; time docker build --no-cache --platform linux/amd64 -t ffmpeg-6.1-scratch320-desktop-build docker-images/6.1/scratch320
+$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-vaapi2404-desktop-build docker-images/7.1/vaapi2404
+$ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-vaapi2404-desktop-build:latest
+```
+
+- alpine320
+```sh
+$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-alpine320-desktop-build docker-images/7.1/alpine320
+$ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-alpine320-desktop-build:latest
+```
+
+```sh
+$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-scratch320-desktop-build docker-images/7.1/scratch320
+$ docker run -it --rm --entrypoint='sh' --platform="linux/amd64" ffmpeg-7.1-scratch320-desktop-build:latest
 ```
 
 </details>

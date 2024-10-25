@@ -5,58 +5,74 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-FROM        ubuntu:24.04 as base
+# Stage 1: Build
+FROM       ubuntu:24.04 AS builder
 
 WORKDIR     /tmp/workdir
 
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ca-certificates openssl expat libgomp1 && \
-        apt-get autoremove -y && \
-        apt-get clean -y
+COPY generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
+COPY download_tarballs.sh /tmp/workdir
+COPY build_source.sh /tmp/workdir
+COPY install_ffmpeg.sh /tmp/workdir
 
-FROM base as build
 
-ENV         %%ENV%%
+%%ENV%%
 
 ARG DEBIAN_FRONTEND=noninteractive
+
+# Before autoremove and clean: Image was 217.01MB
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim && \
+        chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
+        chmod +x /tmp/workdir/download_tarballs.sh && \
+        chmod +x /tmp/workdir/build_source.sh && \
+        chmod +x /tmp/workdir/install_ffmpeg.sh
 
 RUN      buildDeps="autoconf \
                     automake \
                     cmake \
+                    build-essential \
+                    texinfo \
                     curl \
+                    wget \
+                    tar \
                     bzip2 \
                     libexpat1-dev \
-                    g++ \
                     gcc \
                     git \
+                    git-core \
                     gperf \
                     libtool \
                     make \
                     meson \
+                    ninja-build \
                     nasm \
                     perl \
                     pkg-config \
-                    libssl-dev \
+                    python3 \
                     yasm \
+                    zlib1g-dev \
+                    libfreetype6-dev \
+                    libgnutls28-dev \
+                    libsdl2-dev \
                     libva-dev \
-                    zlib1g-dev" && \
+                    libvdpau-dev \
+                    libnuma-dev \
+                    libdav1d-dev \
+                    openssl \
+                    libssl-dev \
+                    expat \
+                    libgomp1" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
-%%RUN%%
-## cleanup
-RUN \
-        ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
-        for lib in /usr/local/lib/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
-        cp ${PREFIX}/bin/* /usr/local/bin/ && \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-        LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-        cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-        mkdir -p /usr/local/lib/pkgconfig && \
-        for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-          sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
-        done
 
-FROM        base AS release
+%%RUN%%
+
+
+# Stage 2: Final Image ( shrink the size back down )
+FROM ubuntu:24.04
+COPY --from=builder /usr/local /usr/local/
+
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
@@ -64,13 +80,3 @@ ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
-
-COPY --from=build /usr/local /usr/local/
-
-RUN \
-	apt-get update -y && \
-	apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver && \
-	rm -rf /var/lib/apt/lists/*
-
-# Let's make sure the app built correctly
-# Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
