@@ -399,7 +399,6 @@ extract_tarball() {
     fi
 }
 
-
 build_support_libraries() {
     local librariesRaw="$(jq -r '.[] | .library_name' $manifestJsonFile)"
     local libs=( $librariesRaw )

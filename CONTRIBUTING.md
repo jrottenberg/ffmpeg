@@ -106,6 +106,8 @@ In the bash shell, run the following commands
    $ ffmpeg
    $ ffmpeg -h
    $ ldd `which ffmpeg`
+   Note: this next command on alipne will need to be modified to look in '/usr/lib/' insteasd of '/usr/local/'
+         but they are all there
    $ for i in ogg amr vorbis theora mp3lame opus vpx xvid fdk x264 x265;do echo $i; find /usr/local/ -name *$i*;done
    $ ffmpeg -buildconf
 

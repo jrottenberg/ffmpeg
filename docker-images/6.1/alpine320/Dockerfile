@@ -122,7 +122,7 @@ RUN         libDeps="libgomp \
                     # https://xcb.freedesktop.org/
                     # https://www.x.org/archive//individual/util/util-macros-
                     util-macros \
-                    # https://www.x.org/archive/individual/proto/xproto-
+                    # https://www.x.org/archive/individual/proto/
                     xorgproto \
                     # https://www.x.org/archive/individual/lib/libXau-
                     libxau \

@@ -113,12 +113,22 @@ RUN     buildDeps="autoconf \
                    openssl-dev \
                    python3 \
                    tar \
+                   xz \
                    bzip2 \
                    xcb-proto \
                    yasm \
                    zlib-dev \
                    alpine-sdk \
-                   linux-headers" && \
+                   linux-headers\
+                   ## https://www.fribidi.org/
+                   fribidi \
+                   fribidi-static \
+                   fribidi-dev\
+                   # https://github.com/libass/libass
+                   libass \
+                   libass-dev\
+                   # https://www.x.org/archive/individual/proto/
+                   xorgproto" && \
         apk add --no-cache --update ${buildDeps}
 
 #RUN     apk add --no-cache --update meson samuri
@@ -173,21 +183,11 @@ libvidstab
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
-# probably not going to work
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list fribidi
-RUN /tmp/workdir/download_tarballs.sh
-RUN /tmp/workdir/build_source.sh
-
 # additional batch of libraries ( split into docker layers, to allow for caching )
 RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list fontconfig
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
-
-# probably not going to work
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libass
-RUN /tmp/workdir/download_tarballs.sh
-RUN /tmp/workdir/build_source.sh
 
 # additional batch of libraries ( split into docker layers, to allow for caching )
 RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar
@@ -203,7 +203,8 @@ RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
 # additional batch of libraries ( split into docker layers, to allow for caching )
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list xproto,libxau
+# note: took out 'xproto' because of the configure.guess error
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libxau
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
