@@ -29,65 +29,6 @@ ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/
 ENV PREFIX="/opt/ffmpeg"
 ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"
 
-# FFMPEG_VERSION=5.1.6 \
-#     LIBVMAF_VERSION=2.3.1 \
-#     OPENCOREAMR_VERSION=0.1.6 \
-#     X264_VERSION=20191217-2245-stable \
-#     X265_VERSION=4.0 \
-#     OGG_VERSION=1.3.5 \
-#     OPUS_VERSION=1.3 \
-#     VORBIS_VERSION=1.3.7 \
-#     THEORA_VERSION=1.1.1 \
-#     VPX_VERSION=1.8.0 \
-#     WEBP_VERSION=1.4.0 \
-#     LAME_VERSION=3.100 \
-#     XVID_VERSION=1.3.7 \
-#     FDKAAC_VERSION=2.0.3 \
-#     OPENJPEG_VERSION=2.5.2 \
-#     FREETYPE_VERSION=2.13.3 \
-#     LIBVIDSTAB_VERSION=1.1.1 \
-#     FRIBIDI_VERSION=1.0.16 \
-#     FONTCONFIG_VERSION=2.15.0 \
-#     LIBASS_VERSION=0.17.3 \
-#     KVAZAAR_VERSION=2.3.1 \
-#     AOM_VERSION=v3.10.0 \
-#     XORG_MACROS_VERSION=1.20.1 \
-#     XPROTO_VERSION=7.0.31 \
-#     XAU_VERSION=1.0.11 \
-#     LIBPTHREAD_STUBS_VERSION=0.5 \
-#     LIBXML2_VERSION=2.13.4 \
-#     LIBBLURAY_VERSION=1.3.4 \
-#     LIBZMQ_VERSION=4.3.5 \
-#     LIBSRT_VERSION=1.5.3 \
-#     LIBPNG_VERSION=1.6.44 \
-#     LIBARIBB24_VERSION=1.0.3 \
-#     ZIMG_VERSION=3.0.5 \
-#     SRC=/usr/local
-# #
-#     # CHROMAPRINT_VERSION=1.5.0 \
-#     # LIBXCB_VERSION=1.13.1 \
-#     # XCBPROTO_VERSION=1.13 \
-#     # PYTHON=python3 \
-
-# ARG         OGG_SHA256SUM="0eb4b4b9420a0f51db142ba3f9c64b333f826532dc0f48c6410ae51f4799b664 libogg-1.3.5.tar.gz"
-# ARG         OPUS_SHA256SUM="4f3d69aefdf2dbaf9825408e452a8a414ffc60494c70633560700398820dc550 opus-1.3.tar.gz"
-# ARG         VORBIS_SHA256SUM="0e982409a9c3fc82ee06e08205b1355e5c6aa4c36bca58146ef399621b0ce5ab libvorbis-1.3.7.tar.gz"
-# ARG         THEORA_SHA256SUM="40952956c47811928d1e7922cda3bc1f427eb75680c3c37249c91e949054916b libtheora-1.1.1.tar.gz"
-# ARG         FREETYPE_SHA256SUM="5c3a8e78f7b24c20b25b54ee575d6daa40007a5f4eea2845861c3409b3021747 freetype-2.13.3.tar.gz"
-# # ARG         FRIBIDI_SHA256SUM="3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8 1.0.16.tar.gz"
-# # ARG         LIBVIDSTAB_SHA256SUM="14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb v1.1.0.tar.gz"
-# # ARG         LIBASS_SHA256SUM="8fadf294bf701300d4605e6f1d92929304187fca4b8d8a47889315526adbafd7 0.13.7.tar.gz"
-# ARG         LIBBLURAY_SHA512SUM="94dbf3b68d1c23fe4648c153cc2f0c251886fac0a6b6bbe3a77caabaa5322682f712afe4a7b6b16ca3f06744fbc0e1ca872209a32898dcf0ae182055d335aec1 libbluray-1.3.4.tar.bz2"
-# ARG         LIBZMQ_SHA256SUM="ae933b1e98411fd7cb8309f9502d2737 zeromq-4.3.5.tar.gz"
-# ARG         LIBARIBB24_SHA256SUM="f61560738926e57f9173510389634d8c06cabedfa857db4b28fb7704707ff128 v1.0.3.tar.gz"
-
-
-
-# ARG         MAKEFLAGS="-j2"
-# ARG         PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig"
-# ARG         PREFIX="/opt/ffmpeg"
-# ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
-
 
 
 RUN     buildDeps="autoconf \
@@ -138,8 +79,6 @@ RUN     buildDeps="autoconf \
                    libdav1d \
                    dav1d-dev" && \
         apk add --no-cache --update ${buildDeps}
-
-#RUN     apk add --no-cache --update meson samuri
 
 # Note: pass '--library-list' to 'generate-source-of-truth-ffmpeg-versions.py'
 #       ex: '--library-list lib1,lib2,lib3'
@@ -249,10 +188,10 @@ RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmp
 ## when  debugging you can pass in || true to the end of the next 3 commands
 ## to keep the build going even if one of the steps fails
 RUN /tmp/workdir/download_tarballs.sh
-RUN /tmp/workdir/build_source.sh || true
+RUN /tmp/workdir/build_source.sh
 
 # TODO add a strip and fakeroot argument
-RUN /tmp/workdir/install_ffmpeg.sh || true
+RUN /tmp/workdir/install_ffmpeg.sh --strip
 
 
 
@@ -686,18 +625,10 @@ RUN /tmp/workdir/install_ffmpeg.sh || true
 #         make qt-faststart && cp qt-faststart ${PREFIX}/bin/
 
 
-# RUN \
-#         mkdir -p /tmp/fakeroot/lib  && \
-#         ldd ${PREFIX}/bin/ffmpeg | cut -d ' ' -f 3 | strings | xargs -I R cp R /tmp/fakeroot/lib/ && \
-#         for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
-#         cp -r ${PREFIX}/bin /tmp/fakeroot/bin/ && \
-#         cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/ && \
-#         LD_LIBRARY_PATH=/tmp/fakeroot/lib /tmp/fakeroot/bin/ffmpeg -buildconf
-
 ### Release Stage
-# FROM        alpine:3.20 AS release
-# RUN         apk add --no-cache --update bash less tree file vim
-# COPY        --from=builder /usr/local /usr/local
+FROM        alpine:3.20 AS release
+RUN         apk add --no-cache --update bash less tree file vim
+COPY        --from=builder /usr/local /usr/local
 # COPY --from=build /tmp/fakeroot/ /
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \

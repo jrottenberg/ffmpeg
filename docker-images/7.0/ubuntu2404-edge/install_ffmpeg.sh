@@ -20,16 +20,16 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-OS_NAME=$(uname -s)
-is_ubuntu=false
-is_alpine=false
-if [[ "$OS_NAME" == "Linux" ]]; then
-    if grep -q "Ubuntu" /etc/os-release; then
-        is_ubuntu=true
-    elif grep -q "Alpine Linux" /etc/alpine-release; then
-        is_alpine=true
-    fi
-fi
+# OS_NAME=$(uname -s)
+# is_ubuntu=false
+# is_alpine=false
+# if [[ "$OS_NAME" == "Linux" ]]; then
+#     if grep -q "Ubuntu" /etc/os-release; then
+#         is_ubuntu=true
+#     elif grep -q "Alpine Linux" /etc/alpine-release; then
+#         is_alpine=true
+#     fi
+# fi
 
 install_ffmpeg() {
     ## cleanup
@@ -78,16 +78,20 @@ install_ffmpeg() {
 
     # Strip libraries if requested
     if $strip_libs; then
+        # 106 megs down to 68 megs
+        echo "Stripping libraries"
         for lib in /usr/local/lib/*.so.*; do
             strip --strip-all "$lib"
         done
+        # thinking, do I need to run ffmpeg -buildconf again? ( I don't think so )
     fi
-    if $is_alpine && $strip_libs; then
-        for lib in /usr/lib/*.so.*; do
-            # some of the support libs in the alpine build are are here
-            strip --strip-all "$lib"
-        done
-    fi
+    # if $is_alpine && $strip_libs; then
+    #     for lib in /usr/lib/*.so.*; do
+    #         # some of the support libs in the alpine build are are here
+    #         # I actually don't think this works
+    #         strip --strip-all "$lib" 2>/dev/null || true
+    #     done
+    # fi
 }
 
 install_ffmpeg
