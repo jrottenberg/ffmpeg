@@ -25,8 +25,6 @@ Below is a table that provides examples for the nomenclature:
 | --- | --- | --- | --- | --- |
 | ffmpeg-7.1-ubuntu2404 | 24.04 | 5.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | external libraries are installed from os packages, and ffmpeg is built from source. See [Ubunu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. |
 | ffmpeg-7.0-ubuntu2404-edge | 24.04 | 5.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | libs and ffmpeg are built from source. See [Ubunu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. |
-| ffmpeg-7.0-ubuntu2404-debug | 24.04 | 5.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | Developer only build, disabled when checked in. This will make a large container with all of the source built, if something fails the docker image still builds |
-|
 | ffmpeg-6.1-vaapi2404 | 24.04 | 5.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | like: `ubuntu2404` but enables: [Video Acceleration API (VAAPI)](https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI) in ffmpeg |
 | ffmpeg-5.1-nvidia2204-edge | 22.04 | 5.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | Built w/ [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled |
 | ffmpeg-7.1-alpine320 | 3.20 | 5.x - 7.x | [alpine](https://alpinelinux.org/releases/) | vendor libs, but ffmpeg is built from source |
