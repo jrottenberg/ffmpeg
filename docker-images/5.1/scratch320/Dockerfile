@@ -629,7 +629,7 @@ RUN /tmp/workdir/install_ffmpeg.sh --strip
 FROM        alpine:3.20 AS release
 RUN         apk add --no-cache --update bash less tree file vim
 COPY        --from=builder /usr/local /usr/local
-# COPY --from=build /tmp/fakeroot/ /
+COPY        --from=builder /tmp/fakeroot/ /
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg

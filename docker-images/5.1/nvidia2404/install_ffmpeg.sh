@@ -20,17 +20,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# OS_NAME=$(uname -s)
-# is_ubuntu=false
-# is_alpine=false
-# if [[ "$OS_NAME" == "Linux" ]]; then
-#     if grep -q "Ubuntu" /etc/os-release; then
-#         is_ubuntu=true
-#     elif grep -q "Alpine Linux" /etc/alpine-release; then
-#         is_alpine=true
-#     fi
-# fi
-
 install_ffmpeg() {
     ## cleanup
     # This is used for both the source and packages version ( be robust about looking for libs to copy )
@@ -94,4 +83,18 @@ install_ffmpeg() {
     # fi
 }
 
-install_ffmpeg
+install_with_striped_libs() {
+    mkdir -p /tmp/fakeroot/lib
+    ldd ${PREFIX}/bin/ffmpeg | cut -d ' ' -f 3 | strings | xargs -I R cp R /tmp/fakeroot/lib/
+    for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done
+    cp -r ${PREFIX}/bin /tmp/fakeroot/bin/
+    cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/
+    LD_LIBRARY_PATH=/tmp/fakeroot/lib /tmp/fakeroot/bin/ffmpeg -buildconf
+}
+
+# if strip_libs is true then call the install_with_striped_libs function
+if $strip_libs; then
+    install_with_striped_libs
+else
+    install_ffmpeg
+fi
