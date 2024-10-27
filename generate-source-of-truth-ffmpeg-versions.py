@@ -36,7 +36,7 @@ paste into the README.md file of the repository.
 FFMPEG_71 = {"version": "7.1", "release_date": "2024-09-30"}
 FFMPEG_70 = {"version": "7.0", "release_date": "2024-04-05"}
 FFMPEG_61 = {"version": "6.1", "release_date": "2023-11-11"}
-FFMPEG_51 = {"version": "5.1", "release_date": "2022-06-22"}
+# FFMPEG_51 = {"version": "5.1", "release_date": "2022-06-22"}
 OGG = {"version": "1.3.5", "release_date": "2021-06-04"}
 OPENCOREAMR = {"version": "0.1.6", "release_date": "2022-08-01"}
 VORBIS = {"version": "1.3.7", "release_date": "2020-07-04"}
@@ -690,22 +690,22 @@ LIBRARIES = OrderedDict(
                 },
             },
         ),
-        (
-            "ffmpeg-5.1",
-            {
-                "link": "http://ffmpeg.org/",
-                "version": FFMPEG_51["version"],
-                "version_link": "http://ffmpeg.org/releases/",
-                "release_date": FFMPEG_51["release_date"],
-                "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
-                "license_link": "https://ffmpeg.org/legal.html",
-                "build_info": {
-                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_51['version']}.tar.bz2",
-                    "build_dir": "/tmp/ffmpeg",
-                    "tarball_name": f"ffmpeg-{FFMPEG_51['version']}.tar.bz2",
-                },
-            },
-        ),
+        # (
+        #     "ffmpeg-5.1",
+        #     {
+        #         "link": "http://ffmpeg.org/",
+        #         "version": FFMPEG_51["version"],
+        #         "version_link": "http://ffmpeg.org/releases/",
+        #         "release_date": FFMPEG_51["release_date"],
+        #         "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
+        #         "license_link": "https://ffmpeg.org/legal.html",
+        #         "build_info": {
+        #             "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_51['version']}.tar.bz2",
+        #             "build_dir": "/tmp/ffmpeg",
+        #             "tarball_name": f"ffmpeg-{FFMPEG_51['version']}.tar.bz2",
+        #         },
+        #     },
+        # ),
     ]
 )
 # come back to this problem, I think yaml configuration might be better.

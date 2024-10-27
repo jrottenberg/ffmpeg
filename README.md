@@ -23,14 +23,14 @@ Below is a table that provides examples for the nomenclature:
 
 | image name | OS ver | ffmpeg ver | variant | description
 | --- | --- | --- | --- | --- |
-| ffmpeg-7.1-ubuntu2404 | 24.04 | 5.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | external libraries are installed from os packages, and ffmpeg is built from source. See [Ubunu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. |
-| ffmpeg-7.1-ubuntu2404-edge | 24.04 | 5.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | libs and ffmpeg are built from source. See [Ubunu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. |
-| ffmpeg-7.1-vaapi2404 | 24.04 | 5.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | like: `ubuntu2404` but enables: [Video Acceleration API (VAAPI)](https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI) in ffmpeg |
-| ffmpeg-7.1-nvidia2204-edge | 22.04 | 5.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | Built w/ [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled |
-| ffmpeg-7.1-alpine320 | 3.20 | 5.x - 7.x | [alpine](https://alpinelinux.org/releases/) | vendor libs, but ffmpeg is built from source |
-| ffmpeg-7.1-scratch | 3.20 | 5.x - 7.x | [alpine](https://alpinelinux.org/releases/) | vendor libs, and ffmpeg are built from source. Also we make the distro as small as possible by not installing any packages in base and striping symbols of installed libs |
+| ffmpeg-7.1-ubuntu2404 | 24.04 | 6.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | external libraries are installed from os packages, and ffmpeg is built from source. See [Ubunu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. |
+| ffmpeg-7.1-ubuntu2404-edge | 24.04 | 6.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | libs and ffmpeg are built from source. See [Ubunu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. |
+| ffmpeg-7.1-vaapi2404 | 24.04 | 6.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | like: `ubuntu2404` but enables: [Video Acceleration API (VAAPI)](https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI) in ffmpeg |
+| ffmpeg-7.1-nvidia2204-edge | 22.04 | 6.x - 7.x | [ubuntu](https://releases.ubuntu.com/) | Built w/ [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled |
+| ffmpeg-7.1-alpine320 | 3.20 | 6.x - 7.x | [alpine](https://alpinelinux.org/releases/) | vendor libs, but ffmpeg is built from source |
+| ffmpeg-7.1-scratch | 3.20 | 6.x - 7.x | [alpine](https://alpinelinux.org/releases/) | vendor libs, and ffmpeg are built from source. Also we make the distro as small as possible by not installing any packages in base and striping symbols of installed libs |
 
-ffmpeg `<version>` can be one of the following: `5.1`, `6.1`, `7.0`, `7.1` with the above table.
+ffmpeg `<version>` can be one of the following: `6.1`, `7.0`, `7.1` with the above table.
 
 Note: The current versions of ffmpeg supported are  anything newer than 3 years old and not exceeded the end-of-life
 
@@ -307,7 +307,6 @@ These libs are included in the package images as well, but the version numbers m
 | [ffmpeg-7.1](http://ffmpeg.org/) | [7.1](http://ffmpeg.org/releases/) | 2024-09-30 | [ffmpeg-7.1.tar.bz2](https://ffmpeg.org/releases/ffmpeg-7.1.tar.bz2) | No | [GNU Lesser General Public License (LGPL) version 2.1](https://ffmpeg.org/legal.html) |
 | [ffmpeg-7.0](http://ffmpeg.org/) | [7.0](http://ffmpeg.org/releases/) | 2024-04-05 | [ffmpeg-7.0.tar.bz2](https://ffmpeg.org/releases/ffmpeg-7.0.tar.bz2) | No | [GNU Lesser General Public License (LGPL) version 2.1](https://ffmpeg.org/legal.html) |
 | [ffmpeg-6.1](http://ffmpeg.org/) | [6.1](http://ffmpeg.org/releases/) | 2023-11-11 | [ffmpeg-6.1.tar.bz2](https://ffmpeg.org/releases/ffmpeg-6.1.tar.bz2) | No | [GNU Lesser General Public License (LGPL) version 2.1](https://ffmpeg.org/legal.html) |
-| [ffmpeg-5.1](http://ffmpeg.org/) | [5.1](http://ffmpeg.org/releases/) | 2022-06-22 | [ffmpeg-5.1.tar.bz2](https://ffmpeg.org/releases/ffmpeg-5.1.tar.bz2) | No | [GNU Lesser General Public License (LGPL) version 2.1](https://ffmpeg.org/legal.html) |
 
 
 
