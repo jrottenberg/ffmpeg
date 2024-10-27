@@ -21,7 +21,7 @@ RUN         chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py &&
             chmod +x /tmp/workdir/build_source.sh && \
             chmod +x /tmp/workdir/install_ffmpeg.sh
 
-ENV         %%ENV%%
+%%ENV%%
 
 
 RUN     buildDeps="autoconf \
@@ -77,7 +77,7 @@ RUN     buildDeps="autoconf \
 
 ### Release Stage
 FROM        alpine:3.20 AS release
-RUN         apk add --no-cache --update bash less tree file vim
+# RUN         apk add --no-cache --update bash less tree file vim
 COPY        --from=builder /usr/local /usr/local
 COPY        --from=builder /tmp/fakeroot/ /
 

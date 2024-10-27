@@ -187,10 +187,7 @@ for version in keep_version:
         #     template = tmpfile.read()
         with open(TEMPLATE_STR.format(variant["name"]), "r") as tmpfile:
             template = tmpfile.read()
-        # Note: the debug, doc, ffplay, shared, -ldl, gpl. ( the first 6 flags) are
-        #       prebuilt in Docker-run-ubuntu template to prevent conflicts
-        # Note2: I took that out ( no need to build ffmpeg twice anymore )
-        # Note3: Droping some notes here, in needs to come back.
+
         FFMPEG_CONFIG_FLAGS = [
             "--disable-debug",
             "--disable-doc",

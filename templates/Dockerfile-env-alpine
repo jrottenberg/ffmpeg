@@ -3,18 +3,3 @@ ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/
 
 ENV PREFIX="/opt/ffmpeg"
 ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"
-
-
-# FFMPEG_VERSION=%%FFMPEG_VERSION%% \
-#     LIBVMAF_VERSION=2.3.1 \
-#     KVAZAAR_VERSION=2.0.0 \
-#     LIBPTHREAD_STUBS_VERSION=0.4 \
-#     LIBBLURAY_VERSION=1.1.2 \
-#     LIBARIBB24_VERSION=1.0.3 \
-
-# ARG         LIBARIBB24_SHA256SUM="f61560738926e57f9173510389634d8c06cabedfa857db4b28fb7704707ff128 v1.0.3.tar.gz"
-
-# ARG         MAKEFLAGS="-j2"
-# ARG         PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig"
-# ARG         PREFIX="/opt/ffmpeg"
-# ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"

@@ -657,9 +657,9 @@ LIBRARIES = OrderedDict(
         ),
     ]
 )
-# come back to this problem, I think yaml configuration is better.
+# come back to this problem, I think yaml configuration might be better.
 # with open('libraries.json', 'r') as f:
-#     data = json.load(f)
+#     data = json.load(f) # todo this should be yaml config
 #     order_list = data['build_order']
 #     LIBRARIES = OrderedDict((key, data['libraries'][key]) for key in order_list)
 

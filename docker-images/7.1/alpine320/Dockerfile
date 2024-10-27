@@ -20,26 +20,11 @@ RUN         chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py &&
             chmod +x /tmp/workdir/build_source.sh && \
             chmod +x /tmp/workdir/install_ffmpeg.sh
 
-ENV         ENV MAKEFLAGS="-j2"
+ENV MAKEFLAGS="-j2"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
 
 ENV PREFIX="/opt/ffmpeg"
 ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"
-
-
-# FFMPEG_VERSION=7.1 \
-#     LIBVMAF_VERSION=2.3.1 \
-#     KVAZAAR_VERSION=2.0.0 \
-#     LIBPTHREAD_STUBS_VERSION=0.4 \
-#     LIBBLURAY_VERSION=1.1.2 \
-#     LIBARIBB24_VERSION=1.0.3 \
-
-# ARG         LIBARIBB24_SHA256SUM="f61560738926e57f9173510389634d8c06cabedfa857db4b28fb7704707ff128 v1.0.3.tar.gz"
-
-# ARG         MAKEFLAGS="-j2"
-# ARG         PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig"
-# ARG         PREFIX="/opt/ffmpeg"
-# ARG         LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64"
 
 
 RUN         libDeps="libgomp \
@@ -185,6 +170,7 @@ RUN     buildDeps="autoconf \
                    alpine-sdk \
                    linux-headers" && \
         apk add --no-cache --update ${buildDeps}
+
 # Note: pass '--library-list lib1,lib2,lib3 for more control.
 #       Here we have 3 libs that we have to build from source
 # vmaf
@@ -200,127 +186,16 @@ RUN /tmp/workdir/build_source.sh
 
 RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg
 RUN /tmp/workdir/download_tarballs.sh
-RUN /tmp/workdir/build_source.sh || true
+RUN /tmp/workdir/build_source.sh
 
 ## when  debugging you can pass in || true to the end of the command
 ## to keep the build going even if one of the steps fails
-RUN /tmp/workdir/install_ffmpeg.sh || true
+RUN /tmp/workdir/install_ffmpeg.sh
 
-
-# ## libvmaf https://github.com/Netflix/vmaf
-# RUN \
-#         if which meson || false; then \
-#         echo "Building VMAF." && \
-#         DIR=/tmp/vmaf && \
-#         mkdir -p ${DIR} && \
-#         cd ${DIR} && \
-#         curl -sLO https://github.com/Netflix/vmaf/archive/v${LIBVMAF_VERSION}.tar.gz && \
-#         tar -xz --strip-components=1 -f v${LIBVMAF_VERSION}.tar.gz && \
-#         cd /tmp/vmaf/libvmaf && \
-#         meson build --buildtype release --prefix=${PREFIX} && \
-#         ninja -vC build && \
-#         ninja -vC build install && \
-#         mkdir -p ${PREFIX}/share/model/ && \
-#         cp -r /tmp/vmaf/model/* ${PREFIX}/share/model/ && \
-#         rm -rf ${DIR}; \
-#         else \
-#         echo "VMAF skipped."; \
-#         fi
-
-# ## kvazaar https://github.com/ultravideo/kvazaar
-# RUN \
-#         DIR=/tmp/kvazaar && \
-#         mkdir -p ${DIR} && \
-#         cd ${DIR} && \
-#         curl -sLO https://github.com/ultravideo/kvazaar/archive/v${KVAZAAR_VERSION}.tar.gz && \
-#         tar -zx --strip-components=1 -f v${KVAZAAR_VERSION}.tar.gz && \
-#         ./autogen.sh && \
-#         ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
-#         make && \
-#         make install && \
-#         rm -rf ${DIR}
-
-# # libevent && libevent-dev has usr/lib/libevent_pthreads ???
-# RUN \
-#         DIR=/tmp/libpthread-stubs && \
-#         mkdir -p ${DIR} && \
-#         cd ${DIR} && \
-#         curl -sLO https://xcb.freedesktop.org/dist/libpthread-stubs-${LIBPTHREAD_STUBS_VERSION}.tar.gz && \
-#         tar -zx --strip-components=1 -f libpthread-stubs-${LIBPTHREAD_STUBS_VERSION}.tar.gz && \
-#         ./configure --prefix="${PREFIX}" && \
-#         make && \
-#         make install && \
-#         rm -rf ${DIR}
-
-
-# ## libbluray - Requires libxml, freetype, and fontconfig
-# RUN \
-#         DIR=/tmp/libbluray && \
-#         mkdir -p ${DIR} && \
-#         cd ${DIR} && \
-#         curl -sLO https://download.videolan.org/pub/videolan/libbluray/${LIBBLURAY_VERSION}/libbluray-${LIBBLURAY_VERSION}.tar.bz2 && \
-#         echo ${LIBBLURAY_SHA256SUM} | sha256sum --check && \
-#         tar -jx --strip-components=1 -f libbluray-${LIBBLURAY_VERSION}.tar.bz2 && \
-#         ./configure --prefix="${PREFIX}" --disable-examples --disable-bdjava-jar --disable-static --enable-shared && \
-#         make && \
-#         make install && \
-#         rm -rf ${DIR}
-
-# ## libaribb24
-# RUN \
-#         DIR=/tmp/b24 && \
-#         mkdir -p ${DIR} && \
-#         cd ${DIR} && \
-#         curl -sLO https://github.com/nkoriyama/aribb24/archive/v${LIBARIBB24_VERSION}.tar.gz && \
-#         echo ${LIBARIBB24_SHA256SUM} | sha256sum --check && \
-#         tar -xz --strip-components=1 -f v${LIBARIBB24_VERSION}.tar.gz && \
-
-#         autoreconf -fiv && \
-#         ./configure CFLAGS="-I${PREFIX}/include -fPIC" --prefix="${PREFIX}" && \
-#         make && \
-#         make install && \
-#         rm -rf ${DIR}
-
-# ## Download ffmpeg https://ffmpeg.org/
-# RUN  \
-#         DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
-#         curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-#         tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2
-#         # ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
-#         # make ;  make install
-
-
-# # ## Build ffmpeg https://ffmpeg.org/
-# RUN  \
-#         DIR=/tmp/ffmpeg && cd ${DIR} && \
-#         ./configure \
-#         % % FFMPEG_CONFIG_FLAGS % % && \
-#         make clean && \
-#         make && \
-#         make install && \
-#         make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
-#         make distclean && \
-#         hash -r && \
-#         cd tools && \
-#         make qt-faststart && cp qt-faststart ${PREFIX}/bin/
-
-
-# RUN \
-#     ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
-#     for lib in /usr/local/lib/*.so.*; do ln -sf "${lib##*/}" "${lib%%.so.*}".so; done && \
-#     cp ${PREFIX}/bin/* /usr/local/bin/ && \
-#     cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-#     LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-#     mkdir -p /usr/local/include && \
-#     cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include && \
-#     mkdir -p /usr/local/lib/pkgconfig && \
-#     for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
-#         sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
-#     done
 
 ### Release Stage
 FROM        alpine:3.20 AS release
-RUN         apk add --no-cache --update bash less tree file vim
+# RUN         apk add --no-cache --update bash less tree file vim
 COPY        --from=builder /usr/local /usr/local
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \

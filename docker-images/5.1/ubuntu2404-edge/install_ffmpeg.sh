@@ -74,13 +74,6 @@ install_ffmpeg() {
         done
         # thinking, do I need to run ffmpeg -buildconf again? ( I don't think so )
     fi
-    # if $is_alpine && $strip_libs; then
-    #     for lib in /usr/lib/*.so.*; do
-    #         # some of the support libs in the alpine build are are here
-    #         # I actually don't think this works
-    #         strip --strip-all "$lib" 2>/dev/null || true
-    #     done
-    # fi
 }
 
 install_with_striped_libs() {

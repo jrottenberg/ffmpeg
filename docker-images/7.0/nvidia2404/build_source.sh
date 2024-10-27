@@ -62,24 +62,6 @@ build_libvorbis() {
 }
 
 build_libvpx() {
-    # local dir=${1}
-    # mkdir -p build; cd build && \
-    # ./configure --prefix="${PREFIX}" --enable-vp8 --enable-vp9 --enable-vp9-highbitdepth --enable-pic --enable-shared \
-    #     --disable-debug --disable-examples --disable-docs --disable-install-bins .. && \
-    # ./configure  --prefix="${PREFIX}" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm &&
-    # cd ${dir}
-    # pwd
-    # ./configure  --prefix="${PREFIX}" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --enable-pic --enable-shared --as=yasm
-    # make
-    # make install
-
-    # cd ~/ffmpeg_sources && \
-    # git -C libvpx pull 2> /dev/null || git clone --depth 1 https://chromium.googlesource.com/webm/libvpx.git && \
-    # cd libvpx && \
-    # PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm && \
-    # PATH="$HOME/bin:$PATH" make && \
-    # make install
-
     local data=$(jq -r '.[] | select(.library_name == "libvpx")' $manifestJsonFile)
     local dir=$(echo "$data" | jq -r '.build_dir')
     local vpx_version=$(jq -r '.["libvpx"]' $manifestJsonVersionsFile)
@@ -108,6 +90,7 @@ build_libmp3lame() {
     make && \
     make install
 }
+
 
 build_libxvid() {
     # read doc/INSTALL
@@ -283,12 +266,6 @@ build_zimg() {
 
 # Dependancy on libogg
 build_libtheora() {
-    # add sym link for sdl-config
-    # ln -s /usr/bin/sdl2-config /usr/bin/sdl-config && \
-    # currently build does not find sdl-config, and thus no playback support is enabled (probably exacly, the way it was before)
-    # Note: consider installing doxygen so that the api documentation is built
-    #       right now, I did not, so we can keep everything small.
-    # disable examples to advoid the libjpeg sizeof error still in the example code.
     if [ "$is_ubuntu" = true ]; then
         cp /usr/share/misc/config.guess .
     fi
