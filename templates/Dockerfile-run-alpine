@@ -11,7 +11,7 @@ RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libp
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-%%FFMPEG_VERSION%%
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 

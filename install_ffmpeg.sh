@@ -50,6 +50,10 @@ install_ffmpeg() {
     cp -r ${PREFIX}/bin/* /usr/local/bin/
     cp -r ${PREFIX}/share/ffmpeg /usr/local/share/
 
+    if [ ! -d /usr/local/include ]; then
+        mkdir -p /usr/local/include
+    fi
+
     # Build configuration and copy include directories
     LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
     cp -rp ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include

@@ -78,7 +78,7 @@ SKIP_VARIANTS = {
     "4.2": ["alpine313", "ubuntu2404"] + [v["name"] for v in VARIANTS],
     "4.3": ["nvidia2204", "vaapi2204"] + [v["name"] for v in VARIANTS],
     "4.4": ["alpine313", "nvidia2204", "scratch313"] + [v["name"] for v in VARIANTS],
-    "5.1": [],
+    "5.1": [v["name"] for v in VARIANTS],
     "6.1": [],
     "7.0": [],
     "7.1": [],
@@ -312,9 +312,12 @@ for version in keep_version:
         FFMPEG_CONFIG_FLAGS.sort()
 
         COMBINED_CONFIG_FLAGS = " \\\n        ".join(FFMPEG_CONFIG_FLAGS)
-        run_content = RUN_CONTENT.replace(
+        # run content needs two replace statements
+        run_content_flags = RUN_CONTENT.replace(
             "%%FFMPEG_CONFIG_FLAGS%%", COMBINED_CONFIG_FLAGS
         )
+        run_content = run_content_flags.replace("%%FFMPEG_VERSION%%", version[0:3])
+
         env_content = ENV_CONTENT.replace("%%FFMPEG_VERSION%%", version)
         docker_content = template.replace("%%ENV%%", env_content)
         docker_content = docker_content.replace("%%RUN%%", run_content)

@@ -268,6 +268,7 @@ These libs are included in the package images as well, but the version numbers m
 
 
 See `generate-source-of-truth-ffmpeg-versions.py` to update a version
+
 ## FFMPEG Supported Libraries
 The following libraries are used by FFMPEG. The version number and release date are provided along with the license information.
 These version numbers are for the lib source builds, which are 'ubuntu2404-edge' and 'foo'.
@@ -292,6 +293,7 @@ These libs are included in the package images as well, but the version numbers m
 | [fontconfig](https://www.freedesktop.org/wiki/Software/fontconfig/) | [2.15.0](https://www.freedesktop.org/software/fontconfig/release/) | 2023-12-22 | [fontconfig-2.15.0.tar.gz](https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.15.0.tar.gz) | No | []() |
 | [kvazaar](https://github.com/ultravideo/kvazaar) | [2.3.1](https://github.com/ultravideo/kvazaar/releases) | 2024-04-10 | [kvazaar-2.3.1.tar.gz](https://github.com/ultravideo/kvazaar/releases/download/v2.3.1/kvazaar-2.3.1.tar.gz) | No | [BSD 3-Clause](https://github.com/ultravideo/kvazaar/blob/master/LICENSE`) |
 | [aom](https://aomedia.googlesource.com/aom) | [3.10.0](https://aomedia.googlesource.com/aom/+refs) | 2024-08-01 |  | No | [Alliance for Open Media](https://aomedia.org/license/software-license/) |
+| [nvidia-codec-headers](https://github.com/FFmpeg/nv-codec-headers) | [12.2.72.0]() | 2024-03-31 | [nv-codec-headers-12.2.72.0.tar.gz](https://github.com/FFmpeg/nv-codec-headers/releases/download/n12.2.72.0/nv-codec-headers-12.2.72.0.tar.gz) | No | []() |
 | [libsvtav1](https://gitlab.com/AOMediaCodec/SVT-AV1) | [2.2.1](https://gitlab.com/AOMediaCodec/SVT-AV1/-/tags) | 2024-08-01 | [SVT-AV1-v2.2.1.tar.gz](https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v2.2.1/SVT-AV1-v2.2.1.tar.gz) | No | [BSD 3-Clause Clear License](https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/LICENSE.md?ref_type=heads) |
 | [xproto](https://www.x.org/releases/individual/proto/) | [7.0.31](https://www.x.org/releases/individual/proto/) | 2016-09-23 | [xproto-7.0.31.tar.gz](https://www.x.org/releases/individual/proto/xproto-7.0.31.tar.gz) | No | [The MIT License](https://opensource.org/licenses/MIT) |
 | [libpthread-stubs](https://www.x.org/releases/individual/lib/) | [0.5](https://www.x.org/releases/individual/lib/) | 2023-07-18 | [libpthread-stubs-0.5.tar.xz](https://www.x.org/releases/individual/lib/libpthread-stubs-0.5.tar.xz) | No | [The MIT License](https://opensource.org/licenses/MIT) |
@@ -302,7 +304,10 @@ These libs are included in the package images as well, but the version numbers m
 | [libtheora](https://xiph.org/downloads/) | [1.1.1](https://xiph.org/downloads/) | 2010-01-25 | [libtheora-1.1.1.tar.gz](https://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.gz) | No | [BSD-style license](https://git.xiph.org/?p=mirrors/theora.git;a=blob_plain;f=COPYING;hb=HEAD) |
 | [libsrt](https://github.com/Haivision/srt) | [1.5.3](https://github.com/Haivision/srt/releases/) | 2023-09-07 | [srt-v1.5.3.tar.gz](https://github.com/Haivision/srt/archive/refs/tags/v1.5.3.tar.gz) | No | [Mozilla Public License (MPL) version 2.0](https://github.com/Haivision/srt/blob/master/LICENSE) |
 | [libvmaf](https://github.com/Netflix/vmaf) | [3.0.0](https://github.com/Netflix/vmaf/releases) | 2023-12-07 | [vmaf-v3.0.0.tar.gz](https://github.com/Netflix/vmaf/archive/refs/tags/v3.0.0.tar.gz) | No | [BSD-2-Clause](https://github.com/Netflix/vmaf/blob/master/LICENSE) |
-| [ffmpeg](http://ffmpeg.org/) | [7.1](http://ffmpeg.org/releases/) | 2024-09-30 | [ffmpeg-7.1.tar.bz2](https://ffmpeg.org/releases/ffmpeg-7.1.tar.bz2) | No | [GNU Lesser General Public License (LGPL) version 2.1](https://ffmpeg.org/legal.html) |
+| [ffmpeg-7.1](http://ffmpeg.org/) | [7.1](http://ffmpeg.org/releases/) | 2024-09-30 | [ffmpeg-7.1.tar.bz2](https://ffmpeg.org/releases/ffmpeg-7.1.tar.bz2) | No | [GNU Lesser General Public License (LGPL) version 2.1](https://ffmpeg.org/legal.html) |
+| [ffmpeg-7.0](http://ffmpeg.org/) | [7.0](http://ffmpeg.org/releases/) | 2024-04-05 | [ffmpeg-7.0.tar.bz2](https://ffmpeg.org/releases/ffmpeg-7.0.tar.bz2) | No | [GNU Lesser General Public License (LGPL) version 2.1](https://ffmpeg.org/legal.html) |
+| [ffmpeg-6.1](http://ffmpeg.org/) | [6.1](http://ffmpeg.org/releases/) | 2023-11-11 | [ffmpeg-6.1.tar.bz2](https://ffmpeg.org/releases/ffmpeg-6.1.tar.bz2) | No | [GNU Lesser General Public License (LGPL) version 2.1](https://ffmpeg.org/legal.html) |
+| [ffmpeg-5.1](http://ffmpeg.org/) | [5.1](http://ffmpeg.org/releases/) | 2022-06-22 | [ffmpeg-5.1.tar.bz2](https://ffmpeg.org/releases/ffmpeg-5.1.tar.bz2) | No | [GNU Lesser General Public License (LGPL) version 2.1](https://ffmpeg.org/legal.html) |
 
 
 

@@ -351,6 +351,13 @@ build_support_libraries() {
         #     echo "Building 'aom' before we build $lib_name"
         #     build_aom
         # fi
+        # ffmpeg is in the lib_name string then the callback name is build_ffmpeg
+        callback_lib_name=${lib_name}
+        if [[ "$lib_name" == *"ffmpeg"* ]]; then
+            # take out the version numbers
+            callback_lib_name="ffmpeg"
+        fi
+
         local data=$(jq -r '.[] | select(.library_name == "'${lib_name}'")' $manifestJsonFile)
         build_dir=$(echo "$data" | jq -r '.build_dir')
         tarball_name=$(echo "$data" | jq -r '.tarball_name')
@@ -366,7 +373,7 @@ build_support_libraries() {
         # make a callback function to build the library
         # if anything fails, we will exit with a non-zero status
         echo "-------------------- Running callback: build_${lib_name} --------------------"
-        build_${lib_name} ${build_dir}
+        build_${callback_lib_name} ${build_dir}
         echo "Finished building $lib_name removing build directory [${build_dir}]"
         cd /tmp/workdir
         rm -rf $build_dir
