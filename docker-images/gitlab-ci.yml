@@ -4,356 +4,203 @@ stages:
   - nvidia
   - scratch
   - ubuntu
+  - ubuntu-edge
   - vaapi
 
-7.0.2-ubuntu2204:
+7.1-ubuntu2404:
+  extends: .docker
+  stage: ubuntu
+  variables:
+    MAJOR_VERSION: 7
+    VERSION: "7.1"
+    LONG_VERSION: "7.1"
+    VARIANT: ubuntu2404
+    PARENT: "ubuntu"
+    ISPARENT: "True"
+
+7.1-ubuntu2404-edge:
+  extends: .docker
+  stage: ubuntu-edge
+  variables:
+    MAJOR_VERSION: 7
+    VERSION: "7.1"
+    LONG_VERSION: "7.1"
+    VARIANT: ubuntu2404-edge
+    PARENT: "ubuntu-edge"
+    ISPARENT: "True"
+
+7.1-alpine320:
+  extends: .docker
+  stage: alpine
+  variables:
+    MAJOR_VERSION: 7
+    VERSION: "7.1"
+    LONG_VERSION: "7.1"
+    VARIANT: alpine320
+    PARENT: "alpine"
+    ISPARENT: "True"
+
+7.1-scratch320:
+  extends: .docker
+  stage: scratch
+  variables:
+    MAJOR_VERSION: 7
+    VERSION: "7.1"
+    LONG_VERSION: "7.1"
+    VARIANT: scratch320
+    PARENT: "scratch"
+    ISPARENT: "True"
+
+7.1-vaapi2404:
+  extends: .docker
+  stage: vaapi
+  variables:
+    MAJOR_VERSION: 7
+    VERSION: "7.1"
+    LONG_VERSION: "7.1"
+    VARIANT: vaapi2404
+    PARENT: "vaapi"
+    ISPARENT: "True"
+
+7.1-nvidia2404:
+  extends: .docker
+  stage: nvidia
+  variables:
+    MAJOR_VERSION: 7
+    VERSION: "7.1"
+    LONG_VERSION: "7.1"
+    VARIANT: nvidia2404
+    PARENT: "nvidia"
+    ISPARENT: "True"
+
+7.0.2-ubuntu2404:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 7
     VERSION: "7.0"
     LONG_VERSION: "7.0.2"
-    VARIANT: ubuntu2204
+    VARIANT: ubuntu2404
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-7.0.2-alpine313:
+7.0.2-ubuntu2404-edge:
+  extends: .docker
+  stage: ubuntu-edge
+  variables:
+    MAJOR_VERSION: 7
+    VERSION: "7.0"
+    LONG_VERSION: "7.0.2"
+    VARIANT: ubuntu2404-edge
+    PARENT: "ubuntu-edge"
+    ISPARENT: "True"
+
+7.0.2-alpine320:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 7
     VERSION: "7.0"
     LONG_VERSION: "7.0.2"
-    VARIANT: alpine313
+    VARIANT: alpine320
     PARENT: "alpine"
     ISPARENT: "True"
 
-7.0.2-scratch313:
+7.0.2-scratch320:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 7
     VERSION: "7.0"
     LONG_VERSION: "7.0.2"
-    VARIANT: scratch313
+    VARIANT: scratch320
     PARENT: "scratch"
     ISPARENT: "True"
 
-7.0.2-vaapi2204:
+7.0.2-vaapi2404:
   extends: .docker
   stage: vaapi
   variables:
     MAJOR_VERSION: 7
     VERSION: "7.0"
     LONG_VERSION: "7.0.2"
-    VARIANT: vaapi2204
+    VARIANT: vaapi2404
     PARENT: "vaapi"
     ISPARENT: "True"
 
-7.0.2-nvidia2204:
+7.0.2-nvidia2404:
   extends: .docker
   stage: nvidia
   variables:
     MAJOR_VERSION: 7
     VERSION: "7.0"
     LONG_VERSION: "7.0.2"
-    VARIANT: nvidia2204
+    VARIANT: nvidia2404
     PARENT: "nvidia"
     ISPARENT: "True"
 
-6.1.2-ubuntu2204:
+6.1.2-ubuntu2404:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.1"
     LONG_VERSION: "6.1.2"
-    VARIANT: ubuntu2204
+    VARIANT: ubuntu2404
     PARENT: "ubuntu"
     ISPARENT: "True"
 
-6.1.2-vaapi2204:
+6.1.2-ubuntu2404-edge:
+  extends: .docker
+  stage: ubuntu-edge
+  variables:
+    MAJOR_VERSION: 6
+    VERSION: "6.1"
+    LONG_VERSION: "6.1.2"
+    VARIANT: ubuntu2404-edge
+    PARENT: "ubuntu-edge"
+    ISPARENT: "True"
+
+6.1.2-alpine320:
+  extends: .docker
+  stage: alpine
+  variables:
+    MAJOR_VERSION: 6
+    VERSION: "6.1"
+    LONG_VERSION: "6.1.2"
+    VARIANT: alpine320
+    PARENT: "alpine"
+    ISPARENT: "True"
+
+6.1.2-scratch320:
+  extends: .docker
+  stage: scratch
+  variables:
+    MAJOR_VERSION: 6
+    VERSION: "6.1"
+    LONG_VERSION: "6.1.2"
+    VARIANT: scratch320
+    PARENT: "scratch"
+    ISPARENT: "True"
+
+6.1.2-vaapi2404:
   extends: .docker
   stage: vaapi
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.1"
     LONG_VERSION: "6.1.2"
-    VARIANT: vaapi2204
+    VARIANT: vaapi2404
     PARENT: "vaapi"
     ISPARENT: "True"
 
-6.1.2-nvidia2204:
+6.1.2-nvidia2404:
   extends: .docker
   stage: nvidia
   variables:
     MAJOR_VERSION: 6
     VERSION: "6.1"
     LONG_VERSION: "6.1.2"
-    VARIANT: nvidia2204
-    PARENT: "nvidia"
-    ISPARENT: "True"
-
-5.1.6-ubuntu2204:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 5
-    VERSION: "5.1"
-    LONG_VERSION: "5.1.6"
-    VARIANT: ubuntu2204
-    PARENT: "ubuntu"
-    ISPARENT: "True"
-
-5.1.6-alpine313:
-  extends: .docker
-  stage: alpine
-  variables:
-    MAJOR_VERSION: 5
-    VERSION: "5.1"
-    LONG_VERSION: "5.1.6"
-    VARIANT: alpine313
-    PARENT: "alpine"
-    ISPARENT: "True"
-
-5.1.6-vaapi2204:
-  extends: .docker
-  stage: vaapi
-  variables:
-    MAJOR_VERSION: 5
-    VERSION: "5.1"
-    LONG_VERSION: "5.1.6"
-    VARIANT: vaapi2204
-    PARENT: "vaapi"
-    ISPARENT: "True"
-
-5.1.6-nvidia2204:
-  extends: .docker
-  stage: nvidia
-  variables:
-    MAJOR_VERSION: 5
-    VERSION: "5.1"
-    LONG_VERSION: "5.1.6"
-    VARIANT: nvidia2204
-    PARENT: "nvidia"
-    ISPARENT: "True"
-
-4.4.5-ubuntu2204:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.4"
-    LONG_VERSION: "4.4.5"
-    VARIANT: ubuntu2204
-    PARENT: "ubuntu"
-    ISPARENT: "True"
-
-4.4.5-alpine313:
-  extends: .docker
-  stage: alpine
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.4"
-    LONG_VERSION: "4.4.5"
-    VARIANT: alpine313
-    PARENT: "alpine"
-    ISPARENT: "True"
-
-4.4.5-scratch313:
-  extends: .docker
-  stage: scratch
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.4"
-    LONG_VERSION: "4.4.5"
-    VARIANT: scratch313
-    PARENT: "scratch"
-    ISPARENT: "True"
-
-4.4.5-vaapi2204:
-  extends: .docker
-  stage: vaapi
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.4"
-    LONG_VERSION: "4.4.5"
-    VARIANT: vaapi2204
-    PARENT: "vaapi"
-    ISPARENT: "True"
-
-4.4.5-nvidia2204:
-  extends: .docker
-  stage: nvidia
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.4"
-    LONG_VERSION: "4.4.5"
-    VARIANT: nvidia2204
-    PARENT: "nvidia"
-    ISPARENT: "True"
-
-4.3.8-ubuntu2204:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.3"
-    LONG_VERSION: "4.3.8"
-    VARIANT: ubuntu2204
-    PARENT: "ubuntu"
-    ISPARENT: "True"
-
-4.3.8-vaapi2204:
-  extends: .docker
-  stage: vaapi
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.3"
-    LONG_VERSION: "4.3.8"
-    VARIANT: vaapi2204
-    PARENT: "vaapi"
-    ISPARENT: "True"
-
-4.3.8-nvidia2204:
-  extends: .docker
-  stage: nvidia
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.3"
-    LONG_VERSION: "4.3.8"
-    VARIANT: nvidia2204
-    PARENT: "nvidia"
-    ISPARENT: "True"
-
-4.2.10-ubuntu2204:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.2"
-    LONG_VERSION: "4.2.10"
-    VARIANT: ubuntu2204
-    PARENT: "ubuntu"
-    ISPARENT: "True"
-
-4.2.10-scratch313:
-  extends: .docker
-  stage: scratch
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.2"
-    LONG_VERSION: "4.2.10"
-    VARIANT: scratch313
-    PARENT: "scratch"
-    ISPARENT: "True"
-
-4.2.10-vaapi2204:
-  extends: .docker
-  stage: vaapi
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.2"
-    LONG_VERSION: "4.2.10"
-    VARIANT: vaapi2204
-    PARENT: "vaapi"
-    ISPARENT: "True"
-
-4.2.10-nvidia2204:
-  extends: .docker
-  stage: nvidia
-  variables:
-    MAJOR_VERSION: 4
-    VERSION: "4.2"
-    LONG_VERSION: "4.2.10"
-    VARIANT: nvidia2204
-    PARENT: "nvidia"
-    ISPARENT: "True"
-
-3.4.13-ubuntu2204:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 3
-    VERSION: "3.4"
-    LONG_VERSION: "3.4.13"
-    VARIANT: ubuntu2204
-    PARENT: "ubuntu"
-    ISPARENT: "True"
-
-3.4.13-alpine313:
-  extends: .docker
-  stage: alpine
-  variables:
-    MAJOR_VERSION: 3
-    VERSION: "3.4"
-    LONG_VERSION: "3.4.13"
-    VARIANT: alpine313
-    PARENT: "alpine"
-    ISPARENT: "True"
-
-3.4.13-scratch313:
-  extends: .docker
-  stage: scratch
-  variables:
-    MAJOR_VERSION: 3
-    VERSION: "3.4"
-    LONG_VERSION: "3.4.13"
-    VARIANT: scratch313
-    PARENT: "scratch"
-    ISPARENT: "True"
-
-3.4.13-vaapi2204:
-  extends: .docker
-  stage: vaapi
-  variables:
-    MAJOR_VERSION: 3
-    VERSION: "3.4"
-    LONG_VERSION: "3.4.13"
-    VARIANT: vaapi2204
-    PARENT: "vaapi"
-    ISPARENT: "True"
-
-3.4.13-nvidia2204:
-  extends: .docker
-  stage: nvidia
-  variables:
-    MAJOR_VERSION: 3
-    VERSION: "3.4"
-    LONG_VERSION: "3.4.13"
-    VARIANT: nvidia2204
-    PARENT: "nvidia"
-    ISPARENT: "True"
-
-2.8.22-ubuntu2204:
-  extends: .docker
-  stage: ubuntu
-  variables:
-    MAJOR_VERSION: 2
-    VERSION: "2.8"
-    LONG_VERSION: "2.8.22"
-    VARIANT: ubuntu2204
-    PARENT: "ubuntu"
-    ISPARENT: "True"
-
-2.8.22-vaapi2204:
-  extends: .docker
-  stage: vaapi
-  variables:
-    MAJOR_VERSION: 2
-    VERSION: "2.8"
-    LONG_VERSION: "2.8.22"
-    VARIANT: vaapi2204
-    PARENT: "vaapi"
-    ISPARENT: "True"
-
-2.8.22-nvidia2204:
-  extends: .docker
-  stage: nvidia
-  variables:
-    MAJOR_VERSION: 2
-    VERSION: "2.8"
-    LONG_VERSION: "2.8.22"
-    VARIANT: nvidia2204
+    VARIANT: nvidia2404
     PARENT: "nvidia"
     ISPARENT: "True"
