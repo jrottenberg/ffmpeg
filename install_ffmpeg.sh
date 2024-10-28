@@ -26,12 +26,13 @@ is_alpine=false
 if [[ "$OS_NAME" == "Linux" ]]; then
     if grep -q "Ubuntu" /etc/os-release; then
         is_ubuntu=true
-    elif grep -q "Alpine Linux" /etc/alpine-release; then
+    elif [[ -f /etc/alpine-release ]]; then
         is_alpine=true
     fi
 fi
 
 install_ffmpeg() {
+    echo "Installing ffmpeg"
     ## cleanup
     # This is used for both the source and packages version ( be robust about looking for libs to copy )
     if [ ! -f ${PREFIX}/bin/ffmpeg ]; then

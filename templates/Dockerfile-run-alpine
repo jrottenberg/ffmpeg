@@ -15,6 +15,6 @@ RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmp
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
-## when  debugging you can pass in || true to the end of the command
-## to keep the build going even if one of the steps fails
+# when  debugging you can pass in || true to the end of the command
+# to keep the build going even if one of the steps fails
 RUN /tmp/workdir/install_ffmpeg.sh

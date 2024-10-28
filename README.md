@@ -255,6 +255,12 @@ Full hardware acceleration example:
 docker run -it --entrypoint='bash' jrottenberg/ffmpeg:7.1-ubuntu2404
 for i in ogg amr vorbis theora mp3lame opus vpx xvid fdk x264 x265;do echo $i; find /usr/local/ -name *$i*;done
 ```
+Libs are in `/lib` in alpine.
+```bash
+docker run -it --entrypoint='sh' jrottenberg/ffmpeg:7.1-alpine320
+for i in ogg amr vorbis theora mp3lame opus vpx xvid fdk x264 x265;do echo $i; find /lib/ -name *$i*;done
+```
+
 
 ## FFMPEG Supported Libraries
 The following libraries are used by FFMPEG. The version number and release date are provided along with the license information.
