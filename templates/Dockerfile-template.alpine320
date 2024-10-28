@@ -172,6 +172,7 @@ RUN     buildDeps="autoconf \
 FROM        alpine:3.20 AS release
 # RUN         apk add --no-cache --update bash less tree file vim
 COPY        --from=builder /usr/local /usr/local
+COPY        --from=builder /tmp/fakeroot/ /
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
@@ -179,4 +180,4 @@ LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
 ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 CMD         ["--help"]
-ENTRYPOINT  ["ffmpeg"]
+ENTRYPOINT  ["/bin/ffmpeg"]

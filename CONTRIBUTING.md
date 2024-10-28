@@ -82,7 +82,7 @@ $ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-va
 - alpine320
 ```sh
 $ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-alpine320-desktop-build docker-images/7.1/alpine320
-$ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-alpine320-desktop-build:latest
+$ docker run -it --rm --entrypoint='sh' --platform="linux/amd64" ffmpeg-7.1-alpine320-desktop-build:latest
 ```
 
 ```sh
