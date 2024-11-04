@@ -328,6 +328,7 @@ build_ffmpeg() {
         --enable-libdav1d \
         --enable-libfdk-aac \
         --enable-libfreetype \
+        --enable-libharfbuzz \
         --enable-libkvazaar \
         --enable-libmp3lame \
         --enable-libnpp \
