@@ -143,30 +143,12 @@ jobs:
         ISPARENT:  True
 
 
-      scratch320_6.1.2:
-        MAJOR_VERSION: 6
-        VERSION:  6.1
-        LONG_VERSION: 6.1.2
-        VARIANT:  scratch320
-        PARENT: scratch
-        ISPARENT:  True
-
-
       vaapi2404_6.1.2:
         MAJOR_VERSION: 6
         VERSION:  6.1
         LONG_VERSION: 6.1.2
         VARIANT:  vaapi2404
         PARENT: vaapi
-        ISPARENT:  True
-
-
-      nvidia2404_6.1.2:
-        MAJOR_VERSION: 6
-        VERSION:  6.1
-        LONG_VERSION: 6.1.2
-        VARIANT:  nvidia2404
-        PARENT: nvidia
         ISPARENT:  True
 
   steps:

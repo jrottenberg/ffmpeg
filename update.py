@@ -79,7 +79,10 @@ SKIP_VARIANTS = {
     "4.3": ["nvidia2204", "vaapi2204"] + [v["name"] for v in VARIANTS],
     "4.4": ["alpine313", "nvidia2204", "scratch313"] + [v["name"] for v in VARIANTS],
     "5.1": [v["name"] for v in VARIANTS],
-    "6.1": [],
+    "6.1": [
+        "nvidia2404",
+        "scratch320",
+    ],  # failing from long build times ( over an hour )
     "7.0": [],
     "7.1": [],
 }
