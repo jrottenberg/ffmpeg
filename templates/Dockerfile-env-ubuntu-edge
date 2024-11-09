@@ -1,0 +1,22 @@
+ENV FFMPEG_VERSION=%%FFMPEG_VERSION%%
+
+# fribidi
+ARG FRIBIDI_PKGS="libfribidi-dev libfribidi0"
+# libass
+ARG LIBASS_PKGS="libass-dev libass9"
+# xorg-macros
+ARG XORG_MACROS_PKGS="libxcb-shm0-dev libxcb-shm0 libxcb-xfixes0 libxcb-xfixes0-dev"
+# libxau
+ARG XAU_PKGS="libxau-dev libxau6"
+# libpthread-stubs
+ARG PTHREADS_STUBS_PKGS="libpthread-stubs0-dev"
+# libxml2 ( started giving me download problems, so I went back to the debian package's version )
+ARG XML2_PKGS="libxml2-dev libxml2"
+# libpng
+ARG PNG_PKGS="libpng-dev libpng16-16t64"
+
+ENV MAKEFLAGS="-j2"
+ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
+
+ENV PREFIX="/opt/ffmpeg"
+ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"

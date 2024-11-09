@@ -1,0 +1,20 @@
+# Note: pass '--library-list lib1,lib2,lib3 for more control.
+#       Here we have 3 libs that we have to build from source
+# vmaf
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+# # libevent && libevent-dev has usr/lib/libevent_pthreads ???
+# ## libbluray - Requires libxml, freetype, and fontconfig
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libpthread-stubs,libbluray,libaribb24
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-%%FFMPEG_VERSION%%
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+# when  debugging you can pass in || true to the end of the command
+# to keep the build going even if one of the steps fails
+RUN /tmp/workdir/install_ffmpeg.sh

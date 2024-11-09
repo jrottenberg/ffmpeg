@@ -1,0 +1,29 @@
+RUN \
+        echo "Installing dependencies..." && \
+        apt-get install -yq --no-install-recommends ${OPENCORE_PKGS} ${X264_PKGS} ${X265_PKGS} ${OGG_PKGS} ${OPUS_PKGS} ${VORBIS_PKGS} ${VPX_PKGS} ${WEBP_PKGS} ${MP3LAME_PKGS} ${XVIDCORE_PKGS} ${FDKAAC_PKGS} ${OPENJP_PKGS} ${FREETYPE_PKGS} ${VIDSTAB_PKGS} ${FRIBIDI_PKGS} ${FONTCONFIG_PKGS} ${LIBASS_PKGS} ${AOM_PKGS} ${SVTAV1_PKGS} ${DAV1D_PKGS} ${XORG_MACROS_PKGS} ${XPROTO_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${BLURAY_PKGS} ${ZMQ_PKGS} ${PNG_PKGS} ${ARIBB24_PKGS} ${ZIMG_PKGS} ${THEORA_PKGS} ${SRT_PKGS} ${LIBDRM_PKGS}
+
+RUN \
+	apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver
+
+        # apt install libdrm-dev
+
+## libvmaf https://github.com/Netflix/vmaf
+## https://github.com/Netflix/vmaf/issues/788#issuecomment-756098059
+RUN \
+        echo "Adding g++ for VMAF build" && \
+        apt-get install -yq g++
+
+# Note: pass '--library-list lib1,lib2,lib3 for more control.
+#       Here we have 3 libs that we have to build from source
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar,libvmaf
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-%%FFMPEG_VERSION%%
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+
+## when  debugging you can pass in || true to the end of the command
+## to keep the build going even if one of the steps fails
+RUN /tmp/workdir/install_ffmpeg.sh

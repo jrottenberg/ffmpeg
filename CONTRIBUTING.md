@@ -49,7 +49,77 @@ docker build -t my-build docker-images/VERSION/
 find ffmpeg/ -name Dockerfile | xargs dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
 ```
 
+<details><summary>Some detailed examples, of building and running</summary>
 
+If you are not running the amd64 platform, you may need to pass in the --platform flag to build with docker desktop
+- 7.1-ubuntu2404
+
+```sh
+$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-ubuntu2404-desktop-build docker-images/7.1/ubuntu2404
+$ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-desktop-build:latest
+```
+
+- 7.1-ubuntu2404-edge
+
+```sh
+$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-ubuntu2404-edge-desktop-build docker-images/7.1/ubuntu2404-edge
+$ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-edge-desktop-build:latest
+```
+
+- 7.1-nvidia2404
+
+```sh
+$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-nvidia2404-desktop-build docker-images/7.1/nvidia2404
+$ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-nvidia2404-desktop-build:latest
+```
+
+- vaapi2404
+```sh
+$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-vaapi2404-desktop-build docker-images/7.1/vaapi2404
+$ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-vaapi2404-desktop-build:latest
+```
+
+- alpine320
+```sh
+$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-alpine320-desktop-build docker-images/7.1/alpine320
+$ docker run -it --rm --entrypoint='sh' --platform="linux/amd64" ffmpeg-7.1-alpine320-desktop-build:latest
+```
+
+```sh
+$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-scratch320-desktop-build docker-images/7.1/scratch320
+$ docker run -it --rm --entrypoint='sh' --platform="linux/amd64" ffmpeg-7.1-scratch320-desktop-build:latest
+```
+
+</details>
+
+<details><summary>More testing notes</summary>
+
+
+```
+1: simply run the image: which should output the ffmpeg help
+`docker run -it --rm --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-desktop-build:latest`
+
+2: now run the image in bash
+`docker run -it --rm --entrypoint=bash --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-desktop-build:latest`
+
+In the bash shell, run the following commands
+   $ ffmpeg
+   $ ffmpeg -h
+   $ ldd `which ffmpeg`
+   Note: this next command on alipne will need to be modified to look in '/lib/' instead of '/usr/local/'
+         but they are all there
+   $ for i in ogg amr vorbis theora mp3lame opus vpx xvid fdk x264 x265;do echo $i; find /usr/local/ -name *$i*;done
+   $ ffmpeg -buildconf
+
+3: Convert an avi file to an mp4 file.
+   `docker run --rm -v $(pwd):$(pwd) -w $(pwd) --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-desktop-build:latest -i drop_video_1.avi outfile/dv_converted.mp4`
+
+4: Convert a asf file to an mp4
+   `docker run --rm -v $(pwd):$(pwd) -w $(pwd) --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-desktop-build:latest -i MU_2_Discharge_Bottle___Inlet_to_Discharge.asf outfile/mpu2_discharge_bottle_converted.mp4`
+
+```
+
+</details>
 
 # Reviewing
 

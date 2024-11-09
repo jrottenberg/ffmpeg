@@ -1,0 +1,104 @@
+# Note: pass '--library-list' to 'generate-source-of-truth-ffmpeg-versions.py'
+#       ex: '--library-list lib1,lib2,lib3'
+#  for more control over the build process, and how the docker layers are cached
+
+# RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libopencore-amr,libx264,libx265,libogg,libopus,libvorbis,libvpx,libwebp,libmp3lame,libxvid,libfdk-aac,openjpeg,freetype,libvidstab,fribidi,fontconfig,libass,kvazaar,aom,libsvtav1,xorg-macros,xproto,libxau,libpthread-stubs,libxml2,libbluray,libzmq,libpng,libaribb24,zimg,libtheora,libsrt,libvmaf,ffmpeg
+# dont do this 👆 where all of the libs are built at one time.
+# by splitting them up into batches we allow docker to cache the layers ( which is a lifesaver when debugging )
+# I left this line in here, as it shows the proper order of the libraries that need to be built. ( what worked )
+# there are only a few build deps. I remember that libtheora needed libogg.
+
+RUN \
+        echo "Installing dependencies..." && \
+        apt-get install -yq --no-install-recommends ${FRIBIDI_PKGS} ${LIBASS_PKGS} ${XORG_MACROS_PKGS} ${XAU_PKGS} ${XML2_PKGS} ${PNG_PKGS}
+        # apt-get install -yq --no-install-recommends ${FRIBIDI_PKGS} ${LIBASS_PKGS} ${XORG_MACROS_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${PNG_PKGS}
+
+
+# First batch of libraries ( split into docker layers, to allow for caching )
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
+libopencore-amr,\
+libx264,\
+libx265,\
+libogg,\
+libopus
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+
+#  additional batch of libraries ( split into docker layers, to allow for caching )
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
+libvorbis,\
+libvpx,\
+libwebp,\
+libmp3lame
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+# additional batch of libraries ( split into docker layers, to allow for caching )
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libxvid,libpthread-stubs
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+# additional batch of libraries ( split into docker layers, to allow for caching )
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
+libfdk-aac,\
+openjpeg,\
+freetype,\
+libvidstab
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+# additional batch of libraries ( split into docker layers, to allow for caching )
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list fontconfig
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+# additional batch of libraries ( split into docker layers, to allow for caching )
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvazaar
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+# additional batch of libraries ( split into docker layers, to allow for caching )
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
+aom,\
+libsvtav1
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+# additional batch of libraries ( split into docker layers, to allow for caching )
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list xproto
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+
+# additional batch of libraries ( split into docker layers, to allow for caching )
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
+libbluray,\
+libzmq
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+# additional batch of libraries ( split into docker layers, to allow for caching )
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
+libaribb24,\
+zimg,\
+libtheora
+# Note: libtheora is dependant on libogg
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+# additional batch of libraries ( split into docker layers, to allow for caching )
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
+libsrt,\
+libvmaf
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+# This is a slow one, put it on its own container layer to speed up the build (allowing it to be cached)
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-%%FFMPEG_VERSION%%
+## when  debugging you can pass in || true to the end of the next 3 commands
+## to keep the build going even if one of the steps fails
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
+
+RUN /tmp/workdir/install_ffmpeg.sh
