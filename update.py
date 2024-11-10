@@ -201,7 +201,11 @@ for version in keep_version:
             "--enable-fontconfig",
             "--enable-libass",
             "--enable-libbluray",
+            # https://ffmpeg.org/ffmpeg-filters.html#drawtext-1
             "--enable-libfreetype",
+            "--enable-libharfbuzz",
+            "--enable-libfontconfig",
+            "--enable-libfribidi",
             "--enable-libmp3lame",
             "--enable-libopencore-amrnb",
             "--enable-libopencore-amrwb",
@@ -271,7 +275,6 @@ for version in keep_version:
                 FFMPEG_CONFIG_FLAGS.append("--enable-cuda")
                 FFMPEG_CONFIG_FLAGS.append("--enable-cuvid")
                 FFMPEG_CONFIG_FLAGS.append("--enable-libnpp")
-                FFMPEG_CONFIG_FLAGS.append("--enable-libharfbuzz")
 
         if float(version[0:3]) >= 5.1:
             # from https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#FFmpeg

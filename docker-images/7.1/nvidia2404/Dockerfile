@@ -85,7 +85,7 @@ ARG OPENJP_PKGS="libopenjp2-7 libopenjp2-7-dev"
 #  libwebp7 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxpm4 linux-libc-dev
 # manpages manpages-dev rpcsvc-proto zlib1g-dev
 ARG FREETYPE_PKGS="libfreetype6-dev"
-ARG FONTCONFIG_PKGS="libfontconfig-dev libfontconfig1 fontconfig-config fontconfig-config fonts-dejavu-core fonts-dejavu-mono"
+ARG FONTCONFIG_PKGS="fontconfig libfontconfig-dev libfontconfig1 fontconfig-config fonts-dejavu-core fonts-dejavu-mono"
 ARG VIDSTAB_PKGS="libvidstab-dev libvidstab1.1"
 ARG FRIBIDI_PKGS="libfribidi-dev libfribidi0"
 # libass-dev wanted to install a boat-load of packages
@@ -212,6 +212,11 @@ COPY --from=builder /usr/local/bin /usr/local/bin/
 COPY --from=builder /usr/local/share /usr/local/share/
 COPY --from=builder /usr/local/lib /usr/local/lib/
 COPY --from=builder /usr/local/include /usr/local/include/
+
+# Copy fonts and fontconfig from builder
+COPY --from=builder /usr/share/fonts /usr/share/fonts
+COPY --from=builder /usr/share/fontconfig /usr/share/fontconfig
+COPY --from=builder /usr/bin/fc-* /usr/bin/
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
 ENV	    DEBIAN_FRONTEND=nonintercative

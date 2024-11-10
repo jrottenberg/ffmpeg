@@ -327,7 +327,9 @@ build_ffmpeg() {
         --enable-libbluray \
         --enable-libdav1d \
         --enable-libfdk-aac \
+        --enable-libfontconfig \
         --enable-libfreetype \
+        --enable-libfribidi \
         --enable-libharfbuzz \
         --enable-libkvazaar \
         --enable-libmp3lame \
