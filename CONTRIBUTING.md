@@ -110,7 +110,7 @@ In the bash shell, run the following commands
          but they are all there
    $ for i in ogg amr vorbis theora mp3lame opus vpx xvid fdk x264 x265;do echo $i; find /usr/local/ -name *$i*;done
    $ ffmpeg -buildconf
-   $ ffmpeg -filters 
+   $ ffmpeg -filters
 
 3: Convert an avi file to an mp4 file.
    `docker run --rm -v $(pwd):$(pwd) -w $(pwd) --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-desktop-build:latest -i drop_video_1.avi outfile/dv_converted.mp4`
