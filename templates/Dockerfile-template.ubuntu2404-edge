@@ -72,6 +72,12 @@ RUN      buildDeps="autoconf \
 # Stage 2: Final Image ( shrink the size back down )
 FROM ubuntu:24.04 AS runtime
 
+# Copy fonts and fontconfig from builder
+COPY --from=builder /usr/share/fonts /usr/share/fonts
+COPY --from=builder /usr/share/fontconfig /usr/share/fontconfig
+COPY --from=builder /usr/bin/fc-* /usr/bin/
+
+# Copy rest of the content
 COPY --from=builder /usr/local /usr/local/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \

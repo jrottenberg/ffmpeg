@@ -99,6 +99,7 @@ RUN         libDeps="libgomp \
                     fontconfig \
                     fontconfig-static \
                     fontconfig-dev \
+                    font-dejavu \
                     # https://github.com/libass/libass
                     libass \
                     libass-dev \
@@ -198,6 +199,12 @@ RUN /tmp/workdir/install_ffmpeg.sh
 ### Release Stage
 FROM        alpine:3.20 AS release
 # RUN         apk add --no-cache --update bash less tree file vim
+# Copy fonts and fontconfig from builder
+COPY        --from=builder /usr/share/fonts /usr/share/fonts
+COPY        --from=builder /usr/share/fontconfig /usr/share/fontconfig
+COPY        --from=builder /usr/bin/fc-* /usr/bin/
+
+# Copy rest of the content
 COPY        --from=builder /usr/local /usr/local
 COPY        --from=builder /tmp/fakeroot/ /
 

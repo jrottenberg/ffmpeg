@@ -81,7 +81,7 @@ ARG OPENJP_PKGS="libopenjp2-7 libopenjp2-7-dev"
 #  libwebp7 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxpm4 linux-libc-dev
 # manpages manpages-dev rpcsvc-proto zlib1g-dev
 ARG FREETYPE_PKGS="libfreetype6-dev"
-ARG FONTCONFIG_PKGS="libfontconfig-dev libfontconfig1 fontconfig-config fontconfig-config fonts-dejavu-core fonts-dejavu-mono"
+ARG FONTCONFIG_PKGS="fontconfig libfontconfig-dev libfontconfig1 fontconfig-config fonts-dejavu-core fonts-dejavu-mono"
 ARG VIDSTAB_PKGS="libvidstab-dev libvidstab1.1"
 ARG FRIBIDI_PKGS="libfribidi-dev libfribidi0"
 # libass-dev wanted to install a boat-load of packages
@@ -189,6 +189,12 @@ RUN /tmp/workdir/install_ffmpeg.sh
 
 # Stage 2: Final Image ( shrink the size back down )
 FROM ubuntu:24.04 AS runtime
+# Copy fonts and fontconfig from builder
+COPY --from=builder /usr/share/fonts /usr/share/fonts
+COPY --from=builder /usr/share/fontconfig /usr/share/fontconfig
+COPY --from=builder /usr/bin/fc-* /usr/bin/
+
+# Copy rest of the content
 COPY --from=builder /usr/local /usr/local/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \

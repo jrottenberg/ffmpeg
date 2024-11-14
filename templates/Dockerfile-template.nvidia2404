@@ -88,6 +88,11 @@ COPY --from=builder /usr/local/share /usr/local/share/
 COPY --from=builder /usr/local/lib /usr/local/lib/
 COPY --from=builder /usr/local/include /usr/local/include/
 
+# Copy fonts and fontconfig from builder
+COPY --from=builder /usr/share/fonts /usr/share/fonts
+COPY --from=builder /usr/share/fontconfig /usr/share/fontconfig
+COPY --from=builder /usr/bin/fc-* /usr/bin/
+
 ENV	    NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
 ENV	    DEBIAN_FRONTEND=nonintercative
 WORKDIR     /tmp/workdir

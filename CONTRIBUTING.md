@@ -55,38 +55,38 @@ If you are not running the amd64 platform, you may need to pass in the --platfor
 - 7.1-ubuntu2404
 
 ```sh
-$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-ubuntu2404-desktop-build docker-images/7.1/ubuntu2404
+$ ./update.py; docker build --platform linux/amd64 -t ffmpeg-7.1-ubuntu2404-desktop-build docker-images/7.1/ubuntu2404
 $ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-desktop-build:latest
 ```
 
 - 7.1-ubuntu2404-edge
 
 ```sh
-$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-ubuntu2404-edge-desktop-build docker-images/7.1/ubuntu2404-edge
+$ ./update.py; docker build --platform linux/amd64 -t ffmpeg-7.1-ubuntu2404-edge-desktop-build docker-images/7.1/ubuntu2404-edge
 $ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-edge-desktop-build:latest
 ```
 
 - 7.1-nvidia2404
 
 ```sh
-$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-nvidia2404-desktop-build docker-images/7.1/nvidia2404
+$ ./update.py; docker build --platform linux/amd64 -t ffmpeg-7.1-nvidia2404-desktop-build docker-images/7.1/nvidia2404
 $ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-nvidia2404-desktop-build:latest
 ```
 
 - vaapi2404
 ```sh
-$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-vaapi2404-desktop-build docker-images/7.1/vaapi2404
+$ ./update.py; docker build --platform linux/amd64 -t ffmpeg-7.1-vaapi2404-desktop-build docker-images/7.1/vaapi2404
 $ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-vaapi2404-desktop-build:latest
 ```
 
 - alpine320
 ```sh
-$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-alpine320-desktop-build docker-images/7.1/alpine320
+$ ./update.py; docker build --platform linux/amd64 -t ffmpeg-7.1-alpine320-desktop-build docker-images/7.1/alpine320
 $ docker run -it --rm --entrypoint='sh' --platform="linux/amd64" ffmpeg-7.1-alpine320-desktop-build:latest
 ```
 
 ```sh
-$ ./update.py; time docker build --platform linux/amd64 -t ffmpeg-7.1-scratch320-desktop-build docker-images/7.1/scratch320
+$ ./update.py; docker build --platform linux/amd64 -t ffmpeg-7.1-scratch320-desktop-build docker-images/7.1/scratch320
 $ docker run -it --rm --entrypoint='sh' --platform="linux/amd64" ffmpeg-7.1-scratch320-desktop-build:latest
 ```
 
@@ -110,6 +110,7 @@ In the bash shell, run the following commands
          but they are all there
    $ for i in ogg amr vorbis theora mp3lame opus vpx xvid fdk x264 x265;do echo $i; find /usr/local/ -name *$i*;done
    $ ffmpeg -buildconf
+   $ ffmpeg -filters
 
 3: Convert an avi file to an mp4 file.
    `docker run --rm -v $(pwd):$(pwd) -w $(pwd) --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-desktop-build:latest -i drop_video_1.avi outfile/dv_converted.mp4`
@@ -117,8 +118,9 @@ In the bash shell, run the following commands
 4: Convert a asf file to an mp4
    `docker run --rm -v $(pwd):$(pwd) -w $(pwd) --platform="linux/amd64" ffmpeg-7.1-ubuntu2404-desktop-build:latest -i MU_2_Discharge_Bottle___Inlet_to_Discharge.asf outfile/mpu2_discharge_bottle_converted.mp4`
 
+5: using a drawtext filter
+   `docker run --rm -v $(pwd):$(pwd) -w $(pwd) --platform="linux/amd64" jrottenberg/ffmpeg:7.1-ubuntu2404 -i sample-5s_1.mp4 -vf "drawtext=text='Stack Overflow':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2" outfile/sample-5s_1_with_text.mp4`
 ```
-
 </details>
 
 # Reviewing
