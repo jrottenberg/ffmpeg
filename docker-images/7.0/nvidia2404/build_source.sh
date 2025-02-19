@@ -318,6 +318,7 @@ build_ffmpeg() {
         --disable-doc \
         --disable-ffplay \
         --enable-cuda \
+        --enable-cuda-nvcc \
         --enable-cuvid \
         --enable-fontconfig \
         --enable-gpl \
