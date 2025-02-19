@@ -271,6 +271,7 @@ for version in keep_version:
             LDFLAGS.append("-L/usr/local/cuda/lib64")
             LDFLAGS.append("-L/usr/local/cuda/lib32/")
             FFMPEG_CONFIG_FLAGS.append("--enable-nvenc")
+            FFMPEG_CONFIG_FLAGS.append("--enable-cuda-nvcc")
             if version == "snapshot" or int(version[0]) >= 4:
                 FFMPEG_CONFIG_FLAGS.append("--enable-cuda")
                 FFMPEG_CONFIG_FLAGS.append("--enable-cuvid")
