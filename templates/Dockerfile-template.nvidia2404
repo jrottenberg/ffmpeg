@@ -18,7 +18,7 @@ COPY download_tarballs.sh /tmp/workdir
 COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
 
-ENV         %%ENV%%
+%%ENV%%
 
 # Note: I don't think we need 'ca-certificates'
 ARG DEBIAN_FRONTEND=noninteractive
