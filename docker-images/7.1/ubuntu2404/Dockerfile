@@ -16,7 +16,7 @@ COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
 
 
-ENV FFMPEG_VERSION=7.1
+ENV FFMPEG_VERSION=7.1.1
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html

@@ -18,7 +18,7 @@ COPY download_tarballs.sh /tmp/workdir
 COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
 
-ENV         ENV FFMPEG_VERSION=7.1
+ENV         ENV FFMPEG_VERSION=7.1.1
 
 ENV NVIDIA_HEADERS_VERSION=11.1.5.3
 
