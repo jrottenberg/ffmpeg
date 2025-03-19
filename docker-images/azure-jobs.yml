@@ -8,55 +8,55 @@ jobs:
     maxParallel: 10
     matrix:
 
-      ubuntu2404_7.1:
+      ubuntu2404_7.1.1:
         MAJOR_VERSION: 7
         VERSION:  7.1
-        LONG_VERSION: 7.1
+        LONG_VERSION: 7.1.1
         VARIANT:  ubuntu2404
         PARENT: ubuntu
         ISPARENT:  True
 
 
-      ubuntu2404-edge_7.1:
+      ubuntu2404-edge_7.1.1:
         MAJOR_VERSION: 7
         VERSION:  7.1
-        LONG_VERSION: 7.1
+        LONG_VERSION: 7.1.1
         VARIANT:  ubuntu2404-edge
         PARENT: ubuntu-edge
         ISPARENT:  True
 
 
-      alpine320_7.1:
+      alpine320_7.1.1:
         MAJOR_VERSION: 7
         VERSION:  7.1
-        LONG_VERSION: 7.1
+        LONG_VERSION: 7.1.1
         VARIANT:  alpine320
         PARENT: alpine
         ISPARENT:  True
 
 
-      scratch320_7.1:
+      scratch320_7.1.1:
         MAJOR_VERSION: 7
         VERSION:  7.1
-        LONG_VERSION: 7.1
+        LONG_VERSION: 7.1.1
         VARIANT:  scratch320
         PARENT: scratch
         ISPARENT:  True
 
 
-      vaapi2404_7.1:
+      vaapi2404_7.1.1:
         MAJOR_VERSION: 7
         VERSION:  7.1
-        LONG_VERSION: 7.1
+        LONG_VERSION: 7.1.1
         VARIANT:  vaapi2404
         PARENT: vaapi
         ISPARENT:  True
 
 
-      nvidia2404_7.1:
+      nvidia2404_7.1.1:
         MAJOR_VERSION: 7
         VERSION:  7.1
-        LONG_VERSION: 7.1
+        LONG_VERSION: 7.1.1
         VARIANT:  nvidia2404
         PARENT: nvidia
         ISPARENT:  True

@@ -20,7 +20,7 @@ RUN         chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py &&
             chmod +x /tmp/workdir/build_source.sh && \
             chmod +x /tmp/workdir/install_ffmpeg.sh
 
-ENV FFMPEG_VERSION=7.1
+ENV FFMPEG_VERSION=7.1.1
 
 ENV MAKEFLAGS="-j2"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
