@@ -18,7 +18,7 @@ COPY download_tarballs.sh /tmp/workdir
 COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
 
-ENV         ENV FFMPEG_VERSION=7.1.1
+ENV FFMPEG_VERSION=7.1.1
 
 ENV NVIDIA_HEADERS_VERSION=11.1.5.3
 
@@ -126,43 +126,43 @@ RUN     apt-get -yqq update && \
         chmod +x /tmp/workdir/install_ffmpeg.sh
 
 RUN      buildDeps="autoconf \
-        automake \
-        cmake \
-        build-essential \
-        texinfo \
-        curl \
-        wget \
-        tar \
-        bzip2 \
-        libexpat1-dev \
-        gcc \
-        git \
-        git-core \
-        gperf \
-        libtool \
-        make \
-        meson \
-        ninja-build \
-        nasm \
-        perl \
-        pkg-config \
-        python3 \
-        yasm \
-        zlib1g-dev \
-        libfreetype6-dev \
-        libgnutls28-dev \
-        libsdl2-dev \
-        libva-dev \
-        libvdpau-dev \
-        libnuma-dev \
-        libdav1d-dev \
-        openssl \
-        libssl-dev \
-        expat \
-        libgomp1 \
-        ca-certificates \
-        libxcb-shape0-dev \
-        libavformat-dev" && \
+                    automake \
+                    cmake \
+                    build-essential \
+                    texinfo \
+                    curl \
+                    wget \
+                    tar \
+                    bzip2 \
+                    libexpat1-dev \
+                    gcc \
+                    git \
+                    git-core \
+                    gperf \
+                    libtool \
+                    make \
+                    meson \
+                    ninja-build \
+                    nasm \
+                    perl \
+                    pkg-config \
+                    python3 \
+                    yasm \
+                    zlib1g-dev \
+                    libfreetype6-dev \
+                    libgnutls28-dev \
+                    libsdl2-dev \
+                    libva-dev \
+                    libvdpau-dev \
+                    libnuma-dev \
+                    libdav1d-dev \
+                    openssl \
+                    libssl-dev \
+                    expat \
+                    libgomp1 \
+                    ca-certificates \
+                    libxcb-shape0-dev \
+                    libavformat-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
 
@@ -170,7 +170,7 @@ RUN \
         echo "Installing dependencies..." && \
         apt-get install -yq --no-install-recommends ${OPENCORE_PKGS} ${X264_PKGS} ${X265_PKGS} ${OGG_PKGS} ${OPUS_PKGS} ${VORBIS_PKGS} ${VPX_PKGS} ${WEBP_PKGS} ${MP3LAME_PKGS} ${XVIDCORE_PKGS} ${FDKAAC_PKGS} ${OPENJP_PKGS} ${FREETYPE_PKGS} ${VIDSTAB_PKGS} ${FRIBIDI_PKGS} ${FONTCONFIG_PKGS} ${LIBASS_PKGS} ${AOM_PKGS} ${SVTAV1_PKGS} ${DAV1D_PKGS} ${XORG_MACROS_PKGS} ${XPROTO_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${BLURAY_PKGS} ${ZMQ_PKGS} ${PNG_PKGS} ${ARIBB24_PKGS} ${ZIMG_PKGS} ${THEORA_PKGS} ${SRT_PKGS} ${LIBDRM_PKGS}
 
-# apt install libdrm-dev
+        # apt install libdrm-dev
 
 ## libvmaf https://github.com/Netflix/vmaf
 ## https://github.com/Netflix/vmaf/issues/788#issuecomment-756098059
@@ -228,7 +228,7 @@ RUN     apt-get -yqq update && \
         apt-get clean -y
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
-        org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
+            org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
 ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
