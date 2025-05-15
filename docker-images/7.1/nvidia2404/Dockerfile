@@ -6,7 +6,7 @@
 #
 #
 # Stage 1: Build ( https://hub.docker.com/r/nvidia/cuda )
-FROM nvidia/cuda:12.6.2-devel-ubuntu24.04 AS builder
+FROM nvidia/cuda:12.9.0-devel-ubuntu24.04 AS builder
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
 ENV	    DEBIAN_FRONTEND=noninteractive
@@ -18,9 +18,9 @@ COPY download_tarballs.sh /tmp/workdir
 COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
 
-ENV         ENV FFMPEG_VERSION=7.1.1
+ENV FFMPEG_VERSION=7.1.1
 
-ENV NVIDIA_HEADERS_VERSION=11.1.5.3
+#ENV NVIDIA_HEADERS_VERSION=11.1.5.3
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
@@ -161,6 +161,7 @@ RUN      buildDeps="autoconf \
                     expat \
                     libgomp1 \
                     ca-certificates \
+                    xxd \
                     libxcb-shape0-dev \
                     libavformat-dev" && \
         apt-get -yqq update && \
@@ -200,7 +201,7 @@ RUN /tmp/workdir/install_ffmpeg.sh
 
 # Stage 2: Final Image ( shrink the size back down )
 # FROM nvidia/cuda:12.6.2-runtime-ubuntu24.04
-FROM nvidia/cuda:12.6.2-base-ubuntu24.04 AS runtime
+FROM nvidia/cuda:12.9.0-base-ubuntu24.04 AS runtime
 # We used to use runtime, but I switched us to base, as it is significantly-smaller.
 # (~ 80Megs ) base: Includes the CUDA runtime (cudart)
 # (~ 1.4Gigs) runtime: Builds on the base and includes the CUDA math libraries⁠, and NCCL⁠.
@@ -230,7 +231,7 @@ RUN     apt-get -yqq update && \
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
-ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
+ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64:/usr/local/cuda-12.9/compat/
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]

@@ -71,7 +71,9 @@ ZIMG = {"version": "3.0.5", "release_date": "2023-6-30"}
 LIBARIBB24 = {"version": "1.0.3", "release_date": "2014-08-18"}
 OPENJPEG = {"version": "2.5.2", "release_date": "2024-02-28"}
 THEORA = {"version": "1.1.1", "release_date": "2010-01-25"}
-LIBVMAF = {"version": "3.0.0", "release_date": "2023-12-07"}
+# libvmaf to old for cuda we need use master branch
+# https://github.com/Netflix/vmaf/issues/1357
+LIBVMAF = {"version": "master", "release_date": "2023-12-07"}
 
 # Library details, Source of truth
 # TODO: store this in a yaml confiuration file ( would probably be better )
@@ -636,9 +638,11 @@ LIBRARIES = OrderedDict(
                 "license_name": "BSD-2-Clause",
                 "license_link": "https://github.com/Netflix/vmaf/blob/master/LICENSE",
                 "build_info": {
-                    "download_link": f"https://github.com/Netflix/vmaf/archive/refs/tags/v{LIBVMAF['version']}.tar.gz",
+                    #"download_link": f"https://github.com/Netflix/vmaf/archive/refs/tags/v{LIBVMAF['version']}.tar.gz",
+                    "download_link":"https://github.com/Netflix/vmaf/archive/refs/heads/master.tar.gz",
                     "build_dir": "/tmp/vmaf",
                     "tarball_name": f"vmaf-v{LIBVMAF['version']}.tar.gz",
+                    #"tarball_name": f"vmaf-v{LIBVMAF['version']}.tar.gz",
                 },
             },
         ),
