@@ -33,6 +33,7 @@ paste into the README.md file of the repository.
 """
 
 # Library versions Source of truth
+FFMPEG_80 = {"version": "8.0", "release_date": "2025-08-22"}
 FFMPEG_71 = {"version": "7.1", "release_date": "2024-09-30"}
 FFMPEG_70 = {"version": "7.0", "release_date": "2024-04-05"}
 FFMPEG_61 = {"version": "6.1", "release_date": "2023-11-11"}
@@ -116,7 +117,8 @@ LIBRARIES = OrderedDict(
             {
                 "link": "http://x265.org/",
                 "version": X265["version"],
-                "version_link": "http://ftp.videolan.org/pub/videolan/x265/",  # "https://www.x265.org/downloads/",
+                # "https://www.x265.org/downloads/",
+                "version_link": "http://ftp.videolan.org/pub/videolan/x265/",
                 "release_date": X265["release_date"],
                 "license_name": "GNU General Public License (GPL) version 2",
                 "license_link": "https://bitbucket.org/multicoreware/x265/raw/f8ae7afc1f61ed0db3b2f23f5d581706fe6ed677/COPYING",
@@ -135,7 +137,8 @@ LIBRARIES = OrderedDict(
                 "version_link": "https://xiph.org/downloads/",
                 "release_date": OGG["release_date"],
                 "license_name": "BSD-style license",
-                "license_link": "https://git.xiph.org/?p=mirrors/ogg.git;a=blob_plain;f=COPYING;hb=HEAD",  # TODO: check this link
+                # TODO: check this link
+                "license_link": "https://git.xiph.org/?p=mirrors/ogg.git;a=blob_plain;f=COPYING;hb=HEAD",
                 "build_info": {
                     "download_link": f"https://downloads.xiph.org/releases/ogg/libogg-{OGG['version']}.tar.gz",
                     "build_dir": "/tmp/libogg",
@@ -639,6 +642,22 @@ LIBRARIES = OrderedDict(
                     "download_link": f"https://github.com/Netflix/vmaf/archive/refs/tags/v{LIBVMAF['version']}.tar.gz",
                     "build_dir": "/tmp/vmaf",
                     "tarball_name": f"vmaf-v{LIBVMAF['version']}.tar.gz",
+                },
+            },
+        ),
+        (
+            "ffmpeg-8.0",
+            {
+                "link": "http://ffmpeg.org/",
+                "version": FFMPEG_80["version"],
+                "version_link": "http://ffmpeg.org/releases/",
+                "release_date": FFMPEG_80["release_date"],
+                "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
+                "license_link": "https://ffmpeg.org/legal.html",
+                "build_info": {
+                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_80['version']}.tar.bz2",
+                    "build_dir": "/tmp/ffmpeg",
+                    "tarball_name": f"ffmpeg-{FFMPEG_80['version']}.tar.bz2",
                 },
             },
         ),

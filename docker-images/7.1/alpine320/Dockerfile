@@ -8,17 +8,6 @@ FROM        alpine:3.20 AS builder
 
 RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates openssl expat git less tree file vim bash
 
-WORKDIR     /tmp/workdir
-
-COPY        generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
-COPY        download_tarballs.sh /tmp/workdir
-COPY        build_source.sh /tmp/workdir
-COPY        install_ffmpeg.sh /tmp/workdir
-
-RUN         chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
-            chmod +x /tmp/workdir/download_tarballs.sh && \
-            chmod +x /tmp/workdir/build_source.sh && \
-            chmod +x /tmp/workdir/install_ffmpeg.sh
 
 ENV FFMPEG_VERSION=7.1.1
 
@@ -173,6 +162,16 @@ RUN     buildDeps="autoconf \
                    alpine-sdk \
                    linux-headers" && \
         apk add --no-cache --update ${buildDeps}
+
+
+
+WORKDIR     /tmp/workdir
+
+COPY        generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
+COPY        download_tarballs.sh /tmp/workdir
+COPY        build_source.sh /tmp/workdir
+COPY        install_ffmpeg.sh /tmp/workdir
+
 
 # Note: pass '--library-list lib1,lib2,lib3 for more control.
 #       Here we have 3 libs that we have to build from source

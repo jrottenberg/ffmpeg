@@ -67,8 +67,14 @@ install_ffmpeg() {
     fi
 
     # Build configuration and copy include directories
-    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf && \
-    cp -rp ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include
+    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
+    for lib in ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw*; do
+        if [[ -d "$lib" ]]; then
+            cp -rp "$lib" /usr/local/include/
+        else
+            echo "Warning: Directory '$lib' not found."
+        fi
+    done
 
     # Create pkgconfig directory and copy and modify pkgconfig files
     mkdir -p /usr/local/lib/pkgconfig
