@@ -222,7 +222,6 @@ for version in keep_version:
             "--enable-libzmq",
             "--enable-nonfree",
             "--enable-openssl",
-            "--enable-postproc",
             "--enable-small",
             "--enable-version3",
             '--prefix="${PREFIX}"',
@@ -349,8 +348,11 @@ for version in keep_version:
             build_source_content = template.replace(
                 "%%FFMPEG_CONFIG_FLAGS%%", COMBINED_CONFIG_FLAGS
             )
+            os.chmod("build_source.sh", 0o755)
+
         with open(f"{ddir}/build_source.sh", "w") as buildfile:
             buildfile.write(build_source_content)
+            os.chmod(f"{ddir}/build_source.sh", 0o755)
 
 
 with open("docker-images/gitlab-ci.yml", "w") as gitlabcifile:

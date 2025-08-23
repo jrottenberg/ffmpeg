@@ -350,7 +350,6 @@ build_ffmpeg() {
         --enable-libzmq \
         --enable-nonfree \
         --enable-openssl \
-        --enable-postproc \
         --enable-shared \
         --enable-small \
         --enable-vaapi \

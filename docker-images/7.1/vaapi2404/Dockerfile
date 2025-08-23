@@ -8,12 +8,7 @@
 # Stage 1: Build
 FROM       ubuntu:24.04 AS builder
 
-WORKDIR     /tmp/workdir
 
-COPY generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
-COPY download_tarballs.sh /tmp/workdir
-COPY build_source.sh /tmp/workdir
-COPY install_ffmpeg.sh /tmp/workdir
 
 
 ENV FFMPEG_VERSION=7.1.1
@@ -116,11 +111,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Before autoremove and clean: Image was 217.01MB
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim && \
-        chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
-        chmod +x /tmp/workdir/download_tarballs.sh && \
-        chmod +x /tmp/workdir/build_source.sh && \
-        chmod +x /tmp/workdir/install_ffmpeg.sh
+        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim
 
 RUN      buildDeps="autoconf \
                     automake \
@@ -159,6 +150,13 @@ RUN      buildDeps="autoconf \
                     libgomp1" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
+
+WORKDIR     /tmp/workdir
+
+COPY generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
+COPY download_tarballs.sh /tmp/workdir
+COPY build_source.sh /tmp/workdir
+COPY install_ffmpeg.sh /tmp/workdir
 
 RUN \
         echo "Installing dependencies..." && \

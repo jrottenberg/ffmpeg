@@ -11,12 +11,6 @@ FROM nvidia/cuda:12.6.2-devel-ubuntu24.04 AS builder
 ENV	    NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
 ENV	    DEBIAN_FRONTEND=noninteractive
 
-WORKDIR     /tmp/workdir
-
-COPY generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
-COPY download_tarballs.sh /tmp/workdir
-COPY build_source.sh /tmp/workdir
-COPY install_ffmpeg.sh /tmp/workdir
 
 ENV         ENV FFMPEG_VERSION=7.1.1
 
@@ -119,11 +113,7 @@ ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-l
 # Note: I don't think we need 'ca-certificates'
 ARG DEBIAN_FRONTEND=noninteractive
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim && \
-        chmod +x /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py && \
-        chmod +x /tmp/workdir/download_tarballs.sh && \
-        chmod +x /tmp/workdir/build_source.sh && \
-        chmod +x /tmp/workdir/install_ffmpeg.sh
+        apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim
 
 RUN      buildDeps="autoconf \
                     automake \
@@ -165,6 +155,14 @@ RUN      buildDeps="autoconf \
                     libavformat-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
+
+
+WORKDIR     /tmp/workdir
+
+COPY generate-source-of-truth-ffmpeg-versions.py /tmp/workdir
+COPY download_tarballs.sh /tmp/workdir
+COPY build_source.sh /tmp/workdir
+COPY install_ffmpeg.sh /tmp/workdir
 
 RUN \
         echo "Installing dependencies..." && \

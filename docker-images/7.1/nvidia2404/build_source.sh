@@ -355,7 +355,6 @@ build_ffmpeg() {
         --enable-nonfree \
         --enable-nvenc \
         --enable-openssl \
-        --enable-postproc \
         --enable-shared \
         --enable-small \
         --enable-version3 \
