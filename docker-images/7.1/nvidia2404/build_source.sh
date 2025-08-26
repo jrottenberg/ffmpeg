@@ -285,7 +285,7 @@ build_libvmaf() {
     # https://github.com/Netflix/vmaf/issues/788#issuecomment-756098059
     mkdir ./libvmaf/build
     cd ./libvmaf/build
-    meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static --prefix "${PREFIX}" .. && \
+    meson setup -Denable_tests=false -Denable_docs=false -Denable_cuda=true --buildtype=release --default-library=static --prefix "${PREFIX}" .. && \
     # meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=shared --prefix "${PREFIX}" ..
     ninja
     ninja install
