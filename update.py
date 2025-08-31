@@ -312,6 +312,9 @@ for version in keep_version:
             LDFLAGS.append("-L/usr/lib/x86_64-linux-gnu")
             LDFLAGS.append("-L/usr/lib")  # for alpine ( but probably fine for all)
 
+        if float(version[0:1]) >= 8:
+            FFMPEG_CONFIG_FLAGS.append("--enable-whisper")
+
         cflags = '--extra-cflags="{0}"'.format(" ".join(CFLAGS))
         ldflags = '--extra-ldflags="{0}"'.format(" ".join(LDFLAGS))
         FFMPEG_CONFIG_FLAGS.append(cflags)

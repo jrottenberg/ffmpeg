@@ -358,6 +358,7 @@ build_ffmpeg() {
         --enable-shared \
         --enable-small \
         --enable-version3 \
+        --enable-whisper \
         --extra-cflags="-I${PREFIX}/include -I${PREFIX}/include/ffnvcodec -I/usr/local/cuda/include/ -I/usr/include/x86_64-linux-gnu" \
         --extra-ldflags="-L${PREFIX}/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/ -L/usr/lib/x86_64-linux-gnu -L/usr/lib" \
         --extra-ldflags=-L/opt/ffmpeg/lib/x86_64-linux-gnu \
