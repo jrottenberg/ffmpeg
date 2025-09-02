@@ -21,6 +21,7 @@ TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 # recent versions, we keep things manageable.
 # Note: the older builds will be preserved in the the docker hub registry.
 RELEASED_YEARS_AGO = 3
+KEEP_VERSION = "8."
 
 
 def is_too_old(date_str, years):
@@ -39,8 +40,10 @@ def get_eol_versions():
         if not v["eol"]:
             if "0.0" in v["latest"]:
                 v["latest"] = v["latest"].replace("0.0", "0")
-            release_date = v["releaseDate"]
-            if not is_too_old(release_date, years=RELEASED_YEARS_AGO):
+            release_date = v["latestReleaseDate"]
+            if not is_too_old(release_date, years=RELEASED_YEARS_AGO) and v[
+                "latest"
+            ].startswith(KEEP_VERSION):
                 keep_version.append(v["latest"])
     return keep_version
 
@@ -311,6 +314,9 @@ for version in keep_version:
             CFLAGS.append("-I/usr/include/x86_64-linux-gnu")
             LDFLAGS.append("-L/usr/lib/x86_64-linux-gnu")
             LDFLAGS.append("-L/usr/lib")  # for alpine ( but probably fine for all)
+
+        if float(version[0:1]) >= 8:
+            FFMPEG_CONFIG_FLAGS.append("--enable-whisper")
 
         cflags = '--extra-cflags="{0}"'.format(" ".join(CFLAGS))
         ldflags = '--extra-ldflags="{0}"'.format(" ".join(LDFLAGS))
