@@ -33,7 +33,7 @@ FROM  devel-base as build
 
 ENV        NVIDIA_HEADERS_VERSION=11.1.5.3
 
-ENV         %%ENV%%
+%%ENV%%
 
 RUN      buildDeps="autoconf \
                     automake \
