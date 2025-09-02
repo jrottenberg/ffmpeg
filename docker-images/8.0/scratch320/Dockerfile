@@ -94,22 +94,13 @@ COPY        install_ffmpeg.sh /tmp/workdir
 
 
 # First batch of libraries ( split into docker layers, to allow for caching )
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
-        libopencore-amr,\
-        libx264,\
-        libx265,\
-        libogg,\
-        libopus
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libopencore-amr,libx264,libx265,libogg,libopus
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
 
 #  additional batch of libraries ( split into docker layers, to allow for caching )
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
-        libvorbis,\
-        libvpx,\
-        libwebp,\
-        libmp3lame
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libvorbis,libvpx,libwebp,libmp3lame
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
@@ -119,11 +110,7 @@ RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
 # additional batch of libraries ( split into docker layers, to allow for caching )
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
-        libfdk-aac,\
-        openjpeg,\
-        freetype,\
-        libvidstab
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libfdk-aac,openjpeg,freetype,libvidstab
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
@@ -144,10 +131,7 @@ RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
 # additional batch of libraries ( split into docker layers, to allow for caching )
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
-        aom,\
-        xorg-macros,\
-        libsvtav1
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list aom,xorg-macros,libsvtav1
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
@@ -159,17 +143,12 @@ RUN /tmp/workdir/build_source.sh
 
 
 # additional batch of libraries ( split into docker layers, to allow for caching )
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
-        libxml2,\
-        libbluray,\
-        libzmq
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libxml2,libbluray,libzmq
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
 # additional batch of libraries ( split into docker layers, to allow for caching )
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
-        libaribb24,\
-        zimg
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libaribb24,zimg
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
@@ -179,9 +158,7 @@ RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
 # # additional batch of libraries ( split into docker layers, to allow for caching )
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list \
-        libsrt,\
-        libvmaf
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libsrt,libvmaf
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
