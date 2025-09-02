@@ -40,7 +40,7 @@ def get_eol_versions():
         if not v["eol"]:
             if "0.0" in v["latest"]:
                 v["latest"] = v["latest"].replace("0.0", "0")
-            release_date = v["releaseDate"]
+            release_date = v["latestReleaseDate"]
             if not is_too_old(release_date, years=RELEASED_YEARS_AGO) and v[
                 "latest"
             ].startswith(KEEP_VERSION):
