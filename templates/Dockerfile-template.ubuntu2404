@@ -9,7 +9,7 @@
 FROM       ubuntu:24.04 AS builder
 
 
-%%ENV%%
+ENV %%ENV%%
 
 ARG DEBIAN_FRONTEND=noninteractive
 
