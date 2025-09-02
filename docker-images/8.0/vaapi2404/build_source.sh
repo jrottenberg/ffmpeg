@@ -296,7 +296,7 @@ build_whisper() {
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=${PREFIX} \
         -DGGML_STATIC=OFF
-    
+
     cmake --build build -j$(nproc)
 
     mkdir -p ${PREFIX}/include ${PREFIX}/lib ${PREFIX}/lib/pkgconfig
