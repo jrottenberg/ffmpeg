@@ -291,6 +291,23 @@ build_libvmaf() {
     ninja install
 }
 
+build_whisper() {
+    cmake -B build -S . \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+        -DGGML_STATIC=OFF
+    
+    cmake --build build -j$(nproc)
+
+    mkdir -p ${PREFIX}/include ${PREFIX}/lib ${PREFIX}/lib/pkgconfig
+    cp -av include/whisper.h ggml/include/ggml*.h ${PREFIX}/include/
+    find ./build -name "*.so*" -exec cp -av {} ${PREFIX}/lib/ \;
+    cp ./build/whisper.pc ${PREFIX}/lib/pkgconfig/
+}
+
+
+
+
 build_ffmpeg() {
     # Here is a list of things that we enable in the ffmpeg build: that are not in the
     # track configuration guide: https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#FFmpeg
@@ -313,11 +330,10 @@ build_ffmpeg() {
     # --enable-small
     # --enable-version3
 
-    # export PKG_CONFIG_PATH=${PKG_CONFIG_PATH}
     ./configure %%FFMPEG_CONFIG_FLAGS%% && \
     make && \
     make install && \
-    make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ && \
+    make tools/zmqsend && cp -av tools/zmqsend ${PREFIX}/bin/ && \
     make distclean && \
     hash -r && \
     cd tools && \

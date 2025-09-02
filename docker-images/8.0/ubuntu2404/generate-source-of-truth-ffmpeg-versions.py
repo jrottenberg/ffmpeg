@@ -73,24 +73,24 @@ LIBARIBB24 = {"version": "1.0.3", "release_date": "2014-08-18"}
 OPENJPEG = {"version": "2.5.2", "release_date": "2024-02-28"}
 THEORA = {"version": "1.1.1", "release_date": "2010-01-25"}
 LIBVMAF = {"version": "3.0.0", "release_date": "2023-12-07"}
-WHISPER = {"version": "20250625", "release_date": "2025-06-25"}
+WHISPER = {"version": "1.7.6", "release_date": "2025-06-25"}
 
 # Library details, Source of truth
-# TODO: store this in a yaml confiuration file ( would probably be better )
+# TODO: store this in a yaml configuration file ( would probably be better )
 # flake8: noqa E501
 LIBRARIES = OrderedDict(
     [
         (
             "whisper",
             {
-                "link": "https://github.com/openai/whisper",
+                "link": "https://github.com/ggml-org/whisper.cpp",
                 "version": WHISPER["version"],
-                "version_link": "https://github.com/openai/whisper/releases",
+                "version_link": "https://github.com/ggml-org/whisper.cpp/releases",
                 "release_date": WHISPER["release_date"],
                 "license_name": "MIT License",
-                "license_link": "https://github.com/openai/whisper/blob/master/LICENSE",
+                "license_link": "https://github.com/ggml-org/whisper.cpp/blob/master/LICENSE",
                 "build_info": {
-                    "download_link": f"https://github.com/openai/whisper/archive/refs/tags/v{WHISPER['version']}.tar.gz",
+                    "download_link": f"https://github.com/ggml-org/whisper.cpp/archive/refs/tags/v{WHISPER['version']}.tar.gz",
                     "build_dir": "/tmp/whisper",
                     "tarball_name": f"whisper-v{WHISPER['version']}.tar.gz",
                 },
