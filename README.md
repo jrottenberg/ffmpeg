@@ -49,7 +49,7 @@ Note: The current versions of ffmpeg supported are  anything newer than 3 years 
 
 **ubuntu2404**
 We chose Ubuntu 24.04 because it is the LTS ( Long Term Support ) build of Ubuntu.
-We used the ffmpeg support libraries from the Ubuntu distrobution where possible. Example: we use 'libx264-dev' as the package to install. We do not tie it to a version. This way when its time to update from 24.04 to 26.04 we can simply update the base Docker template for ubuntu. This will make updating the OS easier as time goes on.
+We used the ffmpeg support libraries from the Ubuntu distribution where possible. Example: we use 'libx264-dev' as the package to install. We do not tie it to a version. This way when its time to update from 24.04 to 26.04 we can simply update the base Docker template for ubuntu. This will make updating the OS easier as time goes on.
 
 **ubuntu2404-edge**
 This image is just like the above `ubuntu2404` container image, except we build all of the ffmpeg support libraries. This is in the spirit of the original intent of this project `jrottenberg/ffmpeg` alltogether. Building everything that ffmpeg needs, and ffmpeg itself from source. This gives us the most control over all of the details of release. The drawback of this is that its much harder to keep updated. The thought process of having both 'Ubuntu-2404' and 'Ubuntu-2404-edge' is that it makes updating the OS easier over time.
