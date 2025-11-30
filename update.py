@@ -52,6 +52,11 @@ keep_version = get_eol_versions()
 print("The following versions of ffmpeg is still supported:")
 for version in keep_version:
     print(version)
+
+# Determine the latest version for "latest" tag
+latest_version = keep_version[-1] if keep_version else None
+print(f"Latest version for 'latest' tag: {latest_version}")
+
 VARIANTS = [
     {"name": "ubuntu2404", "parent": "ubuntu"},
     {"name": "ubuntu2404-edge", "parent": "ubuntu-edge"},
@@ -62,6 +67,9 @@ VARIANTS = [
     {"name": "nvidia2404", "parent": "nvidia"},
 ]
 current_variant_names = [v["name"] for v in VARIANTS]
+
+# Define which variant should be tagged as "latest" (Ubuntu LTS)
+LATEST_VARIANT = "ubuntu2404"
 
 
 all_parents = sorted(set([sub["parent"] for sub in VARIANTS]))
@@ -160,6 +168,8 @@ for version in keep_version:
             v["name"] for v in compatible_variants if v["parent"] == variant["parent"]
         ]
         is_parent = sorted(siblings, reverse=True)[0] == variant["name"]
+        # Determine if this should be tagged as "latest"
+        is_latest = version == latest_version and variant["name"] == LATEST_VARIANT
         dockerfile = IMAGE_FORMAT_STR.format(short_version, variant["name"])
         gitlabci.append(
             f"""
@@ -173,6 +183,7 @@ for version in keep_version:
     VARIANT: {variant['name']}
     PARENT: "{variant['parent']}"
     ISPARENT: "{is_parent}"
+    ISLATEST: "{is_latest}"
 """
         )
 
@@ -185,6 +196,7 @@ for version in keep_version:
         VARIANT:  {variant["name"]}
         PARENT: {variant["parent"]}
         ISPARENT:  {is_parent}
+        ISLATEST:  {is_latest}
 """
         )
         # with open(

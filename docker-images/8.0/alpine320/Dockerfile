@@ -9,7 +9,7 @@ FROM        alpine:3.20 AS builder
 RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates openssl expat git less tree file vim bash
 
 
-ENV FFMPEG_VERSION=8.0
+ENV FFMPEG_VERSION=8.0.1
 
 ENV MAKEFLAGS="-j2"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"

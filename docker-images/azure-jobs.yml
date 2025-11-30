@@ -8,58 +8,64 @@ jobs:
     maxParallel: 10
     matrix:
 
-      ubuntu2404_8.0:
+      ubuntu2404_8.0.1:
         MAJOR_VERSION: 8
         VERSION:  8.0
-        LONG_VERSION: 8.0
+        LONG_VERSION: 8.0.1
         VARIANT:  ubuntu2404
         PARENT: ubuntu
         ISPARENT:  True
+        ISLATEST:  True
 
 
-      ubuntu2404-edge_8.0:
+      ubuntu2404-edge_8.0.1:
         MAJOR_VERSION: 8
         VERSION:  8.0
-        LONG_VERSION: 8.0
+        LONG_VERSION: 8.0.1
         VARIANT:  ubuntu2404-edge
         PARENT: ubuntu-edge
         ISPARENT:  True
+        ISLATEST:  False
 
 
-      alpine320_8.0:
+      alpine320_8.0.1:
         MAJOR_VERSION: 8
         VERSION:  8.0
-        LONG_VERSION: 8.0
+        LONG_VERSION: 8.0.1
         VARIANT:  alpine320
         PARENT: alpine
         ISPARENT:  True
+        ISLATEST:  False
 
 
-      scratch320_8.0:
+      scratch320_8.0.1:
         MAJOR_VERSION: 8
         VERSION:  8.0
-        LONG_VERSION: 8.0
+        LONG_VERSION: 8.0.1
         VARIANT:  scratch320
         PARENT: scratch
         ISPARENT:  True
+        ISLATEST:  False
 
 
-      vaapi2404_8.0:
+      vaapi2404_8.0.1:
         MAJOR_VERSION: 8
         VERSION:  8.0
-        LONG_VERSION: 8.0
+        LONG_VERSION: 8.0.1
         VARIANT:  vaapi2404
         PARENT: vaapi
         ISPARENT:  True
+        ISLATEST:  False
 
 
-      nvidia2404_8.0:
+      nvidia2404_8.0.1:
         MAJOR_VERSION: 8
         VERSION:  8.0
-        LONG_VERSION: 8.0
+        LONG_VERSION: 8.0.1
         VARIANT:  nvidia2404
         PARENT: nvidia
         ISPARENT:  True
+        ISLATEST:  False
 
   steps:
   - template: ../azure-steps.yml
