@@ -33,7 +33,7 @@ build_libx264() {
 
 build_libx265() {
     cd build/linux
-    sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh
+    sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX} -DENABLE_ALPHA=ON/" multilib.sh
     sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh
     ./multilib.sh
     make -C 8bit install
