@@ -16,7 +16,7 @@ For the latest FFmpeg version on Ubuntu LTS, you can use: `docker pull jrottenbe
 
 This image can be used as a base for an encoding farm.
 
-## Builds / Avaliabvle Docker Containers
+## Builds / Available Docker Containers
 
 There are different builds available:
 Below is a table that provides examples for the nomenclature:
