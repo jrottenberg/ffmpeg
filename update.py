@@ -150,25 +150,28 @@ def update_ffmpeg_entries_in_source_of_truth(versions, dates):
     entries = []
     for full_version in sorted(versions, reverse=True):
         short = get_shorten_version(full_version)
-        date = dates[full_version]
+        dates[full_version]
         const = "FFMPEG_" + short.replace(".", "_")
+        lgpl = "GNU Lesser General Public License (LGPL) version 2.1"
+        dl = f"https://ffmpeg.org/releases/" f"ffmpeg-{{{const}['version']}}.tar.bz2"
         entries.append(
-            f'        (\n'
+            f"        (\n"
             f'            "ffmpeg-{short}",\n'
-            f'            {{\n'
+            f"            {{\n"
             f'                "link": "http://ffmpeg.org/",\n'
             f'                "version": {const}["version"],\n'
             f'                "version_link": "http://ffmpeg.org/releases/",\n'
             f'                "release_date": {const}["release_date"],\n'
-            f'                "license_name": "GNU Lesser General Public License (LGPL) version 2.1",\n'
+            f'                "license_name": "{lgpl}",\n'
             f'                "license_link": "https://ffmpeg.org/legal.html",\n'
             f'                "build_info": {{\n'
-            f'                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{{{const}[\'version\']}}.tar.bz2",\n'
+            f'                    "download_link": f"{dl}",\n'
             f'                    "build_dir": "/tmp/ffmpeg",\n'
-            f'                    "tarball_name": f"ffmpeg-{{{const}[\'version\']}}.tar.bz2",\n'
-            f'                }},\n'
-            f'            }},\n'
-            f'        ),'
+            f'                    "tarball_name":'
+            f" f\"ffmpeg-{{{const}['version']}}.tar.bz2\",\n"
+            f"                }},\n"
+            f"            }},\n"
+            f"        ),"
         )
 
     new_block = (

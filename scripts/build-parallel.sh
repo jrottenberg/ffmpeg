@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Build all docker-images in parallel using GNU screen.
-# Each Dockerfile gets its own named screen window; logs go to logs/<version>-<variant>.log
-# Usage: ./build-parallel.sh [IMAGE_PREFIX]
+# Build all docker-images in parallel using tmux with a tiled grid view.
+# Each Dockerfile gets its own pane showing live build output.
+# Usage: ./build-parallel-tmux.sh [IMAGE_PREFIX]
 #   IMAGE_PREFIX defaults to "jrottenberg/ffmpeg"
 
 set -euo pipefail
@@ -13,7 +13,6 @@ SESSION="ffmpeg-build"
 
 mkdir -p "${LOG_DIR}"
 
-# Collect all Dockerfiles: docker-images/<version>/<variant>/Dockerfile
 mapfile -t DOCKERFILES < <(find "${REPO_ROOT}/docker-images" -name Dockerfile | sort)
 
 if [[ ${#DOCKERFILES[@]} -eq 0 ]]; then
@@ -22,9 +21,9 @@ if [[ ${#DOCKERFILES[@]} -eq 0 ]]; then
 fi
 
 # Kill any stale session with the same name
-screen -S "${SESSION}" -X quit 2>/dev/null || true
+tmux kill-session -t "${SESSION}" 2>/dev/null || true
 
-echo "Starting screen session '${SESSION}' with ${#DOCKERFILES[@]} builds"
+echo "Starting tmux session '${SESSION}' with ${#DOCKERFILES[@]} builds"
 echo "Logs → ${LOG_DIR}/"
 echo ""
 
@@ -32,30 +31,31 @@ FIRST=true
 for dockerfile in "${DOCKERFILES[@]}"; do
     variant_dir="$(dirname "${dockerfile}")"
     variant="$(basename "${variant_dir}")"
-    version_dir="$(dirname "${variant_dir}")"
-    version="$(basename "${version_dir}")"
+    version="$(basename "$(dirname "${variant_dir}")")"
     tag="${IMAGE_PREFIX}:${version}-${variant}"
     logfile="${LOG_DIR}/${version}-${variant}.log"
-    window_name="${version}-${variant}"
+    pane_title="${version}-${variant}"
 
-    build_cmd="docker build -t \"${tag}\" --build-arg MAKEFLAGS=\"-j\$(((\$(nproc) + 1)))\" \"${variant_dir}\" 2>&1 | tee \"${logfile}\"; echo \"EXIT \$?\" >> \"${logfile}\""
+    build_cmd="printf '\033]2;%s\033\\' '${pane_title}'; docker build -t '${tag}' --build-arg MAKEFLAGS='-j\$(($(nproc) + 1))' '${variant_dir}' 2>&1 | tee '${logfile}'; echo \"--- done: \$? ---\"; read -r"
 
     if [[ "${FIRST}" == true ]]; then
-        # Create the session with the first window
-        screen -dmS "${SESSION}" -t "${window_name}" bash -c "${build_cmd}"
+        tmux new-session -d -s "${SESSION}" -x "220" -y "50" bash
+        tmux send-keys -t "${SESSION}" "${build_cmd}" Enter
         FIRST=false
     else
-        # Add subsequent windows to the existing session
-        screen -S "${SESSION}" -X screen -t "${window_name}" bash -c "${build_cmd}"
+        tmux split-window -t "${SESSION}" bash
+        tmux send-keys -t "${SESSION}" "${build_cmd}" Enter
+        tmux select-layout -t "${SESSION}" tiled
     fi
 
-    echo "  Queued: ${tag}  (log: logs/${version}-${variant}.log)"
+    echo "  Queued: ${tag}"
 done
+
+# Final tiled layout
+tmux select-layout -t "${SESSION}" tiled
 
 echo ""
 echo "All builds launched."
 echo ""
-echo "Attach to the session:   screen -r ${SESSION}"
-echo "List windows:            screen -S ${SESSION} -Q windows"
-echo "Follow a log:            tail -f logs/<version>-<variant>.log"
-echo "Kill all:                screen -S ${SESSION} -X quit"
+echo "Attach:    tmux attach -t ${SESSION}"
+echo "Kill all:  tmux kill-session -t ${SESSION}"
