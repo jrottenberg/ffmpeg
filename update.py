@@ -171,8 +171,7 @@ for version in keep_version:
         # Determine if this should be tagged as "latest"
         is_latest = version == latest_version and variant["name"] == LATEST_VARIANT
         dockerfile = IMAGE_FORMAT_STR.format(short_version, variant["name"])
-        gitlabci.append(
-            f"""
+        gitlabci.append(f"""
 {version}-{variant['name']}:
   extends: .docker
   stage: {variant['parent']}
@@ -184,11 +183,9 @@ for version in keep_version:
     PARENT: "{variant['parent']}"
     ISPARENT: "{is_parent}"
     ISLATEST: "{is_latest}"
-"""
-        )
+""")
 
-        azure.append(
-            f"""
+        azure.append(f"""
       {variant["name"]}_{version}:
         MAJOR_VERSION: {major_version}
         VERSION:  {short_version}
@@ -197,8 +194,7 @@ for version in keep_version:
         PARENT: {variant["parent"]}
         ISPARENT:  {is_parent}
         ISLATEST:  {is_latest}
-"""
-        )
+""")
         # with open(
         #     TEMPLATE_STR.format(variant["name"].replace("-edge", "")), "r"
         # ) as tmpfile:
