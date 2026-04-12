@@ -3,6 +3,7 @@
 import datetime
 import json
 import os
+import re
 import shutil
 from urllib import request
 
@@ -33,6 +34,7 @@ def is_too_old(date_str, years):
 
 def get_eol_versions():
     keep_version = []
+    release_dates = {}
     with request.urlopen(FFMPEG_RELEASES) as conn:
         ffmpeg_releases = conn.read().decode("utf-8")
 
@@ -45,10 +47,11 @@ def get_eol_versions():
                 "latest"
             ].startswith(KEEP_VERSION):
                 keep_version.append(v["latest"])
-    return keep_version
+                release_dates[v["latest"]] = release_date
+    return keep_version, release_dates
 
 
-keep_version = get_eol_versions()
+keep_version, release_dates = get_eol_versions()
 print("The following versions of ffmpeg is still supported:")
 for version in keep_version:
     print(version)
@@ -133,6 +136,61 @@ def read_ffmpeg_template(variant_name, env_or_run="env"):
     with open(f"templates/Dockerfile-{env_or_run}-{distro_name}", "r") as tmpfile:
         return tmpfile.read()
 
+
+def update_ffmpeg_entries_in_source_of_truth(versions, dates):
+    """
+    Regenerate the %%FFMPEG_ENTRIES_START%% … %%FFMPEG_ENTRIES_END%% block in
+    generate-source-of-truth-ffmpeg-versions.py so it stays in sync with the
+    active ffmpeg versions without manual edits.
+    """
+    filepath = "generate-source-of-truth-ffmpeg-versions.py"
+    with open(filepath, "r") as f:
+        content = f.read()
+
+    entries = []
+    for full_version in sorted(versions, reverse=True):
+        short = get_shorten_version(full_version)
+        date = dates[full_version]
+        const = "FFMPEG_" + short.replace(".", "_")
+        entries.append(
+            f'        (\n'
+            f'            "ffmpeg-{short}",\n'
+            f'            {{\n'
+            f'                "link": "http://ffmpeg.org/",\n'
+            f'                "version": {const}["version"],\n'
+            f'                "version_link": "http://ffmpeg.org/releases/",\n'
+            f'                "release_date": {const}["release_date"],\n'
+            f'                "license_name": "GNU Lesser General Public License (LGPL) version 2.1",\n'
+            f'                "license_link": "https://ffmpeg.org/legal.html",\n'
+            f'                "build_info": {{\n'
+            f'                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{{{const}[\'version\']}}.tar.bz2",\n'
+            f'                    "build_dir": "/tmp/ffmpeg",\n'
+            f'                    "tarball_name": f"ffmpeg-{{{const}[\'version\']}}.tar.bz2",\n'
+            f'                }},\n'
+            f'            }},\n'
+            f'        ),'
+        )
+
+    new_block = (
+        "        # %%FFMPEG_ENTRIES_START%%\n"
+        + "\n".join(entries)
+        + "\n        # %%FFMPEG_ENTRIES_END%%"
+    )
+
+    updated = re.sub(
+        r"        # %%FFMPEG_ENTRIES_START%%.*?# %%FFMPEG_ENTRIES_END%%",
+        new_block,
+        content,
+        flags=re.DOTALL,
+    )
+
+    with open(filepath, "w") as f:
+        f.write(updated)
+
+    print(f"Updated ffmpeg entries in {filepath}")
+
+
+update_ffmpeg_entries_in_source_of_truth(keep_version, release_dates)
 
 print("Preparing docker images for ffmpeg versions: ")
 

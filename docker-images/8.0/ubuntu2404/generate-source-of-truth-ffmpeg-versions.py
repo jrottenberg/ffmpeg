@@ -663,19 +663,20 @@ LIBRARIES = OrderedDict(
                 },
             },
         ),
+        # %%FFMPEG_ENTRIES_START%%
         (
             "ffmpeg-8.1",
             {
                 "link": "http://ffmpeg.org/",
-                "version": FFMPEG_81["version"],
+                "version": FFMPEG_8_1["version"],
                 "version_link": "http://ffmpeg.org/releases/",
-                "release_date": FFMPEG_81["release_date"],
+                "release_date": FFMPEG_8_1["release_date"],
                 "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
                 "license_link": "https://ffmpeg.org/legal.html",
                 "build_info": {
-                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_81['version']}.tar.bz2",
+                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_8_1['version']}.tar.bz2",
                     "build_dir": "/tmp/ffmpeg",
-                    "tarball_name": f"ffmpeg-{FFMPEG_81['version']}.tar.bz2",
+                    "tarball_name": f"ffmpeg-{FFMPEG_8_1['version']}.tar.bz2",
                 },
             },
         ),
@@ -683,82 +684,19 @@ LIBRARIES = OrderedDict(
             "ffmpeg-8.0",
             {
                 "link": "http://ffmpeg.org/",
-                "version": FFMPEG_80["version"],
+                "version": FFMPEG_8_0["version"],
                 "version_link": "http://ffmpeg.org/releases/",
-                "release_date": FFMPEG_80["release_date"],
+                "release_date": FFMPEG_8_0["release_date"],
                 "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
                 "license_link": "https://ffmpeg.org/legal.html",
                 "build_info": {
-                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_80['version']}.tar.bz2",
+                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_8_0['version']}.tar.bz2",
                     "build_dir": "/tmp/ffmpeg",
-                    "tarball_name": f"ffmpeg-{FFMPEG_80['version']}.tar.bz2",
+                    "tarball_name": f"ffmpeg-{FFMPEG_8_0['version']}.tar.bz2",
                 },
             },
         ),
-        (
-            "ffmpeg-7.1",
-            {
-                "link": "http://ffmpeg.org/",
-                "version": FFMPEG_71["version"],
-                "version_link": "http://ffmpeg.org/releases/",
-                "release_date": FFMPEG_71["release_date"],
-                "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
-                "license_link": "https://ffmpeg.org/legal.html",
-                "build_info": {
-                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_71['version']}.tar.bz2",
-                    "build_dir": "/tmp/ffmpeg",
-                    "tarball_name": f"ffmpeg-{FFMPEG_71['version']}.tar.bz2",
-                },
-            },
-        ),
-        (
-            "ffmpeg-7.0",
-            {
-                "link": "http://ffmpeg.org/",
-                "version": FFMPEG_70["version"],
-                "version_link": "http://ffmpeg.org/releases/",
-                "release_date": FFMPEG_70["release_date"],
-                "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
-                "license_link": "https://ffmpeg.org/legal.html",
-                "build_info": {
-                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_70['version']}.tar.bz2",
-                    "build_dir": "/tmp/ffmpeg",
-                    "tarball_name": f"ffmpeg-{FFMPEG_70['version']}.tar.bz2",
-                },
-            },
-        ),
-        (
-            "ffmpeg-6.1",
-            {
-                "link": "http://ffmpeg.org/",
-                "version": FFMPEG_61["version"],
-                "version_link": "http://ffmpeg.org/releases/",
-                "release_date": FFMPEG_61["release_date"],
-                "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
-                "license_link": "https://ffmpeg.org/legal.html",
-                "build_info": {
-                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_61['version']}.tar.bz2",
-                    "build_dir": "/tmp/ffmpeg",
-                    "tarball_name": f"ffmpeg-{FFMPEG_61['version']}.tar.bz2",
-                },
-            },
-        ),
-        # (
-        #     "ffmpeg-5.1",
-        #     {
-        #         "link": "http://ffmpeg.org/",
-        #         "version": FFMPEG_51["version"],
-        #         "version_link": "http://ffmpeg.org/releases/",
-        #         "release_date": FFMPEG_51["release_date"],
-        #         "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
-        #         "license_link": "https://ffmpeg.org/legal.html",
-        #         "build_info": {
-        #             "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_51['version']}.tar.bz2",
-        #             "build_dir": "/tmp/ffmpeg",
-        #             "tarball_name": f"ffmpeg-{FFMPEG_51['version']}.tar.bz2",
-        #         },
-        #     },
-        # ),
+        # %%FFMPEG_ENTRIES_END%%
     ]
 )
 # come back to this problem, I think yaml configuration might be better.
