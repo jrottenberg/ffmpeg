@@ -7,7 +7,7 @@
 set -euo pipefail
 
 IMAGE_PREFIX="${1:-jrottenberg/ffmpeg}"
-REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 LOG_DIR="${REPO_ROOT}/logs"
 SESSION="ffmpeg-build"
 

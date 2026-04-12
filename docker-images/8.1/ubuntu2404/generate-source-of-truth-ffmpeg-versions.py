@@ -33,12 +33,12 @@ paste into the README.md file of the repository.
 """
 
 # Library versions Source of truth
-FFMPEG_81 = {"version": "8.1", "release_date": "2025-11-28"}
-FFMPEG_80 = {"version": "8.0", "release_date": "2025-08-22"}
-FFMPEG_71 = {"version": "7.1", "release_date": "2024-09-30"}
-FFMPEG_70 = {"version": "7.0", "release_date": "2024-04-05"}
-FFMPEG_61 = {"version": "6.1", "release_date": "2023-11-11"}
-# FFMPEG_51 = {"version": "5.1", "release_date": "2022-06-22"}
+FFMPEG_8_1 = {"version": "8.1", "release_date": "2025-11-28"}
+FFMPEG_8_0 = {"version": "8.0", "release_date": "2025-08-22"}
+FFMPEG_7_1 = {"version": "7.1", "release_date": "2024-09-30"}
+FFMPEG_7_0 = {"version": "7.0", "release_date": "2024-04-05"}
+FFMPEG_6_1 = {"version": "6.1", "release_date": "2023-11-11"}
+# FFMPEG_5_1 = {"version": "5.1", "release_date": "2022-06-22"}
 OGG = {"version": "1.3.5", "release_date": "2021-06-04"}
 OPENCOREAMR = {"version": "0.1.6", "release_date": "2022-08-01"}
 VORBIS = {"version": "1.3.7", "release_date": "2020-07-04"}
