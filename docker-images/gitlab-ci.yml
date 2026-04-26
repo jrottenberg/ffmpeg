@@ -7,6 +7,78 @@ stages:
   - ubuntu-edge
   - vaapi
 
+8.1.0-ubuntu2404:
+  extends: .docker
+  stage: ubuntu
+  variables:
+    MAJOR_VERSION: 8
+    VERSION: "8.1"
+    LONG_VERSION: "8.1.0"
+    VARIANT: ubuntu2404
+    PARENT: "ubuntu"
+    ISPARENT: "True"
+    ISLATEST: "False"
+
+8.1.0-ubuntu2404-edge:
+  extends: .docker
+  stage: ubuntu-edge
+  variables:
+    MAJOR_VERSION: 8
+    VERSION: "8.1"
+    LONG_VERSION: "8.1.0"
+    VARIANT: ubuntu2404-edge
+    PARENT: "ubuntu-edge"
+    ISPARENT: "True"
+    ISLATEST: "False"
+
+8.1.0-alpine320:
+  extends: .docker
+  stage: alpine
+  variables:
+    MAJOR_VERSION: 8
+    VERSION: "8.1"
+    LONG_VERSION: "8.1.0"
+    VARIANT: alpine320
+    PARENT: "alpine"
+    ISPARENT: "True"
+    ISLATEST: "False"
+
+8.1.0-scratch320:
+  extends: .docker
+  stage: scratch
+  variables:
+    MAJOR_VERSION: 8
+    VERSION: "8.1"
+    LONG_VERSION: "8.1.0"
+    VARIANT: scratch320
+    PARENT: "scratch"
+    ISPARENT: "True"
+    ISLATEST: "False"
+
+8.1.0-vaapi2404:
+  extends: .docker
+  stage: vaapi
+  variables:
+    MAJOR_VERSION: 8
+    VERSION: "8.1"
+    LONG_VERSION: "8.1.0"
+    VARIANT: vaapi2404
+    PARENT: "vaapi"
+    ISPARENT: "True"
+    ISLATEST: "False"
+
+8.1.0-nvidia2404:
+  extends: .docker
+  stage: nvidia
+  variables:
+    MAJOR_VERSION: 8
+    VERSION: "8.1"
+    LONG_VERSION: "8.1.0"
+    VARIANT: nvidia2404
+    PARENT: "nvidia"
+    ISPARENT: "True"
+    ISLATEST: "False"
+
 8.0.1-ubuntu2404:
   extends: .docker
   stage: ubuntu
