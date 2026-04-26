@@ -9,9 +9,7 @@
 FROM       ubuntu:24.04 AS builder
 
 
-
-
-ENV FFMPEG_VERSION=8.0.1
+ENV FFMPEG_VERSION=8.1.0
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
@@ -109,7 +107,6 @@ ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-l
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Before autoremove and clean: Image was 217.01MB
 RUN     apt-get -yqq update && \
         apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim
 
@@ -158,14 +155,13 @@ COPY download_tarballs.sh /tmp/workdir
 COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
 
+
+
 RUN \
         echo "Installing dependencies..." && \
         apt-get install -yq --no-install-recommends ${OPENCORE_PKGS} ${X264_PKGS} ${X265_PKGS} ${OGG_PKGS} ${OPUS_PKGS} ${VORBIS_PKGS} ${VPX_PKGS} ${WEBP_PKGS} ${MP3LAME_PKGS} ${XVIDCORE_PKGS} ${FDKAAC_PKGS} ${OPENJP_PKGS} ${FREETYPE_PKGS} ${VIDSTAB_PKGS} ${FRIBIDI_PKGS} ${FONTCONFIG_PKGS} ${LIBASS_PKGS} ${AOM_PKGS} ${SVTAV1_PKGS} ${DAV1D_PKGS} ${XORG_MACROS_PKGS} ${XPROTO_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${BLURAY_PKGS} ${ZMQ_PKGS} ${PNG_PKGS} ${ARIBB24_PKGS} ${ZIMG_PKGS} ${THEORA_PKGS} ${SRT_PKGS} ${LIBDRM_PKGS}
 
-RUN \
-        apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver
-
-# apt install libdrm-dev
+        # apt install libdrm-dev
 
 ## libvmaf https://github.com/Netflix/vmaf
 ## https://github.com/Netflix/vmaf/issues/788#issuecomment-756098059
@@ -179,10 +175,9 @@ RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvaz
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.0
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.1
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
-
 
 ## when  debugging you can pass in || true to the end of the command
 ## to keep the build going even if one of the steps fails

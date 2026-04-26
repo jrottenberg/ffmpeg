@@ -9,7 +9,7 @@
 FROM       ubuntu:24.04 AS builder
 
 
-ENV FFMPEG_VERSION=8.0
+ENV FFMPEG_VERSION=8.0.1
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html

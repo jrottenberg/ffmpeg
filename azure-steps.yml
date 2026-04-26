@@ -28,6 +28,15 @@ steps:
         docker push "${GHCR}:${VERSION}-${PARENT}"
         docker push "${GHCR}:${MAJOR_VERSION}-${PARENT}"
       fi
+
+      if [ "${ISLATEST:-False}" == "True" ]
+        then
+        docker tag "${DOCKER}:${LONG_VERSION}-${VARIANT}" "${DOCKER}:latest"
+        docker push "${DOCKER}:latest"
+
+        docker tag "${DOCKER}:${LONG_VERSION}-${VARIANT}" "${GHCR}:latest"
+        docker push "${GHCR}:latest"
+      fi
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     displayName: Push docker image
     env:

@@ -16,7 +16,7 @@ COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
 
 
-ENV FFMPEG_VERSION=8.0.1
+ENV FFMPEG_VERSION=8.1.0
 
 # fribidi
 ARG FRIBIDI_PKGS="libfribidi-dev libfribidi0"
@@ -158,7 +158,7 @@ RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
 # This is a slow one, put it on its own container layer to speed up the build (allowing it to be cached)
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.0
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.1
 ## when  debugging you can pass in || true to the end of the next 3 commands
 ## to keep the build going even if one of the steps fails
 RUN /tmp/workdir/download_tarballs.sh

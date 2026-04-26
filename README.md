@@ -12,9 +12,11 @@ This project prepares a minimalist Docker image with FFmpeg. It compiles FFmpeg 
 
 You can install the latest build of this image by running `docker pull jrottenberg/ffmpeg:${VERSION}-${VARIANT}` or `docker pull ghcr.io/jrottenberg/ffmpeg:${VERSION}-${VARIANT}`.
 
+For the latest FFmpeg version on Ubuntu LTS, you can use: `docker pull jrottenberg/ffmpeg:latest` or `docker pull ghcr.io/jrottenberg/ffmpeg:latest`.
+
 This image can be used as a base for an encoding farm.
 
-## Builds / Avaliabvle Docker Containers
+## Builds / Available Docker Containers
 
 There are different builds available:
 Below is a table that provides examples for the nomenclature:

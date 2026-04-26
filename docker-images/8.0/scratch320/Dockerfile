@@ -10,7 +10,7 @@ RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates openssl
 # apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim && \
 
 
-ENV FFMPEG_VERSION=8.0
+ENV FFMPEG_VERSION=8.0.1
 
 ENV MAKEFLAGS="-j2"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"

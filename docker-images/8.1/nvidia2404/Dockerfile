@@ -5,13 +5,16 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-# Stage 1: Build
-FROM       ubuntu:24.04 AS builder
+# Stage 1: Build ( https://hub.docker.com/r/nvidia/cuda )
+FROM nvidia/cuda:12.6.2-devel-ubuntu24.04 AS builder
+
+ENV	    NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
+ENV	    DEBIAN_FRONTEND=noninteractive
 
 
+ENV FFMPEG_VERSION=8.1.0
 
-
-ENV FFMPEG_VERSION=8.0.1
+ENV NVIDIA_HEADERS_VERSION=11.1.5.3
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
@@ -107,9 +110,8 @@ ENV PREFIX="/opt/ffmpeg"
 ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"
 
 
+# Note: I don't think we need 'ca-certificates'
 ARG DEBIAN_FRONTEND=noninteractive
-
-# Before autoremove and clean: Image was 217.01MB
 RUN     apt-get -yqq update && \
         apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim
 
@@ -147,9 +149,13 @@ RUN      buildDeps="autoconf \
                     openssl \
                     libssl-dev \
                     expat \
-                    libgomp1" && \
+                    libgomp1 \
+                    ca-certificates \
+                    libxcb-shape0-dev \
+                    libavformat-dev" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
+
 
 WORKDIR     /tmp/workdir
 
@@ -161,9 +167,6 @@ COPY install_ffmpeg.sh /tmp/workdir
 RUN \
         echo "Installing dependencies..." && \
         apt-get install -yq --no-install-recommends ${OPENCORE_PKGS} ${X264_PKGS} ${X265_PKGS} ${OGG_PKGS} ${OPUS_PKGS} ${VORBIS_PKGS} ${VPX_PKGS} ${WEBP_PKGS} ${MP3LAME_PKGS} ${XVIDCORE_PKGS} ${FDKAAC_PKGS} ${OPENJP_PKGS} ${FREETYPE_PKGS} ${VIDSTAB_PKGS} ${FRIBIDI_PKGS} ${FONTCONFIG_PKGS} ${LIBASS_PKGS} ${AOM_PKGS} ${SVTAV1_PKGS} ${DAV1D_PKGS} ${XORG_MACROS_PKGS} ${XPROTO_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${BLURAY_PKGS} ${ZMQ_PKGS} ${PNG_PKGS} ${ARIBB24_PKGS} ${ZIMG_PKGS} ${THEORA_PKGS} ${SRT_PKGS} ${LIBDRM_PKGS}
-
-RUN \
-        apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver
 
 # apt install libdrm-dev
 
@@ -179,10 +182,13 @@ RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvaz
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.0
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list nvidia-codec-headers
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.1
+RUN /tmp/workdir/download_tarballs.sh
+RUN /tmp/workdir/build_source.sh
 
 ## when  debugging you can pass in || true to the end of the command
 ## to keep the build going even if one of the steps fails
@@ -191,14 +197,33 @@ RUN /tmp/workdir/install_ffmpeg.sh
 
 
 # Stage 2: Final Image ( shrink the size back down )
-FROM ubuntu:24.04 AS runtime
+# FROM nvidia/cuda:12.6.2-runtime-ubuntu24.04
+FROM nvidia/cuda:12.6.2-base-ubuntu24.04 AS runtime
+# We used to use runtime, but I switched us to base, as it is significantly-smaller.
+# (~ 80Megs ) base: Includes the CUDA runtime (cudart)
+# (~ 1.4Gigs) runtime: Builds on the base and includes the CUDA math libraries⁠, and NCCL⁠.
+# (~ 4 Gigs ) devel: Builds on the runtime and includes headers, development tools for building CUDA images.
+
+# COPY --from=builder /usr/local /usr/local/
+# copy only needed files, without copying nvidia dev files
+COPY --from=builder /usr/local/bin /usr/local/bin/
+COPY --from=builder /usr/local/share /usr/local/share/
+COPY --from=builder /usr/local/lib /usr/local/lib/
+COPY --from=builder /usr/local/include /usr/local/include/
+
 # Copy fonts and fontconfig from builder
 COPY --from=builder /usr/share/fonts /usr/share/fonts
 COPY --from=builder /usr/share/fontconfig /usr/share/fontconfig
 COPY --from=builder /usr/bin/fc-* /usr/bin/
 
-# Copy rest of the content
-COPY --from=builder /usr/local /usr/local/
+ENV	    NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
+ENV	    DEBIAN_FRONTEND=nonintercative
+WORKDIR     /tmp/workdir
+
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends ca-certificates expat libgomp1 libxcb-shape0-dev && \
+        apt-get autoremove -y && \
+        apt-get clean -y
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg

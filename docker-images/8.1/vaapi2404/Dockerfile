@@ -11,7 +11,7 @@ FROM       ubuntu:24.04 AS builder
 
 
 
-ENV FFMPEG_VERSION=8.0.1
+ENV FFMPEG_VERSION=8.1.0
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
@@ -179,7 +179,7 @@ RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvaz
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.0
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.1
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
