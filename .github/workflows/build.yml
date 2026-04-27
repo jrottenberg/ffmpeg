@@ -185,7 +185,7 @@ jobs:
         with:
           source: ./docs
           destination: ./_site
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
