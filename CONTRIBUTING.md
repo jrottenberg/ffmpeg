@@ -1,6 +1,6 @@
 # Welcome to ffmpeg docker image contributing guide <!-- omit in toc -->
 
-Thank you for investing your time in contributing to our project! Any contribution you make will be reflected on [jrottenberg/ffmpeg](https://github.com/jrottenberg/ffmpeg) :tada:.
+Thank you for investing your time in contributing to our project! Any contribution you make will be reflected on [jrottenberg/ffmpeg](https://github.com/jrottenberg/ffmpeg) 🎉.
 
 Read our [Code of Conduct](./CODE_OF_CONDUCT.md) to keep our community approachable and respectable.
 
@@ -122,6 +122,17 @@ In the bash shell, run the following commands
    `docker run --rm -v $(pwd):$(pwd) -w $(pwd) --platform="linux/amd64" jrottenberg/ffmpeg:7.1-ubuntu2404 -i sample-5s_1.mp4 -vf "drawtext=text='Stack Overflow':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2" outfile/sample-5s_1_with_text.mp4`
 ```
 </details>
+
+## Previewing GitHub Pages locally
+
+The project site is built from `README.md` using Jekyll. To preview it locally:
+
+```sh
+docker build -t docs -f docs/Dockerfile .
+docker run --rm -p 4000:4000 docs
+```
+
+Then open http://localhost:4000.
 
 # Reviewing
 

@@ -18,6 +18,12 @@ if [[ "$OS_NAME" == "Linux" ]]; then
         is_alpine=true
     fi
 fi
+
+ARCH=$(uname -m)
+is_x86=false
+if [[ "$ARCH" == "x86_64" ]]; then
+    is_x86=true
+fi
 ######################### Callback build functions #########################
 build_libopencore-amr() {
     ./configure --prefix="${PREFIX}" --enable-shared
@@ -35,6 +41,9 @@ build_libx265() {
     cd build/linux
     sed -i "/-DEXTRA_LIB/ s/$/ -DCMAKE_INSTALL_PREFIX=\${PREFIX}/" multilib.sh
     sed -i "/^cmake/ s/$/ -DENABLE_CLI=OFF/" multilib.sh
+    if [ "$is_x86" = false ]; then
+        sed -i "/^cmake/ s/$/ -DENABLE_ASSEMBLY=OFF/" multilib.sh
+    fi
     ./multilib.sh
     make -C 8bit install
 }
@@ -74,7 +83,11 @@ build_libvpx() {
     git -C libvpx pull 2> /dev/null || git clone --branch ${version} --depth 1 https://chromium.googlesource.com/webm/libvpx.git
     cd libvpx
     pwd
-    ./configure  --prefix="${PREFIX}" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --enable-pic --enable-shared --as=yasm
+    local vpx_configure_flags="--prefix=${PREFIX} --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --enable-pic --enable-shared"
+    if [ "$is_x86" = true ]; then
+        vpx_configure_flags="${vpx_configure_flags} --as=yasm"
+    fi
+    ./configure ${vpx_configure_flags}
     make
     make install
 }
@@ -86,7 +99,11 @@ build_libwebp() {
 }
 
 build_libmp3lame() {
-    ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --enable-shared --enable-nasm --disable-frontend && \
+    local nasm_flag="--enable-nasm"
+    if [ "$is_x86" = false ]; then
+        nasm_flag="--disable-nasm"
+    fi
+    ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --enable-shared ${nasm_flag} --disable-frontend && \
     make && \
     make install
 }
@@ -137,9 +154,9 @@ build_fribidi() {
 }
 
 build_fontconfig() {
-    ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
-    make && \
-    make install
+    meson setup build --prefix="${PREFIX}" --default-library=shared && \
+    ninja -C build && \
+    ninja -C build install
 }
 
 build_libass() {
@@ -171,7 +188,11 @@ build_aom() {
     cd ${dir} && \
     mkdir -p ./aom_build && \
     cd ./aom_build && \
-    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 -DENABLE_NASM=on .. && \
+    local nasm_flag="-DENABLE_NASM=on"
+    if [ "$is_x86" = false ]; then
+        nasm_flag="-DENABLE_NASM=off"
+    fi
+    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 ${nasm_flag} .. && \
     make && \
     make install
 }
@@ -198,12 +219,10 @@ build_xorg-macros() {
     make install
 }
 
-build_xproto() {
-    dir=${1}
-    cp /usr/share/misc/config.guess . && \
-    ./configure --srcdir=${dir} --prefix="${PREFIX}" && \
-    make && \
-    make install
+build_xorgproto() {
+    meson setup build --prefix="${PREFIX}" && \
+    ninja -C build && \
+    ninja -C build install
 }
 
 build_libxau() {
@@ -266,9 +285,6 @@ build_zimg() {
 
 # Dependancy on libogg
 build_libtheora() {
-    if [ "$is_ubuntu" = true ]; then
-        cp /usr/share/misc/config.guess .
-    fi
     ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared --disable-examples
     make
     make install
@@ -371,8 +387,9 @@ build_ffmpeg() {
         --enable-vaapi \
         --enable-version3 \
         --enable-whisper \
-        --extra-cflags="-I${PREFIX}/include -I/usr/include/x86_64-linux-gnu" \
-        --extra-ldflags="-L${PREFIX}/lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib" \
+        --extra-cflags="-I${PREFIX}/include -I/usr/include/x86_64-linux-gnu -I/usr/include/aarch64-linux-gnu" \
+        --extra-ldflags="-L${PREFIX}/lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/aarch64-linux-gnu -L/usr/lib" \
+        --extra-ldflags=-L/opt/ffmpeg/lib/aarch64-linux-gnu \
         --extra-ldflags=-L/opt/ffmpeg/lib/x86_64-linux-gnu \
         --extra-libs=-ldl \
         --extra-libs=-lm \

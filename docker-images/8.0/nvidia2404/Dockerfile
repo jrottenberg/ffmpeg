@@ -43,7 +43,7 @@ ENV NVIDIA_HEADERS_VERSION=11.1.5.3
 ##     libdav1d - https://code.videolan.org/videolan/dav1d
 ##              - https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#libdav1d
 ##  util-macros - (x.org) (and supporting libraries) for screen capture https://xcb.freedesktop.org/
-##       xproto - (x.org)
+##    xorgproto - (x.org)
 ##       libXau -
 ##   libpthread - libpthread-stubs
 ##      libxml2 - for libbluray
@@ -103,7 +103,7 @@ ARG THEORA_PKGS="libtheora-dev libtheora0"
 ARG SRT_PKGS="libssl-dev libsrt-openssl-dev libsrt1.5-openssl"
 ARG LIBDRM_PKGS="libbsd0 libdrm-dev libdrm2 libxcb1-dev libxcb1"
 
-ENV MAKEFLAGS="-j2"
+ENV MAKEFLAGS="-j4"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
 
 ENV PREFIX="/opt/ffmpeg"

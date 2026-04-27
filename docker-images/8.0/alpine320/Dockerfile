@@ -11,7 +11,7 @@ RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates openssl
 
 ENV FFMPEG_VERSION=8.0.1
 
-ENV MAKEFLAGS="-j2"
+ENV MAKEFLAGS="-j4"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
 
 ENV PREFIX="/opt/ffmpeg"

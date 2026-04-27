@@ -1,0 +1,9 @@
+.git
+.github
+__pycache__
+*.pyc
+.DS_Store
+*.md
+!README.md
+!CONTRIBUTING.md
+.pre-commit-config.yaml

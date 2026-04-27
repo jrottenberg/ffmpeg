@@ -57,14 +57,23 @@ for version in keep_version:
 latest_version = keep_version[-1] if keep_version else None
 print(f"Latest version for 'latest' tag: {latest_version}")
 
+DEFAULT_PLATFORMS = "linux/amd64,linux/arm64"
+X86_ONLY_PLATFORMS = "linux/amd64"
+
 VARIANTS = [
-    {"name": "ubuntu2404", "parent": "ubuntu"},
-    {"name": "ubuntu2404-edge", "parent": "ubuntu-edge"},
-    {"name": "alpine320", "parent": "alpine"},
-    {"name": "scratch320", "parent": "scratch"},
+    {"name": "ubuntu2404", "parent": "ubuntu", "platforms": DEFAULT_PLATFORMS},
+    {
+        "name": "ubuntu2404-edge",
+        "parent": "ubuntu-edge",
+        "platforms": DEFAULT_PLATFORMS,
+    },
+    {"name": "alpine320", "parent": "alpine", "platforms": DEFAULT_PLATFORMS},
+    {"name": "scratch320", "parent": "scratch", "platforms": DEFAULT_PLATFORMS},
     # Video Acceleration API (VAAPI) https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI
-    {"name": "vaapi2404", "parent": "vaapi"},
-    {"name": "nvidia2404", "parent": "nvidia"},
+    # i965-va-driver is x86_64 only
+    {"name": "vaapi2404", "parent": "vaapi", "platforms": X86_ONLY_PLATFORMS},
+    # NVIDIA CUDA builds are x86_64 only
+    {"name": "nvidia2404", "parent": "nvidia", "platforms": X86_ONLY_PLATFORMS},
 ]
 current_variant_names = [v["name"] for v in VARIANTS]
 
@@ -74,7 +83,8 @@ LATEST_VARIANT = "ubuntu2404"
 
 all_parents = sorted(set([sub["parent"] for sub in VARIANTS]))
 gitlabci = ["stages:\n  - lint\n"]
-azure = []
+gh_build = []
+gh_manifest = []
 
 for parent in all_parents:
     gitlabci.append(f"  - {parent}\n")
@@ -183,18 +193,27 @@ for version in keep_version:
     PARENT: "{variant['parent']}"
     ISPARENT: "{is_parent}"
     ISLATEST: "{is_latest}"
+    PLATFORMS: "{variant['platforms']}"
 """)
 
-        azure.append(f"""
-      {variant["name"]}_{version}:
-        MAJOR_VERSION: {major_version}
-        VERSION:  {short_version}
-        LONG_VERSION: {version}
-        VARIANT:  {variant["name"]}
-        PARENT: {variant["parent"]}
-        ISPARENT:  {is_parent}
-        ISLATEST:  {is_latest}
-""")
+        gh_base = {
+            "major_version": major_version,
+            "version": short_version,
+            "long_version": version,
+            "variant": variant["name"],
+            "parent": variant["parent"],
+            "is_parent": str(is_parent),
+            "is_latest": str(is_latest),
+            "platforms": variant["platforms"],
+        }
+        platforms = variant["platforms"].split(",")
+        for platform in platforms:
+            arch = platform.replace("linux/", "")
+            runner = "ubuntu-latest" if arch == "amd64" else "ubuntu-24.04-arm"
+            gh_build.append(
+                {**gh_base, "platform": platform, "arch": arch, "runner": runner}
+            )
+        gh_manifest.append(gh_base)
         # with open(
         #     TEMPLATE_STR.format(variant["name"].replace("-edge", "")), "r"
         # ) as tmpfile:
@@ -292,23 +311,14 @@ for version in keep_version:
             FFMPEG_CONFIG_FLAGS.append("--extra-libs=-lm")  # add math library
             FFMPEG_CONFIG_FLAGS.append("--ld=g++")  # use g++ as linker
 
-            # DELETE NEXT 5 LINES when everything works
-            # --extra-cflags="-I/usr/local/include -I/usr/lib/include" \
-            # --extra-cxxflags="-I/usr/local/include -I/usr/lib/include" \
-            # --extra-ldflags="-L/usr/local/lib" \
-            # --extra-ldflags="-L/usr/local/lib64 -L/usr/lib -L/usr/lib64" \
-            # FFMPEG_CONFIG_FLAGS.append("--extra-ldflags=-L/usr/local/lib \
-            # -L/usr/local/lib64 -L/usr/lib -L/usr/lib64")
-
-            # Some shenagians to get libvmaf to build with static linking
+            # libvmaf static linking (both arch paths so builds work on amd64 and arm64)
             FFMPEG_CONFIG_FLAGS.append(
                 "--extra-ldflags=-L/opt/ffmpeg/lib/x86_64-linux-gnu"
             )
+            FFMPEG_CONFIG_FLAGS.append(
+                "--extra-ldflags=-L/opt/ffmpeg/lib/aarch64-linux-gnu"
+            )
 
-            # --ld=g++ or --ld=clang++ when configuring ffmpeg
-            # FFMPEG_CONFIG_FLAGS.append("--pkg-config-flags='--static'")
-            # FFMPEG_CONFIG_FLAGS.append("--enable-static")
-            # FFMPEG_CONFIG_FLAGS.append("--enable-gnutls")
             FFMPEG_CONFIG_FLAGS.append("--enable-libfdk-aac")
             FFMPEG_CONFIG_FLAGS.append("--enable-libsvtav1")
             FFMPEG_CONFIG_FLAGS.append("--enable-libdav1d")
@@ -317,10 +327,11 @@ for version in keep_version:
                 "--enable-libfdk_aac"
             )  # this was likely misstyped before
 
-        # if "ubuntu" in variant["parent"] and float(version[0:3]) >= 5.1:
         if float(version[0:3]) >= 5.1:
             CFLAGS.append("-I/usr/include/x86_64-linux-gnu")
+            CFLAGS.append("-I/usr/include/aarch64-linux-gnu")
             LDFLAGS.append("-L/usr/lib/x86_64-linux-gnu")
+            LDFLAGS.append("-L/usr/lib/aarch64-linux-gnu")
             LDFLAGS.append("-L/usr/lib")  # for alpine ( but probably fine for all)
 
         if float(version[0:1]) >= 8:
@@ -372,10 +383,10 @@ for version in keep_version:
 with open("docker-images/gitlab-ci.yml", "w") as gitlabcifile:
     gitlabcifile.write("".join(gitlabci))
 
-with open("templates/azure.template", "r") as tmpfile:
-    template = tmpfile.read()
-azure = template.replace("%%VERSIONS%%", "\n".join(azure))
-
-
-with open("docker-images/azure-jobs.yml", "w") as azurefile:
-    azurefile.write(azure)
+gh_matrices = {
+    "build": gh_build,
+    "manifest": gh_manifest,
+}
+with open("docker-images/github-actions-matrix.json", "w") as ghfile:
+    json.dump(gh_matrices, ghfile, indent=2)
+    ghfile.write("\n")
