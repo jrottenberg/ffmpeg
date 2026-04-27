@@ -33,7 +33,7 @@ ARG XML2_PKGS="libxml2-dev libxml2"
 # libpng
 ARG PNG_PKGS="libpng-dev libpng16-16t64"
 
-ENV MAKEFLAGS="-j2"
+ENV MAKEFLAGS="-j4"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
 
 ENV PREFIX="/opt/ffmpeg"
@@ -87,7 +87,7 @@ RUN      buildDeps="autoconf \
 #       ex: '--library-list lib1,lib2,lib3'
 #  for more control over the build process, and how the docker layers are cached
 
-# RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libopencore-amr,libx264,libx265,libogg,libopus,libvorbis,libvpx,libwebp,libmp3lame,libxvid,libfdk-aac,openjpeg,freetype,libvidstab,fribidi,fontconfig,libass,kvazaar,aom,libsvtav1,xorg-macros,xproto,libxau,libpthread-stubs,libxml2,libbluray,libzmq,libpng,libaribb24,zimg,libtheora,libsrt,libvmaf,ffmpeg
+# RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libopencore-amr,libx264,libx265,libogg,libopus,libvorbis,libvpx,libwebp,libmp3lame,libxvid,libfdk-aac,openjpeg,freetype,libvidstab,fribidi,fontconfig,libass,kvazaar,aom,libsvtav1,xorg-macros,xorgproto,libxau,libpthread-stubs,libxml2,libbluray,libzmq,libpng,libaribb24,zimg,libtheora,libsrt,libvmaf,ffmpeg
 # dont do this 👆 where all of the libs are built at one time.
 # by splitting them up into batches we allow docker to cache the layers ( which is a lifesaver when debugging )
 # I left this line in here, as it shows the proper order of the libraries that need to be built. ( what worked )
@@ -136,7 +136,7 @@ RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
 # additional batch of libraries ( split into docker layers, to allow for caching )
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list xproto
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list xorgproto
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 

@@ -17,8 +17,11 @@ pre-commit:
     - docker:19-dind
   before_script:
     - export IMAGE="ffmpeg:${VERSION}-${VARIANT:-ubuntu}"
+    - docker run --rm --privileged tonistiigi/binfmt --install all
+    - docker buildx create --name multiarch --driver docker-container --use
+    - docker buildx inspect --bootstrap
   script:
-    - docker build -t "${IMAGE}" --build-arg MAKEFLAGS="-j$(($(nproc) + 1))" docker-images/${VERSION}/${VARIANT}
+    - docker buildx build --platform ${PLATFORMS} -t "${IMAGE}" --build-arg MAKEFLAGS="-j$(($(nproc) + 1))" docker-images/${VERSION}/${VARIANT}
     - docker images
   after_script:
     - docker run --rm ${IMAGE} -buildconf

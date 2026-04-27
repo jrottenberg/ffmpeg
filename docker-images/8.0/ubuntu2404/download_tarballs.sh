@@ -99,15 +99,17 @@ download_tarballs() {
         if [ ! -f "$build_dir/$tarball_name" ]; then
             echo "$build_dir/$tarball_name does not exist, downloading now..."
             cd "$build_dir"
-            # curl -fsSL -o "$library.tar.gz" "
-            # curl command line reference
-            #      -o write output to file
-            #      -f Fail fast with no output on HTTP errors
-            #      -s Silent mode
-            #      -S, --show-error  Show error even when -s is used
-            #      -L, --location    Follow redirects
-            #      --retry <num>     Retry request if transient problems occur
-            curl -fsSL --retry 2 -o "$tarball_name" "$download_url"
+            local http_code
+            http_code=$(curl -sL --retry 2 -o "$tarball_name" -w "%{http_code}" "$download_url")
+            if [ "$http_code" = "418" ]; then
+                echo "Got HTTP 418 (anti-bot) for ${download_url}, waiting 60s before retry..."
+                rm -f "$tarball_name"
+                sleep 60
+                curl -fsSL --retry 2 -o "$tarball_name" "$download_url"
+            elif [ "$http_code" -ge 400 ] 2>/dev/null; then
+                echo "curl: HTTP $http_code for ${download_url}"
+                rm -f "$tarball_name"
+            fi
         else
             # if not quietly, then echo that we are skipping the download
             [ "$quiet" = false ] &&

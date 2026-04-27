@@ -123,6 +123,17 @@ In the bash shell, run the following commands
 ```
 </details>
 
+## Previewing GitHub Pages locally
+
+The project site is built from `README.md` using Jekyll. To preview it locally:
+
+```sh
+docker build -t docs -f docs/Dockerfile .
+docker run --rm -p 4000:4000 docs
+```
+
+Then open http://localhost:4000.
+
 # Reviewing
 
 

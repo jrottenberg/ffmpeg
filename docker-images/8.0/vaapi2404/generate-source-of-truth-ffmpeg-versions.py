@@ -33,48 +33,43 @@ paste into the README.md file of the repository.
 """
 
 # Library versions Source of truth
-FFMPEG_81 = {"version": "8.1", "release_date": "2025-11-28"}
+AOM = {"version": "3.10.0", "release_date": "2024-08-01"}
+FDKAAC = {"version": "2.0.3", "release_date": "2023-12-21"}
 FFMPEG_80 = {"version": "8.0", "release_date": "2025-08-22"}
-FFMPEG_71 = {"version": "7.1", "release_date": "2024-09-30"}
-FFMPEG_70 = {"version": "7.0", "release_date": "2024-04-05"}
-FFMPEG_61 = {"version": "6.1", "release_date": "2023-11-11"}
-# FFMPEG_51 = {"version": "5.1", "release_date": "2022-06-22"}
+FFMPEG_81 = {"version": "8.1", "release_date": "2025-11-28"}
+FONTCONFIG = {"version": "2.15.0", "release_date": "2023-12-22"}
+FREETYPE = {"version": "2.13.3", "release_date": "2024-08-12"}
+KVAAZAAR = {"version": "2.3.1", "release_date": "2024-04-10"}
+LAME = {"version": "3.100", "release_date": "2017-10-13"}
+LIBARIBB24 = {"version": "1.0.3", "release_date": "2014-08-18"}
+LIBASS = {"version": "0.17.3", "release_date": "2024-07-02"}
+LIBBLURAY = {"version": "1.3.4", "release_date": "2022-11-26"}
+LIBFRIDIBI = {"version": "1.0.16", "release_date": "2024-10-1"}
+LIBPNG = {"version": "1.6.44", "release_date": "2024-09-12"}
+LIBSRT = {"version": "1.5.3", "release_date": "2023-09-07"}
+LIBVIDSTAB = {"version": "1.1.1", "release_date": "2022-05-30"}
+LIBVMAF = {"version": "3.0.0", "release_date": "2023-12-07"}
+LIBXML2 = {"version": "2.13.4", "release_date": "2024-09-01"}
+LIBZMQ = {"version": "4.3.5", "release_date": "2023-10-9"}
+NV_CODEC = {"version": "12.2.72.0", "release_date": "2024-03-31"}
 OGG = {"version": "1.3.5", "release_date": "2021-06-04"}
 OPENCOREAMR = {"version": "0.1.6", "release_date": "2022-08-01"}
-VORBIS = {"version": "1.3.7", "release_date": "2020-07-04"}
-THEORA = {"version": "1.1.1", "release_date": "2010"}
-LAME = {"version": "3.100", "release_date": "2017-10-13"}
+OPENJPEG = {"version": "2.5.2", "release_date": "2024-02-28"}
 OPUS = {"version": "1.5.2", "release_date": "2024-04-12"}
+PTHREAD_STUBS = {"version": "0.5", "release_date": "2023-07-18"}
+SVTAV1 = {"version": "2.2.1", "release_date": "2024-08-01"}
+THEORA = {"version": "1.2.0", "release_date": "2025-03-29"}
+VORBIS = {"version": "1.3.7", "release_date": "2020-07-04"}
 VPX = {"version": "1.14.1", "release_date": "2024-05-30"}
 WEBP = {"version": "1.4.0", "release_date": "2024-04-13"}
-XVID = {"version": "1.3.7", "release_date": "2019"}
-FDKAAC = {"version": "2.0.3", "release_date": "2023-12-21"}
-FREETYPE = {"version": "2.13.3", "release_date": "2024-08-12"}
-LIBVIDSTAB = {"version": "1.1.1", "release_date": "2022-05-30"}
-LIBFRIDIBI = {"version": "1.0.16", "release_date": "2024-10-1"}
-FONTCONFIG = {"version": "2.15.0", "release_date": "2023-12-22"}
-LIBASS = {"version": "0.17.3", "release_date": "2024-07-02"}
-KVAAZAAR = {"version": "2.3.1", "release_date": "2024-04-10"}
-AOM = {"version": "3.10.0", "release_date": "2024-08-01"}
-NV_CODEC = {"version": "12.2.72.0", "release_date": "2024-03-31"}
-SVTAV1 = {"version": "2.2.1", "release_date": "2024-08-01"}
-XORG_MACROS = {"version": "1.20.1", "release_date": "2024-04-16"}
-XPROTO = {"version": "7.0.31", "release_date": "2016-09-23"}
-XAU = {"version": "1.0.11", "release_date": "2022-12-08"}
-PTHREAD_STUBS = {"version": "0.5", "release_date": "2023-07-18"}
-LIBXML2 = {"version": "2.13.4", "release_date": "2024-09-01"}
-LIBBLURAY = {"version": "1.3.4", "release_date": "2022-11-26"}
+WHISPER = {"version": "1.7.6", "release_date": "2025-06-25"}
 X264 = {"version": "20191217-2245-stable", "release_date": "2019-12-17"}
 X265 = {"version": "4.0", "release_date": "2024-09-13"}
-LIBZMQ = {"version": "4.3.5", "release_date": "2023-10-9"}
-LIBSRT = {"version": "1.5.3", "release_date": "2023-09-07"}
-LIBPNG = {"version": "1.6.44", "release_date": "2024-09-12"}
+XAU = {"version": "1.0.11", "release_date": "2022-12-08"}
+XORG_MACROS = {"version": "1.20.1", "release_date": "2024-04-16"}
+XORGPROTO = {"version": "2024.1", "release_date": "2024-04-12"}
+XVID = {"version": "1.3.7", "release_date": "2019"}
 ZIMG = {"version": "3.0.5", "release_date": "2023-6-30"}
-LIBARIBB24 = {"version": "1.0.3", "release_date": "2014-08-18"}
-OPENJPEG = {"version": "2.5.2", "release_date": "2024-02-28"}
-THEORA = {"version": "1.1.1", "release_date": "2010-01-25"}
-LIBVMAF = {"version": "3.0.0", "release_date": "2023-12-07"}
-WHISPER = {"version": "1.7.6", "release_date": "2025-06-25"}
 
 # Library details, Source of truth
 # TODO: store this in a yaml configuration file ( would probably be better )
@@ -353,14 +348,14 @@ LIBRARIES = OrderedDict(
         (
             "fontconfig",
             {
-                "link": "https://www.freedesktop.org/wiki/Software/fontconfig/",
+                "link": "https://gitlab.freedesktop.org/fontconfig/fontconfig",
                 "version": FONTCONFIG["version"],
-                "version_link": "https://www.freedesktop.org/software/fontconfig/release/",
+                "version_link": "https://gitlab.freedesktop.org/fontconfig/fontconfig/-/tags",
                 "release_date": FONTCONFIG["release_date"],
                 "license_name": "",
                 "license_link": "",
                 "build_info": {
-                    "download_link": f"https://www.freedesktop.org/software/fontconfig/release/fontconfig-{FONTCONFIG['version']}.tar.gz",
+                    "download_link": f"https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/{FONTCONFIG['version']}/fontconfig-{FONTCONFIG['version']}.tar.gz",
                     "build_dir": "/tmp/fontconfig",
                     "tarball_name": f"fontconfig-{FONTCONFIG['version']}.tar.gz",
                 },
@@ -464,18 +459,18 @@ LIBRARIES = OrderedDict(
             },
         ),
         (
-            "xproto",
+            "xorgproto",
             {
                 "link": "https://www.x.org/releases/individual/proto/",
-                "version": XPROTO["version"],
+                "version": XORGPROTO["version"],
                 "version_link": "https://www.x.org/releases/individual/proto/",
-                "release_date": XPROTO["release_date"],
+                "release_date": XORGPROTO["release_date"],
                 "license_name": "The MIT License",
                 "license_link": "https://opensource.org/licenses/MIT",
                 "build_info": {
-                    "download_link": f"https://www.x.org/releases/individual/proto/xproto-{XPROTO['version']}.tar.gz",
-                    "build_dir": "/tmp/xproto",
-                    "tarball_name": f"xproto-{XPROTO['version']}.tar.gz",
+                    "download_link": f"https://www.x.org/releases/individual/proto/xorgproto-{XORGPROTO['version']}.tar.xz",
+                    "build_dir": "/tmp/xorgproto",
+                    "tarball_name": f"xorgproto-{XORGPROTO['version']}.tar.xz",
                 },
             },
         ),
@@ -499,14 +494,14 @@ LIBRARIES = OrderedDict(
         (
             "libpthread-stubs",
             {
-                "link": "https://www.x.org/releases/individual/lib/",
+                "link": "https://xcb.freedesktop.org/dist/",
                 "version": PTHREAD_STUBS["version"],
-                "version_link": "https://www.x.org/releases/individual/lib/",
+                "version_link": "https://xcb.freedesktop.org/dist/",
                 "release_date": PTHREAD_STUBS["release_date"],
                 "license_name": "The MIT License",
                 "license_link": "https://opensource.org/licenses/MIT",
                 "build_info": {
-                    "download_link": f"https://www.x.org/releases/individual/lib/libpthread-stubs-{PTHREAD_STUBS['version']}.tar.xz",
+                    "download_link": f"https://xcb.freedesktop.org/dist/libpthread-stubs-{PTHREAD_STUBS['version']}.tar.xz",
                     "build_dir": "/tmp/libpthread-stubs",
                     "tarball_name": f"libpthread-stubs-{PTHREAD_STUBS['version']}.tar.xz",
                     # "using_source_build": False,
@@ -695,70 +690,6 @@ LIBRARIES = OrderedDict(
                 },
             },
         ),
-        (
-            "ffmpeg-7.1",
-            {
-                "link": "http://ffmpeg.org/",
-                "version": FFMPEG_71["version"],
-                "version_link": "http://ffmpeg.org/releases/",
-                "release_date": FFMPEG_71["release_date"],
-                "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
-                "license_link": "https://ffmpeg.org/legal.html",
-                "build_info": {
-                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_71['version']}.tar.bz2",
-                    "build_dir": "/tmp/ffmpeg",
-                    "tarball_name": f"ffmpeg-{FFMPEG_71['version']}.tar.bz2",
-                },
-            },
-        ),
-        (
-            "ffmpeg-7.0",
-            {
-                "link": "http://ffmpeg.org/",
-                "version": FFMPEG_70["version"],
-                "version_link": "http://ffmpeg.org/releases/",
-                "release_date": FFMPEG_70["release_date"],
-                "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
-                "license_link": "https://ffmpeg.org/legal.html",
-                "build_info": {
-                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_70['version']}.tar.bz2",
-                    "build_dir": "/tmp/ffmpeg",
-                    "tarball_name": f"ffmpeg-{FFMPEG_70['version']}.tar.bz2",
-                },
-            },
-        ),
-        (
-            "ffmpeg-6.1",
-            {
-                "link": "http://ffmpeg.org/",
-                "version": FFMPEG_61["version"],
-                "version_link": "http://ffmpeg.org/releases/",
-                "release_date": FFMPEG_61["release_date"],
-                "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
-                "license_link": "https://ffmpeg.org/legal.html",
-                "build_info": {
-                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_61['version']}.tar.bz2",
-                    "build_dir": "/tmp/ffmpeg",
-                    "tarball_name": f"ffmpeg-{FFMPEG_61['version']}.tar.bz2",
-                },
-            },
-        ),
-        # (
-        #     "ffmpeg-5.1",
-        #     {
-        #         "link": "http://ffmpeg.org/",
-        #         "version": FFMPEG_51["version"],
-        #         "version_link": "http://ffmpeg.org/releases/",
-        #         "release_date": FFMPEG_51["release_date"],
-        #         "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
-        #         "license_link": "https://ffmpeg.org/legal.html",
-        #         "build_info": {
-        #             "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_51['version']}.tar.bz2",
-        #             "build_dir": "/tmp/ffmpeg",
-        #             "tarball_name": f"ffmpeg-{FFMPEG_51['version']}.tar.bz2",
-        #         },
-        #     },
-        # ),
     ]
 )
 # come back to this problem, I think yaml configuration might be better.
@@ -780,7 +711,7 @@ def generate_library_table(filename):
             "The following libraries are used by FFMPEG. The version number and release date are provided along with the license information.\n"
         )
         f.write(
-            "These version numbers are for the lib source builds, which are 'ubuntu2404-edge' and 'foo'.\n"
+            "These version numbers are for the lib source builds, which are 'ubuntu2404-edge' and 'scratch320'.\n"
         )
         f.write(
             "These libs are included in the package images as well, but the version numbers might vary slightly.\n\n"

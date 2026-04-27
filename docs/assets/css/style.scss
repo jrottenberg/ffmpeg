@@ -1,0 +1,13 @@
+---
+---
+
+@import "jekyll-theme-minimal";
+
+.wrapper {
+  max-width: 1200px;
+  width: 90%;
+}
+
+section {
+  width: calc(100% - 300px);
+}

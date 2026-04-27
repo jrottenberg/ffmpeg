@@ -18,6 +18,7 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
     ISLATEST: "False"
+    PLATFORMS: "linux/amd64,linux/arm64"
 
 8.1.0-ubuntu2404-edge:
   extends: .docker
@@ -30,6 +31,7 @@ stages:
     PARENT: "ubuntu-edge"
     ISPARENT: "True"
     ISLATEST: "False"
+    PLATFORMS: "linux/amd64,linux/arm64"
 
 8.1.0-alpine320:
   extends: .docker
@@ -42,6 +44,7 @@ stages:
     PARENT: "alpine"
     ISPARENT: "True"
     ISLATEST: "False"
+    PLATFORMS: "linux/amd64,linux/arm64"
 
 8.1.0-scratch320:
   extends: .docker
@@ -54,6 +57,7 @@ stages:
     PARENT: "scratch"
     ISPARENT: "True"
     ISLATEST: "False"
+    PLATFORMS: "linux/amd64,linux/arm64"
 
 8.1.0-vaapi2404:
   extends: .docker
@@ -66,6 +70,7 @@ stages:
     PARENT: "vaapi"
     ISPARENT: "True"
     ISLATEST: "False"
+    PLATFORMS: "linux/amd64"
 
 8.1.0-nvidia2404:
   extends: .docker
@@ -78,6 +83,7 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
     ISLATEST: "False"
+    PLATFORMS: "linux/amd64"
 
 8.0.1-ubuntu2404:
   extends: .docker
@@ -90,6 +96,7 @@ stages:
     PARENT: "ubuntu"
     ISPARENT: "True"
     ISLATEST: "True"
+    PLATFORMS: "linux/amd64,linux/arm64"
 
 8.0.1-ubuntu2404-edge:
   extends: .docker
@@ -102,6 +109,7 @@ stages:
     PARENT: "ubuntu-edge"
     ISPARENT: "True"
     ISLATEST: "False"
+    PLATFORMS: "linux/amd64,linux/arm64"
 
 8.0.1-alpine320:
   extends: .docker
@@ -114,6 +122,7 @@ stages:
     PARENT: "alpine"
     ISPARENT: "True"
     ISLATEST: "False"
+    PLATFORMS: "linux/amd64,linux/arm64"
 
 8.0.1-scratch320:
   extends: .docker
@@ -126,6 +135,7 @@ stages:
     PARENT: "scratch"
     ISPARENT: "True"
     ISLATEST: "False"
+    PLATFORMS: "linux/amd64,linux/arm64"
 
 8.0.1-vaapi2404:
   extends: .docker
@@ -138,6 +148,7 @@ stages:
     PARENT: "vaapi"
     ISPARENT: "True"
     ISLATEST: "False"
+    PLATFORMS: "linux/amd64"
 
 8.0.1-nvidia2404:
   extends: .docker
@@ -150,3 +161,4 @@ stages:
     PARENT: "nvidia"
     ISPARENT: "True"
     ISLATEST: "False"
+    PLATFORMS: "linux/amd64"

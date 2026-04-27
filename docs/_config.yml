@@ -1,0 +1,10 @@
+title: FFmpeg Docker Images
+description: Minimalist Docker images with FFmpeg compiled from source
+remote_theme: pages-themes/minimal@v0.2.0
+plugins:
+  - jekyll-remote-theme
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
