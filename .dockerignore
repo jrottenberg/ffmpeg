@@ -5,4 +5,5 @@ __pycache__
 .DS_Store
 *.md
 !README.md
+!CONTRIBUTING.md
 .pre-commit-config.yaml

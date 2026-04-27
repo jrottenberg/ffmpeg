@@ -20,11 +20,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Sync README to docs
+      - name: Sync README and CONTRIBUTING to docs
         run: |
           mkdir -p docs
           printf -- '---\n---\n\n' > docs/index.md
           cat README.md >> docs/index.md
+          printf -- '---\ntitle: Contributing\n---\n\n' > docs/contributing.md
+          cat CONTRIBUTING.md >> docs/contributing.md
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll

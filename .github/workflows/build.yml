@@ -2,7 +2,15 @@ name: Build Docker Images
 
 on:
   push:
+    paths:
+      - 'docker-images/**'
+      - 'templates/**'
+      - '.github/workflows/build.yml'
   pull_request:
+    paths:
+      - 'docker-images/**'
+      - 'templates/**'
+      - '.github/workflows/build.yml'
   workflow_dispatch:
 
 concurrency:
