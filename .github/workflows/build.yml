@@ -180,7 +180,7 @@ jobs:
           mkdir -p docs
           printf -- '---\nlayout: default\ntitle: FFmpeg Docker Images\n---\n\n' > docs/index.md
           cat README.md >> docs/index.md
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - uses: actions/jekyll-build-pages@v1
         with:
           source: ./docs
