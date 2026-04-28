@@ -1,11 +1,10 @@
 # FFmpeg Docker image
 
-[![Docker Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?logo=docker&style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/)
-[![Docker pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?logo=docker&style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
-[![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?logo=docker)](https://hub.docker.com/r/jrottenberg/ffmpeg/tags)
-[![Github Container Registry Images](https://img.shields.io/badge/images-automated-blue?logo=github&style=plastic)](https://github.com/jrottenberg/ffmpeg/pkgs/container/ffmpeg)
-[![gitlab pipeline status](https://gitlab.com/jrottenberg/ffmpeg/badges/main/pipeline.svg)](https://gitlab.com/jrottenberg/ffmpeg/commits/main)
-[![GitHub Actions Build Status](https://github.com/jrottenberg/ffmpeg/actions/workflows/build.yml/badge.svg)](https://github.com/jrottenberg/ffmpeg/actions/workflows/build.yml)
+[![Stars](https://img.shields.io/docker/stars/jrottenberg/ffmpeg.svg?logo=docker&style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/stars/count/)
+[![Pulls](https://img.shields.io/docker/pulls/jrottenberg/ffmpeg.svg?logo=docker&style=plastic)](https://registry.hub.docker.com/v2/repositories/jrottenberg/ffmpeg/)
+[![Actions](https://github.com/jrottenberg/ffmpeg/actions/workflows/build.yml/badge.svg)](https://github.com/jrottenberg/ffmpeg/actions/workflows/build.yml)
+[![Stars](https://img.shields.io/github/stars/jrottenberg/ffmpeg?logo=github&style=plastic)](https://github.com/jrottenberg/ffmpeg/stargazers)
+[![Forks](https://img.shields.io/github/forks/jrottenberg/ffmpeg?logo=github&style=plastic)](https://github.com/jrottenberg/ffmpeg/network/members)
 
 
 This project prepares a minimalist Docker image with FFmpeg. It compiles FFmpeg from sources following instructions from the [Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide).
@@ -57,10 +56,10 @@ We used the ffmpeg support libraries from the Ubuntu distribution where possible
 This image is just like the above `ubuntu2404` container image, except we build all of the ffmpeg support libraries. This is in the spirit of the original intent of this project `jrottenberg/ffmpeg` alltogether. Building everything that ffmpeg needs, and ffmpeg itself from source. This gives us the most control over all of the details of release. The drawback of this is that its much harder to keep updated. The thought process of having both 'Ubuntu-2404' and 'Ubuntu-2404-edge' is that it makes updating the OS easier over time.
 
 **vaapi2404**
- This release is like also `ubuntu2404` but enables: [Video Acceleration API (VAAPI)](https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI) when building ffmpeg
+ Based on `ubuntu2404` with [Video Acceleration API (VAAPI)](https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI) enabled.
 
 **nvidia2404**
- This release is like also `ubuntu2404` but enables: [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled
+ Based on `ubuntu2404` with [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled.
 
 **alpine320**
 [alpine](https://alpinelinux.org/releases/) uses the os vendor libs, but ffmpeg is built from source.

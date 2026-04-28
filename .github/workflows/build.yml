@@ -175,11 +175,13 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
-      - name: Sync README to docs
+      - name: Sync README and CONTRIBUTING to docs
         run: |
           mkdir -p docs
           printf -- '---\nlayout: default\ntitle: FFmpeg Docker Images\n---\n\n' > docs/index.md
           cat README.md >> docs/index.md
+          printf -- '---\nlayout: default\ntitle: Contributing\n---\n\n' > docs/contributing.md
+          cat CONTRIBUTING.md >> docs/contributing.md
       - uses: actions/configure-pages@v6
       - uses: actions/jekyll-build-pages@v1
         with:
