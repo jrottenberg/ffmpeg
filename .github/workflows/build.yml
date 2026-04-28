@@ -66,12 +66,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v4
       - uses: docker/login-action@v4
-        if: github.event_name == 'push'
+        if: ${{ secrets.DOCKER_LOGIN != '' }}
         with:
           username: ${{ secrets.DOCKER_LOGIN }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - uses: docker/login-action@v4
-        if: github.event_name == 'push'
+        if: ${{ secrets.GITHUB_TOKEN != '' }}
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
