@@ -76,7 +76,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@v7
         with:
           context: docker-images/${{ matrix.version }}/${{ matrix.variant }}
           platforms: ${{ matrix.platform }}
@@ -87,7 +87,7 @@ jobs:
           cache-from: type=gha,scope=${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}
           cache-to: type=gha,mode=max,scope=${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}
       - name: Load image for smoke test
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: docker-images/${{ matrix.version }}/${{ matrix.variant }}
           load: true
