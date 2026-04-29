@@ -3,6 +3,10 @@
 
 @import "jekyll-theme-minimal";
 
+footer a:hover {
+  font-weight: normal;
+}
+
 .wrapper {
   max-width: 1200px;
   width: 90%;
