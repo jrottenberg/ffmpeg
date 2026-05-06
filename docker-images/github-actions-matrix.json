@@ -3,7 +3,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "ubuntu2404",
       "parent": "ubuntu",
       "is_parent": "True",
@@ -16,7 +16,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "ubuntu2404",
       "parent": "ubuntu",
       "is_parent": "True",
@@ -29,7 +29,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "ubuntu2404-edge",
       "parent": "ubuntu-edge",
       "is_parent": "True",
@@ -42,7 +42,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "ubuntu2404-edge",
       "parent": "ubuntu-edge",
       "is_parent": "True",
@@ -55,7 +55,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "alpine320",
       "parent": "alpine",
       "is_parent": "True",
@@ -68,7 +68,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "alpine320",
       "parent": "alpine",
       "is_parent": "True",
@@ -81,7 +81,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "scratch320",
       "parent": "scratch",
       "is_parent": "True",
@@ -94,7 +94,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "scratch320",
       "parent": "scratch",
       "is_parent": "True",
@@ -107,7 +107,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "vaapi2404",
       "parent": "vaapi",
       "is_parent": "True",
@@ -120,7 +120,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "nvidia2404",
       "parent": "nvidia",
       "is_parent": "True",
@@ -133,7 +133,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "ubuntu2404",
       "parent": "ubuntu",
       "is_parent": "True",
@@ -146,7 +146,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "ubuntu2404",
       "parent": "ubuntu",
       "is_parent": "True",
@@ -159,7 +159,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "ubuntu2404-edge",
       "parent": "ubuntu-edge",
       "is_parent": "True",
@@ -172,7 +172,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "ubuntu2404-edge",
       "parent": "ubuntu-edge",
       "is_parent": "True",
@@ -185,7 +185,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "alpine320",
       "parent": "alpine",
       "is_parent": "True",
@@ -198,7 +198,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "alpine320",
       "parent": "alpine",
       "is_parent": "True",
@@ -211,7 +211,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "scratch320",
       "parent": "scratch",
       "is_parent": "True",
@@ -224,7 +224,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "scratch320",
       "parent": "scratch",
       "is_parent": "True",
@@ -237,7 +237,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "vaapi2404",
       "parent": "vaapi",
       "is_parent": "True",
@@ -250,7 +250,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "nvidia2404",
       "parent": "nvidia",
       "is_parent": "True",
@@ -265,7 +265,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "ubuntu2404",
       "parent": "ubuntu",
       "is_parent": "True",
@@ -275,7 +275,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "ubuntu2404-edge",
       "parent": "ubuntu-edge",
       "is_parent": "True",
@@ -285,7 +285,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "alpine320",
       "parent": "alpine",
       "is_parent": "True",
@@ -295,7 +295,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "scratch320",
       "parent": "scratch",
       "is_parent": "True",
@@ -305,7 +305,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "vaapi2404",
       "parent": "vaapi",
       "is_parent": "True",
@@ -315,7 +315,7 @@
     {
       "major_version": "8",
       "version": "8.1",
-      "long_version": "8.1.0",
+      "long_version": "8.1.1",
       "variant": "nvidia2404",
       "parent": "nvidia",
       "is_parent": "True",
@@ -325,7 +325,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "ubuntu2404",
       "parent": "ubuntu",
       "is_parent": "True",
@@ -335,7 +335,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "ubuntu2404-edge",
       "parent": "ubuntu-edge",
       "is_parent": "True",
@@ -345,7 +345,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "alpine320",
       "parent": "alpine",
       "is_parent": "True",
@@ -355,7 +355,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "scratch320",
       "parent": "scratch",
       "is_parent": "True",
@@ -365,7 +365,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "vaapi2404",
       "parent": "vaapi",
       "is_parent": "True",
@@ -375,7 +375,7 @@
     {
       "major_version": "8",
       "version": "8.0",
-      "long_version": "8.0.1",
+      "long_version": "8.0.2",
       "variant": "nvidia2404",
       "parent": "nvidia",
       "is_parent": "True",

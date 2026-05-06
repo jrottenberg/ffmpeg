@@ -16,7 +16,7 @@ COPY build_source.sh /tmp/workdir
 COPY install_ffmpeg.sh /tmp/workdir
 
 
-ENV FFMPEG_VERSION=8.0.1
+ENV FFMPEG_VERSION=8.0.2
 
 # fribidi
 ARG FRIBIDI_PKGS="libfribidi-dev libfribidi0"
