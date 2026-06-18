@@ -72,6 +72,9 @@ VARIANTS = [
     # Video Acceleration API (VAAPI) https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI
     # i965-va-driver is x86_64 only
     {"name": "vaapi2404", "parent": "vaapi", "platforms": X86_ONLY_PLATFORMS},
+    # AMD Advanced Media Framework (AMF)
+    # https://github.com/GPUOpen-LibrariesAndSDKs/AMF/wiki/Build-FFmpeg-with-AMF-Support
+    {"name": "amf2404", "parent": "amf", "platforms": X86_ONLY_PLATFORMS},
     # NVIDIA CUDA builds are x86_64 only
     {"name": "nvidia2404", "parent": "nvidia", "platforms": X86_ONLY_PLATFORMS},
 ]
@@ -137,6 +140,8 @@ def read_ffmpeg_template(variant_name, env_or_run="env"):
         distro_name = "nvidia"
     elif variant_name == "vaapi":
         distro_name = "vaapi"
+    elif variant_name == "amf":
+        distro_name = "amf"
     else:
         distro_name = "ubuntu"
 
@@ -288,6 +293,10 @@ for version in keep_version:
             "parent"
         ] == "vaapi":
             FFMPEG_CONFIG_FLAGS.append("--enable-vaapi")
+
+        if variant["parent"] == "amf":
+            CFLAGS.append("-I/usr/local/include")
+            FFMPEG_CONFIG_FLAGS.append("--enable-amf")
 
         # libavresample removed on v5, deprecated since v4.0
         # https://github.com/FFmpeg/FFmpeg/commit/c29038f3041a4080342b2e333c1967d136749c0f

@@ -1,6 +1,7 @@
 stages:
   - lint
   - alpine
+  - amf
   - nvidia
   - scratch
   - ubuntu
@@ -68,6 +69,19 @@ stages:
     LONG_VERSION: "8.1.1"
     VARIANT: vaapi2404
     PARENT: "vaapi"
+    ISPARENT: "True"
+    ISLATEST: "False"
+    PLATFORMS: "linux/amd64"
+
+8.1.1-amf2404:
+  extends: .docker
+  stage: amf
+  variables:
+    MAJOR_VERSION: 8
+    VERSION: "8.1"
+    LONG_VERSION: "8.1.1"
+    VARIANT: amf2404
+    PARENT: "amf"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64"
@@ -146,6 +160,19 @@ stages:
     LONG_VERSION: "8.0.2"
     VARIANT: vaapi2404
     PARENT: "vaapi"
+    ISPARENT: "True"
+    ISLATEST: "False"
+    PLATFORMS: "linux/amd64"
+
+8.0.2-amf2404:
+  extends: .docker
+  stage: amf
+  variables:
+    MAJOR_VERSION: 8
+    VERSION: "8.0"
+    LONG_VERSION: "8.0.2"
+    VARIANT: amf2404
+    PARENT: "amf"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64"
