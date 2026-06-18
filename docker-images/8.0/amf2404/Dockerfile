@@ -12,6 +12,8 @@ FROM       ubuntu:24.04 AS builder
 ENV FFMPEG_VERSION=8.0.2
 
 ENV AMD_AMF_VERSION=v1.5.2
+ENV AMD_AMF_REPO_URL=https://repo.radeon.com/amf/26.10.1
+ENV TZ=Etc/UTC
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
@@ -104,7 +106,7 @@ ENV MAKEFLAGS="-j4"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
 
 ENV PREFIX="/opt/ffmpeg"
-ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"
+ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu:/opt/amf/lib/x86_64-linux-gnu"
 
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -161,7 +163,16 @@ COPY install_ffmpeg.sh /tmp/workdir
 
 RUN \
         echo "Installing dependencies..." && \
-        apt-get install -yq --no-install-recommends ${OPENCORE_PKGS} ${X264_PKGS} ${X265_PKGS} ${OGG_PKGS} ${OPUS_PKGS} ${VORBIS_PKGS} ${VPX_PKGS} ${WEBP_PKGS} ${MP3LAME_PKGS} ${XVIDCORE_PKGS} ${FDKAAC_PKGS} ${OPENJP_PKGS} ${FREETYPE_PKGS} ${VIDSTAB_PKGS} ${FRIBIDI_PKGS} ${FONTCONFIG_PKGS} ${LIBASS_PKGS} ${AOM_PKGS} ${SVTAV1_PKGS} ${DAV1D_PKGS} ${XORG_MACROS_PKGS} ${XPROTO_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${BLURAY_PKGS} ${ZMQ_PKGS} ${PNG_PKGS} ${ARIBB24_PKGS} ${ZIMG_PKGS} ${THEORA_PKGS} ${SRT_PKGS} ${LIBDRM_PKGS}
+        apt-get install -yq --no-install-recommends ${OPENCORE_PKGS} ${X264_PKGS} ${X265_PKGS} ${OGG_PKGS} ${OPUS_PKGS} ${VORBIS_PKGS} ${VPX_PKGS} ${WEBP_PKGS} ${MP3LAME_PKGS} ${XVIDCORE_PKGS} ${FDKAAC_PKGS} ${OPENJP_PKGS} ${FREETYPE_PKGS} ${VIDSTAB_PKGS} ${FRIBIDI_PKGS} ${FONTCONFIG_PKGS} ${LIBASS_PKGS} ${AOM_PKGS} ${SVTAV1_PKGS} ${DAV1D_PKGS} ${XORG_MACROS_PKGS} ${XPROTO_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${BLURAY_PKGS} ${ZMQ_PKGS} ${PNG_PKGS} ${ARIBB24_PKGS} ${ZIMG_PKGS} ${THEORA_PKGS} ${SRT_PKGS} ${LIBDRM_PKGS} tzdata
+
+RUN \
+        . /etc/os-release && \
+        codename="${UBUNTU_CODENAME:-${VERSION_CODENAME}}" && \
+        mkdir -p /etc/apt/keyrings && \
+        curl -fsSL ${AMD_AMF_REPO_URL}/amf-pub.gpg -o /etc/apt/keyrings/amf-pub.asc && \
+        echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/amf-pub.asc] ${AMD_AMF_REPO_URL}/ubuntu ${codename} main" > /etc/apt/sources.list.d/amf.list && \
+        apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends amf-amdgpu-pro libamdenc-amdgpu-pro
 
 RUN \
         git clone --branch ${AMD_AMF_VERSION} --depth 1 https://github.com/GPUOpen-LibrariesAndSDKs/AMF.git /tmp/amf && \
@@ -195,6 +206,13 @@ RUN /tmp/workdir/install_ffmpeg.sh
 
 # Stage 2: Final Image ( shrink the size back down )
 FROM ubuntu:24.04 AS runtime
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN     apt-get -yqq update && \
+        apt-get install -yq --no-install-recommends libvulkan1 mesa-vulkan-drivers && \
+        rm -rf /var/lib/apt/lists/*
+
 # Copy fonts and fontconfig from builder
 COPY --from=builder /usr/share/fonts /usr/share/fonts
 COPY --from=builder /usr/share/fontconfig /usr/share/fontconfig
@@ -202,11 +220,12 @@ COPY --from=builder /usr/bin/fc-* /usr/bin/
 
 # Copy rest of the content
 COPY --from=builder /usr/local /usr/local/
+COPY --from=builder /opt/amf /opt/amf/
 
 LABEL       org.opencontainers.image.authors="julien@rottenberg.info" \
             org.opencontainers.image.source=https://github.com/jrottenberg/ffmpeg
 
-ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
+ENV         LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64:/opt/amf/lib/x86_64-linux-gnu
 
 CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]

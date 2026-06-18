@@ -1,6 +1,8 @@
 ENV FFMPEG_VERSION=%%FFMPEG_VERSION%%
 
 ENV AMD_AMF_VERSION=v1.5.2
+ENV AMD_AMF_REPO_URL=https://repo.radeon.com/amf/26.10.1
+ENV TZ=Etc/UTC
 
 ## opencore-amr - https://sourceforge.net/projects/opencore-amr/
 ##         x264 - http://www.videolan.org/developers/x264.html
@@ -93,4 +95,4 @@ ENV MAKEFLAGS="-j4"
 ENV PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig:/opt/ffmpeg/lib/x86_64-linux-gnu/pkgconfig:/opt/ffmpeg/lib/aarch64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig"
 
 ENV PREFIX="/opt/ffmpeg"
-ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu"
+ENV LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64:/opt/ffmpeg/lib/aarch64-linux-gnu:/opt/amf/lib/x86_64-linux-gnu"
