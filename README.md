@@ -27,6 +27,7 @@ Below is a table that provides examples for the nomenclature:
 | ffmpeg-8.1-ubuntu2404 | 24.04 | 8.x | amd64, arm64 | [ubuntu](https://releases.ubuntu.com/) | external libraries are installed from os packages, and ffmpeg is built from source. See [Ubuntu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. |
 | ffmpeg-8.1-ubuntu2404-edge | 24.04 | 8.x | amd64, arm64 | [ubuntu](https://releases.ubuntu.com/) | libs and ffmpeg are built from source. See [Ubuntu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this. |
 | ffmpeg-8.1-vaapi2404 | 24.04 | 8.x | amd64 | [ubuntu](https://releases.ubuntu.com/) | like: `ubuntu2404` but enables: [Video Acceleration API (VAAPI)](https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI) in ffmpeg |
+| ffmpeg-8.1-amf2404 | 24.04 | 8.x | amd64 | [ubuntu](https://releases.ubuntu.com/) | like: `ubuntu2404` but enables: [AMD Advanced Media Framework (AMF)](https://github.com/GPUOpen-LibrariesAndSDKs/AMF/wiki/Build-FFmpeg-with-AMF-Support) in ffmpeg |
 | ffmpeg-8.1-nvidia2404 | 24.04 | 8.x | amd64 | [ubuntu](https://releases.ubuntu.com/) | Built w/ [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled |
 | ffmpeg-8.1-alpine320 | 3.20 | 8.x | amd64, arm64 | [alpine](https://alpinelinux.org/releases/) | vendor libs, but ffmpeg is built from source |
 | ffmpeg-8.1-scratch320 | 3.20 | 8.x | amd64, arm64 | [alpine](https://alpinelinux.org/releases/) | vendor libs, and ffmpeg are built from source. Also we make the distro as small as possible by not installing any packages in base and striping symbols of installed libs |
@@ -43,6 +44,7 @@ Note: The current versions of ffmpeg supported are anything newer than 3 years o
 - ubuntu based images `ffmpeg:<version>-ubuntu` or `ffmpeg:<version>-ubuntu2404` (old versions with `ffmpeg:<version>-ubuntu2004` , `ffmpeg:<version>-ubuntu1804`)
   - ubuntu based nvidia images `ffmpeg:<version>-nvidia` or `ffmpeg:<version>-nvidia2404` (old versions with `ffmpeg:<version>-nvidia2204`, `ffmpeg:<version>-nvidia2004`)
   - ubuntu based vaapi images `ffmpeg:<version>-vaapi2404` (old versions with `ffmpeg:<version>-vaapi2004`, `ffmpeg:<version>-vaapi1804`)
+  - ubuntu based amf images `ffmpeg:<version>-amf2404`
 
 </details>
 
@@ -57,6 +59,9 @@ This image is just like the above `ubuntu2404` container image, except we build 
 
 **vaapi2404**
  Based on `ubuntu2404` with [Video Acceleration API (VAAPI)](https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI) enabled.
+
+**amf2404**
+ Based on `ubuntu2404` with [AMD Advanced Media Framework (AMF)](https://github.com/GPUOpen-LibrariesAndSDKs/AMF/wiki/Build-FFmpeg-with-AMF-Support) enabled.
 
 **nvidia2404**
  Based on `ubuntu2404` with [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled.
