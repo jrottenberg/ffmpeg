@@ -163,16 +163,9 @@ jobs:
             docker buildx imagetools create -t "${tag}" ${GHCR_SOURCES}
           done
 
-  deploy-docs:
-    if: github.event_name != 'pull_request'
+  build-docs:
     needs: [lint]
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
       - name: Sync README and CONTRIBUTING to docs
@@ -188,6 +181,18 @@ jobs:
           source: ./docs
           destination: ./_site
       - uses: actions/upload-pages-artifact@v5
+
+  deploy-docs:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [build-docs]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
