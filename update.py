@@ -21,7 +21,6 @@ TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 # recent versions, we keep things manageable.
 # Note: the older builds will be preserved in the the docker hub registry.
 RELEASED_YEARS_AGO = 3
-KEEP_VERSION = "8."
 
 
 def is_too_old(date_str, years):
@@ -36,19 +35,24 @@ def get_eol_versions():
     with request.urlopen(FFMPEG_RELEASES) as conn:
         ffmpeg_releases = conn.read().decode("utf-8")
 
+    # We trust endoflife.date for the list of supported releases: any cycle that
+    # is not end-of-life is a candidate. RELEASED_YEARS_AGO is only a safety net
+    # to drop lines that stopped receiving patches long ago. No major version is
+    # hardcoded, so new releases (e.g. v10) are picked up automatically.
     for v in json.loads(ffmpeg_releases):
         if not v["eol"]:
             if "0.0" in v["latest"]:
                 v["latest"] = v["latest"].replace("0.0", "0")
             release_date = v["latestReleaseDate"]
-            if not is_too_old(release_date, years=RELEASED_YEARS_AGO) and v[
-                "latest"
-            ].startswith(KEEP_VERSION):
+            if not is_too_old(release_date, years=RELEASED_YEARS_AGO):
                 keep_version.append(v["latest"])
     return keep_version
 
 
 keep_version = get_eol_versions()
+# endoflife.date does not guarantee ordering, so sort by numeric version to make
+# the "latest" tag deterministic (newest wins) rather than dependent on API order.
+keep_version.sort(key=lambda v: tuple(int(p) for p in v.split(".")))
 print("The following versions of ffmpeg is still supported:")
 for version in keep_version:
     print(version)
@@ -159,6 +163,15 @@ for version in keep_version:
     short_version = get_shorten_version(version)
     major_version = get_major_version(version)
     ver_path = os.path.join("docker-images", short_version)
+
+    # A supported release with every variant skipped has nothing to build with
+    # the current variant set (e.g. old lines predating today's OS variants).
+    # Skip it entirely so we don't leave an empty docker-images/<version> dir.
+    if not compatible_variants:
+        print(f"Skipping ffmpeg-{version}: no compatible variants")
+        shutil.rmtree(ver_path, ignore_errors=True)
+        continue
+
     os.makedirs(ver_path, exist_ok=True)
     for existing_variant in os.listdir(ver_path):
         if existing_variant not in compatible_variants:
