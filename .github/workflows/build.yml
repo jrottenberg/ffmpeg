@@ -3,14 +3,14 @@ name: Build Docker Images
 on:
   push:
     paths:
-      - 'docker-images/**'
-      - 'templates/**'
-      - '.github/workflows/build.yml'
+      - "docker-images/**"
+      - "templates/**"
+      - ".github/workflows/build.yml"
   pull_request:
     paths:
-      - 'docker-images/**'
-      - 'templates/**'
-      - '.github/workflows/build.yml'
+      - "docker-images/**"
+      - "templates/**"
+      - ".github/workflows/build.yml"
   workflow_dispatch:
 
 concurrency:
@@ -49,13 +49,93 @@ jobs:
       manifest: ${{ steps.matrix.outputs.manifest }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - id: matrix
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.sha }}
+          REF_NAME: ${{ github.ref_name }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
-          echo "build=$(jq -c '.build' docker-images/github-actions-matrix.json)" >> "$GITHUB_OUTPUT"
-          echo "manifest=$(jq -c '.manifest' docker-images/github-actions-matrix.json)" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+
+          full_build=$(jq -c '.build' docker-images/github-actions-matrix.json)
+          full_manifest=$(jq -c '.manifest' docker-images/github-actions-matrix.json)
+
+          emit_all() {
+            echo "Selecting ALL versions"
+            {
+              echo "build=$full_build"
+              echo "manifest=$full_manifest"
+            } >> "$GITHUB_OUTPUT"
+          }
+
+          # Only build versions whose image files changed. Anything we cannot
+          # reliably diff (manual dispatch, new branch, missing base) falls back
+          # to building everything so we never accidentally skip a needed image.
+          case "$EVENT_NAME" in
+            pull_request)
+              base="$BASE_SHA"
+              ;;
+            push)
+              if [ "$REF_NAME" = "$DEFAULT_BRANCH" ]; then
+                base="$BEFORE_SHA"
+              else
+                # Feature branch: compare against the default branch so we build
+                # only what this branch changes relative to it.
+                git fetch --no-tags --quiet origin "$DEFAULT_BRANCH" || true
+                base="$(git merge-base "origin/$DEFAULT_BRANCH" "$HEAD_SHA" 2>/dev/null || true)"
+              fi
+              ;;
+            *)
+              emit_all; exit 0
+              ;;
+          esac
+
+          if [ -z "${base:-}" ] \
+            || [ "$base" = "0000000000000000000000000000000000000000" ] \
+            || ! git cat-file -e "${base}^{commit}" 2>/dev/null; then
+            emit_all; exit 0
+          fi
+
+          changed="$(git diff --name-only "$base" "$HEAD_SHA")"
+          echo "Changed files:"; echo "$changed"
+
+          # A change to the workflow itself or a shared template rebuilds
+          # everything, since those affect every generated image.
+          if echo "$changed" | grep -qE '^\.github/workflows/build\.yml$|^templates/'; then
+            emit_all; exit 0
+          fi
+
+          # Otherwise, restrict the matrix to the changed version directories.
+          versions="$(echo "$changed" \
+            | sed -nE 's#^docker-images/([0-9]+\.[0-9]+)/.*#\1#p' \
+            | sort -u)"
+          echo "Changed versions: ${versions:-<none>}"
+
+          if [ -z "$versions" ]; then
+            {
+              echo "build=[]"
+              echo "manifest=[]"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          selected="$(printf '%s\n' $versions | jq -R . | jq -sc .)"
+          filter='[.[] | select(.version as $v | $sel | index($v))]'
+          filtered_build="$(echo "$full_build" | jq -c --argjson sel "$selected" "$filter")"
+          filtered_manifest="$(echo "$full_manifest" | jq -c --argjson sel "$selected" "$filter")"
+          {
+            echo "build=$filtered_build"
+            echo "manifest=$filtered_manifest"
+          } >> "$GITHUB_OUTPUT"
 
   build:
     needs: [lint, generate-matrix]
+    if: needs.generate-matrix.outputs.build != '[]'
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 120
     strategy:
@@ -105,7 +185,7 @@ jobs:
           echo "All codec checks passed"
 
   create-manifests:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && needs.generate-matrix.outputs.manifest != '[]'
     needs: [build, generate-matrix]
     runs-on: ubuntu-latest
     strategy:

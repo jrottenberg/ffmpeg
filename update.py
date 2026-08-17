@@ -3,6 +3,7 @@
 import datetime
 import json
 import os
+import re
 import shutil
 from urllib import request
 
@@ -21,6 +22,12 @@ TEMPLATE_STR = "templates/Dockerfile-template.{0}"
 # recent versions, we keep things manageable.
 # Note: the older builds will be preserved in the the docker hub registry.
 RELEASED_YEARS_AGO = 3
+# How many of the most recent major version lines we actively build. Older majors
+# are intentionally left out of the repo/CI (their images already live in the
+# registry) so we don't rebuild them on every change. This is version-agnostic:
+# a brand-new major (e.g. v10) is discovered from endoflife.date automatically,
+# and the oldest major then drops out of the active set -- no code change needed.
+KEEP_RECENT_MAJORS = 2
 
 
 def is_too_old(date_str, years):
@@ -31,22 +38,28 @@ def is_too_old(date_str, years):
 
 
 def get_eol_versions():
-    keep_version = []
+    candidates = []
     with request.urlopen(FFMPEG_RELEASES) as conn:
         ffmpeg_releases = conn.read().decode("utf-8")
 
     # We trust endoflife.date for the list of supported releases: any cycle that
-    # is not end-of-life is a candidate. RELEASED_YEARS_AGO is only a safety net
-    # to drop lines that stopped receiving patches long ago. No major version is
-    # hardcoded, so new releases (e.g. v10) are picked up automatically.
+    # is not end-of-life and still within the recency window is a candidate. No
+    # major version is hardcoded, so new releases (e.g. v10) are picked up
+    # automatically.
     for v in json.loads(ffmpeg_releases):
         if not v["eol"]:
             if "0.0" in v["latest"]:
                 v["latest"] = v["latest"].replace("0.0", "0")
             release_date = v["latestReleaseDate"]
             if not is_too_old(release_date, years=RELEASED_YEARS_AGO):
-                keep_version.append(v["latest"])
-    return keep_version
+                candidates.append(v["latest"])
+
+    # Restrict to the most recent major lines so we ship the current versions
+    # without rebuilding older majors that are already published.
+    recent_majors = sorted({int(c.split(".")[0]) for c in candidates}, reverse=True)[
+        :KEEP_RECENT_MAJORS
+    ]
+    return [c for c in candidates if int(c.split(".")[0]) in recent_majors]
 
 
 keep_version = get_eol_versions()
@@ -147,6 +160,21 @@ def read_ffmpeg_template(variant_name, env_or_run="env"):
     with open(f"templates/Dockerfile-{env_or_run}-{distro_name}", "r") as tmpfile:
         return tmpfile.read()
 
+
+# Prune docker-images/<version> directories for versions we no longer build
+# (e.g. a major that aged out of the active set). Old images stay in the
+# registry; we just stop shipping their Dockerfiles so CI doesn't rebuild them.
+kept_short_versions = {get_shorten_version(v) for v in keep_version}
+if os.path.isdir("docker-images"):
+    for entry in sorted(os.listdir("docker-images")):
+        entry_path = os.path.join("docker-images", entry)
+        if (
+            os.path.isdir(entry_path)
+            and re.fullmatch(r"\d+\.\d+", entry)
+            and entry not in kept_short_versions
+        ):
+            print(f"Pruning docker-images/{entry} (no longer an active version)")
+            shutil.rmtree(entry_path, ignore_errors=True)
 
 print("Preparing docker images for ffmpeg versions: ")
 
