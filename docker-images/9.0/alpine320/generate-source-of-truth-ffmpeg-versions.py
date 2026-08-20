@@ -37,6 +37,7 @@ AOM = {"version": "3.10.0", "release_date": "2024-08-01"}
 FDKAAC = {"version": "2.0.3", "release_date": "2023-12-21"}
 FFMPEG_80 = {"version": "8.0", "release_date": "2025-08-22"}
 FFMPEG_81 = {"version": "8.1", "release_date": "2025-11-28"}
+FFMPEG_90 = {"version": "9.0", "release_date": "2026-08-04"}
 FONTCONFIG = {"version": "2.15.0", "release_date": "2023-12-22"}
 FREETYPE = {"version": "2.13.3", "release_date": "2024-08-12"}
 KVAAZAAR = {"version": "2.3.1", "release_date": "2024-04-10"}
@@ -655,6 +656,22 @@ LIBRARIES = OrderedDict(
                     "download_link": f"https://github.com/Netflix/vmaf/archive/refs/tags/v{LIBVMAF['version']}.tar.gz",
                     "build_dir": "/tmp/vmaf",
                     "tarball_name": f"vmaf-v{LIBVMAF['version']}.tar.gz",
+                },
+            },
+        ),
+        (
+            "ffmpeg-9.0",
+            {
+                "link": "http://ffmpeg.org/",
+                "version": FFMPEG_90["version"],
+                "version_link": "http://ffmpeg.org/releases/",
+                "release_date": FFMPEG_90["release_date"],
+                "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
+                "license_link": "https://ffmpeg.org/legal.html",
+                "build_info": {
+                    "download_link": f"https://ffmpeg.org/releases/ffmpeg-{FFMPEG_90['version']}.tar.bz2",
+                    "build_dir": "/tmp/ffmpeg",
+                    "tarball_name": f"ffmpeg-{FFMPEG_90['version']}.tar.bz2",
                 },
             },
         ),
