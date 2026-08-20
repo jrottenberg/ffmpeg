@@ -716,6 +716,48 @@ LIBRARIES = OrderedDict(
 #     LIBRARIES = OrderedDict((key, data['libraries'][key]) for key in order_list)
 
 
+def _dynamic_ffmpeg_library_info(library_name):
+    """
+    Build a library_info dict on the fly for a 'ffmpeg-<version>' library name
+    that has no hand-written entry in LIBRARIES (e.g. a brand-new major/minor
+    line like 'ffmpeg-10.0', or an exact patch release like 'ffmpeg-9.0.1').
+
+    ffmpeg.org publishes a tarball named 'ffmpeg-<version>.tar.bz2' for every
+    version string it releases (majors, minors, and patches alike), so the
+    download link/tarball name can always be derived from the requested
+    version without maintaining a per-release dict entry. This is what keeps
+    new ffmpeg major versions (v10, v11, ...) working without a code change
+    here, and also keeps the build in sync with the exact patch version
+    requested (instead of silently drifting from the declared FFMPEG_VERSION).
+    """
+    version = library_name.split("-", 1)[1]
+    return {
+        "link": "http://ffmpeg.org/",
+        "version": version,
+        "version_link": "http://ffmpeg.org/releases/",
+        "release_date": "",
+        "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
+        "license_link": "https://ffmpeg.org/legal.html",
+        "build_info": {
+            "download_link": f"https://ffmpeg.org/releases/ffmpeg-{version}.tar.bz2",
+            "build_dir": "/tmp/ffmpeg",
+            "tarball_name": f"ffmpeg-{version}.tar.bz2",
+        },
+    }
+
+
+def resolve_library_info(library_name):
+    """
+    Look up a library's info, falling back to a dynamically generated entry
+    for any 'ffmpeg-<version>' name not already registered in LIBRARIES.
+    """
+    if library_name in LIBRARIES:
+        return LIBRARIES[library_name]
+    if library_name.startswith("ffmpeg-"):
+        return _dynamic_ffmpeg_library_info(library_name)
+    return {}
+
+
 def generate_library_table(filename):
     """
     Generates a formatted table of FFmpeg libraries.
@@ -780,7 +822,7 @@ def generate_versions_manifest(output_file, ffmpeg_libraries=[]):
     if not ffmpeg_libraries:
         ffmpeg_libraries = LIBRARIES.keys()
     for library_name in ffmpeg_libraries:
-        library_info = LIBRARIES.get(library_name, {})
+        library_info = resolve_library_info(library_name)
         manifest_data[library_name] = library_info.get("version", "")
 
     with open(output_file, "w") as f:
@@ -802,7 +844,7 @@ def generate_build_manifest(output_file, ffmpeg_libraries=[]):
     if not ffmpeg_libraries:
         ffmpeg_libraries = LIBRARIES.keys()
     for library_name in ffmpeg_libraries:
-        library_info = LIBRARIES.get(library_name, {})
+        library_info = resolve_library_info(library_name)
         build_info = library_info.get("build_info", {})
         download_url = build_info.get("download_link", "")
         build_dir = build_info.get("build_dir", "")

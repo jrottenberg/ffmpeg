@@ -4,7 +4,7 @@
 #
 #
 
-FROM        alpine:3.20 AS builder
+FROM        public.ecr.aws/docker/library/alpine:3.20 AS builder
 
 RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates openssl expat git libgomp less tree file vim bash
 # apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim && \
@@ -162,7 +162,7 @@ RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
 # This is a slow one, put it on its own container layer to speed up the build (allowing it to be cached)
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.1
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.1.2
 ## when  debugging you can pass in || true to the end of the next 3 commands
 ## to keep the build going even if one of the steps fails
 RUN /tmp/workdir/download_tarballs.sh
@@ -173,7 +173,7 @@ RUN /tmp/workdir/install_ffmpeg.sh --strip
 
 
 ### Release Stage
-FROM        alpine:3.20 AS release
+FROM        public.ecr.aws/docker/library/alpine:3.20 AS release
 # RUN         apk add --no-cache --update bash less tree file vim
 # Copy fonts and fontconfig from builder
 COPY        --from=builder /usr/share/fonts /usr/share/fonts

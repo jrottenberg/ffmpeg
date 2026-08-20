@@ -6,7 +6,7 @@
 #
 #
 # Stage 1: Build
-FROM       ubuntu:24.04 AS builder
+FROM       public.ecr.aws/docker/library/ubuntu:24.04 AS builder
 
 
 
@@ -179,7 +179,7 @@ RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list kvaz
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.1
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.1.2
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
@@ -191,7 +191,7 @@ RUN /tmp/workdir/install_ffmpeg.sh
 
 
 # Stage 2: Final Image ( shrink the size back down )
-FROM ubuntu:24.04 AS runtime
+FROM public.ecr.aws/docker/library/ubuntu:24.04 AS runtime
 # Copy fonts and fontconfig from builder
 COPY --from=builder /usr/share/fonts /usr/share/fonts
 COPY --from=builder /usr/share/fontconfig /usr/share/fontconfig

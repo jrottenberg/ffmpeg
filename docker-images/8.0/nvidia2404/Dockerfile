@@ -5,8 +5,11 @@
 # https://hub.docker.com/r/jrottenberg/ffmpeg/
 #
 #
-# Stage 1: Build ( https://hub.docker.com/r/nvidia/cuda )
-FROM nvidia/cuda:12.6.2-devel-ubuntu24.04 AS builder
+# Stage 1: Build ( https://catalog.ngc.nvidia.com/orgs/nvidia/containers/cuda )
+# Note: nvidia/cuda is not an official Docker Hub image and has no public ECR
+# mirror, so we pull it from NVIDIA's own registry (nvcr.io) instead of
+# docker.io to avoid Docker Hub's anonymous pull rate limiting.
+FROM nvcr.io/nvidia/cuda:12.6.2-devel-ubuntu24.04 AS builder
 
 ENV	    NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
 ENV	    DEBIAN_FRONTEND=noninteractive
@@ -186,7 +189,7 @@ RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list nvid
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.0
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-8.0.3
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
@@ -197,8 +200,8 @@ RUN /tmp/workdir/install_ffmpeg.sh
 
 
 # Stage 2: Final Image ( shrink the size back down )
-# FROM nvidia/cuda:12.6.2-runtime-ubuntu24.04
-FROM nvidia/cuda:12.6.2-base-ubuntu24.04 AS runtime
+# FROM nvcr.io/nvidia/cuda:12.6.2-runtime-ubuntu24.04
+FROM nvcr.io/nvidia/cuda:12.6.2-base-ubuntu24.04 AS runtime
 # We used to use runtime, but I switched us to base, as it is significantly-smaller.
 # (~ 80Megs ) base: Includes the CUDA runtime (cudart)
 # (~ 1.4Gigs) runtime: Builds on the base and includes the CUDA math libraries⁠, and NCCL⁠.

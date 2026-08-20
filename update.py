@@ -389,7 +389,11 @@ for version in keep_version:
         run_content_flags = RUN_CONTENT.replace(
             "%%FFMPEG_CONFIG_FLAGS%%", COMBINED_CONFIG_FLAGS
         )
-        run_content = run_content_flags.replace("%%FFMPEG_VERSION%%", version[0:3])
+        # Use the exact patch version (e.g. "9.0.1"), not just "9.0", so the
+        # library-list request downloads the same tarball declared by
+        # ENV FFMPEG_VERSION further down in the Dockerfile instead of
+        # silently building an older/unpatched release.
+        run_content = run_content_flags.replace("%%FFMPEG_VERSION%%", version)
 
         env_content = ENV_CONTENT.replace("%%FFMPEG_VERSION%%", version)
         docker_content = template.replace("%%ENV%%", env_content)
