@@ -140,6 +140,11 @@ jobs:
     timeout-minutes: 120
     strategy:
       fail-fast: false
+      # Cap concurrent legs so we don't hammer Docker Hub with dozens of
+      # simultaneous pushes to the same repo (that's what trips its 429
+      # rate limiting, separate from the base-image *pull* limiting we
+      # already moved off Docker Hub for).
+      max-parallel: 6
       matrix:
         include: ${{ fromJson(needs.generate-matrix.outputs.build) }}
     steps:
@@ -156,7 +161,49 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v7
+      # docker.io intermittently 429s the push side under matrix-wide load
+      # (a separate issue from the base-image *pull* limiting fixed
+      # earlier). docker/build-push-action has no built-in retry (declined
+      # upstream: https://github.com/docker/build-push-action/pull/1422),
+      # so we retry the step itself up to 3 times with backoff. The build
+      # stages are cached via type=gha, so a retry mostly just re-attempts
+      # the push, not a full rebuild.
+      - name: Build and push (attempt 1)
+        id: build_push_1
+        continue-on-error: true
+        uses: docker/build-push-action@v7
+        with:
+          context: docker-images/${{ matrix.version }}/${{ matrix.variant }}
+          platforms: ${{ matrix.platform }}
+          push: ${{ github.event_name == 'push' }}
+          tags: |
+            ${{ env.DOCKER }}:${{ matrix.long_version }}-${{ matrix.variant }}-${{ matrix.arch }}
+            ${{ env.GHCR }}:${{ matrix.long_version }}-${{ matrix.variant }}-${{ matrix.arch }}
+          cache-from: type=gha,scope=${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}
+      - name: Wait before retrying push (attempt 2)
+        if: steps.build_push_1.outcome == 'failure'
+        run: sleep 30
+      - name: Build and push (attempt 2)
+        id: build_push_2
+        if: steps.build_push_1.outcome == 'failure'
+        continue-on-error: true
+        uses: docker/build-push-action@v7
+        with:
+          context: docker-images/${{ matrix.version }}/${{ matrix.variant }}
+          platforms: ${{ matrix.platform }}
+          push: ${{ github.event_name == 'push' }}
+          tags: |
+            ${{ env.DOCKER }}:${{ matrix.long_version }}-${{ matrix.variant }}-${{ matrix.arch }}
+            ${{ env.GHCR }}:${{ matrix.long_version }}-${{ matrix.variant }}-${{ matrix.arch }}
+          cache-from: type=gha,scope=${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}
+      - name: Wait before retrying push (attempt 3)
+        if: steps.build_push_1.outcome == 'failure' && steps.build_push_2.outcome == 'failure'
+        run: sleep 60
+      - name: Build and push (attempt 3)
+        if: steps.build_push_1.outcome == 'failure' && steps.build_push_2.outcome == 'failure'
+        uses: docker/build-push-action@v7
         with:
           context: docker-images/${{ matrix.version }}/${{ matrix.variant }}
           platforms: ${{ matrix.platform }}
@@ -190,6 +237,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      # Same reasoning as the build job: avoid a burst of concurrent
+      # `imagetools create` pushes against docker.io tripping its rate
+      # limiting.
+      max-parallel: 6
       matrix:
         include: ${{ fromJson(needs.generate-matrix.outputs.manifest) }}
     steps:
@@ -214,6 +265,23 @@ jobs:
           ISPARENT: ${{ matrix.is_parent }}
           ISLATEST: ${{ matrix.is_latest }}
         run: |
+          # docker.io intermittently 429s these registry writes under load;
+          # retry with backoff instead of failing the whole job on a
+          # transient rate limit.
+          retry() {
+            local max_attempts=5 delay=15 attempt=1
+            until "$@"; do
+              if (( attempt >= max_attempts )); then
+                echo "Command failed after ${attempt} attempts: $*" >&2
+                return 1
+              fi
+              echo "Attempt ${attempt} failed, retrying in ${delay}s: $*" >&2
+              sleep "${delay}"
+              attempt=$((attempt + 1))
+              delay=$((delay * 2))
+            done
+          }
+
           DOCKER_SOURCES=""
           GHCR_SOURCES=""
           IFS=',' read -ra ARCHS <<< "${PLATFORMS}"
@@ -237,10 +305,10 @@ jobs:
           fi
 
           for tag in ${DOCKER_TAGS}; do
-            docker buildx imagetools create -t "${tag}" ${DOCKER_SOURCES}
+            retry docker buildx imagetools create -t "${tag}" ${DOCKER_SOURCES}
           done
           for tag in ${GHCR_TAGS}; do
-            docker buildx imagetools create -t "${tag}" ${GHCR_SOURCES}
+            retry docker buildx imagetools create -t "${tag}" ${GHCR_SOURCES}
           done
 
   build-docs:
