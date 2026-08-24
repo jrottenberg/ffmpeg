@@ -22,14 +22,14 @@ repos: # pre-commit autoupdate
 
   # If you want to avoid flake8 errors due to unused vars or imports:
   - repo: https://github.com/myint/autoflake.git
-    rev: v2.3.3
+    rev: v2.4.0
     hooks:
       - id: autoflake
         args:
           [--in-place, --remove-all-unused-imports, --remove-unused-variables]
 
   - repo: https://github.com/pycqa/isort
-    rev: 9.0.0a3
+    rev: 9.0.0b5
     hooks:
       - id: isort
 
