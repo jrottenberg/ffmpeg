@@ -2,6 +2,7 @@ name: Build Docker Images
 
 on:
   push:
+    branches: [main]
     paths:
       - "docker-images/**"
       - "templates/**"
@@ -57,19 +58,27 @@ jobs:
           BEFORE_SHA: ${{ github.event.before }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.sha }}
-          REF_NAME: ${{ github.ref_name }}
-          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
           set -euo pipefail
 
           full_build=$(jq -c '.build' docker-images/github-actions-matrix.json)
           full_manifest=$(jq -c '.manifest' docker-images/github-actions-matrix.json)
 
+          add_context_hashes() {
+            local input="$1"
+            echo "$input" | jq -c '.[]' | while read -r entry; do
+              version="$(echo "$entry" | jq -r '.version')"
+              variant="$(echo "$entry" | jq -r '.variant')"
+              context_hash="$(git rev-parse "HEAD:docker-images/${version}/${variant}")"
+              echo "$entry" | jq -c --arg h "$context_hash" '. + {context_hash: $h}'
+            done | jq -sc '.'
+          }
+
           emit_all() {
             echo "Selecting ALL versions"
             {
-              echo "build=$full_build"
-              echo "manifest=$full_manifest"
+              echo "build=$(add_context_hashes "$full_build")"
+              echo "manifest=$(add_context_hashes "$full_manifest")"
             } >> "$GITHUB_OUTPUT"
           }
 
@@ -81,14 +90,7 @@ jobs:
               base="$BASE_SHA"
               ;;
             push)
-              if [ "$REF_NAME" = "$DEFAULT_BRANCH" ]; then
-                base="$BEFORE_SHA"
-              else
-                # Feature branch: compare against the default branch so we build
-                # only what this branch changes relative to it.
-                git fetch --no-tags --quiet origin "$DEFAULT_BRANCH" || true
-                base="$(git merge-base "origin/$DEFAULT_BRANCH" "$HEAD_SHA" 2>/dev/null || true)"
-              fi
+              base="$BEFORE_SHA"
               ;;
             *)
               emit_all; exit 0
@@ -129,8 +131,8 @@ jobs:
           filtered_build="$(echo "$full_build" | jq -c --argjson sel "$selected" "$filter")"
           filtered_manifest="$(echo "$full_manifest" | jq -c --argjson sel "$selected" "$filter")"
           {
-            echo "build=$filtered_build"
-            echo "manifest=$filtered_manifest"
+            echo "build=$(add_context_hashes "$filtered_build")"
+            echo "manifest=$(add_context_hashes "$filtered_manifest")"
           } >> "$GITHUB_OUTPUT"
 
   build:
@@ -158,24 +160,33 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      # These per-arch tags are internal staging artifacts consumed only by
-      # the create-manifests job below (they're not documented/published
-      # tags anyone pulls directly), so push them to ghcr.io only. ghcr.io
-      # has no meaningful rate limit; docker.io does, and with up to ~30
-      # of these legs running per pipeline run, pushing every per-arch
-      # image there too was a major source of its 429s. The final,
-      # user-facing multi-arch tags (e.g. jrottenberg/ffmpeg:9.0-alpine320)
-      # still get published to docker.io by create-manifests, just
-      # assembled from these ghcr.io sources instead of docker.io ones.
+      # Per-arch staging tags keyed by build-context hash (not version).
+      # PR builds push these to ghcr.io only; create-manifests on main
+      # assembles the public tags from them. On main, skip the build when
+      # a matching ctx-* tag already exists (e.g. built by an open PR).
+      - name: Check for cached staging image
+        id: cache-check
+        if: github.event.pull_request.head.repo.full_name == github.repository || github.event_name != 'pull_request'
+        run: |
+          staging_tag="${{ env.GHCR }}:ctx-${{ matrix.context_hash }}-${{ matrix.variant }}-${{ matrix.arch }}"
+          if docker buildx imagetools inspect "$staging_tag" >/dev/null 2>&1; then
+            echo "cache_hit=true" >> "$GITHUB_OUTPUT"
+            echo "Reusing cached staging image: $staging_tag"
+          else
+            echo "cache_hit=false" >> "$GITHUB_OUTPUT"
+            echo "No cached staging image, will build: $staging_tag"
+          fi
       - uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
+        if: steps.cache-check.outputs.cache_hit != 'true'
         with:
           context: docker-images/${{ matrix.version }}/${{ matrix.variant }}
           platforms: ${{ matrix.platform }}
-          push: ${{ github.event_name == 'push' }}
-          tags: ${{ env.GHCR }}:${{ matrix.long_version }}-${{ matrix.variant }}-${{ matrix.arch }}
+          push: ${{ github.event.pull_request.head.repo.full_name == github.repository || github.event_name != 'pull_request' }}
+          tags: ${{ env.GHCR }}:ctx-${{ matrix.context_hash }}-${{ matrix.variant }}-${{ matrix.arch }}
           cache-from: type=gha,scope=${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}
           cache-to: type=gha,mode=max,scope=${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}
       - name: Load image for smoke test
+        if: steps.cache-check.outputs.cache_hit != 'true'
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
         with:
           context: docker-images/${{ matrix.version }}/${{ matrix.variant }}
@@ -183,6 +194,7 @@ jobs:
           tags: smoke-test:latest
           cache-from: type=gha,scope=${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}
       - name: Smoke test
+        if: steps.cache-check.outputs.cache_hit != 'true'
         run: |
           docker run --rm smoke-test:latest -version
           docker run --rm smoke-test:latest -buildconf
@@ -194,7 +206,7 @@ jobs:
           echo "All codec checks passed"
 
   create-manifests:
-    if: github.event_name == 'push' && needs.generate-matrix.outputs.manifest != '[]'
+    if: (github.ref == 'refs/heads/main') && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && needs.generate-matrix.outputs.manifest != '[]'
     needs: [build, generate-matrix]
     runs-on: ubuntu-latest
     strategy:
@@ -223,6 +235,7 @@ jobs:
           PARENT: ${{ matrix.parent }}
           VERSION: ${{ matrix.version }}
           LONG_VERSION: ${{ matrix.long_version }}
+          CONTEXT_HASH: ${{ matrix.context_hash }}
           MAJOR_VERSION: ${{ matrix.major_version }}
           ISPARENT: ${{ matrix.is_parent }}
           ISLATEST: ${{ matrix.is_latest }}
@@ -244,16 +257,14 @@ jobs:
             done
           }
 
-          # The build job only stages per-arch images on ghcr.io (see that
-          # job for why), so that's the only source we ever read from here.
-          # `imagetools create` can assemble a manifest list on one
-          # registry from sources hosted on a different one, so this is
-          # enough to publish the final tags on both docker.io and ghcr.io.
+          # The build job stages per-arch images on ghcr.io under ctx-<hash>
+          # tags (see that job). create-manifests assembles the public tags
+          # from those sources on main only.
           SOURCES=""
           IFS=',' read -ra ARCHS <<< "${PLATFORMS}"
           for platform in "${ARCHS[@]}"; do
             arch="${platform#linux/}"
-            SOURCES="${SOURCES} ${{ env.GHCR }}:${LONG_VERSION}-${VARIANT}-${arch}"
+            SOURCES="${SOURCES} ${{ env.GHCR }}:ctx-${CONTEXT_HASH}-${VARIANT}-${arch}"
           done
 
           DOCKER_TAGS="${{ env.DOCKER }}:${VERSION}-${VARIANT} ${{ env.DOCKER }}:${LONG_VERSION}-${VARIANT}"

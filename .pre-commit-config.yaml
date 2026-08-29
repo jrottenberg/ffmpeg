@@ -29,7 +29,7 @@ repos: # pre-commit autoupdate
           [--in-place, --remove-all-unused-imports, --remove-unused-variables]
 
   - repo: https://github.com/pycqa/isort
-    rev: 9.0.0b5
+    rev: 9.0.1
     hooks:
       - id: isort
 
