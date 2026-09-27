@@ -197,12 +197,20 @@ jobs:
         if: steps.cache-check.outputs.cache_hit != 'true'
         run: |
           docker run --rm smoke-test:latest -version
-          docker run --rm smoke-test:latest -buildconf
+          BUILD_CONF=$(docker run --rm smoke-test:latest -buildconf)
+          echo "$BUILD_CONF"
           CODECS=$(docker run --rm smoke-test:latest -codecs)
           for codec in libx264 libx265 libvpx libopus; do
             echo "Checking $codec..."
             echo "$CODECS" | grep -q "$codec" || { echo "MISSING: $codec"; exit 1; }
           done
+          # The QSV variant has to be configured with oneVPL and ship the QSV codecs
+          if [[ "${{ matrix.variant }}" == qsv* ]]; then
+            echo "Checking --enable-libvpl..."
+            echo "$BUILD_CONF" | grep -q -- "--enable-libvpl" || { echo "MISSING: --enable-libvpl"; exit 1; }
+            echo "Checking h264_qsv..."
+            echo "$CODECS" | grep -q "h264_qsv" || { echo "MISSING: h264_qsv"; exit 1; }
+          fi
           echo "All codec checks passed"
 
   create-manifests:

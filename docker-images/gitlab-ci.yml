@@ -2,6 +2,7 @@ stages:
   - lint
   - alpine
   - nvidia
+  - qsv
   - scratch
   - ubuntu
   - ubuntu-edge
@@ -85,6 +86,19 @@ stages:
     ISLATEST: "False"
     PLATFORMS: "linux/amd64"
 
+8.0.3-qsv2404:
+  extends: .docker
+  stage: qsv
+  variables:
+    MAJOR_VERSION: 8
+    VERSION: "8.0"
+    LONG_VERSION: "8.0.3"
+    VARIANT: qsv2404
+    PARENT: "qsv"
+    ISPARENT: "True"
+    ISLATEST: "False"
+    PLATFORMS: "linux/amd64"
+
 8.1.2-ubuntu2404:
   extends: .docker
   stage: ubuntu
@@ -163,6 +177,19 @@ stages:
     ISLATEST: "False"
     PLATFORMS: "linux/amd64"
 
+8.1.2-qsv2404:
+  extends: .docker
+  stage: qsv
+  variables:
+    MAJOR_VERSION: 8
+    VERSION: "8.1"
+    LONG_VERSION: "8.1.2"
+    VARIANT: qsv2404
+    PARENT: "qsv"
+    ISPARENT: "True"
+    ISLATEST: "False"
+    PLATFORMS: "linux/amd64"
+
 9.0.1-ubuntu2404:
   extends: .docker
   stage: ubuntu
@@ -237,6 +264,19 @@ stages:
     LONG_VERSION: "9.0.1"
     VARIANT: nvidia2404
     PARENT: "nvidia"
+    ISPARENT: "True"
+    ISLATEST: "False"
+    PLATFORMS: "linux/amd64"
+
+9.0.1-qsv2404:
+  extends: .docker
+  stage: qsv
+  variables:
+    MAJOR_VERSION: 9
+    VERSION: "9.0"
+    LONG_VERSION: "9.0.1"
+    VARIANT: qsv2404
+    PARENT: "qsv"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64"

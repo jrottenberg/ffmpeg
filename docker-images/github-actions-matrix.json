@@ -132,6 +132,19 @@
     },
     {
       "major_version": "8",
+      "version": "8.0",
+      "long_version": "8.0.3",
+      "variant": "qsv2404",
+      "parent": "qsv",
+      "is_parent": "True",
+      "is_latest": "False",
+      "platforms": "linux/amd64",
+      "platform": "linux/amd64",
+      "arch": "amd64",
+      "runner": "ubuntu-latest"
+    },
+    {
+      "major_version": "8",
       "version": "8.1",
       "long_version": "8.1.2",
       "variant": "ubuntu2404",
@@ -253,6 +266,19 @@
       "long_version": "8.1.2",
       "variant": "nvidia2404",
       "parent": "nvidia",
+      "is_parent": "True",
+      "is_latest": "False",
+      "platforms": "linux/amd64",
+      "platform": "linux/amd64",
+      "arch": "amd64",
+      "runner": "ubuntu-latest"
+    },
+    {
+      "major_version": "8",
+      "version": "8.1",
+      "long_version": "8.1.2",
+      "variant": "qsv2404",
+      "parent": "qsv",
       "is_parent": "True",
       "is_latest": "False",
       "platforms": "linux/amd64",
@@ -383,6 +409,19 @@
       "long_version": "9.0.1",
       "variant": "nvidia2404",
       "parent": "nvidia",
+      "is_parent": "True",
+      "is_latest": "False",
+      "platforms": "linux/amd64",
+      "platform": "linux/amd64",
+      "arch": "amd64",
+      "runner": "ubuntu-latest"
+    },
+    {
+      "major_version": "9",
+      "version": "9.0",
+      "long_version": "9.0.1",
+      "variant": "qsv2404",
+      "parent": "qsv",
       "is_parent": "True",
       "is_latest": "False",
       "platforms": "linux/amd64",
@@ -454,6 +493,16 @@
     },
     {
       "major_version": "8",
+      "version": "8.0",
+      "long_version": "8.0.3",
+      "variant": "qsv2404",
+      "parent": "qsv",
+      "is_parent": "True",
+      "is_latest": "False",
+      "platforms": "linux/amd64"
+    },
+    {
+      "major_version": "8",
       "version": "8.1",
       "long_version": "8.1.2",
       "variant": "ubuntu2404",
@@ -508,6 +557,16 @@
       "long_version": "8.1.2",
       "variant": "nvidia2404",
       "parent": "nvidia",
+      "is_parent": "True",
+      "is_latest": "False",
+      "platforms": "linux/amd64"
+    },
+    {
+      "major_version": "8",
+      "version": "8.1",
+      "long_version": "8.1.2",
+      "variant": "qsv2404",
+      "parent": "qsv",
       "is_parent": "True",
       "is_latest": "False",
       "platforms": "linux/amd64"
@@ -568,6 +627,16 @@
       "long_version": "9.0.1",
       "variant": "nvidia2404",
       "parent": "nvidia",
+      "is_parent": "True",
+      "is_latest": "False",
+      "platforms": "linux/amd64"
+    },
+    {
+      "major_version": "9",
+      "version": "9.0",
+      "long_version": "9.0.1",
+      "variant": "qsv2404",
+      "parent": "qsv",
       "is_parent": "True",
       "is_latest": "False",
       "platforms": "linux/amd64"
