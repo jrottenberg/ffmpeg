@@ -15,7 +15,7 @@ ENV	    NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
 ENV	    DEBIAN_FRONTEND=noninteractive
 
 
-ENV FFMPEG_VERSION=9.0.1
+ENV FFMPEG_VERSION=9.0.2
 
 ENV NVIDIA_HEADERS_VERSION=11.1.5.3
 
@@ -189,7 +189,7 @@ RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list nvid
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-9.0.1
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list ffmpeg-9.0.2
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
