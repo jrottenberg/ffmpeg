@@ -79,6 +79,12 @@ $ ./update.py; docker build --platform linux/amd64 -t ffmpeg-7.1-vaapi2404-deskt
 $ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-7.1-vaapi2404-desktop-build:latest
 ```
 
+- qsv2404
+```sh
+$ ./update.py; docker build --platform linux/amd64 -t ffmpeg-9.0-qsv2404-desktop-build docker-images/9.0/qsv2404
+$ docker run -it --rm --entrypoint='bash' --platform="linux/amd64" ffmpeg-9.0-qsv2404-desktop-build:latest
+```
+
 - alpine320
 ```sh
 $ ./update.py; docker build --platform linux/amd64 -t ffmpeg-7.1-alpine320-desktop-build docker-images/7.1/alpine320

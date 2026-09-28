@@ -91,6 +91,9 @@ VARIANTS = [
     {"name": "vaapi2404", "parent": "vaapi", "platforms": X86_ONLY_PLATFORMS},
     # NVIDIA CUDA builds are x86_64 only
     {"name": "nvidia2404", "parent": "nvidia", "platforms": X86_ONLY_PLATFORMS},
+    # Intel Quick Sync Video ( QSV ) https://trac.ffmpeg.org/wiki/HWAccelIntro#QSV
+    # oneVPL and the Intel media driver are x86_64 only
+    {"name": "qsv2404", "parent": "qsv", "platforms": X86_ONLY_PLATFORMS},
 ]
 current_variant_names = [v["name"] for v in VARIANTS]
 
@@ -154,6 +157,8 @@ def read_ffmpeg_template(variant_name, env_or_run="env"):
         distro_name = "nvidia"
     elif variant_name == "vaapi":
         distro_name = "vaapi"
+    elif variant_name == "qsv":
+        distro_name = "qsv"
     else:
         distro_name = "ubuntu"
 
@@ -329,6 +334,13 @@ for version in keep_version:
             "parent"
         ] == "vaapi":
             FFMPEG_CONFIG_FLAGS.append("--enable-vaapi")
+
+        # Intel Quick Sync Video through oneVPL ( --enable-libvpl landed in
+        # FFmpeg 6.0, older releases only offer the deprecated libmfx )
+        if variant["parent"] == "qsv" and (
+            version == "snapshot" or float(version[0:3]) >= 6.0
+        ):
+            FFMPEG_CONFIG_FLAGS.append("--enable-libvpl")
 
         # libavresample removed on v5, deprecated since v4.0
         # https://github.com/FFmpeg/FFmpeg/commit/c29038f3041a4080342b2e333c1967d136749c0f

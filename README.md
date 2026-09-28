@@ -28,6 +28,7 @@ Below is a table that provides examples for the nomenclature:
 | ffmpeg-9.0-ubuntu2404-edge | 24.04  | 9.x        | amd64, arm64 | [ubuntu](https://releases.ubuntu.com/)      | libs and ffmpeg are built from source. See [Ubuntu Compilation Guide](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu) for details on this.                                              |
 | ffmpeg-9.0-vaapi2404       | 24.04  | 9.x        | amd64        | [ubuntu](https://releases.ubuntu.com/)      | like: `ubuntu2404` but enables: [Video Acceleration API (VAAPI)](https://trac.ffmpeg.org/wiki/HWAccelIntro#VAAPI) in ffmpeg                                                                   |
 | ffmpeg-9.0-nvidia2404      | 24.04  | 9.x        | amd64        | [ubuntu](https://releases.ubuntu.com/)      | Built w/ [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled                                                         |
+| ffmpeg-9.0-qsv2404         | 24.04  | 9.x        | amd64        | [ubuntu](https://releases.ubuntu.com/)      | like: `ubuntu2404` but enables: [Intel Quick Sync Video ( QSV )](https://trac.ffmpeg.org/wiki/HWAccelIntro#QSV) through oneVPL                                                                |
 | ffmpeg-9.0-alpine320       | 3.20   | 9.x        | amd64, arm64 | [alpine](https://alpinelinux.org/releases/) | vendor libs, but ffmpeg is built from source                                                                                                                                                  |
 | ffmpeg-9.0-scratch320      | 3.20   | 9.x        | amd64, arm64 | [alpine](https://alpinelinux.org/releases/) | vendor libs, and ffmpeg are built from source. Also we make the distro as small as possible by not installing any packages in base and striping symbols of installed libs                     |
 
@@ -43,6 +44,7 @@ Note: The current versions of ffmpeg supported are anything newer than 3 years o
 - ubuntu based images `ffmpeg:<version>-ubuntu` or `ffmpeg:<version>-ubuntu2404` (old versions with `ffmpeg:<version>-ubuntu2004` , `ffmpeg:<version>-ubuntu1804`)
   - ubuntu based nvidia images `ffmpeg:<version>-nvidia` or `ffmpeg:<version>-nvidia2404` (old versions with `ffmpeg:<version>-nvidia2204`, `ffmpeg:<version>-nvidia2004`)
   - ubuntu based vaapi images `ffmpeg:<version>-vaapi2404` (old versions with `ffmpeg:<version>-vaapi2004`, `ffmpeg:<version>-vaapi1804`)
+  - ubuntu based Intel Quick Sync Video images `ffmpeg:<version>-qsv` or `ffmpeg:<version>-qsv2404`
 
 </details>
 
@@ -60,6 +62,9 @@ This image is just like the above `ubuntu2404` container image, except we build 
 
 **nvidia2404**
  Based on `ubuntu2404` with [NVIDIA's hardware-accelerated encoding and decoding APIs](https://trac.ffmpeg.org/wiki/HWAccelIntro#CUDANVENCNVDEC) enabled.
+
+**qsv2404**
+ Based on `ubuntu2404` with [Intel Quick Sync Video ( QSV )](https://trac.ffmpeg.org/wiki/HWAccelIntro#QSV) enabled through oneVPL ( `--enable-libvpl` ). The image ships the oneVPL dispatcher, the oneVPL GPU implementation ( mfx-gen ) and the Intel media driver ( iHD ), so no extra packages are needed inside the container. Note that oneVPL only supports Intel GPUs from Tiger Lake ( 11th gen ) and newer — on older GPUs ( Skylake, Kaby Lake, ... ) the `*_qsv` codecs fail to initialise, use the `vaapi` variant there instead.
 
 **alpine320**
 [alpine](https://alpinelinux.org/releases/) uses the os vendor libs, but ffmpeg is built from source.
@@ -249,6 +254,24 @@ Hardware encoding only example:
 `docker run --runtime=nvidia jrottenberg/ffmpeg:4.4-nvidia -i INPUT -c:v nvenc_h264 -preset hq OUTPUT`
 Full hardware acceleration example:
 `docker run --runtime=nvidia jrottenberg/ffmpeg:4.4-nvidia -hwaccel cuvid -c:v h264_cuvid -i INPUT -vf scale_npp=-1:720 -c:v h264_nvenc -preset slow OUTPUT`
+
+#### Use Intel Quick Sync Video ( QSV ) enabled build
+
+ jrottenberg/ffmpeg:${VERSION}-qsv or jrottenberg/ffmpeg:${VERSION}-qsv2404 ( example: `jrottenberg/ffmpeg:9.0-qsv` )
+
+- The container has oneVPL, the oneVPL GPU implementation and the Intel media ( iHD ) driver installed, the host only needs an Intel GPU with its kernel driver loaded. oneVPL supports Tiger Lake ( 11th gen ) and newer Intel GPUs — on older GPUs use the `vaapi` variant instead.
+- Run the container with the device attached /dev/dri from your host into the container:
+
+`docker run --device /dev/dri:/dev/dri -v $(pwd):$(pwd) -w $(pwd) jrottenberg/ffmpeg:9.0-qsv [...]`
+
+Hardware encoding only example ( software decode, QSV encode ):
+
+`docker run --device /dev/dri:/dev/dri jrottenberg/ffmpeg:9.0-qsv -i INPUT -c:v h264_qsv -quality auto -b:v 5M OUTPUT`
+Full hardware acceleration example ( QSV decode and encode ):
+
+`docker run --device /dev/dri:/dev/dri jrottenberg/ffmpeg:9.0-qsv -c:v h264_qsv -i INPUT -c:v h264_qsv -quality auto OUTPUT`
+
+- Run ffmpeg with the correct parameters, this is the same as when running [ffmpeg natively](https://trac.ffmpeg.org/wiki/HWAccelIntro#QSV). QSV is used through the `*_qsv` decoders and encoders ( `-c:v h264_qsv`, `-c:v hevc_qsv`, `-c:v av1_qsv`, ... ), FFmpeg has no `-hwaccel qsv` option.
 
 ##### See what's inside the beast
 
