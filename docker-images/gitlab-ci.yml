@@ -99,182 +99,182 @@ stages:
     ISLATEST: "False"
     PLATFORMS: "linux/amd64"
 
-8.1.2-ubuntu2404:
+8.1.3-ubuntu2404:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 8
     VERSION: "8.1"
-    LONG_VERSION: "8.1.2"
+    LONG_VERSION: "8.1.3"
     VARIANT: ubuntu2404
     PARENT: "ubuntu"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64,linux/arm64"
 
-8.1.2-ubuntu2404-edge:
+8.1.3-ubuntu2404-edge:
   extends: .docker
   stage: ubuntu-edge
   variables:
     MAJOR_VERSION: 8
     VERSION: "8.1"
-    LONG_VERSION: "8.1.2"
+    LONG_VERSION: "8.1.3"
     VARIANT: ubuntu2404-edge
     PARENT: "ubuntu-edge"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64,linux/arm64"
 
-8.1.2-alpine320:
+8.1.3-alpine320:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 8
     VERSION: "8.1"
-    LONG_VERSION: "8.1.2"
+    LONG_VERSION: "8.1.3"
     VARIANT: alpine320
     PARENT: "alpine"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64,linux/arm64"
 
-8.1.2-scratch320:
+8.1.3-scratch320:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 8
     VERSION: "8.1"
-    LONG_VERSION: "8.1.2"
+    LONG_VERSION: "8.1.3"
     VARIANT: scratch320
     PARENT: "scratch"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64,linux/arm64"
 
-8.1.2-vaapi2404:
+8.1.3-vaapi2404:
   extends: .docker
   stage: vaapi
   variables:
     MAJOR_VERSION: 8
     VERSION: "8.1"
-    LONG_VERSION: "8.1.2"
+    LONG_VERSION: "8.1.3"
     VARIANT: vaapi2404
     PARENT: "vaapi"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64"
 
-8.1.2-nvidia2404:
+8.1.3-nvidia2404:
   extends: .docker
   stage: nvidia
   variables:
     MAJOR_VERSION: 8
     VERSION: "8.1"
-    LONG_VERSION: "8.1.2"
+    LONG_VERSION: "8.1.3"
     VARIANT: nvidia2404
     PARENT: "nvidia"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64"
 
-8.1.2-qsv2404:
+8.1.3-qsv2404:
   extends: .docker
   stage: qsv
   variables:
     MAJOR_VERSION: 8
     VERSION: "8.1"
-    LONG_VERSION: "8.1.2"
+    LONG_VERSION: "8.1.3"
     VARIANT: qsv2404
     PARENT: "qsv"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64"
 
-9.0.1-ubuntu2404:
+9.0.2-ubuntu2404:
   extends: .docker
   stage: ubuntu
   variables:
     MAJOR_VERSION: 9
     VERSION: "9.0"
-    LONG_VERSION: "9.0.1"
+    LONG_VERSION: "9.0.2"
     VARIANT: ubuntu2404
     PARENT: "ubuntu"
     ISPARENT: "True"
     ISLATEST: "True"
     PLATFORMS: "linux/amd64,linux/arm64"
 
-9.0.1-ubuntu2404-edge:
+9.0.2-ubuntu2404-edge:
   extends: .docker
   stage: ubuntu-edge
   variables:
     MAJOR_VERSION: 9
     VERSION: "9.0"
-    LONG_VERSION: "9.0.1"
+    LONG_VERSION: "9.0.2"
     VARIANT: ubuntu2404-edge
     PARENT: "ubuntu-edge"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64,linux/arm64"
 
-9.0.1-alpine320:
+9.0.2-alpine320:
   extends: .docker
   stage: alpine
   variables:
     MAJOR_VERSION: 9
     VERSION: "9.0"
-    LONG_VERSION: "9.0.1"
+    LONG_VERSION: "9.0.2"
     VARIANT: alpine320
     PARENT: "alpine"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64,linux/arm64"
 
-9.0.1-scratch320:
+9.0.2-scratch320:
   extends: .docker
   stage: scratch
   variables:
     MAJOR_VERSION: 9
     VERSION: "9.0"
-    LONG_VERSION: "9.0.1"
+    LONG_VERSION: "9.0.2"
     VARIANT: scratch320
     PARENT: "scratch"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64,linux/arm64"
 
-9.0.1-vaapi2404:
+9.0.2-vaapi2404:
   extends: .docker
   stage: vaapi
   variables:
     MAJOR_VERSION: 9
     VERSION: "9.0"
-    LONG_VERSION: "9.0.1"
+    LONG_VERSION: "9.0.2"
     VARIANT: vaapi2404
     PARENT: "vaapi"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64"
 
-9.0.1-nvidia2404:
+9.0.2-nvidia2404:
   extends: .docker
   stage: nvidia
   variables:
     MAJOR_VERSION: 9
     VERSION: "9.0"
-    LONG_VERSION: "9.0.1"
+    LONG_VERSION: "9.0.2"
     VARIANT: nvidia2404
     PARENT: "nvidia"
     ISPARENT: "True"
     ISLATEST: "False"
     PLATFORMS: "linux/amd64"
 
-9.0.1-qsv2404:
+9.0.2-qsv2404:
   extends: .docker
   stage: qsv
   variables:
     MAJOR_VERSION: 9
     VERSION: "9.0"
-    LONG_VERSION: "9.0.1"
+    LONG_VERSION: "9.0.2"
     VARIANT: qsv2404
     PARENT: "qsv"
     ISPARENT: "True"
