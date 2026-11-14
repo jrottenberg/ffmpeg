@@ -32,6 +32,7 @@ ENV FFMPEG_VERSION=8.1.3
 ##     freetype - https://www.freetype.org/
 ##                consider passing --no-install-recommends for this one its globbie (if you do, pass in libfreetype6)
 ##   libvidstab - https://github.com/georgmartius/vid.stab
+##  rubberband - https://breakfastquay.com/rubberband/
 ##      fridibi - https://www.fribidi.org/
 ##   fontconfig - https://www.freedesktop.org/wiki/Software/fontconfig/
 ##       libass - https://github.com/libass/libass
@@ -62,6 +63,7 @@ ARG X265_PKGS="libnuma1 libx265-199 libx265-dev"
 # libnuma-dev
 ARG OGG_PKGS="libogg-dev libogg0"
 ARG OPUS_PKGS="libopus-dev libopus0"
+ARG RUBBERBAND_PKGS="librubberband-dev librubberband2"
 ARG VORBIS_PKGS="libvorbis-dev libvorbis0a libvorbisenc2 libvorbisfile3"
 ARG VPX_PKGS="libvpx-dev libvpx9"
 ARG WEBP_PKGS="libsharpyuv-dev libsharpyuv0 libwebp-dev libwebp7 libwebpdecoder3 libwebpdemux2 libwebpmux3"
@@ -162,7 +164,7 @@ COPY install_ffmpeg.sh /tmp/workdir
 
 RUN \
         echo "Installing dependencies..." && \
-        apt-get install -yq --no-install-recommends ${OPENCORE_PKGS} ${X264_PKGS} ${X265_PKGS} ${OGG_PKGS} ${OPUS_PKGS} ${VORBIS_PKGS} ${VPX_PKGS} ${WEBP_PKGS} ${MP3LAME_PKGS} ${XVIDCORE_PKGS} ${FDKAAC_PKGS} ${OPENJP_PKGS} ${FREETYPE_PKGS} ${VIDSTAB_PKGS} ${FRIBIDI_PKGS} ${FONTCONFIG_PKGS} ${LIBASS_PKGS} ${AOM_PKGS} ${SVTAV1_PKGS} ${DAV1D_PKGS} ${XORG_MACROS_PKGS} ${XPROTO_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${BLURAY_PKGS} ${ZMQ_PKGS} ${PNG_PKGS} ${ARIBB24_PKGS} ${ZIMG_PKGS} ${THEORA_PKGS} ${SRT_PKGS} ${LIBDRM_PKGS}
+        apt-get install -yq --no-install-recommends ${OPENCORE_PKGS} ${X264_PKGS} ${X265_PKGS} ${OGG_PKGS} ${OPUS_PKGS} ${RUBBERBAND_PKGS} ${VORBIS_PKGS} ${VPX_PKGS} ${WEBP_PKGS} ${MP3LAME_PKGS} ${XVIDCORE_PKGS} ${FDKAAC_PKGS} ${OPENJP_PKGS} ${FREETYPE_PKGS} ${VIDSTAB_PKGS} ${FRIBIDI_PKGS} ${FONTCONFIG_PKGS} ${LIBASS_PKGS} ${AOM_PKGS} ${SVTAV1_PKGS} ${DAV1D_PKGS} ${XORG_MACROS_PKGS} ${XPROTO_PKGS} ${XAU_PKGS} ${PTHREADS_STUBS_PKGS} ${XML2_PKGS} ${BLURAY_PKGS} ${ZMQ_PKGS} ${PNG_PKGS} ${ARIBB24_PKGS} ${ZIMG_PKGS} ${THEORA_PKGS} ${SRT_PKGS} ${LIBDRM_PKGS}
 
 # The QSV runtime ( oneVPL, mfx-gen and the Intel media driver ) is only
 # needed at run time, it gets installed in the runtime stage of

@@ -43,10 +43,10 @@ If you forget and don't have pre-commit configured, the pre-commit step will fai
 pre-commit run -a # recommended
 
 # Test a specific variant
-docker build -t my-build docker-images/VERSION/
+docker build -t my-build docker-images/VERSION/VARIANT/
 
 # Make sure all variants pass before CI
-find ffmpeg/ -name Dockerfile | xargs dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
+find docker-images/ -name Dockerfile | xargs dirname | parallel --no-notice -j 4 --results logs docker build -t {} {}
 ```
 
 <details><summary>Some detailed examples, of building and running</summary>

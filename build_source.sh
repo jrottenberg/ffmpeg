@@ -25,6 +25,15 @@ if [[ "$ARCH" == "x86_64" ]]; then
     is_x86=true
 fi
 ######################### Callback build functions #########################
+build_rubberband() {
+    meson setup build --prefix="${PREFIX}" --libdir=lib --default-library=shared \
+        -Dfft=builtin -Dresampler=builtin \
+        -Dcmdline=disabled -Dtests=disabled -Djni=disabled \
+        -Dladspa=disabled -Dlv2=disabled -Dvamp=disabled && \
+    ninja -C build && \
+    ninja -C build install
+}
+
 build_libopencore-amr() {
     ./configure --prefix="${PREFIX}" --enable-shared
     make

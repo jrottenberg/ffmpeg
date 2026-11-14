@@ -286,6 +286,7 @@ for version in keep_version:
             "--enable-libopencore-amrnb",
             "--enable-libopencore-amrwb",
             "--enable-libopus",
+            "--enable-librubberband",
             "--enable-libtheora",
             "--enable-libvidstab",
             "--enable-libvorbis",

@@ -211,7 +211,11 @@ jobs:
             echo "Checking h264_qsv..."
             echo "$CODECS" | grep -q "h264_qsv" || { echo "MISSING: h264_qsv"; exit 1; }
           fi
-          echo "All codec checks passed"
+          echo "Checking Rubber Band pitch and tempo processing..."
+          docker run --rm smoke-test:latest \
+            -hide_banner -loglevel error -f lavfi -i "sine=frequency=440:duration=1" \
+            -af "rubberband=pitch=2:tempo=1.2" -c:a libopus -f ogg - > /dev/null
+          echo "All codec and filter checks passed"
 
   create-manifests:
     if: (github.ref == 'refs/heads/main') && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && needs.generate-matrix.outputs.manifest != '[]'

@@ -38,6 +38,9 @@ RUN         libDeps="libgomp \
                     opus \
                     opus-tools \
                     opus-dev \
+                    # https://breakfastquay.com/rubberband/
+                    rubberband \
+                    rubberband-dev \
                     # https://xiph.org/vorbis/
                     libvorbis \
                     libvorbis-static \

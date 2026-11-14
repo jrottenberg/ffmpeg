@@ -58,6 +58,7 @@ OPENCOREAMR = {"version": "0.1.6", "release_date": "2022-08-01"}
 OPENJPEG = {"version": "2.5.2", "release_date": "2024-02-28"}
 OPUS = {"version": "1.5.2", "release_date": "2024-04-12"}
 PTHREAD_STUBS = {"version": "0.5", "release_date": "2023-07-18"}
+RUBBERBAND = {"version": "4.0.0", "release_date": "2024-10-25"}
 SVTAV1 = {"version": "2.2.1", "release_date": "2024-08-01"}
 THEORA = {"version": "1.2.0", "release_date": "2025-03-29"}
 VORBIS = {"version": "1.3.7", "release_date": "2020-07-04"}
@@ -77,6 +78,22 @@ ZIMG = {"version": "3.0.5", "release_date": "2023-6-30"}
 # flake8: noqa E501
 LIBRARIES = OrderedDict(
     [
+        (
+            "rubberband",
+            {
+                "link": "https://breakfastquay.com/rubberband/",
+                "version": RUBBERBAND["version"],
+                "version_link": f"https://github.com/breakfastquay/rubberband/releases/tag/v{RUBBERBAND['version']}",
+                "release_date": RUBBERBAND["release_date"],
+                "license_name": "GNU General Public License (GPL) version 2 or later",
+                "license_link": f"https://github.com/breakfastquay/rubberband/blob/v{RUBBERBAND['version']}/COPYING",
+                "build_info": {
+                    "download_link": f"https://breakfastquay.com/files/releases/rubberband-{RUBBERBAND['version']}.tar.bz2",
+                    "build_dir": "/tmp/rubberband",
+                    "tarball_name": f"rubberband-{RUBBERBAND['version']}.tar.bz2",
+                },
+            },
+        ),
         (
             "whisper",
             {

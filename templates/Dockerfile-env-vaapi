@@ -18,6 +18,7 @@ ENV FFMPEG_VERSION=%%FFMPEG_VERSION%%
 ##     freetype - https://www.freetype.org/
 ##                consider passing --no-install-recommends for this one its globbie (if you do, pass in libfreetype6)
 ##   libvidstab - https://github.com/georgmartius/vid.stab
+##  rubberband - https://breakfastquay.com/rubberband/
 ##      fridibi - https://www.fribidi.org/
 ##   fontconfig - https://www.freedesktop.org/wiki/Software/fontconfig/
 ##       libass - https://github.com/libass/libass
@@ -48,6 +49,7 @@ ARG X265_PKGS="libnuma1 libx265-199 libx265-dev"
 # libnuma-dev
 ARG OGG_PKGS="libogg-dev libogg0"
 ARG OPUS_PKGS="libopus-dev libopus0"
+ARG RUBBERBAND_PKGS="librubberband-dev librubberband2"
 ARG VORBIS_PKGS="libvorbis-dev libvorbis0a libvorbisenc2 libvorbisfile3"
 ARG VPX_PKGS="libvpx-dev libvpx9"
 ARG WEBP_PKGS="libsharpyuv-dev libsharpyuv0 libwebp-dev libwebp7 libwebpdecoder3 libwebpdemux2 libwebpmux3"
