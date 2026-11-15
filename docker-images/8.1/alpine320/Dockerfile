@@ -4,7 +4,7 @@
 #
 #
 
-FROM        public.ecr.aws/docker/library/alpine:3.20 AS builder
+FROM        mirror.gcr.io/library/alpine:3.20 AS builder
 
 RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates openssl expat git less tree file vim bash
 
@@ -45,6 +45,9 @@ RUN         libDeps="libgomp \
                     opus \
                     opus-tools \
                     opus-dev \
+                    # https://breakfastquay.com/rubberband/
+                    rubberband \
+                    rubberband-dev \
                     # https://xiph.org/vorbis/
                     libvorbis \
                     libvorbis-static \
@@ -196,7 +199,7 @@ RUN /tmp/workdir/install_ffmpeg.sh
 
 
 ### Release Stage
-FROM        public.ecr.aws/docker/library/alpine:3.20 AS release
+FROM        mirror.gcr.io/library/alpine:3.20 AS release
 # RUN         apk add --no-cache --update bash less tree file vim
 # Copy fonts and fontconfig from builder
 COPY        --from=builder /usr/share/fonts /usr/share/fonts

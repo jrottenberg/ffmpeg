@@ -6,7 +6,7 @@
 #
 #
 # Stage 1: Build
-FROM       public.ecr.aws/docker/library/ubuntu:24.04 AS builder
+FROM       mirror.gcr.io/library/ubuntu:24.04 AS builder
 
 WORKDIR     /tmp/workdir
 
@@ -116,7 +116,7 @@ RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
 # additional batch of libraries ( split into docker layers, to allow for caching )
-RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libfdk-aac,openjpeg,freetype,libvidstab
+RUN /tmp/workdir/generate-source-of-truth-ffmpeg-versions.py --library-list libfdk-aac,openjpeg,freetype,libvidstab,rubberband
 RUN /tmp/workdir/download_tarballs.sh
 RUN /tmp/workdir/build_source.sh
 
@@ -169,7 +169,7 @@ RUN /tmp/workdir/install_ffmpeg.sh
 
 
 # Stage 2: Final Image ( shrink the size back down )
-FROM public.ecr.aws/docker/library/ubuntu:24.04 AS runtime
+FROM mirror.gcr.io/library/ubuntu:24.04 AS runtime
 
 # Copy fonts and fontconfig from builder
 COPY --from=builder /usr/share/fonts /usr/share/fonts
