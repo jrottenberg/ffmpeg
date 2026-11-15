@@ -4,7 +4,7 @@
 #
 #
 
-FROM        public.ecr.aws/docker/library/alpine:3.20 AS builder
+FROM        mirror.gcr.io/library/alpine:3.20 AS builder
 
 RUN         apk add --no-cache --update libgcc libstdc++ ca-certificates openssl expat git libgomp less tree file vim bash
 # apt-get install -yq --no-install-recommends curl jq python3 python3-requests less tree file vim && \
@@ -173,7 +173,7 @@ RUN /tmp/workdir/install_ffmpeg.sh --strip
 
 
 ### Release Stage
-FROM        public.ecr.aws/docker/library/alpine:3.20 AS release
+FROM        mirror.gcr.io/library/alpine:3.20 AS release
 # RUN         apk add --no-cache --update bash less tree file vim
 # Copy fonts and fontconfig from builder
 COPY        --from=builder /usr/share/fonts /usr/share/fonts

@@ -6,7 +6,7 @@
 #
 #
 # Stage 1: Build
-FROM       public.ecr.aws/docker/library/ubuntu:24.04 AS builder
+FROM       mirror.gcr.io/library/ubuntu:24.04 AS builder
 
 
 ENV FFMPEG_VERSION=9.0.2
@@ -188,7 +188,7 @@ RUN /tmp/workdir/install_ffmpeg.sh
 
 
 # Stage 2: Final Image ( shrink the size back down )
-FROM public.ecr.aws/docker/library/ubuntu:24.04 AS runtime
+FROM mirror.gcr.io/library/ubuntu:24.04 AS runtime
 # Copy fonts and fontconfig from builder
 COPY --from=builder /usr/share/fonts /usr/share/fonts
 COPY --from=builder /usr/share/fontconfig /usr/share/fontconfig
