@@ -740,14 +740,24 @@ def _dynamic_ffmpeg_library_info(library_name):
     line like 'ffmpeg-10.0', or an exact patch release like 'ffmpeg-9.0.1').
 
     ffmpeg.org publishes a tarball named 'ffmpeg-<version>.tar.bz2' for every
-    version string it releases (majors, minors, and patches alike), so the
-    download link/tarball name can always be derived from the requested
-    version without maintaining a per-release dict entry. This is what keeps
-    new ffmpeg major versions (v10, v11, ...) working without a code change
-    here, and also keeps the build in sync with the exact patch version
-    requested (instead of silently drifting from the declared FFMPEG_VERSION).
+    version string it releases, except that an x.y.0 release drops the '.0'
+    (published as 'ffmpeg-x.y.tar.bz2'). The download link/tarball name can
+    therefore be derived from the requested version without maintaining a
+    per-release dict entry. This is what keeps new ffmpeg major versions
+    (v10, v11, ...) working without a code change here, and also keeps the
+    build in sync with the exact patch version requested (instead of silently
+    drifting from the declared FFMPEG_VERSION).
     """
     version = library_name.split("-", 1)[1]
+    # ffmpeg.org publishes an x.y.0 release as 'ffmpeg-x.y.tar.bz2' -- without
+    # the trailing '.0' (e.g. 'ffmpeg-9.1.tar.bz2', not 'ffmpeg-9.1.0.tar.bz2').
+    # Patch releases keep the full name ('ffmpeg-9.1.1.tar.bz2'), and a
+    # major.0 release is published as 'ffmpeg-x.0.tar.bz2' (e.g. 10.0), so
+    # only drop the '.0' from a three-part x.y.0 version.
+    parts = version.split(".")
+    tarball_version = (
+        ".".join(parts[:-1]) if len(parts) == 3 and parts[-1] == "0" else version
+    )
     return {
         "link": "http://ffmpeg.org/",
         "version": version,
@@ -756,9 +766,9 @@ def _dynamic_ffmpeg_library_info(library_name):
         "license_name": "GNU Lesser General Public License (LGPL) version 2.1",
         "license_link": "https://ffmpeg.org/legal.html",
         "build_info": {
-            "download_link": f"https://ffmpeg.org/releases/ffmpeg-{version}.tar.bz2",
+            "download_link": f"https://ffmpeg.org/releases/ffmpeg-{tarball_version}.tar.bz2",
             "build_dir": "/tmp/ffmpeg",
-            "tarball_name": f"ffmpeg-{version}.tar.bz2",
+            "tarball_name": f"ffmpeg-{tarball_version}.tar.bz2",
         },
     }
 
